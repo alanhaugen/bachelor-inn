@@ -21,12 +21,12 @@ func Touch(pos :Vector2) -> bool:
 func Dijkstra(pos :Vector2, movementLength :int) -> void:
 	var frontier :int = 0;
 	var frontierPositions :Array;
+	var nextFrontierPositions :Array;
 	
 	frontierPositions.append(pos);
 	
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
-		frontier += 1;
 		
 		var north :Vector2 = Vector2(pos.x, pos.y - 1);
 		var south :Vector2 = Vector2(pos.x, pos.y + 1);
@@ -34,16 +34,21 @@ func Dijkstra(pos :Vector2, movementLength :int) -> void:
 		var west  :Vector2 = Vector2(pos.x - 1, pos.y);
 		
 		if (Touch(north)):
-			frontierPositions.append(north);
+			nextFrontierPositions.append(north);
 		
 		if (Touch(south)):
-			frontierPositions.append(south);
+			nextFrontierPositions.append(south);
 		
 		if (Touch(east)):
-			frontierPositions.append(east);
+			nextFrontierPositions.append(east);
 		
 		if (Touch(west)):
-			frontierPositions.append(west);
+			nextFrontierPositions.append(west);
+		
+		if (frontierPositions.is_empty() == true):
+			frontier += 1;
+			frontierPositions = nextFrontierPositions.duplicate();
+			nextFrontierPositions.clear();
 	
 	return;
 
@@ -65,7 +70,7 @@ func _input(event: InputEvent) -> void:
 			unitPos = pos;
 			movementMap.clear();
 			
-			Dijkstra(pos, 5);
+			Dijkstra(pos, 2);
 			
 		elif (isUnitSelected == true && movementMap.get_cell_source_id(pos) != -1):
 			unitsMap.set_cell(pos, 0, Vector2(29, 69));
