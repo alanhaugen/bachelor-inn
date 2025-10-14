@@ -27,6 +27,7 @@ func _input(event: InputEvent) -> void:
 		if (unitsMap.get_cell_source_id(pos) != -1):
 			isUnitSelected = true;
 			unitPos = pos;
+			movementMap.clear();
 			movementMap.set_cell(Vector2(pos.x -1, pos.y), 0, Vector2(14,3));
 			movementMap.set_cell(Vector2(pos.x +1, pos.y), 0, Vector2(14,3));
 			movementMap.set_cell(Vector2(pos.x, pos.y+1), 0, Vector2(14,3));
