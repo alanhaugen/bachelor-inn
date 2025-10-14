@@ -7,9 +7,45 @@ var units :Array;
 @onready var map :TileMapLayer = %Map;
 @onready var unitsMap :TileMapLayer = $Units;
 @onready var movementMap :TileMapLayer = $MovementSquares;
+@onready var collidable_terrain_layer: TileMapLayer = $CollidableTerrainLayer
 
 var isUnitSelected :bool = false;
 var unitPos :Vector2;
+
+func Touch(pos :Vector2) -> bool:
+	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
+		movementMap.set_cell(pos, 0, Vector2(14,3));
+		return true;
+	return false;
+
+func Dijkstra(pos :Vector2, movementLength :int) -> void:
+	var frontier :int = 0;
+	var frontierPositions :Array;
+	
+	frontierPositions.append(pos);
+	
+	while (frontier < movementLength && frontierPositions.is_empty() == false):
+		pos = frontierPositions.pop_front();
+		frontier += 1;
+		
+		var north :Vector2 = Vector2(pos.x, pos.y - 1);
+		var south :Vector2 = Vector2(pos.x, pos.y + 1);
+		var east  :Vector2 = Vector2(pos.x + 1, pos.y);
+		var west  :Vector2 = Vector2(pos.x - 1, pos.y);
+		
+		if (Touch(north)):
+			frontierPositions.append(north);
+		
+		if (Touch(south)):
+			frontierPositions.append(south);
+		
+		if (Touch(east)):
+			frontierPositions.append(east);
+		
+		if (Touch(west)):
+			frontierPositions.append(west);
+	
+	return;
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -28,10 +64,9 @@ func _input(event: InputEvent) -> void:
 			isUnitSelected = true;
 			unitPos = pos;
 			movementMap.clear();
-			movementMap.set_cell(Vector2(pos.x -1, pos.y), 0, Vector2(14,3));
-			movementMap.set_cell(Vector2(pos.x +1, pos.y), 0, Vector2(14,3));
-			movementMap.set_cell(Vector2(pos.x, pos.y+1), 0, Vector2(14,3));
-			movementMap.set_cell(Vector2(pos.x, pos.y-1), 0, Vector2(14,3));
+			
+			Dijkstra(pos, 5);
+			
 		elif (isUnitSelected == true && movementMap.get_cell_source_id(pos) != -1):
 			unitsMap.set_cell(pos, 0, Vector2(29, 69));
 			unitsMap.set_cell(unitPos, -1);
