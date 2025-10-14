@@ -4218,7 +4218,7 @@ tile_set = SubResource("TileSet_2lpho")
 
 [node name="Units" type="TileMapLayer" parent="."]
 scale = Vector2(5, 5)
-tile_map_data = PackedByteArray("AAACAAIAAAAdAEUAAAA=")
+tile_map_data = PackedByteArray("AAACAAIAAAAdAEUAAAAHAAcAAAAdAEUAAAA=")
 tile_set = SubResource("TileSet_2lpho")
 
 [node name="MovementSquares" type="TileMapLayer" parent="."]
