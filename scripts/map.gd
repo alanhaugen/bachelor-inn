@@ -5,13 +5,25 @@ var units :Array;
 
 @onready var cursor: Sprite2D = $Cursor;
 @onready var map :TileMapLayer = %Map;
+@onready var unitsMap :TileMapLayer = $Units;
+@onready var movementMap :TileMapLayer = $MovementSquares;
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var pos :Vector2 = map.local_to_map(event.position / map.transform.get_scale());
 		cursor.position = map.map_to_local(pos * 5);
-		map.set_cell(pos,1);
+		#map.set_cell(pos, 1);
+		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
+		
+		if (unitsMap.get_cell_source_id(pos) != -1):
+			movementMap.set_cell(Vector2(pos.x -1, pos.y), 0, Vector2(14,3));
+			movementMap.set_cell(Vector2(pos.x +1, pos.y), 0, Vector2(14,3));
+			movementMap.set_cell(Vector2(pos.x, pos.y+1), 0, Vector2(14,3));
+			movementMap.set_cell(Vector2(pos.x, pos.y-1), 0, Vector2(14,3));
+		else:
+			movementMap.clear();
+		
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
