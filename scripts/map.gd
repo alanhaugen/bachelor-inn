@@ -21,11 +21,12 @@ var unitPos        :Vector2;
 var playerCode     :Vector2i = Vector2i(29, 69);
 var playerCodeDone :Vector2i = Vector2i(28, 75);
 var enemyCode      :Vector2i = Vector2i(18, 80);
-var swordCode      :Vector2i = Vector2i(22,27);
+var attackCode     :Vector2i = Vector2i(22,27);
+var legalMoveCode  :Vector2i = Vector2(14,3);
 
 func Touch(pos :Vector2) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
-		movementMap.set_cell(pos, 0, Vector2(14,3));
+		movementMap.set_cell(pos, 0, legalMoveCode);
 		return true;
 	return false;
 
@@ -34,11 +35,15 @@ func Dijkstra(startPos :Vector2, movementLength :int) -> Array[Move]:
 	var frontierPositions :Array;
 	var nextFrontierPositions :Array;
 	
-	var pos :Vector2 = startPos;
+	var pos   :Vector2 = startPos;
 	var moves :Array[Move];
 	
 	frontierPositions.append(pos);
 	var type :Vector2i = unitsMap.get_cell_atlas_coords(pos);
+	
+	var tempEnemyCode :Vector2i = enemyCode;
+	if (playerTurn == false):
+		enemyCode = playerCode;
 	
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
@@ -67,21 +72,23 @@ func Dijkstra(startPos :Vector2, movementLength :int) -> Array[Move]:
 		# Add attack moves
 		if (unitsMap.get_cell_atlas_coords(north) == enemyCode):
 			moves.append(Move.new(startPos, north, type, unitsMap, true));
-			movementMap.set_cell(north, 0, swordCode);
+			movementMap.set_cell(north, 0, attackCode);
 		if (unitsMap.get_cell_atlas_coords(south) == enemyCode):
 			moves.append(Move.new(startPos, south, type, unitsMap, true));
-			movementMap.set_cell(south, 0, swordCode);
+			movementMap.set_cell(south, 0, attackCode);
 		if (unitsMap.get_cell_atlas_coords(east) == enemyCode):
 			moves.append(Move.new(startPos, east, type, unitsMap, true));
-			movementMap.set_cell(east, 0, swordCode);
+			movementMap.set_cell(east, 0, attackCode);
 		if (unitsMap.get_cell_atlas_coords(west) == enemyCode):
 			moves.append(Move.new(startPos, west, type, unitsMap, true));
-			movementMap.set_cell(west, 0, swordCode);
+			movementMap.set_cell(west, 0, attackCode);
 		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
 			frontierPositions = nextFrontierPositions.duplicate();
 			nextFrontierPositions.clear();
+	
+	enemyCode = tempEnemyCode;
 	
 	return moves;
 
@@ -125,7 +132,10 @@ func _input(event: InputEvent) -> void:
 				isUnitSelected = true;
 		elif (movementMap.get_cell_source_id(pos) != -1):
 			activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
+			if (movementMap.get_cell_atlas_coords(pos) == attackCode):
+				activeMove.isAttack = true;
 			ShowMovePopup(windowPos);
+			
 			#unitsMap.set_cell(pos, 0, playerCodeDone);
 			#unitsMap.set_cell(unitPos, -1);
 			movementMap.clear();
@@ -159,21 +169,50 @@ func MoveAI() -> void:
 			aiUnitsMoves.append(Array());
 			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
 	
-	for i in aiUnitsMoves.size():
-		var randomMove :Move = aiUnitsMoves[i][randi() % aiUnitsMoves.size()];
-		randomMove.execute();
-	
+	# Move each enemy unit
+	for i :int in aiUnitsMoves.size():
+		var move :Move = null;
+		
+		# First look for an attack
+		for j :int in aiUnitsMoves[i].size():
+			if (aiUnitsMoves[i][j].isAttack == true):
+				move = aiUnitsMoves[i][j];
+		
+		# No attacks found, choose a random move
+		if (move == null):
+			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
+		
+		# Do the attack or move
+		move.execute();
+
 	movementMap.clear();
-	
 	playerTurn = true;
+
+func CheckVictoryConditions() -> void:
+	var units :Array[Vector2i] = unitsMap.get_used_cells();
+	var numberOfPlayerUnits :int = 0;
+	var numberOfEnemyUnits  :int = 0;
+	
+	for i in units.size():
+		var pos :Vector2i = units[i];
+		if (unitsMap.get_cell_atlas_coords(pos) == playerCode || unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
+			numberOfPlayerUnits += 1;
+		elif (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
+			numberOfEnemyUnits += 1;
+	
+	if (numberOfPlayerUnits == 0):
+		get_tree().change_scene_to_file("res://scenes/gameover.tscn");
+	elif (numberOfEnemyUnits == 0):
+		get_tree().change_scene_to_file("res://scenes/victory.tscn");
 
 func _process(delta: float) -> void:
 	if (playerTurn):
-		var units :Array[Vector2i] = unitsMap.get_used_cells();
 		playerTurn = false;
+		var units :Array[Vector2i] = unitsMap.get_used_cells();
 		for i in units.size():
 			var pos :Vector2i = units[i];
 			if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
 				playerTurn = true;
 	else:
 		MoveAI();
+		CheckVictoryConditions();
