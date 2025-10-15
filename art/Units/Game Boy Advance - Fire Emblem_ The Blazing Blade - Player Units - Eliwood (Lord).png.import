@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dckp5sqvm15ev"
-path="res://.godot/imported/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png-a18fe40d6707089ca486bb60e5ba8f07.ctex"
+uid="uid://bfanvcm4yq3wa"
+path="res://.godot/imported/Game Boy Advance - Fire Emblem_ The Blazing Blade - Player Units - Eliwood (Lord).png-c2d5a448cddc0bda99ebaab8e7fd49a5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png"
-dest_files=["res://.godot/imported/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png-a18fe40d6707089ca486bb60e5ba8f07.ctex"]
+source_file="res://art/Units/Game Boy Advance - Fire Emblem_ The Blazing Blade - Player Units - Eliwood (Lord).png"
+dest_files=["res://.godot/imported/Game Boy Advance - Fire Emblem_ The Blazing Blade - Player Units - Eliwood (Lord).png-c2d5a448cddc0bda99ebaab8e7fd49a5.ctex"]
 
 [params]
 
