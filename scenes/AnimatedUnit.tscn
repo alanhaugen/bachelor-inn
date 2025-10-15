@@ -53,7 +53,9 @@ animations = [{
 }]
 
 [node name="AnimatedUnit" type="AnimatedSprite2D"]
+scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_3fwa6")
+autoplay = "default"
 frame = 5
 frame_progress = 0.3644503
 speed_scale = 5.0

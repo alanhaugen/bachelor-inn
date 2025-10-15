@@ -111,6 +111,8 @@ func ShowMovePopup(windowPos :Vector2) -> void:
 		move_popup.move_button.show();
 
 func _input(event: InputEvent) -> void:
+	if (state != States.PLAYING):
+		return;
 	if (inMenu):
 		return;
 	
@@ -192,9 +194,11 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 		animationPath.clear();
 		
 		for i :int in path.size():
-			animationPath.append(Vector2(path[i].x, path[i].y) * map.transform.get_scale());
-			#print(animationPath[i].x);
-			#print(animationPath[i].y);
+			animationPath.append(map.map_to_local(path[i]) * map.transform.get_scale());
+
+	if (animationPath.is_empty() == false):
+		animated_unit.position = animationPath.pop_front();
+		animated_unit.show();
 	
 	path_arrow.set_cell(start);
 
@@ -229,6 +233,8 @@ func MoveAI() -> void:
 		movesStack.append(move);
 
 	movementMap.clear();
+	animationPath.clear();
+	AStar(movesStack.front().startPos, movesStack.front().endPos, false);
 	playerTurn = true;
 	state = States.ANIMATING;
 
@@ -262,24 +268,27 @@ func _process(delta: float) -> void:
 			MoveAI();
 			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
+		animated_unit.show();
+		# Animations done: stop animating
 		if (movesStack.is_empty()):
 			state = States.PLAYING;
-			return;
-		else:
+			animated_unit.hide();
+		# Done with one move, execute it and start on next
+		elif (animationPath.is_empty()):
 			activeMove = movesStack.pop_front();
 			activeMove.execute();
-		#if (animationPath.is_empty()):
-		#	activeMove = movesStack.pop_front();
-		#	activeMove.execute();
-		#	AStar(activeMove.startPos, activeMove.endPos, false);
-		#	
-		#	if (animationPath.is_empty() == false):
-		#		animated_unit.position = animationPath.pop_front();
-		#		animated_unit.show();
-		#else:
-		#	if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
-		#		animated_unit.position = animationPath.pop_front();
-		#	else:
-		#		animated_unit.position += (animationPath.pop_front() / animationPath.pop_front().length()) * delta;
+			
+			if (movesStack.is_empty() == false):
+				AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+			
+			if (animationPath.is_empty() == false):
+				animated_unit.position = animationPath.pop_front();
+		# Process animation
+		else:
+			if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
+				animated_unit.position = animationPath.pop_front();
+			else:
+				var dir :Vector2 = animationPath.front() - animated_unit.position;
+				animated_unit.position += dir.normalized() * 5;# animationPath.front(); #(dir.normalized() * delta) * 5000;
 			
 			#animated_unit.position.x = animationPath
