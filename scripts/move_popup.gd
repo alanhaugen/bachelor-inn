@@ -9,21 +9,22 @@ extends Control
 func HidePopup() -> void:
 	map.inMenu = false;
 	map.isUnitSelected = false;
+	map.path_arrow.clear();
 	move_button.hide();
 	attack_button.hide();
 	wait_button.hide();
 	hide();
 
 func _on_move_button_pressed() -> void:
-	map.activeMove.execute();
+	map.movesStack.append(map.activeMove);
 	HidePopup();
 
 func _on_attack_button_pressed() -> void:
-	map.activeMove.execute();
+	map.movesStack.append(map.activeMove);
 	HidePopup();
 
 func _on_wait_button_pressed() -> void:
-	map.activeMove.execute();
+	map.movesStack.append(map.activeMove);
 	HidePopup()
 
 func _on_cancel_button_pressed() -> void:

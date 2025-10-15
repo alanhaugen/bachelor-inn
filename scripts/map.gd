@@ -9,10 +9,15 @@ extends Node2D
 @onready var movementMap               :TileMapLayer = $MovementSquares;
 @onready var collidable_terrain_layer  :TileMapLayer = $CollidableTerrainLayer
 @onready var move_popup                :Control = $MovePopup
+@onready var path_arrow                :TileMapLayer = $PathArrow
+
+enum States { PLAYING, ANIMATING };
+var state :int = States.PLAYING;
 
 var isUnitSelected :bool = false;
 var inMenu         :bool = false;
 var activeMove     :Move;
+var movesStack     :Array;
 
 const Move = preload("res://scripts/move.gd");
 
@@ -135,6 +140,7 @@ func _input(event: InputEvent) -> void:
 			if (movementMap.get_cell_atlas_coords(pos) == attackCode):
 				activeMove.isAttack = true;
 			ShowMovePopup(windowPos);
+			AStar(unitPos, pos);
 			
 			#unitsMap.set_cell(pos, 0, playerCodeDone);
 			#unitsMap.set_cell(unitPos, -1);
@@ -154,6 +160,27 @@ func _ready() -> void:
 	move_popup.hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
+
+func AStar(start :Vector2i, end :Vector2i) -> void:
+	path_arrow.clear();
+	var path :Array[Vector2i];
+	path.append(start);
+	path.append(end);
+	
+	for i :int in abs(end.x - start.x):
+		if (end.x > start.x):
+			path.append(Vector2i(start.x + i, start.y));
+		else:
+			path.append(Vector2i(start.x - i, start.y));
+	
+	for i :int in abs(end.y - start.y):
+		if (end.y < start.y):
+			path.append(Vector2i(start.x, start.y - i));
+		else:
+			path.append(Vector2i(start.x, start.y + i));
+	
+	path_arrow.set_cells_terrain_connect(path, 0, 0);
+	path_arrow.set_cell(start);
 
 func MoveAI() -> void:
 	var units :Array[Vector2i] = unitsMap.get_used_cells();
@@ -183,7 +210,7 @@ func MoveAI() -> void:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
-		move.execute();
+		movesStack.append(move);
 
 	movementMap.clear();
 	playerTurn = true;
@@ -206,13 +233,22 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/victory.tscn");
 
 func _process(delta: float) -> void:
-	if (playerTurn):
-		playerTurn = false;
-		var units :Array[Vector2i] = unitsMap.get_used_cells();
-		for i in units.size():
-			var pos :Vector2i = units[i];
-			if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
-				playerTurn = true;
+	if (movesStack.is_empty()):
+		state = States.PLAYING;
 	else:
-		MoveAI();
-		CheckVictoryConditions();
+		state = States.ANIMATING;
+	
+	if (state == States.PLAYING):
+		if (playerTurn):
+			playerTurn = false;
+			var units :Array[Vector2i] = unitsMap.get_used_cells();
+			for i in units.size():
+				var pos :Vector2i = units[i];
+				if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
+					playerTurn = true;
+		else:
+			MoveAI();
+			CheckVictoryConditions();
+	elif (state == States.ANIMATING):
+		activeMove = movesStack.pop_front();
+		activeMove.execute();
