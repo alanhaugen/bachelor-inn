@@ -198,7 +198,6 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 
 	if (animationPath.is_empty() == false):
 		animated_unit.position = animationPath.pop_front();
-		animated_unit.show();
 	
 	path_arrow.set_cell(start);
 
