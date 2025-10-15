@@ -27,11 +27,10 @@ var playerCode     :Vector2i = Vector2i(29, 69);
 var playerCodeDone :Vector2i = Vector2i(28, 75);
 var enemyCode      :Vector2i = Vector2i(18, 80);
 var attackCode     :Vector2i = Vector2i(22,27);
-var legalMoveCode  :Vector2i = Vector2(14,3);
 
 func Touch(pos :Vector2) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
-		movementMap.set_cell(pos, 0, legalMoveCode);
+		movementMap.set_cell(pos, 6, Vector2i(0,0));
 		return true;
 	return false;
 
