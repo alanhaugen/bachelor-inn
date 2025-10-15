@@ -1,5 +1,8 @@
 extends Node2D
 
+# TODO: Stackable tiles for enemies
+# TODO: Make your own units passable
+
 @onready var cursor: Sprite2D = $Cursor;
 @onready var map :TileMapLayer = $Map;
 @onready var unitsMap :TileMapLayer = $Units;
@@ -10,8 +13,9 @@ const Move = preload("res://scripts/move.gd");
 
 var playerTurn :bool = true;
 var unitPos :Vector2;
-var playerCode :Vector2i = Vector2i(29, 69);
-var enemyCode  :Vector2i = Vector2i(18, 80);
+var playerCode     :Vector2i = Vector2i(29, 69);
+var playerCodeDone :Vector2i = Vector2i(28, 75);
+var enemyCode      :Vector2i = Vector2i(18, 80);
 
 func Touch(pos :Vector2) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
@@ -79,10 +83,9 @@ func _input(event: InputEvent) -> void:
 			movementMap.clear();
 			Dijkstra(pos, 3);
 		elif (movementMap.get_cell_source_id(pos) != -1):
-			unitsMap.set_cell(pos, 0, playerCode);
+			unitsMap.set_cell(pos, 0, playerCodeDone);
 			unitsMap.set_cell(unitPos, -1);
 			movementMap.clear();
-			playerTurn = false;
 		else:
 			movementMap.clear();
 		
@@ -98,22 +101,34 @@ func _ready() -> void:
 #	units.append(unit);
 
 func MoveAI() -> void:
-	var possibleMoves :Array[Move];
 	var units :Array[Vector2i] = unitsMap.get_used_cells();
 	for i in units.size():
 		var pos :Vector2i = units[i];
+		if (unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
+			unitsMap.set_cell(pos, 0, playerCode);
+	
+	var aiUnitsMoves :Array;
+	for i in units.size():
+		var pos :Vector2i = units[i];
 		if (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
-			possibleMoves += Dijkstra(pos, 3);
+			aiUnitsMoves.append(Array());
+			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
 	
-	var randomMove :Move = possibleMoves[randi() % possibleMoves.size()];
+	for i in aiUnitsMoves.size():
+		var randomMove :Move = aiUnitsMoves[i][randi() % aiUnitsMoves.size()];
+		randomMove.exectute();
 	
-	randomMove.exectute();
 	movementMap.clear();
 	
 	playerTurn = true;
 
 func _process(delta: float) -> void:
 	if (playerTurn):
-		return;
+		var units :Array[Vector2i] = unitsMap.get_used_cells();
+		playerTurn = false;
+		for i in units.size():
+			var pos :Vector2i = units[i];
+			if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
+				playerTurn = true;
 	else:
 		MoveAI();
