@@ -26,7 +26,7 @@ func _on_attack_button_pressed() -> void:
 	HidePopup();
 
 func _on_wait_button_pressed() -> void:
-	map.movesStack.append(map.activeMove);
+	map.activeMove.execute();
 	HidePopup()
 
 func _on_cancel_button_pressed() -> void:

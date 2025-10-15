@@ -290,7 +290,8 @@ func _process(delta: float) -> void:
 			if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
 				animated_unit.position = animationPath.pop_front();
 			else:
+				var movement_speed :float = 5;
 				var dir :Vector2 = animationPath.front() - animated_unit.position;
-				animated_unit.position += dir.normalized() * 5;# animationPath.front(); #(dir.normalized() * delta) * 5000;
+				animated_unit.position += dir.normalized() * movement_speed; # * delta
 			
 			#animated_unit.position.x = animationPath
