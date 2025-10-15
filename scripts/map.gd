@@ -233,9 +233,12 @@ func MoveAI() -> void:
 
 	movementMap.clear();
 	animationPath.clear();
-	AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+	
+	if (movesStack.is_empty() == false):
+		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+		state = States.ANIMATING;
+	
 	playerTurn = true;
-	state = States.ANIMATING;
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector2i] = unitsMap.get_used_cells();
