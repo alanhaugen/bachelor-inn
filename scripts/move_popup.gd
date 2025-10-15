@@ -17,10 +17,12 @@ func HidePopup() -> void:
 
 func _on_move_button_pressed() -> void:
 	map.movesStack.append(map.activeMove);
+	map.state = map.States.ANIMATING;
 	HidePopup();
 
 func _on_attack_button_pressed() -> void:
 	map.movesStack.append(map.activeMove);
+	map.state = map.States.ANIMATING;
 	HidePopup();
 
 func _on_wait_button_pressed() -> void:

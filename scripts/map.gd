@@ -10,6 +10,9 @@ extends Node2D
 @onready var collidable_terrain_layer  :TileMapLayer = $CollidableTerrainLayer
 @onready var move_popup                :Control = $MovePopup
 @onready var path_arrow                :TileMapLayer = $PathArrow
+@onready var animated_unit             : AnimatedSprite2D = $AnimatedUnit
+
+var animationPath :Array[Vector2];
 
 enum States { PLAYING, ANIMATING };
 var state :int = States.PLAYING;
@@ -160,14 +163,12 @@ func _ready() -> void:
 	#tiles = map.get_used_cells();
 #	units.append(unit);
 
-func AStar(start :Vector2i, end :Vector2i) -> void:
+func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
 	
 	astar.region = Rect2i(0, 0, 18, 10);
-	#astar.cell_size = 16;
-	#astar.offset = CELL_SIZE * 0.5
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -185,9 +186,15 @@ func AStar(start :Vector2i, end :Vector2i) -> void:
 	var path :PackedVector2Array = astar.get_point_path(start, end);
 	
 	if not path.is_empty():
-		path_arrow.set_cells_terrain_connect(path, 0, 0);
-		#set_cell(0, _start_point, 0, Vector2i(Tile.START_POINT, 0))
-		#set_cell(0, _end_point, 0, Vector2i(Tile.END_POINT, 0))
+		if (showPath):
+			path_arrow.set_cells_terrain_connect(path, 0, 0);
+	
+		animationPath.clear();
+		
+		for i :int in path.size():
+			animationPath.append(Vector2(path[i].x, path[i].y) * map.transform.get_scale());
+			#print(animationPath[i].x);
+			#print(animationPath[i].y);
 	
 	path_arrow.set_cell(start);
 
@@ -223,6 +230,7 @@ func MoveAI() -> void:
 
 	movementMap.clear();
 	playerTurn = true;
+	state = States.ANIMATING;
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector2i] = unitsMap.get_used_cells();
@@ -242,11 +250,6 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/victory.tscn");
 
 func _process(delta: float) -> void:
-	if (movesStack.is_empty()):
-		state = States.PLAYING;
-	else:
-		state = States.ANIMATING;
-	
 	if (state == States.PLAYING):
 		if (playerTurn):
 			playerTurn = false;
@@ -259,5 +262,24 @@ func _process(delta: float) -> void:
 			MoveAI();
 			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
-		activeMove = movesStack.pop_front();
-		activeMove.execute();
+		if (movesStack.is_empty()):
+			state = States.PLAYING;
+			return;
+		else:
+			activeMove = movesStack.pop_front();
+			activeMove.execute();
+		#if (animationPath.is_empty()):
+		#	activeMove = movesStack.pop_front();
+		#	activeMove.execute();
+		#	AStar(activeMove.startPos, activeMove.endPos, false);
+		#	
+		#	if (animationPath.is_empty() == false):
+		#		animated_unit.position = animationPath.pop_front();
+		#		animated_unit.show();
+		#else:
+		#	if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
+		#		animated_unit.position = animationPath.pop_front();
+		#	else:
+		#		animated_unit.position += (animationPath.pop_front() / animationPath.pop_front().length()) * delta;
+			
+			#animated_unit.position.x = animationPath
