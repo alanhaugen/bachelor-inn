@@ -162,23 +162,33 @@ func _ready() -> void:
 
 func AStar(start :Vector2i, end :Vector2i) -> void:
 	path_arrow.clear();
-	var path :Array[Vector2i];
-	path.append(start);
-	path.append(end);
 	
-	for i :int in abs(end.x - start.x):
-		if (end.x > start.x):
-			path.append(Vector2i(start.x + i, start.y));
-		else:
-			path.append(Vector2i(start.x - i, start.y));
+	var astar :AStarGrid2D = AStarGrid2D.new();
 	
-	for i :int in abs(end.y - start.y):
-		if (end.y < start.y):
-			path.append(Vector2i(start.x, start.y - i));
-		else:
-			path.append(Vector2i(start.x, start.y + i));
+	astar.region = Rect2i(0, 0, 18, 10);
+	#astar.cell_size = 16;
+	#astar.offset = CELL_SIZE * 0.5
+	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
+	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	astar.update();
+
+	# Fill in the data from the tilemap layers into the a-star datastructure
+	for i in range(astar.region.position.x, astar.region.end.x):
+		for j in range(astar.region.position.y, astar.region.end.y):
+			var pos :Vector2i = Vector2i(i, j);
+			if (collidable_terrain_layer.get_cell_source_id(pos) != -1):
+				astar.set_point_solid(pos);
+			if (unitsMap.get_cell_source_id(pos) != -1):
+				astar.set_point_solid(pos);
+
+	var path :PackedVector2Array = astar.get_point_path(start, end);
 	
-	path_arrow.set_cells_terrain_connect(path, 0, 0);
+	if not path.is_empty():
+		path_arrow.set_cells_terrain_connect(path, 0, 0);
+		#set_cell(0, _start_point, 0, Vector2i(Tile.START_POINT, 0))
+		#set_cell(0, _end_point, 0, Vector2i(Tile.END_POINT, 0))
+	
 	path_arrow.set_cell(start);
 
 func MoveAI() -> void:
