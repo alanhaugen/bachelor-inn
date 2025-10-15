@@ -1,16 +1,17 @@
 extends Node2D
 
-var tiles :Array;
-var units :Array;
-
 @onready var cursor: Sprite2D = $Cursor;
 @onready var map :TileMapLayer = $Map;
 @onready var unitsMap :TileMapLayer = $Units;
 @onready var movementMap :TileMapLayer = $MovementSquares;
 @onready var collidable_terrain_layer: TileMapLayer = $CollidableTerrainLayer
 
-var isUnitSelected :bool = false;
+const Move = preload("res://scripts/move.gd");
+
+var playerTurn :bool = true;
 var unitPos :Vector2;
+var playerCode :Vector2i = Vector2i(29, 69);
+var enemyCode  :Vector2i = Vector2i(18, 80);
 
 func Touch(pos :Vector2) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
@@ -18,12 +19,16 @@ func Touch(pos :Vector2) -> bool:
 		return true;
 	return false;
 
-func Dijkstra(pos :Vector2, movementLength :int) -> void:
+func Dijkstra(startPos :Vector2, movementLength :int) -> Array[Move]:
 	var frontier :int = 0;
 	var frontierPositions :Array;
 	var nextFrontierPositions :Array;
 	
+	var pos :Vector2 = startPos;
+	var moves :Array[Move];
+	
 	frontierPositions.append(pos);
+	var type :Vector2i = unitsMap.get_cell_atlas_coords(pos);
 	
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
@@ -35,22 +40,26 @@ func Dijkstra(pos :Vector2, movementLength :int) -> void:
 		
 		if (Touch(north)):
 			nextFrontierPositions.append(north);
+			moves.append(Move.new(startPos, north, type, unitsMap));
 		
 		if (Touch(south)):
 			nextFrontierPositions.append(south);
+			moves.append(Move.new(startPos, south, type, unitsMap));
 		
 		if (Touch(east)):
 			nextFrontierPositions.append(east);
+			moves.append(Move.new(startPos, east, type, unitsMap));
 		
 		if (Touch(west)):
 			nextFrontierPositions.append(west);
+			moves.append(Move.new(startPos, west, type, unitsMap));
 		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
 			frontierPositions = nextFrontierPositions.duplicate();
 			nextFrontierPositions.clear();
 	
-	return;
+	return moves;
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -65,17 +74,15 @@ func _input(event: InputEvent) -> void:
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
-		if (unitsMap.get_cell_source_id(pos) != -1):
-			isUnitSelected = true;
+		if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
 			unitPos = pos;
 			movementMap.clear();
-			
-			Dijkstra(pos, 2);
-			
-		elif (isUnitSelected == true && movementMap.get_cell_source_id(pos) != -1):
-			unitsMap.set_cell(pos, 0, Vector2(29, 69));
+			Dijkstra(pos, 3);
+		elif (movementMap.get_cell_source_id(pos) != -1):
+			unitsMap.set_cell(pos, 0, playerCode);
 			unitsMap.set_cell(unitPos, -1);
 			movementMap.clear();
+			playerTurn = false;
 		else:
 			movementMap.clear();
 		
@@ -90,5 +97,23 @@ func _ready() -> void:
 	#tiles = map.get_used_cells();
 #	units.append(unit);
 
-#func _process(delta: float) -> void:
-#	return
+func MoveAI() -> void:
+	var possibleMoves :Array[Move];
+	var units :Array[Vector2i] = unitsMap.get_used_cells();
+	for i in units.size():
+		var pos :Vector2i = units[i];
+		if (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
+			possibleMoves += Dijkstra(pos, 3);
+	
+	var randomMove :Move = possibleMoves[randi() % possibleMoves.size()];
+	
+	randomMove.exectute();
+	movementMap.clear();
+	
+	playerTurn = true;
+
+func _process(delta: float) -> void:
+	if (playerTurn):
+		return;
+	else:
+		MoveAI();

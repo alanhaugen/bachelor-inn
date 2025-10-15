@@ -4217,12 +4217,16 @@ tile_set = SubResource("TileSet_2lpho")
 
 [node name="Units" type="TileMapLayer" parent="."]
 scale = Vector2(5, 5)
-tile_map_data = PackedByteArray("AAACAAIAAAAdAEUAAAAHAAcAAAAdAEUAAAA=")
+tile_map_data = PackedByteArray("AAACAAIAAAAdAEUAAAAHAAcAAAAdAEUAAAACAAYAAAASAFAAAAALAAIAAAASAFAAAAA=")
+tile_set = SubResource("TileSet_2lpho")
+
+[node name="Units" type="TileMapLayer" parent="Units"]
+scale = Vector2(5, 5)
+tile_map_data = PackedByteArray("AAACAAIAAAAdAEUAAAAHAAcAAAAdAEUAAAACAAYAAAASAFAAAAALAAIAAAASAFAAAAA=")
 tile_set = SubResource("TileSet_2lpho")
 
 [node name="MovementSquares" type="TileMapLayer" parent="."]
 scale = Vector2(5, 5)
-tile_map_data = PackedByteArray("AAAAAAQAAgAAAAAAAAA=")
 tile_set = SubResource("TileSet_2lpho")
 
 [node name="Cursor" parent="." instance=ExtResource("4_0cso3")]
