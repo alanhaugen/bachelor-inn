@@ -4,14 +4,17 @@ var startPos :Vector2i;
 var endPos   :Vector2i;
 var type     :Vector2i;
 var units: TileMapLayer;
+var isAttack :bool = false;
+var isWait   :bool = false;
 
-func _init(inStartPos :Vector2i, inEndPos :Vector2i, inType :Vector2i, inUnits: TileMapLayer) -> void:
+func _init(inStartPos :Vector2i, inEndPos :Vector2i, inType :Vector2i, inUnits: TileMapLayer, inIsAttack :bool = false) -> void:
 	startPos = inStartPos;
 	endPos   = inEndPos;
 	type     = inType;
 	units    = inUnits;
+	isAttack = inIsAttack;
 
-func exectute() -> void:
+func execute() -> void:
 	units.set_cell(startPos);
 	units.set_cell(endPos, 0, type);
 	

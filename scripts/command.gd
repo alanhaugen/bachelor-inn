@@ -1,6 +1,6 @@
 class_name Command extends Node
 
-func exectute() -> void:
+func execute() -> void:
 	return;
 	
 func undo() -> void:
