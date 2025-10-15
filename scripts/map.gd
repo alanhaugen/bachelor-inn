@@ -179,7 +179,7 @@ func AStar(start :Vector2i, end :Vector2i) -> void:
 			var pos :Vector2i = Vector2i(i, j);
 			if (collidable_terrain_layer.get_cell_source_id(pos) != -1):
 				astar.set_point_solid(pos);
-			if (unitsMap.get_cell_source_id(pos) != -1):
+			if (unitsMap.get_cell_source_id(pos) != -1 && pos != end):
 				astar.set_point_solid(pos);
 
 	var path :PackedVector2Array = astar.get_point_path(start, end);
