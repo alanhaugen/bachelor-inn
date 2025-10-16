@@ -2,6 +2,7 @@ extends Node2D
 
 # TODO: Stackable tiles for enemies
 # TODO: Make your own units passable
+# TODO: camp?
 
 @onready var cursor                    :Sprite2D = $Cursor;
 @onready var map                       :TileMapLayer = $Map;
@@ -11,8 +12,14 @@ extends Node2D
 @onready var move_popup                :Control = $MovePopup
 @onready var path_arrow                :TileMapLayer = $PathArrow
 @onready var animated_unit             : AnimatedSprite2D = $AnimatedUnit
+@onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
+@onready var animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
+
+@onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
+@onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
 var animationPath :Array[Vector2];
+var isAnimationJustFinished :bool = false;
 
 enum States { PLAYING, ANIMATING };
 var state :int = States.PLAYING;
@@ -162,6 +169,9 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	cursor.hide();
 	move_popup.hide();
+	#turn_transition
+	animation_player.play();
+	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
 
@@ -237,8 +247,6 @@ func MoveAI() -> void:
 	if (movesStack.is_empty() == false):
 		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
 		state = States.ANIMATING;
-	
-	playerTurn = true;
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector2i] = unitsMap.get_used_cells();
@@ -258,7 +266,18 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/victory.tscn");
 
 func _process(delta: float) -> void:
+	if (animation_player.is_playing()):
+		turn_transition.show();
+		return;
+	
+	turn_transition.hide();
+	
 	if (state == States.PLAYING):
+		if (isAnimationJustFinished):
+			isAnimationJustFinished = false;
+			animation_player.play();
+			enemy_label.hide();
+			player_label.show();
 		if (playerTurn):
 			playerTurn = false;
 			var units :Array[Vector2i] = unitsMap.get_used_cells();
@@ -266,6 +285,10 @@ func _process(delta: float) -> void:
 				var pos :Vector2i = units[i];
 				if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
 					playerTurn = true;
+			if (playerTurn == false):
+				animation_player.play();
+				enemy_label.show();
+				player_label.hide();
 		else:
 			MoveAI();
 			CheckVictoryConditions();
@@ -275,6 +298,9 @@ func _process(delta: float) -> void:
 		if (movesStack.is_empty()):
 			state = States.PLAYING;
 			animated_unit.hide();
+			if (playerTurn == false):
+				isAnimationJustFinished = true;
+				playerTurn = true;
 		# Done with one move, execute it and start on next
 		elif (animationPath.is_empty()):
 			activeMove = movesStack.pop_front();
@@ -292,6 +318,6 @@ func _process(delta: float) -> void:
 			else:
 				var movement_speed :float = 5;
 				var dir :Vector2 = animationPath.front() - animated_unit.position;
-				animated_unit.position += dir.normalized() * movement_speed; # * delta
+				animated_unit.position += dir.normalized() * movement_speed;# * delta);
 			
 			#animated_unit.position.x = animationPath
