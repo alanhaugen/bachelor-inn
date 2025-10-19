@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://bisvbua4xbf0n"]
+
+[ext_resource type="Script" uid="uid://m1l1shpb02vb" path="res://scenes/unit.gd" id="1_o7ajc"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o7ajc"]
+
+[node name="Unit" type="Node2D"]
+script = ExtResource("1_o7ajc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_o7ajc")
