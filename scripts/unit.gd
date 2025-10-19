@@ -1,14 +1,33 @@
-extends Node2D
+class_name unit extends Node
 
-var health :int; 	 # Unit health
-var strength :int;	 # Damage with weapons
-var magic :int;		 # Damage with magic
-var luck  :int;		 # Affects many other skills
-var speed :int;		 # Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-var movement :int;
-var defense :int;    # Lowers damage of weapon attacks
-var resistence :int; # Lowers damage of magic attacks
+enum Speciality
+{
+	Magician,
+	Archer,
+	Fighter
+}
+
+# Here are the properties of a unit
+
+@export var isPlayable :bool = true;
+@export var unitName :String = "Believer"; ## Unit health
+@export var speciality :Speciality = Speciality.Fighter;
+
+@export var health :int     = 3; ## Unit health
+@export var skill :int      = 3; ## Chance to hit critical.
+@export var strength :int   = 3; ## Damage with weapons
+@export var magic :int      = 3; ## Damage with magic
+@export var luck  :int      = 3; ## Affects many other skills
+@export var speed :int      = 3; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
+@export var movement :int   = 3; ## Movement range
+@export var defense :int    = 3; ## Lowers damage of weapon attacks
+@export var resistence :int = 3; ## Lowers damage of magic attacks
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical
-var skill :int;		# Chance to hit critical.
+
+func attack() -> void:
+	pass;
+
+func move() -> void:
+	pass;
