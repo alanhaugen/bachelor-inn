@@ -25,8 +25,6 @@ enum Speciality
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical
-<<<<<<< HEAD
-var skill :int;		# Chance to hit critical.
 
 var units: = {
 	"Withburn, the Cleric": 
@@ -129,11 +127,9 @@ var units: = {
 		"experience": 0
 	}
 }
-=======
 
 func attack() -> void:
 	pass;
 
 func move() -> void:
 	pass;
->>>>>>> d79615f2668177b3c5bbc3cc4e297173f8b80c60
