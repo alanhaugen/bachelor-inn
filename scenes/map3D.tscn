@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cawp1e5cmnc8v"]
+
+[ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/MeshLibrary.tres" id="1_hm5u0"]
+[ext_resource type="MeshLibrary" uid="uid://cu8edu6sydp5g" path="res://scenes/UnitMeshLibrary.tres" id="2_ufq0t"]
+
+[sub_resource type="Environment" id="Environment_hm5u0"]
+
+[node name="Map3d" type="Node3D"]
+
+[node name="Map" type="GridMap" parent="."]
+mesh_library = ExtResource("1_hm5u0")
+data = {
+"cells": PackedInt32Array(0, 2, 1441792, 0, 1, 1441792, 65535, 1, 1441792, 65535, 0, 1441792, 65534, 0, 1441792, 65534, 65535, 1441792, 65534, 65534, 1441792, 65535, 65534, 1441792, 65535, 65535, 1441792, 0, 65535, 1441792, 0, 0, 1441792, 0, 65534, 1441792, 0, 65533, 1441792, 1, 65534, 1441792, 1, 65535, 1441792, 1, 0, 1441792, 1, 1, 1441792, 1, 2, 1441792, 65535, 2, 1441792, 65534, 2, 1441792, 65534, 1, 1441792, 65535, 65533, 1441792, 65535, 65532, 1441792, 65534, 65533, 1441792, 65534, 65532, 1441792, 1, 65533, 1441792, 1, 65532, 1441792, 0, 65532, 1441792)
+}
+
+[node name="Units" type="GridMap" parent="."]
+mesh_library = ExtResource("2_ufq0t")
+cell_size = Vector3(2, 2.7, 2)
+data = {
+"cells": PackedInt32Array(0, 65533, 0, 65535, 65535, 0)
+}
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.5158607, 0.85667247, 0, -0.85667247, 0.5158607, 0, 3.5861301, 0)
+environment = SubResource("Environment_hm5u0")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 0, 0, 0)
