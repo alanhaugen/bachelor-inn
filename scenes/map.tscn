@@ -4309,3 +4309,5 @@ visible = false
 visible = false
 
 [node name="TurnTransition" parent="." instance=ExtResource("9_be0no")]
+
+[node name="Map2" type="GridMap" parent="."]
