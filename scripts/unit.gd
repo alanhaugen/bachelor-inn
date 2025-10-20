@@ -13,15 +13,16 @@ enum Speciality
 @export var unitName :String = "Believer"; ## Unit health
 @export var speciality :Speciality = Speciality.Fighter;
 
-@export var health :int     = 3; ## Unit health
-@export var skill :int      = 3; ## Chance to hit critical.
-@export var strength :int   = 3; ## Damage with weapons
-@export var magic :int      = 3; ## Damage with magic
-@export var luck  :int      = 3; ## Affects many other skills
-@export var speed :int      = 3; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-@export var movement :int   = 3; ## Movement range
-@export var defense :int    = 3; ## Lowers damage of weapon attacks
-@export var resistence :int = 3; ## Lowers damage of magic attacks
+@export var health :int     = 4; ## Unit health
+@export var mind :int       = 4; ## Mind reduces sanity loss from combat or other events
+@export var defense :int    = 4; ## Lowers damage of weapon attacks
+@export var resistence :int = 4; ## Lowers damage of magic attacks
+@export var luck  :int      = 4; ## Affects many other skills
+@export var range :int      = 4; ## Movement range
+@export var skill :int      = 4; ## Chance to hit critical.
+@export var strength :int   = 4; ## Damage with weapons
+@export var magic :int      = 4; ## Damage with magic
+@export var speed :int      = 4; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical
