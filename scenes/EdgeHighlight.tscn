@@ -16,7 +16,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.22
 mesh = SubResource("PlaneMesh_1p1b8")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1062524, 1.9654537, -0.4478579)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5298226, 2.1479907, -0.44785765)
 light_color = Color(0.75686276, 0.8392157, 0.7058824, 1)
 light_energy = 0.928
 light_indirect_energy = 0.0
