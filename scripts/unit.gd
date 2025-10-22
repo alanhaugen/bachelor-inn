@@ -1,27 +1,46 @@
 class_name unit extends Node
 
+## This dictates level progression, skills and compatible weapons
 enum Speciality
 {
-	Magician,
-	Archer,
+	## This class has more movement than the other classes
+	## allowing them to get to objectives or outrun enemies
+	Scout,
+	## Most classes usually fall in this category in games
+	## like fire emblem. If we want to use the sanity
+	## mechanic for our game, then these units might have
+	## extra resistance from sanity damage from battles.
+	Support,
+	## The classic healer/utility buffer. Their abilities
+	## do not necessarily have to affect battles, they
+	## could improve movement or conjure terrain.
 	Fighter
 }
 
-# Here are the properties of a unit
+@export var isPlayable :bool = true; ## Friend or foe
+@export var unitName :String = "Bernard Grunderburger"; ## Unit name
+@export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
 
-@export var isPlayable :bool = true;
-@export var unitName :String = "Believer"; ## Unit health
-@export var speciality :Speciality = Speciality.Fighter;
+@export var health :int       = 4;    ## Unit health
+@export var movement :int     = 4;    ## Movement range
+@export var mind :int         = 4;    ## Mind reduces sanity loss from combat or other events
+@export var defense :int      = 4;    ## Lowers damage of weapon attacks
+@export var resistence :int   = 4;    ## Lowers damage of magic attacks
+@export var luck  :int        = 4;    ## Affects many other skills
+@export var intimidation :int = 4;    ## How the unit affects sanity in battle.
+@export var skill :int        = 4;    ## Chance to hit critical.
+@export var strength :int     = 4;    ## Damage with weapons
+@export var magic :int        = 4;    ## Damage with magic
+@export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
+@export var weapon :Weapon    = null; ## Weapon held by unit
 
-@export var health :int     = 3; ## Unit health
-@export var skill :int      = 3; ## Chance to hit critical.
-@export var strength :int   = 3; ## Damage with weapons
-@export var magic :int      = 3; ## Damage with magic
-@export var luck  :int      = 3; ## Affects many other skills
-@export var speed :int      = 3; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-@export var movement :int   = 3; ## Movement range
-@export var defense :int    = 3; ## Lowers damage of weapon attacks
-@export var resistence :int = 3; ## Lowers damage of magic attacks
+@export var experience : int  = 0;
+@export var skills : Array[Skill];
+
+## SKILL TREE
+
+func _ready() -> void:
+	print(unitName);
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical

@@ -4,6 +4,8 @@ extends Node2D
 # TODO: Make your own units passable
 # TODO: camp?
 
+@export var dialogue : String;
+
 @onready var cursor                    :Sprite2D = $Cursor;
 @onready var map                       :TileMapLayer = $Map;
 @onready var unitsMap                  :TileMapLayer = $Units;
