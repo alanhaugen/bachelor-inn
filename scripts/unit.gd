@@ -128,7 +128,6 @@ var units: = {
 	}
 }
 
-
 func attack() -> void:
 	pass;
 
