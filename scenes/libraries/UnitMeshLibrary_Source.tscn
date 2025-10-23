@@ -7,6 +7,9 @@
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/unit.gd" id="1_o7ajc"]
 [ext_resource type="Texture2D" uid="uid://cyv36qbfluytx" path="res://art/mercenary.png" id="2_k673f"]
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/UI/HealthBar.tscn" id="3_1jvru"]
+<<<<<<< Updated upstream:scenes/libraries/UnitMeshLibrary_Source.tscn
+>>>>>>> Stashed changes:scenes/unit.tscn
+=======
 >>>>>>> Stashed changes:scenes/unit.tscn
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1jvru"]
