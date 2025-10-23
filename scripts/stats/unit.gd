@@ -37,10 +37,15 @@ enum Speciality
 @export var experience : int  = 0;
 @export var skills : Array[Skill];
 
-## SKILL TREE
+@onready var health_bar: ProgressBar = $HealthBar
+
+@export var spawn_location :Vector3i; ## Where the unit will spawn
+
+## SKILL TREE	
 
 func _ready() -> void:
 	print(unitName);
+	$HealthBar.init_health(health)
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical

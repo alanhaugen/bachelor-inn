@@ -24,4 +24,4 @@ transform = Transform3D(1, 0, 0, 0, 0.5158607, 0.85667247, 0, -0.85667247, 0.515
 environment = SubResource("Environment_hm5u0")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 5, 5, 0)
