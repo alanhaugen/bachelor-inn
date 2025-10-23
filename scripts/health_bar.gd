@@ -9,12 +9,12 @@ func _set_health(new_health : int) -> void:
 	var prev_health : int = health
 	health = min(max_value, new_health)
 	value = health
-	
+
 	if health <= 0:
 		queue_free()
 	else:
 		damage_bar.value = health
-	
+
 	if health < prev_health:
 		timer.start()
 
