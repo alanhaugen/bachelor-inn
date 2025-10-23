@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cawp1e5cmnc8v"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_uie10"]
-[ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/MeshLibrary.tres" id="2_q6r2o"]
+[ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/CombatMeshLibrary.tres" id="2_q6r2o"]
 [ext_resource type="MeshLibrary" uid="uid://cu8edu6sydp5g" path="res://scenes/libraries/UnitMeshLibrary.tres" id="3_nnbsb"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]

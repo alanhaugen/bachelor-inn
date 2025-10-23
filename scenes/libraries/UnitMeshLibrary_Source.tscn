@@ -1,75 +1,21 @@
-[gd_scene load_steps=12 format=3 uid="uid://bisvbua4xbf0n"]
+[gd_scene load_steps=3 format=3 uid="uid://chm72s4nrf6a6"]
 
-[ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/unit.gd" id="1_a6jp0"]
-[ext_resource type="Texture2D" uid="uid://c34bud74r3ged" path="res://art/textures/mercenary.png" id="2_3ndh6"]
+[ext_resource type="Material" uid="uid://bso04gxd2symm" path="res://shaders/NormalShader.tres" id="1_305ie"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1jvru"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(0, 432, 38, 61)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6jp0"]
+albedo_color = Color(0, 0.6012054, 0, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gic7v"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(38, 432, 38, 61)
+[node name="Unit3dLibrary" type="Node3D"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tb304"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(76, 432, 38, 61)
+[node name="PlayerUnitSpawnPoint" type="MeshInstance3D" parent="."]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ruro2"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(114, 432, 38, 61)
+[node name="Box" type="CSGBox3D" parent="PlayerUnitSpawnPoint"]
+transparency = 0.75
+material = SubResource("StandardMaterial3D_a6jp0")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e8hdl"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(152, 432, 38, 61)
+[node name="EnemySpawnPoint" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_oee7j"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(190, 432, 38, 61)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7gdr1"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(228, 432, 38, 61)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dh01e"]
-atlas = ExtResource("2_3ndh6")
-region = Rect2(266, 432, 38, 61)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_o7ajc"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1jvru")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gic7v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tb304")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ruro2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_e8hdl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_oee7j")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7gdr1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dh01e")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="Unit" type="Node2D"]
-script = ExtResource("1_a6jp0")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-sprite_frames = SubResource("SpriteFrames_o7ajc")
-frame_progress = 0.32007656
+[node name="Box" type="CSGBox3D" parent="EnemySpawnPoint"]
+transparency = 0.75
+material = ExtResource("1_305ie")
