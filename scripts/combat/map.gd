@@ -4,7 +4,7 @@ extends Node2D
 # TODO: Make your own units passable
 # TODO: camp?
 
-@export var dialogue : String;
+@export var dialogue : Array[String];
 
 @onready var cursor                    :Sprite2D = $Cursor;
 @onready var map                       :TileMapLayer = $Map;
@@ -31,7 +31,7 @@ var inMenu         :bool = false;
 var activeMove     :Move;
 var movesStack     :Array;
 
-const Move = preload("res://scripts/move.gd");
+const Move = preload("res://scripts/combat/move.gd");
 
 var playerTurn     :bool = true;
 var unitPos        :Vector2;
@@ -263,9 +263,9 @@ func CheckVictoryConditions() -> void:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/gameover.tscn");
+		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/victory.tscn");
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
 
 func _process(delta: float) -> void:
 	if (animation_player.is_playing()):

@@ -1,17 +1,17 @@
 [gd_scene load_steps=20 format=4 uid="uid://bmw6hxcb71v0c"]
 
-[ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/map.gd" id="1_4xfga"]
-[ext_resource type="Texture2D" uid="uid://dckp5sqvm15ev" path="res://art/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png" id="2_paxxb"]
-[ext_resource type="Texture2D" uid="uid://c34bud74r3ged" path="res://art/mercenary.png" id="3_gldc4"]
-[ext_resource type="PackedScene" uid="uid://dlfwm0w3j2kio" path="res://scenes/cursor.tscn" id="4_0cso3"]
-[ext_resource type="Texture2D" uid="uid://jm00os0n3vhj" path="res://art/05.tileset-autotile.png" id="4_2lpho"]
-[ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/MoveDot.png" id="4_nakos"]
-[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/movePopup.tscn" id="5_2klcf"]
-[ext_resource type="PackedScene" uid="uid://byvsg74rc2sk8" path="res://scenes/AnimatedUnit.tscn" id="8_jh32y"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/turnTransition.tscn" id="9_be0no"]
+[ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_85g3d"]
+[ext_resource type="Texture2D" uid="uid://dckp5sqvm15ev" path="res://art/textures/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png" id="2_choun"]
+[ext_resource type="Texture2D" uid="uid://c34bud74r3ged" path="res://art/textures/mercenary.png" id="3_ya4ey"]
+[ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/textures/MoveDot.png" id="4_eb6dy"]
+[ext_resource type="Texture2D" uid="uid://jm00os0n3vhj" path="res://art/textures/05.tileset-autotile.png" id="5_trceg"]
+[ext_resource type="PackedScene" uid="uid://dlfwm0w3j2kio" path="res://scenes/ui/cursor.tscn" id="6_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/ui/movePopup.tscn" id="7_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://byvsg74rc2sk8" path="res://scenes/ui/AnimatedUnit.tscn" id="8_jbj1t"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turnTransition.tscn" id="9_muem4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_paxxb"]
-texture = ExtResource("2_paxxb")
+texture = ExtResource("2_choun")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -179,7 +179,7 @@ texture = ExtResource("2_paxxb")
 14:10/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0cso3"]
-texture = ExtResource("3_gldc4")
+texture = ExtResource("3_ya4ey")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -2790,7 +2790,7 @@ sources/0 = SubResource("TileSetAtlasSource_paxxb")
 sources/1 = SubResource("TileSetAtlasSource_0cso3")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2klcf"]
-texture = ExtResource("3_gldc4")
+texture = ExtResource("3_ya4ey")
 0:0/0 = 0
 1:0/0 = 0
 3:0/0 = 0
@@ -4024,7 +4024,7 @@ texture = ExtResource("3_gldc4")
 14:34/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2lpho"]
-texture = ExtResource("2_paxxb")
+texture = ExtResource("2_choun")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -4192,7 +4192,7 @@ texture = ExtResource("2_paxxb")
 14:10/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nakos"]
-texture = ExtResource("2_paxxb")
+texture = ExtResource("2_choun")
 0:0/animation_columns = 1
 0:0/animation_frame_0/duration = 1.0
 0:0/animation_frame_1/duration = 1.0
@@ -4203,7 +4203,7 @@ texture = ExtResource("2_paxxb")
 2:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_be0no"]
-texture = ExtResource("4_nakos")
+texture = ExtResource("4_eb6dy")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_2lpho"]
@@ -4213,7 +4213,7 @@ sources/2 = SubResource("TileSetAtlasSource_nakos")
 sources/6 = SubResource("TileSetAtlasSource_be0no")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jh32y"]
-texture = ExtResource("4_2lpho")
+texture = ExtResource("5_trceg")
 texture_region_size = Vector2i(80, 80)
 0:0/0 = 0
 0:0/0/terrain_set = 0
@@ -4275,7 +4275,7 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_jh32y")
 
 [node name="Map1" type="Node2D"]
-script = ExtResource("1_4xfga")
+script = ExtResource("1_85g3d")
 
 [node name="Map" type="TileMapLayer" parent="."]
 scale = Vector2(5, 5)
@@ -4299,13 +4299,13 @@ tile_set = SubResource("TileSet_2lpho")
 [node name="PathArrow" type="TileMapLayer" parent="."]
 tile_set = SubResource("TileSet_be0no")
 
-[node name="Cursor" parent="." instance=ExtResource("4_0cso3")]
+[node name="Cursor" parent="." instance=ExtResource("6_a8y0u")]
 scale = Vector2(0.5, 0.5)
 
-[node name="MovePopup" parent="." instance=ExtResource("5_2klcf")]
+[node name="MovePopup" parent="." instance=ExtResource("7_jkv2x")]
 visible = false
 
-[node name="AnimatedUnit" parent="." instance=ExtResource("8_jh32y")]
+[node name="AnimatedUnit" parent="." instance=ExtResource("8_jbj1t")]
 visible = false
 
-[node name="TurnTransition" parent="." instance=ExtResource("9_be0no")]
+[node name="TurnTransition" parent="." instance=ExtResource("9_muem4")]
