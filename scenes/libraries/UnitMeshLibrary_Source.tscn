@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxbpa037g1fft"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dbywx"]
+albedo_color = Color(0, 1, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_305ie"]
+material = SubResource("StandardMaterial3D_dbywx")
+
+[sub_resource type="BoxMesh" id="BoxMesh_a6jp0"]
+
+[node name="Scene Root" type="Node3D"]
+
+[node name="Unit" type="MeshInstance3D" parent="."]
+transparency = 0.4
+mesh = SubResource("BoxMesh_305ie")
+
+[node name="Enemy" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_a6jp0")

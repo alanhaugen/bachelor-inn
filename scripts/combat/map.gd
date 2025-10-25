@@ -1,4 +1,4 @@
-extends Node2D
+class_name Map extends Node3D
 
 # TODO: Stackable tiles for enemies
 # TODO: Make your own units passable

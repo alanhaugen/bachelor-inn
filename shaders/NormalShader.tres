@@ -1,8 +1,8 @@
 [gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://bso04gxd2symm"]
 
 [ext_resource type="Shader" uid="uid://b2w7ja61yiqgp" path="res://shaders/NormalShaderScrpt.gdshader" id="1_foiyr"]
-[ext_resource type="Texture2D" uid="uid://6jaideuj1qwg" path="res://art/WIP/DFFS_Character edge highlight poc.png" id="2_fkl7n"]
-[ext_resource type="Texture2D" uid="uid://dkt410of2nxd5" path="res://art/WIP/NRML_Character edge highlight poc.png" id="3_s4j2b"]
+[ext_resource type="Texture2D" uid="uid://c6ufp14dqs3ou" path="res://art/WIP/DFFS_Character edge highlight poc.png" id="2_fkl7n"]
+[ext_resource type="Texture2D" uid="uid://bwn1qrilts4jf" path="res://art/WIP/NRML_Character edge highlight poc.png" id="3_s4j2b"]
 
 [resource]
 render_priority = 0
