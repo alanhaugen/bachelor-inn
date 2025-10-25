@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw2l78n8ltopb"]
+
+[ext_resource type="PackedScene" uid="uid://b5l8ulk6yg4hl" path="res://art/dae/M_Grid_base.dae" id="1_hnxey"]
+
+[node name="M_Grid_base" instance=ExtResource("1_hnxey")]
