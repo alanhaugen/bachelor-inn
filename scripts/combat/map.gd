@@ -6,16 +6,16 @@ class_name Map extends Node3D
 
 @export var dialogue : Array[String];
 
-@onready var cursor                    	:Sprite3D 			= $Cursor;
-@onready var map                       	:GridMap 		    = $Map;
-@onready var unitsMap                  	:TileMapLayer 		= $Units;
-@onready var movementMap               	:TileMapLayer 		= $MovementSquares;
-@onready var collidable_terrain_layer  	:TileMapLayer 		= $CollidableTerrainLayer
-@onready var move_popup                	:Control 			= $MovePopup
-@onready var path_arrow                	:TileMapLayer 		= $PathArrow
-@onready var animated_unit             	:AnimatedSprite2D 	= $AnimatedUnit
-@onready var turn_transition			:CanvasLayer 		= $TurnTransition/CanvasLayer
-@onready var animation_player			:AnimationPlayer 	= $TurnTransition/AnimationPlayer
+@onready var cursor: 					Sprite3D 			= $Cursor;
+@onready var map:						GridMap 				= $Map;
+@onready var unitsMap:					GridMap 				= $Units;
+@onready var movementMap:				GridMap 				= $MovementSquares;
+@onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
+@onready var move_popup:					Control 				= $MovePopup
+@onready var path_arrow:					TileMapLayer 		= $PathArrow
+@onready var animated_unit:				AnimatedSprite2D 	= $AnimatedUnit
+@onready var turn_transition	:			CanvasLayer			= $TurnTransition/CanvasLayer
+@onready var animation_player:			AnimationPlayer 		= $TurnTransition/AnimationPlayer
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel

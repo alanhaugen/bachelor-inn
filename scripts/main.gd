@@ -7,14 +7,14 @@ extends Node
 
 #region: --- Props ---
 ## Current level running
-var level : Map;
+var level: Map;
 
 ## Reference to the World node
-@onready var world : Node3D = $World;
+@onready var world: Node3D = $World;
 
 ## Reference to the GUI
-@onready var gui : Control = $UI;
-@onready var levelButton : Button = $UI/MapSelector/LoadMap0;
+@onready var gui: Control = $UI;
+@onready var levelButton: Button = $UI/MapSelector/LoadMap0;
 #endregion
 
 #region: --- Processing ---
