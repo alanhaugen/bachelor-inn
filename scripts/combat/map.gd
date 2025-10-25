@@ -6,8 +6,8 @@ class_name Map extends Node3D
 
 @export var dialogue : Array[String];
 
-@onready var cursor                    	:Sprite2D 			= $Cursor;
-@onready var map                       	:TileMapLayer 		= $Map;
+@onready var cursor                    	:Sprite3D 			= $Cursor;
+@onready var map                       	:GridMap 		    = $Map;
 @onready var unitsMap                  	:TileMapLayer 		= $Units;
 @onready var movementMap               	:TileMapLayer 		= $MovementSquares;
 @onready var collidable_terrain_layer  	:TileMapLayer 		= $CollidableTerrainLayer
