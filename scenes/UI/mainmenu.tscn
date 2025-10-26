@@ -1,10 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://cm02uehw506nt"]
 
-[ext_resource type="Script" uid="uid://cgkrbcbu40277" path="res://scripts/main.gd" id="1_nudk7"]
 [ext_resource type="Texture2D" uid="uid://c6ufp14dqs3ou" path="res://art/WIP/DFFS_Character edge highlight poc.png" id="2_nudk7"]
+[ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 
 [node name="Main" type="Node3D"]
-script = ExtResource("1_nudk7")
+script = ExtResource("3_wxwbn")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

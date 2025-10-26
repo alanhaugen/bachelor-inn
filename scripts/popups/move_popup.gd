@@ -1,10 +1,14 @@
 extends Control
 
-@onready var map: Node3D = $"..";
+@onready var map: Node;
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
+
+
+func _ready() -> void:
+	map = Main.level;
 
 func HidePopup() -> void:
 	map.inMenu = false;

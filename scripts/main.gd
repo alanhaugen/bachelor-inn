@@ -1,4 +1,8 @@
 extends Node
+## Main script.
+##
+## Controls what scene and ui is loaded.
+## Loads settings and saves for the game.
 
 # TODO:
 # load settings
@@ -10,23 +14,10 @@ extends Node
 var level: Map;
 
 ## Reference to the World node
-@onready var world: Node3D = $World;
+var world: Node3D;
 
 ## Reference to the GUI
-@onready var gui: Control = $UI;
-@onready var levelButton: Button = $UI/MapSelector/LoadMap0;
-#endregion
-
-#region: --- Processing ---
-## Called when the node enters the scene tree for the first time
-func _ready() -> void:
-	levelButton.grab_focus(); # Set focus on a button
-#endregion
-
-#region: --- Signals ---
-## Called when the Load Map 0 button is pressed
-func _on_load_map_0_pressed() -> void:
-	load_level("first"); # Load the test level
+var gui: Control;
 #endregion
 
 #region: --- Methods ---
@@ -44,5 +35,4 @@ func load_level(level_name: String) -> void:
 	var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	level = load(level_path).instantiate();
 	world.add_child(level) # Add the new level to the World node
-	$UI/MapSelector.visible = false # Hide the map selector UI
 #endregion

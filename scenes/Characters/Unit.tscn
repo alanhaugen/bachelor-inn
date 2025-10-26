@@ -61,6 +61,7 @@ offset_top = -19.0
 offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
+mouse_filter = 2
 
 [node name="Name" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
 layout_mode = 2

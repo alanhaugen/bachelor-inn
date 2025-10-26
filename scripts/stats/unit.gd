@@ -23,8 +23,8 @@ enum Speciality
 @onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
 @onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
-@export var isPlayable :bool = true; ## Friend or foe
-@export var unitName :String = "Bernard Grunderburger"; ## Unit name
+@export var is_playable :bool = true; ## Friend or foe
+@export var unit_name :String = "Bernard Grunderburger"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
 
 @export var health :int       = 4;    ## Unit health
@@ -45,14 +45,14 @@ enum Speciality
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
-## SKILL TREE	
+## SKILL TREE
 
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
-	print(unitName);
+	print(unit_name);
 	health_bar.init_health(health);
 	health_label.text = "Health: " + str(health);
-	name_label.text = unitName;
+	name_label.text = unit_name;
 
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = character.global_transform.origin;

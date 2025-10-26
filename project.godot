@@ -15,6 +15,10 @@ run/main_scene="uid://cm02uehw506nt"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Main="*res://scripts/main.gd"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2
