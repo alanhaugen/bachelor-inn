@@ -13,15 +13,18 @@ class_name Map extends Node3D
 @onready var map:						GridMap 				= $Map;
 @onready var unitsMap:					GridMap 				= $Units;
 @onready var movementMap:				GridMap 				= $MovementDots;
-@onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
+#@onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
 @onready var move_popup:					Control 				= $MovePopup
-@onready var path_arrow:					TileMapLayer 		= $PathArrow
-@onready var animated_unit:				AnimatedSprite2D 	= $AnimatedUnit
+#@onready var path_arrow:					TileMapLayer 		= $PathArrow
+#@onready var animated_unit:				AnimatedSprite2D 	= $AnimatedUnit
 @onready var turn_transition	:			CanvasLayer			= $TurnTransition/CanvasLayer
 @onready var animation_player:			AnimationPlayer 		= $TurnTransition/AnimationPlayer
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
+
+const UNIT = preload("uid://dac2gtsm1iwar")
+const ENEMY = preload("uid://beocud5p1563r")
 
 var animationPath :Array[Vector2];
 var isAnimationJustFinished :bool = false;
@@ -43,7 +46,7 @@ var unitPos        :Vector3;
 var playerCode     :int = 0;
 var playerCodeDone :int = 3;
 var enemyCode      :int = 1;
-var attackCode     :int = 1;
+var attackCode     :int = 0;
 
 func Touch(pos :Vector3) -> bool:
 	if (GetTileName(pos) != "Water" && unitsMap.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
@@ -225,7 +228,27 @@ func _input(event: InputEvent) -> void:
 func _ready() -> void:
 	cursor.hide();
 	movementMap.clear();
-	##move_popup.hide();
+	unitsMap.hide();
+	
+	var units :Array[Vector3i] = unitsMap.get_used_cells();
+	
+	for i in units.size():
+		var pos: Vector3 = units[i];
+		var newUnit: Node = null;
+		if (GetUnitName(pos) == "Unit"):
+			newUnit = UNIT.instantiate();
+		elif (GetUnitName(pos) == "Enemy"):
+			newUnit = ENEMY.instantiate();
+			
+		if (newUnit != null):
+			#unitArray.append(newUnit);
+			newUnit.position = pos * 2;
+			newUnit.position += Vector3(1, 0, 1);
+			newUnit.scale *= 5;
+			#newUnit = 2;
+			add_child(newUnit);
+	
+	move_popup.hide();
 	#turn_transition
 	##animation_player.play();
 	#turn_transition.get_canvas().hide();
@@ -233,7 +256,7 @@ func _ready() -> void:
 #	units.append(unit);
 
 func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
-	path_arrow.clear();
+##	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
 	
@@ -247,26 +270,26 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	for i in range(astar.region.position.x, astar.region.end.x):
 		for j in range(astar.region.position.y, astar.region.end.y):
 			var pos :Vector2i = Vector2i(i, j);
-			if (collidable_terrain_layer.get_cell_source_id(pos) != -1):
-				astar.set_point_solid(pos);
+##			if (collidable_terrain_layer.get_cell_source_id(pos) != -1):
+##				astar.set_point_solid(pos);
 			if (unitsMap.get_cell_source_id(pos) != -1 && pos != end):
 				astar.set_point_solid(pos);
 
 	var path :PackedVector2Array = astar.get_point_path(start, end);
 	
 	if not path.is_empty():
-		if (showPath):
-			path_arrow.set_cells_terrain_connect(path, 0, 0);
+##		if (showPath):
+##			path_arrow.set_cells_terrain_connect(path, 0, 0);
 	
 		animationPath.clear();
 		
 		##for i :int in path.size():
 		##	animationPath.append(map.map_to_local(path[i]) * map.transform.get_scale());
 
-	if (animationPath.is_empty() == false):
-		animated_unit.position = animationPath.pop_front();
+##	if (animationPath.is_empty() == false):
+##		animated_unit.position = animationPath.pop_front();
 	
-	path_arrow.set_cell(start);
+##	path_arrow.set_cell(start);
 
 func MoveAI() -> void:
 	var units :Array[Vector3i] = unitsMap.get_used_cells();
@@ -388,15 +411,15 @@ func _process(delta: float) -> void:
 			if (movesStack.is_empty() == false):
 				AStar(movesStack.front().startPos, movesStack.front().endPos, false);
 			
-			if (animationPath.is_empty() == false):
-				animated_unit.position = animationPath.pop_front();
+			##if (animationPath.is_empty() == false):
+			##	animated_unit.position = animationPath.pop_front();
 		# Process animation
-		else:
-			if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
-				animated_unit.position = animationPath.pop_front();
-			else:
-				var movement_speed :float = 5;
-				var dir :Vector2 = animationPath.front() - animated_unit.position;
-				animated_unit.position += dir.normalized() * movement_speed;# * delta);
+		##else:
+			##if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
+			##	animated_unit.position = animationPath.pop_front();
+			##else:
+			##	var movement_speed :float = 5;
+			##	var dir :Vector2 = animationPath.front() - animated_unit.position;
+			##	animated_unit.position += dir.normalized() * movement_speed;# * delta);
 			
 			#animated_unit.position.x = animationPath
