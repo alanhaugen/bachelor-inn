@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://uo76egagf4ly"]
+
+[ext_resource type="Texture2D" uid="uid://i71rwm4p5vhp" path="res://art/Units/Unit_Knight_Blue.png" id="1_li13i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ast8h"]
+
+[node name="Unit" type="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ast8h")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_li13i")
