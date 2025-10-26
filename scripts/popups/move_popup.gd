@@ -1,6 +1,6 @@
 extends Control
 
-@onready var map: Node2D = $"..";
+@onready var map: Node3D = $"..";
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton

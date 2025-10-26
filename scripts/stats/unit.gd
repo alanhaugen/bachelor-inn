@@ -21,6 +21,8 @@ enum Speciality
 @onready var character: AnimatedSprite3D = $Character
 @onready var health_bar: ProgressBar = %HealthBar
 @onready var sub_viewport: SubViewport = $Character/Sprite3D/SubViewport
+@onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
+@onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
 @export var isPlayable :bool = true; ## Friend or foe
 @export var unitName :String = "Bernard Grunderburger"; ## Unit name
@@ -49,7 +51,9 @@ enum Speciality
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
 	print(unitName);
-	health_bar.init_health(health)
+	health_bar.init_health(health);
+	health_label.text = "Health: " + str(health);
+	name_label.text = unitName;
 
 func _process(delta: float) -> void:
 	var mesh_3d_position: Vector3 = character.global_transform.origin;
