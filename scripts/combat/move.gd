@@ -2,23 +2,23 @@ extends Command
 
 var startPos :Vector3i;
 var endPos   :Vector3i;
-var type     :Vector2i;
+var gridCode :int;
 var units    :GridMap;
 var isAttack :bool;
 var isWait   :bool;
 
-func _init(inStartPos :Vector3i, inEndPos :Vector3i, inType :Vector2i, inUnits: GridMap, inIsAttack :bool = false) -> void:
+func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: GridMap, inIsAttack :bool = false) -> void:
 	startPos = inStartPos;
 	endPos   = inEndPos;
-	type     = inType;
+	gridCode = inGridCode;
 	units    = inUnits;
 	isAttack = inIsAttack;
 	isWait   = false;
 
 func execute() -> void:
-	units.set_cell(startPos);
-	units.set_cell(endPos, 0, type);
+	units.set_cell_item(startPos, -1);
+	units.set_cell_item(endPos, gridCode);
 	
 func undo() -> void:
-	units.set_cell(endPos);
-	units.set_cell(startPos, 0, type);
+	units.set_cell_item(endPos, -1);
+	units.set_cell_item(startPos, gridCode);

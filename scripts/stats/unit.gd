@@ -37,7 +37,7 @@ enum Speciality
 @export var experience : int  = 0;
 @export var skills : Array[Skill];
 
-@onready var health_bar: ProgressBar = $SubViewport/HealthBar
+@onready var health_bar: ProgressBar = %HealthBar
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 

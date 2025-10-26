@@ -42,7 +42,7 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.5158607, 0.85667247, 0, -0.85667247, 0.5158607, 0, 9.707314, 0)
+transform = Transform3D(1, 0, 0, 0, 0.55597657, 0.83119804, 0, -0.83119804, 0.55597657, -5.99705, 8.331018, 2.948822)
 environment = SubResource("Environment_hm5u0")
 current = true
 
@@ -56,4 +56,4 @@ region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
 [node name="Unit" parent="." instance=ExtResource("6_pmd8a")]
-transform = Transform3D(4.4078507, 0, 0, 0, 4.4078507, 0, 0, 0, 4.4078507, -4.9265537, 1.0483788, -0.8916851)
+transform = Transform3D(4.4078507, 0, 0, 0, 4.4078507, 0, 0, 0, 4.4078507, -4.9265537, 1.0483788, -1.6741458)
