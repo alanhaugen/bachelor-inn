@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=104 format=4 uid="uid://dq7c17a5w0h5q"]
 
-[ext_resource type="Texture2D" uid="uid://bc7bwlicmkij8" path="res://art/textures/texture.png" id="1_el0vd"]
+[ext_resource type="Texture2D" uid="uid://vkmajjp6jpl5" path="res://art/textures/texture.png" id="1_el0vd"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_3myxc"]
 size = Vector3(2, 0.1, 2)
