@@ -46,17 +46,17 @@ var can_move: bool = true
 signal unit_died(unit: Unit)
 signal hp_changed(current: int, maximum: int)
 
-func ready():
+func ready() -> void:
 	update_visuals()
 	
-func initialize(pos: Vector2i):
+func initialize(pos: Vector2i) -> void:
 	grid_position = pos
 	current_hp = max_hp
 	has_acted = false
 	can_move = true
 	
 # HEALTH
-func take_damage(damage: int):
+func take_damage(damage: int) -> void:
 	current_hp = max(0, current_hp - damage)
 	hp_changed.emit(current_hp, max_hp)
 	update_visuals()
@@ -64,12 +64,12 @@ func take_damage(damage: int):
 	if current_hp <= 0:
 		die()
 		
-func heal(amount: int):
+func heal(amount: int) -> void:
 	current_hp = min(max_hp, current_hp + amount)
 	hp_changed.emit(current_hp, max_hp)
 	update_visuals()		
 
-func die():
+func die() -> void:
 	unit_died.emit(self)
 	queue_free()
 
@@ -90,27 +90,27 @@ func get_avoid() -> int:
 	return speed * 2
 
 func can_attack(target_pos: Vector2i) -> bool:
-	var distance = abs(grid_position.x - target_pos.x) + abs(grid_position.y - target_pos.y)
+	var distance: float = abs(grid_position.x - target_pos.x) + abs(grid_position.y - target_pos.y)
 	return distance >= weapon_range_min and distance <= weapon_range_max
 
 func calculate_damage(target: Unit) -> int:
-	var attack = get_attack_power()
-	var defense_stat = defense if unit_class != UnitClass.MAGE else target.resistance
-	var damage = max(0, attack - defense_stat)
+	var attack: float = get_attack_power()
+	var defense_stat: float = defense if unit_class != UnitClass.MAGE else target.resistance
+	var damage: float = max(0, attack - defense_stat)
 	return damage
 	
 # TURN MANAGEMENT
-func end_turn():
+func end_turn() -> void:
 	has_acted = true
 	can_move = false
 	update_visuals()
 	
-func start_turn():
+func start_turn() -> void:
 	has_acted = false
 	can_move = true
 	update_visuals()
 
-func update_visuals():
+func update_visuals() -> void:
 	if has_acted: # Dim the sprite if unit has acted
 		modulate = Color(0.5, 0.5, 0.5, 1.0)
 	else:
@@ -119,9 +119,9 @@ func update_visuals():
 func get_movement_range() -> int:
 	return movement
 
-func move_to(new_position: Vector2i):
+func move_to(new_position: Vector2i) -> void:
 	grid_position = new_position
 	
-func level_up():
+func level_up() -> void:
 	if experience >= 100:
 		experience = experience - 100	
