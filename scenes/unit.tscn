@@ -20,7 +20,7 @@ animations = [{
 }]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_1jvru"]
-viewport_path = NodePath("SubViewport")
+viewport_path = NodePath("AnimatedSprite3D/Sprite3D/SubViewport")
 
 [node name="Unit" type="Node3D"]
 script = ExtResource("1_a6jp0")
@@ -31,21 +31,26 @@ billboard = 1
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_gic7v")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
+[node name="Sprite3D" type="Sprite3D" parent="AnimatedSprite3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.338, 0)
 billboard = 1
 texture = SubResource("ViewportTexture_1jvru")
 
-[node name="SubViewport" type="SubViewport" parent="."]
+[node name="SubViewport" type="SubViewport" parent="AnimatedSprite3D/Sprite3D"]
+size = Vector2i(34, 6)
 
-[node name="HealthBar" parent="SubViewport" instance=ExtResource("3_1jvru")]
+[node name="HealthBar" parent="AnimatedSprite3D/Sprite3D/SubViewport" instance=ExtResource("3_1jvru")]
+unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -16.0
-offset_top = -62.0
+offset_top = -2.0
 offset_right = 16.0
-offset_bottom = -58.0
+offset_bottom = 2.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4

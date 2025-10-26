@@ -2,13 +2,12 @@
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_uie10"]
 [ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/CombatMapMeshLibrary.tres" id="2_q6r2o"]
-[ext_resource type="MeshLibrary" uid="uid://bo25ubxmgu4eg" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="3_nnbsb"]
+[ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="3_nnbsb"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
 
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_uie10")
-dialogue = null
 
 [node name="Map" type="GridMap" parent="."]
 mesh_library = ExtResource("2_q6r2o")

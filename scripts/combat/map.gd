@@ -4,9 +4,11 @@ class_name Map extends Node3D
 # TODO: Make your own units passable
 # TODO: camp?
 
+@export var cameraSpeed :float = 5.0;
+@export var mouseDragSensitivity :float = 50.0;
 @export var dialogue : Array[String];
 
-@onready var camera: 					Camera3D 			= $Camera;
+@onready var camera: 					Camera3D 			= $Camera3D;
 @onready var cursor: 					Sprite3D 			= $Cursor;
 @onready var map:						GridMap 				= $Map;
 @onready var unitsMap:					GridMap 				= $Units;
@@ -24,6 +26,8 @@ class_name Map extends Node3D
 var animationPath :Array[Vector2];
 var isAnimationJustFinished :bool = false;
 
+var dragging :bool = false;
+
 enum States { PLAYING, ANIMATING };
 var state :int = States.PLAYING;
 
@@ -36,10 +40,11 @@ const Move = preload("res://scripts/combat/move.gd");
 
 var playerTurn     :bool = true;
 var unitPos        :Vector2;
-var playerCode     :Vector2i = Vector2i(29, 69);
-var playerCodeDone :Vector2i = Vector2i(28, 75);
-var enemyCode      :Vector2i = Vector2i(18, 80);
+var playerCode     :int = 0;
+var playerCodeDone :int = 3;
+var enemyCode      :int = 1;
 var attackCode     :Vector2i = Vector2i(22,27);
+
 
 func Touch(pos :Vector3) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
@@ -56,9 +61,9 @@ func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	var moves :Array[Move];
 	
 	frontierPositions.append(pos);
-	var type :Vector2i = unitsMap.get_cell_atlas_coords(pos);
+	var type :int = unitsMap.get_cell_item(pos);
 	
-	var tempEnemyCode :Vector2i = enemyCode;
+	var tempEnemyCode :int = enemyCode;
 	if (playerTurn == false):
 		enemyCode = playerCode;
 	
@@ -146,26 +151,42 @@ func get_grid_cell_from_mouse() -> Vector3i:
 
 	return Vector3i();
 
+func GetTileName(pos: Vector3) -> String:
+	return map.mesh_library.get_item_name(map.get_cell_item(pos));
+
 func _input(event: InputEvent) -> void:
 	if (state != States.PLAYING):
 		return;
 	if (inMenu):
 		return;
 	
+	if (event is InputEventMouseMotion and dragging):
+		camera.global_translate(Vector3(event.relative.x,0,event.relative.y) / mouseDragSensitivity);
+	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
+			dragging = true;
 		if (event.pressed == false):
+			dragging = false;
+			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE;
 			return;
 		
 		# Get the tile clicked on
-		
 		var pos :Vector3i = get_grid_cell_from_mouse();
-		##cursor.position = windowPos;
+		print (pos);
+		
+		if (GetTileName(pos) == "Water"):
+			return;
+		
+		var globalPos: Vector3i = map.map_to_local(pos);
+		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z);
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
-		if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
+		if (unitsMap.get_cell_item(pos) == playerCode):
 			#unitPos = pos;
 			movementMap.clear();
 			if (isUnitSelected == true):
@@ -175,7 +196,7 @@ func _input(event: InputEvent) -> void:
 			else:
 				Dijkstra(pos, 3);
 				isUnitSelected = true;
-		elif (movementMap.get_cell_source_id(pos) != -1):
+		elif (movementMap.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			#activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
 			if (movementMap.get_cell_atlas_coords(pos) == attackCode):
 				activeMove.isAttack = true;
@@ -197,6 +218,7 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	cursor.hide();
+	movementMap.clear();
 	##move_popup.hide();
 	#turn_transition
 	##animation_player.play();
@@ -284,10 +306,10 @@ func CheckVictoryConditions() -> void:
 	
 	for i in units.size():
 		var pos :Vector3i = units[i];
-##		if (unitsMap.get_cell_atlas_coords(pos) == playerCode || unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
-##			numberOfPlayerUnits += 1;
-##		elif (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
-##			numberOfEnemyUnits += 1;
+		if (unitsMap.get_cell_item(pos) == playerCode || unitsMap.get_cell_item(pos) == playerCodeDone):
+			numberOfPlayerUnits += 1;
+		elif (unitsMap.get_cell_item(pos) == enemyCode):
+			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
@@ -301,6 +323,17 @@ func _process(delta: float) -> void:
 	
 	##turn_transition.hide();
 	
+	if Input.is_action_pressed("pan_right"):
+		camera.global_translate(Vector3(1,0,0) * cameraSpeed * delta);
+	if Input.is_action_pressed("pan_left"):
+		camera.global_translate(Vector3(-1,0,0) * cameraSpeed * delta);
+	if Input.is_action_pressed("pan_up"):
+		camera.global_translate(Vector3(0,0,-1) * cameraSpeed * delta);
+	if Input.is_action_pressed("pan_down"):
+		camera.global_translate(Vector3(0,0,1) * cameraSpeed * delta);
+	if Input.is_action_pressed("selected"):
+		pass;
+	
 	if (state == States.PLAYING):
 		if (isAnimationJustFinished):
 			isAnimationJustFinished = false;
@@ -312,8 +345,8 @@ func _process(delta: float) -> void:
 			var units :Array[Vector3i] = unitsMap.get_used_cells();
 			for i in units.size():
 				var pos :Vector3i = units[i];
-##				if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
-##					playerTurn = true;
+				if (unitsMap.get_cell_item(pos) == playerCode):
+					playerTurn = true;
 ##			if (playerTurn == false):
 ##				animation_player.play();
 ##				enemy_label.show();
