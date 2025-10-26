@@ -1,21 +1,21 @@
-extends Node2D
+class_name Map extends Node3D
 
 # TODO: Stackable tiles for enemies
 # TODO: Make your own units passable
 # TODO: camp?
 
-@export var dialogue : String;
+@export var dialogue : Array[String];
 
-@onready var cursor                    :Sprite2D = $Cursor;
-@onready var map                       :TileMapLayer = $Map;
-@onready var unitsMap                  :TileMapLayer = $Units;
-@onready var movementMap               :TileMapLayer = $MovementSquares;
-@onready var collidable_terrain_layer  :TileMapLayer = $CollidableTerrainLayer
-@onready var move_popup                :Control = $MovePopup
-@onready var path_arrow                :TileMapLayer = $PathArrow
-@onready var animated_unit             : AnimatedSprite2D = $AnimatedUnit
-@onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
-@onready var animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
+@onready var cursor: 					Sprite3D 			= $Cursor;
+@onready var map:						GridMap 				= $Map;
+@onready var unitsMap:					GridMap 				= $Units;
+@onready var movementMap:				GridMap 				= $MovementSquares;
+@onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
+@onready var move_popup:					Control 				= $MovePopup
+@onready var path_arrow:					TileMapLayer 		= $PathArrow
+@onready var animated_unit:				AnimatedSprite2D 	= $AnimatedUnit
+@onready var turn_transition	:			CanvasLayer			= $TurnTransition/CanvasLayer
+@onready var animation_player:			AnimationPlayer 		= $TurnTransition/AnimationPlayer
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
@@ -31,7 +31,7 @@ var inMenu         :bool = false;
 var activeMove     :Move;
 var movesStack     :Array;
 
-const Move = preload("res://scripts/move.gd");
+const Move = preload("res://scripts/combat/move.gd");
 
 var playerTurn     :bool = true;
 var unitPos        :Vector2;
@@ -263,9 +263,9 @@ func CheckVictoryConditions() -> void:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/gameover.tscn");
+		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/victory.tscn");
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
 
 func _process(delta: float) -> void:
 	if (animation_player.is_playing()):

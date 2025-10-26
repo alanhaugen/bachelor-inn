@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Noble Nights"
-run/main_scene="uid://bmw6hxcb71v0c"
+run/main_scene="uid://cm02uehw506nt"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
 

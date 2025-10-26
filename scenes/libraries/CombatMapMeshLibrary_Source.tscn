@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bjdcjjwqypgie"]
+
+[ext_resource type="PackedScene" uid="uid://4v0f4xr67f0" path="res://art/blender/grids.blend" id="1_n8scq"]
+[ext_resource type="PackedScene" uid="uid://b5l8ulk6yg4hl" path="res://art/dae/M_Grid_base.dae" id="2_ru5t4"]
+
+[node name="grids" instance=ExtResource("1_n8scq")]
+
+[node name="M_Grid_base" parent="." index="5" instance=ExtResource("2_ru5t4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13, 0, -16)
