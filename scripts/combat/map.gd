@@ -53,6 +53,7 @@ var playerCodeDone :int = 3;
 var enemyCode      :int = 1;
 var attackCode     :int = 0;
 
+
 func Touch(pos :Vector3) -> bool:
 	if (GetTileName(pos) != "Water" && unitsMap.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
 		movementMap.set_cell_item(pos, 0);
@@ -146,6 +147,7 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	if result:
 		return result.position
 	return Vector3();
+
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();

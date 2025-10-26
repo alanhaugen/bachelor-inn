@@ -66,7 +66,7 @@ grow_vertical = 0
 [node name="Name" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_nenq2")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="Health" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
