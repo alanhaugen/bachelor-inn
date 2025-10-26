@@ -6,10 +6,11 @@ class_name Map extends Node3D
 
 @export var dialogue : Array[String];
 
+@onready var camera: 					Camera3D 			= $Camera;
 @onready var cursor: 					Sprite3D 			= $Cursor;
 @onready var map:						GridMap 				= $Map;
 @onready var unitsMap:					GridMap 				= $Units;
-@onready var movementMap:				GridMap 				= $MovementSquares;
+@onready var movementMap:				GridMap 				= $MovementDots;
 @onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
 @onready var move_popup:					Control 				= $MovePopup
 @onready var path_arrow:					TileMapLayer 		= $PathArrow
@@ -40,18 +41,18 @@ var playerCodeDone :Vector2i = Vector2i(28, 75);
 var enemyCode      :Vector2i = Vector2i(18, 80);
 var attackCode     :Vector2i = Vector2i(22,27);
 
-func Touch(pos :Vector2) -> bool:
+func Touch(pos :Vector3) -> bool:
 	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
 		movementMap.set_cell(pos, 6, Vector2i(0,0));
 		return true;
 	return false;
 
-func Dijkstra(startPos :Vector2, movementLength :int) -> Array[Move]:
+func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	var frontier :int = 0;
 	var frontierPositions :Array;
 	var nextFrontierPositions :Array;
 	
-	var pos   :Vector2 = startPos;
+	var pos   :Vector3i = startPos;
 	var moves :Array[Move];
 	
 	frontierPositions.append(pos);
@@ -64,10 +65,10 @@ func Dijkstra(startPos :Vector2, movementLength :int) -> Array[Move]:
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
 		
-		var north :Vector2 = Vector2(pos.x, pos.y - 1);
-		var south :Vector2 = Vector2(pos.x, pos.y + 1);
-		var east  :Vector2 = Vector2(pos.x + 1, pos.y);
-		var west  :Vector2 = Vector2(pos.x - 1, pos.y);
+		var north :Vector3 = Vector3(pos.x, pos.y - 1, 0);
+		var south :Vector3 = Vector3(pos.x, pos.y + 1, 0);
+		var east  :Vector3 = Vector3(pos.x + 1, pos.y, 0);
+		var west  :Vector3 = Vector3(pos.x - 1, pos.y, 0);
 		
 		if (Touch(north)):
 			nextFrontierPositions.append(north);
@@ -119,6 +120,32 @@ func ShowMovePopup(windowPos :Vector2) -> void:
 	if (activeMove.isAttack == false && activeMove.isWait == false):
 		move_popup.move_button.show();
 
+func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
+	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(
+		origin,
+		origin + direction * 1000.0
+		);
+
+	var result: Dictionary = space_state.intersect_ray(query)
+	if result:
+		return result.position
+	return Vector3();
+
+func get_grid_cell_from_mouse() -> Vector3i:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
+	var ray_origin: Vector3 = camera.project_ray_origin(mouse_pos)
+	var ray_direction: Vector3 = camera.project_ray_normal(mouse_pos)
+
+	# Cast ray and get intersection point
+	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
+	if intersection != null:
+		# Convert world position to grid coordinates
+		var grid_pos: Vector3i = map.local_to_map(map.to_local(intersection));
+		return grid_pos;
+
+	return Vector3i();
+
 func _input(event: InputEvent) -> void:
 	if (state != States.PLAYING):
 		return;
@@ -131,29 +158,29 @@ func _input(event: InputEvent) -> void:
 			return;
 		
 		# Get the tile clicked on
-		var pos :Vector2 = map.local_to_map(event.position / map.transform.get_scale());
-		var windowPos :Vector2 = map.map_to_local(pos * map.transform.get_scale());
-		cursor.position = windowPos;
+		
+		var pos :Vector3i = get_grid_cell_from_mouse();
+		##cursor.position = windowPos;
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
 		if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
-			unitPos = pos;
+			#unitPos = pos;
 			movementMap.clear();
 			if (isUnitSelected == true):
 				activeMove = Move.new(pos, pos, playerCodeDone, unitsMap);
 				activeMove.isWait = true;
-				ShowMovePopup(windowPos);
+				##ShowMovePopup(windowPos);
 			else:
 				Dijkstra(pos, 3);
 				isUnitSelected = true;
 		elif (movementMap.get_cell_source_id(pos) != -1):
-			activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
+			#activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
 			if (movementMap.get_cell_atlas_coords(pos) == attackCode):
 				activeMove.isAttack = true;
-			ShowMovePopup(windowPos);
-			AStar(unitPos, pos);
+			##ShowMovePopup(windowPos);
+			##AStar(unitPos, pos);
 			
 			#unitsMap.set_cell(pos, 0, playerCodeDone);
 			#unitsMap.set_cell(unitPos, -1);
@@ -170,9 +197,9 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	cursor.hide();
-	move_popup.hide();
+	##move_popup.hide();
 	#turn_transition
-	animation_player.play();
+	##animation_player.play();
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
@@ -205,8 +232,8 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	
 		animationPath.clear();
 		
-		for i :int in path.size():
-			animationPath.append(map.map_to_local(path[i]) * map.transform.get_scale());
+		##for i :int in path.size():
+		##	animationPath.append(map.map_to_local(path[i]) * map.transform.get_scale());
 
 	if (animationPath.is_empty() == false):
 		animated_unit.position = animationPath.pop_front();
@@ -214,18 +241,18 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	path_arrow.set_cell(start);
 
 func MoveAI() -> void:
-	var units :Array[Vector2i] = unitsMap.get_used_cells();
+	var units :Array[Vector3i] = unitsMap.get_used_cells();
 	for i in units.size():
-		var pos :Vector2i = units[i];
-		if (unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
-			unitsMap.set_cell(pos, 0, playerCode);
+		var pos :Vector3i = units[i];
+##		if (unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
+##			unitsMap.set_cell(pos, 0, playerCode);
 	
 	var aiUnitsMoves :Array;
 	for i in units.size():
-		var pos :Vector2i = units[i];
-		if (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
-			aiUnitsMoves.append(Array());
-			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
+		var pos :Vector3i = units[i];
+##		if (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
+##			aiUnitsMoves.append(Array());
+##			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
 	
 	# Move each enemy unit
 	for i :int in aiUnitsMoves.size():
@@ -244,23 +271,23 @@ func MoveAI() -> void:
 		movesStack.append(move);
 
 	movementMap.clear();
-	animationPath.clear();
+	##animationPath.clear();
 	
 	if (movesStack.is_empty() == false):
 		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
 		state = States.ANIMATING;
 
 func CheckVictoryConditions() -> void:
-	var units :Array[Vector2i] = unitsMap.get_used_cells();
+	var units :Array[Vector3i] = unitsMap.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
 	var numberOfEnemyUnits  :int = 0;
 	
 	for i in units.size():
-		var pos :Vector2i = units[i];
-		if (unitsMap.get_cell_atlas_coords(pos) == playerCode || unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
-			numberOfPlayerUnits += 1;
-		elif (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
-			numberOfEnemyUnits += 1;
+		var pos :Vector3i = units[i];
+##		if (unitsMap.get_cell_atlas_coords(pos) == playerCode || unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
+##			numberOfPlayerUnits += 1;
+##		elif (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
+##			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
@@ -268,11 +295,11 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
 
 func _process(delta: float) -> void:
-	if (animation_player.is_playing()):
-		turn_transition.show();
-		return;
+	##if (animation_player.is_playing()):
+	##	turn_transition.show();
+	##	return;
 	
-	turn_transition.hide();
+	##turn_transition.hide();
 	
 	if (state == States.PLAYING):
 		if (isAnimationJustFinished):
@@ -282,15 +309,15 @@ func _process(delta: float) -> void:
 			player_label.show();
 		if (playerTurn):
 			playerTurn = false;
-			var units :Array[Vector2i] = unitsMap.get_used_cells();
+			var units :Array[Vector3i] = unitsMap.get_used_cells();
 			for i in units.size():
-				var pos :Vector2i = units[i];
-				if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
-					playerTurn = true;
-			if (playerTurn == false):
-				animation_player.play();
-				enemy_label.show();
-				player_label.hide();
+				var pos :Vector3i = units[i];
+##				if (unitsMap.get_cell_atlas_coords(pos) == playerCode):
+##					playerTurn = true;
+##			if (playerTurn == false):
+##				animation_player.play();
+##				enemy_label.show();
+##				player_label.hide();
 		else:
 			MoveAI();
 			CheckVictoryConditions();
