@@ -180,7 +180,7 @@ func _input(event: InputEvent) -> void:
 		return;
 	
 	if (event is InputEventMouseMotion and is_dragging):
-		camera.global_translate(Vector3(event.relative.x,0,event.relative.y) / mouse_drag_sensitivity);
+		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
@@ -220,10 +220,12 @@ func _input(event: InputEvent) -> void:
 			activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
 			if (movementMap.get_cell_item(pos) == attackCode):
 				activeMove.isAttack = true;
-			##ShowMovePopup(windowPos);
-			##AStar(unitPos, pos);
 			
-			activeMove.execute();
+			var windowPos: Vector2 = Vector2(0,0);
+			ShowMovePopup(windowPos);
+			AStar(unitPos, pos);
+			
+			#activeMove.execute();
 			
 			#unitsMap.set_cell_item(pos, playerCodeDone);
 			#unitsMap.set_cell_item(unitPos, -1);
@@ -273,12 +275,12 @@ func _ready() -> void:
 #	units.append(unit);
 
 
-func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
+func AStar(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
 	
-	astar.region = Rect2i(0, 0, 18, 10);
+	astar.region = Rect2i(0, 0, 40, 40);
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -288,12 +290,13 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	for i in range(astar.region.position.x, astar.region.end.x):
 		for j in range(astar.region.position.y, astar.region.end.y):
 			var pos :Vector2i = Vector2i(i, j);
-			if (map.get_cell_source_id(pos) != -1):
+			var pos3D :Vector3i = Vector3i(i, 0, j);
+			if (GetTileName(pos3D) == "Water"):
 				astar.set_point_solid(pos);
-			if (unitsMap.get_cell_source_id(pos) != -1 && pos != end):
+			if (GetUnitName(pos3D) != "null" && pos3D != end):
 				astar.set_point_solid(pos);
 
-	var path :PackedVector2Array = astar.get_point_path(start, end);
+	var path :PackedVector2Array = astar.get_point_path(Vector2i(start.x, start.z), Vector2i(end.x, end.z));
 	
 	if not path.is_empty():
 		if (showPath):
@@ -307,7 +310,7 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	if (animationPath.is_empty() == false):
 		animated_unit.position = animationPath.pop_front();
 	
-	path_arrow.set_cell(start);
+	path_arrow.set_cell_item(start, -1);
 
 
 func MoveAI() -> void:
@@ -334,19 +337,18 @@ func MoveAI() -> void:
 				move = aiUnitsMoves[i][j];
 		
 		# No attacks found, choose a random move
-		if (move == null):
+		if move == null:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
 		movesStack.append(move);
 
 	movementMap.clear();
-	##animationPath.clear();
+	animationPath.clear();
 	
-##	if (movesStack.is_empty() == false):
-##		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
-##		state = States.ANIMATING;
-	state = States.ANIMATING; # removeme
+	if (movesStack.is_empty() == false):
+		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+		state = States.ANIMATING;
 
 
 func CheckVictoryConditions() -> void:
@@ -406,21 +408,9 @@ func _process(delta: float) -> void:
 			MoveAI();
 			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
-		## -- Remove followig code:
-		if (movesStack.is_empty()):
-			is_player_turn = true;
-			state = States.PLAYING;
-			return;
-		var move :Move = movesStack.pop_front();
-		move.execute();
-		return;
-		## -- end remove following code
-		
-		##animated_unit.show();
 		# Animations done: stop animating
 		if (movesStack.is_empty()):
 			state = States.PLAYING;
-			##animated_unit.hide();
 			if (is_player_turn == false):
 				isAnimationJustFinished = true;
 				is_player_turn = true;

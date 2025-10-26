@@ -54,7 +54,7 @@ func _ready() -> void:
 	health_label.text = "Health: " + str(health);
 	name_label.text = unitName;
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = character.global_transform.origin;
 	
 	if camera:

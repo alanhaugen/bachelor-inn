@@ -13,9 +13,6 @@
 
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_f5yf2")
-camera_speed = null
-mouse_drag_sensitivity = null
-dialogue = null
 
 [node name="GridMap" type="GridMap" parent="."]
 visible = false

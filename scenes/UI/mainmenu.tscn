@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=3 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="Script" uid="uid://cgkrbcbu40277" path="res://scripts/main.gd" id="1_nudk7"]
+[ext_resource type="Texture2D" uid="uid://c6ufp14dqs3ou" path="res://art/WIP/DFFS_Character edge highlight poc.png" id="2_nudk7"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_nudk7")
@@ -39,6 +40,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Load first level"
+icon = ExtResource("2_nudk7")
 
 [node name="LoadMap1" type="Button" parent="UI/MapSelector"]
 visible = false
@@ -60,6 +62,10 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 text = "Load first level"
+
+[node name="NinePatchRect" type="NinePatchRect" parent="UI/MapSelector"]
+layout_mode = 2
+patch_margin_left = 10
 
 [node name="World" type="Node3D" parent="."]
 
