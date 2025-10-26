@@ -17,6 +17,11 @@ enum Speciality
 	Fighter
 }
 
+@onready var camera: Camera3D;
+@onready var character: AnimatedSprite3D = $Character
+@onready var health_bar: ProgressBar = %HealthBar
+@onready var sub_viewport: SubViewport = $Character/Sprite3D/SubViewport
+
 @export var isPlayable :bool = true; ## Friend or foe
 @export var unitName :String = "Bernard Grunderburger"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
@@ -37,15 +42,21 @@ enum Speciality
 @export var experience : int  = 0;
 @export var skills : Array[Skill];
 
-@onready var health_bar: ProgressBar = %HealthBar
-
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
 ## SKILL TREE	
 
 func _ready() -> void:
+	camera = get_viewport().get_camera_3d();
 	print(unitName);
 	health_bar.init_health(health)
+
+func _process(delta: float) -> void:
+	var mesh_3d_position: Vector3 = character.global_transform.origin;
+	
+	if camera:
+		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
+		health_bar.position = screen_position_2d - Vector2(32, 0);
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical

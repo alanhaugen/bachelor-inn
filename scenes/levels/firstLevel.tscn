@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bibvxf0718edk"]
+[gd_scene load_steps=8 format=3 uid="uid://bibvxf0718edk"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_f5yf2"]
 [ext_resource type="MeshLibrary" uid="uid://4jk1m4xre0br" path="res://scenes/libraries/GrassMapMeshLibrary.tres" id="2_11u0d"]
@@ -6,7 +6,6 @@
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_8tmoo"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_8tmoo"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_hvfss"]
-[ext_resource type="PackedScene" uid="uid://dac2gtsm1iwar" path="res://scenes/unit.tscn" id="6_pmd8a"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
 
@@ -41,7 +40,7 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.55597657, 0.83119804, 0, -0.83119804, 0.55597657, -5.99705, 8.331018, 2.948822)
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, -5.99705, 8.331018, 2.948822)
 environment = SubResource("Environment_hm5u0")
 current = true
 
@@ -53,6 +52,3 @@ transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4
 texture = ExtResource("5_hvfss")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
-
-[node name="Unit" parent="." instance=ExtResource("6_pmd8a")]
-transform = Transform3D(4.4078507, 0, 0, 0, 4.4078507, 0, 0, 0, 4.4078507, -4.9265537, 1.0483788, -1.6741458)
