@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=6 format=3 uid="uid://cu8edu6sydp5g"]
 
-[ext_resource type="Texture2D" uid="uid://c34bud74r3ged" path="res://art/mercenary.png" id="1_lwpnr"]
+[ext_resource type="Texture2D" uid="uid://cyv36qbfluytx" path="res://art/mercenary.png" id="1_lwpnr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2bx3w"]
 transparency = 1
