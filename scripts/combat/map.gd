@@ -23,8 +23,9 @@ class_name Map extends Node3D
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-const UNIT = preload("uid://dac2gtsm1iwar")
+const UNIT = preload("uid://btmpi20wskms7")
 const ENEMY = preload("uid://beocud5p1563r")
+const CHEST = preload("uid://ctcbsf1b8tg5x")
 
 var animationPath :Array[Vector2];
 var isAnimationJustFinished :bool = false;
@@ -237,14 +238,17 @@ func _ready() -> void:
 		var newUnit: Node = null;
 		if (GetUnitName(pos) == "Unit"):
 			newUnit = UNIT.instantiate();
+			newUnit.scale *= 5;
 		elif (GetUnitName(pos) == "Enemy"):
 			newUnit = ENEMY.instantiate();
+			newUnit.scale *= 5;
+		elif (GetUnitName(pos) == "Chest"):
+			newUnit = CHEST.instantiate();
 			
 		if (newUnit != null):
 			#unitArray.append(newUnit);
 			newUnit.position = pos * 2;
 			newUnit.position += Vector3(1, 0, 1);
-			newUnit.scale *= 5;
 			#newUnit = 2;
 			add_child(newUnit);
 	
