@@ -39,16 +39,15 @@ var movesStack     :Array;
 const Move = preload("res://scripts/combat/move.gd");
 
 var playerTurn     :bool = true;
-var unitPos        :Vector2;
+var unitPos        :Vector3;
 var playerCode     :int = 0;
 var playerCodeDone :int = 3;
 var enemyCode      :int = 1;
-var attackCode     :Vector2i = Vector2i(22,27);
-
+var attackCode     :int = 1;
 
 func Touch(pos :Vector3) -> bool:
-	if (collidable_terrain_layer.get_cell_source_id(pos) == -1 && unitsMap.get_cell_source_id(pos) == -1):
-		movementMap.set_cell(pos, 6, Vector2i(0,0));
+	if (GetTileName(pos) != "Water" && unitsMap.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
+		movementMap.set_cell_item(pos, 0);
 		return true;
 	return false;
 
@@ -70,10 +69,10 @@ func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
 		
-		var north :Vector3 = Vector3(pos.x, pos.y - 1, 0);
-		var south :Vector3 = Vector3(pos.x, pos.y + 1, 0);
-		var east  :Vector3 = Vector3(pos.x + 1, pos.y, 0);
-		var west  :Vector3 = Vector3(pos.x - 1, pos.y, 0);
+		var north :Vector3 = Vector3(pos.x, 0, pos.z - 1);
+		var south :Vector3 = Vector3(pos.x, 0, pos.z + 1);
+		var east  :Vector3 = Vector3(pos.x + 1, 0, pos.z);
+		var west  :Vector3 = Vector3(pos.x - 1, 0, pos.z);
 		
 		if (Touch(north)):
 			nextFrontierPositions.append(north);
@@ -92,18 +91,18 @@ func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 			moves.append(Move.new(startPos, west, type, unitsMap));
 		
 		# Add attack moves
-		if (unitsMap.get_cell_atlas_coords(north) == enemyCode):
+		if (unitsMap.get_cell_item(north) == enemyCode):
 			moves.append(Move.new(startPos, north, type, unitsMap, true));
-			movementMap.set_cell(north, 0, attackCode);
-		if (unitsMap.get_cell_atlas_coords(south) == enemyCode):
+			movementMap.set_cell_item(north, 0, attackCode);
+		if (unitsMap.get_cell_item(south) == enemyCode):
 			moves.append(Move.new(startPos, south, type, unitsMap, true));
-			movementMap.set_cell(south, 0, attackCode);
-		if (unitsMap.get_cell_atlas_coords(east) == enemyCode):
+			movementMap.set_cell_item(south, 0, attackCode);
+		if (unitsMap.get_cell_item(east) == enemyCode):
 			moves.append(Move.new(startPos, east, type, unitsMap, true));
-			movementMap.set_cell(east, 0, attackCode);
-		if (unitsMap.get_cell_atlas_coords(west) == enemyCode):
+			movementMap.set_cell_item(east, 0, attackCode);
+		if (unitsMap.get_cell_item(west) == enemyCode):
 			moves.append(Move.new(startPos, west, type, unitsMap, true));
-			movementMap.set_cell(west, 0, attackCode);
+			movementMap.set_cell_item(west, 0, attackCode);
 		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
@@ -154,6 +153,9 @@ func get_grid_cell_from_mouse() -> Vector3i:
 func GetTileName(pos: Vector3) -> String:
 	return map.mesh_library.get_item_name(map.get_cell_item(pos));
 
+func GetUnitName(pos: Vector3) -> String:
+	return unitsMap.mesh_library.get_item_name(unitsMap.get_cell_item(pos));
+
 func _input(event: InputEvent) -> void:
 	if (state != States.PLAYING):
 		return;
@@ -186,29 +188,33 @@ func _input(event: InputEvent) -> void:
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
-		if (unitsMap.get_cell_item(pos) == playerCode):
-			#unitPos = pos;
+		if (GetUnitName(pos) == "Unit"):
+			unitPos = pos;
 			movementMap.clear();
-			if (isUnitSelected == true):
-				activeMove = Move.new(pos, pos, playerCodeDone, unitsMap);
-				activeMove.isWait = true;
-				##ShowMovePopup(windowPos);
-			else:
-				Dijkstra(pos, 3);
-				isUnitSelected = true;
+			Dijkstra(pos, 3);
+			#if (isUnitSelected == true):
+			#	activeMove = Move.new(pos, pos, playerCodeDone, unitsMap);
+			#	activeMove.isWait = true;
+			#	##ShowMovePopup(windowPos);
+			#else:
+			#	Dijkstra(pos, 3);
+			#	isUnitSelected = true;
 		elif (movementMap.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			#activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
-			if (movementMap.get_cell_atlas_coords(pos) == attackCode):
+			activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
+			if (movementMap.get_cell_item(pos) == attackCode):
 				activeMove.isAttack = true;
 			##ShowMovePopup(windowPos);
 			##AStar(unitPos, pos);
 			
-			#unitsMap.set_cell(pos, 0, playerCodeDone);
-			#unitsMap.set_cell(unitPos, -1);
+			activeMove.execute();
+			
+			#unitsMap.set_cell_item(pos, playerCodeDone);
+			#unitsMap.set_cell_item(unitPos, -1);
 			movementMap.clear();
+			#isUnitSelected = false;
 		else:
 			movementMap.clear();
-			isUnitSelected = false;
+			#isUnitSelected = false;
 		
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
@@ -266,15 +272,15 @@ func MoveAI() -> void:
 	var units :Array[Vector3i] = unitsMap.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
-##		if (unitsMap.get_cell_atlas_coords(pos) == playerCodeDone):
-##			unitsMap.set_cell(pos, 0, playerCode);
+		if (unitsMap.get_cell_item(pos) == playerCodeDone):
+			unitsMap.set_cell_item(pos, playerCode);
 	
 	var aiUnitsMoves :Array;
 	for i in units.size():
 		var pos :Vector3i = units[i];
-##		if (unitsMap.get_cell_atlas_coords(pos) == enemyCode):
-##			aiUnitsMoves.append(Array());
-##			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
+		if (unitsMap.get_cell_item(pos) == enemyCode):
+			aiUnitsMoves.append(Array());
+			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
 	
 	# Move each enemy unit
 	for i :int in aiUnitsMoves.size():
@@ -295,9 +301,10 @@ func MoveAI() -> void:
 	movementMap.clear();
 	##animationPath.clear();
 	
-	if (movesStack.is_empty() == false):
-		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
-		state = States.ANIMATING;
+##	if (movesStack.is_empty() == false):
+##		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+##		state = States.ANIMATING;
+	state = States.ANIMATING; # removeme
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = unitsMap.get_used_cells();
@@ -355,11 +362,21 @@ func _process(delta: float) -> void:
 			MoveAI();
 			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
-		animated_unit.show();
+		## -- Remove followig code:
+		if (movesStack.is_empty()):
+			playerTurn = true;
+			state = States.PLAYING;
+			return;
+		var move :Move = movesStack.pop_front();
+		move.execute();
+		return;
+		## -- end remove following code
+		
+		##animated_unit.show();
 		# Animations done: stop animating
 		if (movesStack.is_empty()):
 			state = States.PLAYING;
-			animated_unit.hide();
+			##animated_unit.hide();
 			if (playerTurn == false):
 				isAnimationJustFinished = true;
 				playerTurn = true;

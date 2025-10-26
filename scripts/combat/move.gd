@@ -16,9 +16,9 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 	isWait   = false;
 
 func execute() -> void:
-	units.set_cell(startPos);
-	units.set_cell(endPos, 0, gridCode);
+	units.set_cell_item(startPos, -1);
+	units.set_cell_item(endPos, gridCode);
 	
 func undo() -> void:
-	units.set_cell(endPos);
-	units.set_cell(startPos, 0, gridCode);
+	units.set_cell_item(endPos, -1);
+	units.set_cell_item(startPos, gridCode);
