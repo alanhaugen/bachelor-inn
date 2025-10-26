@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://bibvxf0718edk"]
+[gd_scene load_steps=9 format=3 uid="uid://bibvxf0718edk"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_f5yf2"]
 [ext_resource type="MeshLibrary" uid="uid://4jk1m4xre0br" path="res://scenes/libraries/GrassMapMeshLibrary.tres" id="2_11u0d"]
 [ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/CombatMapMeshLibrary.tres" id="2_p1sjd"]
-[ext_resource type="MeshLibrary" uid="uid://bo25ubxmgu4eg" path="res://scenes/libraries/UnitMeshLibrary.tres" id="3_efpj7"]
+[ext_resource type="MeshLibrary" uid="uid://bo25ubxmgu4eg" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="3_efpj7"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_hvfss"]
 [ext_resource type="PackedScene" uid="uid://dac2gtsm1iwar" path="res://scenes/unit.tscn" id="6_pmd8a"]
+[ext_resource type="PackedScene" uid="uid://ctcbsf1b8tg5x" path="res://art/gltf/Chest.gltf" id="7_8tmoo"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
 
@@ -34,7 +35,6 @@ data = {
 }
 
 [node name="Chests" type="GridMap" parent="."]
-mesh_library = ExtResource("3_efpj7")
 data = {
 "cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65532, 1, 1048583, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 65533, 1, 655362, 65534, 1, 655362, 65535, 1, 655362, 0, 1, 655362, 1, 1, 655362, 2, 1, 655362, 3, 1, 655367, 3, 0, 1441794, 65533, 65534, 1, 2, 65535, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0)
 }
@@ -42,6 +42,7 @@ data = {
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.5158607, 0.85667247, 0, -0.85667247, 0.5158607, 0, 9.707314, 0)
 environment = SubResource("Environment_hm5u0")
+current = true
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 5, 5, 0)
@@ -54,3 +55,6 @@ region_rect = Rect2(0, 0, 32, 32)
 
 [node name="Unit" parent="." instance=ExtResource("6_pmd8a")]
 transform = Transform3D(4.4078507, 0, 0, 0, 4.4078507, 0, 0, 0, 4.4078507, -4.9265537, 1.0483788, -0.8916851)
+
+[node name="blockbench_export" parent="." instance=ExtResource("7_8tmoo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9522724, 1.0165367, -4.8656445)

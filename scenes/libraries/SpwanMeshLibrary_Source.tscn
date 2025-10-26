@@ -1,4 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bxbpa037g1fft"]
+[gd_scene load_steps=5 format=3 uid="uid://bxbpa037g1fft"]
+
+[ext_resource type="ArrayMesh" uid="uid://dsmaodb30jw47" path="res://art/meshes/chest_bottom.res" id="1_305ie"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dbywx"]
 albedo_color = Color(0, 1, 1, 1)
@@ -18,3 +20,8 @@ mesh = SubResource("BoxMesh_305ie")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 transparency = 0.4
 mesh = SubResource("BoxMesh_a6jp0")
+
+[node name="Chest" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+transparency = 0.4
+mesh = ExtResource("1_305ie")
