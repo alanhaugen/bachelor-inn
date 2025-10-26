@@ -20,7 +20,6 @@ enum Speciality
 @onready var camera: Camera3D;
 @onready var character: AnimatedSprite3D = $Character
 @onready var health_bar: ProgressBar = %HealthBar
-@onready var sub_viewport: SubViewport = $Character/Sprite3D/SubViewport
 @onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
 @onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
