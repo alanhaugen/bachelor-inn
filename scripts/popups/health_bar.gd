@@ -11,6 +11,7 @@ func _ready() -> void:
 	health_bar.max_value = 0;
 	sanity_bar.max_value = 0;
 
+
 func _set_health(new_health: int) -> void:
 	health_bar.max_value = max(health_bar.max_value, new_health);
 	health_bar.value = new_health;
