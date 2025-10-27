@@ -22,6 +22,7 @@ animations = [{
 
 [node name="Unit" type="Node3D"]
 script = ExtResource("1_5uy6h")
+unit_name = "Old Man"
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31031227, 0)
@@ -48,7 +49,6 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HealthBar"]
 layout_mode = 1

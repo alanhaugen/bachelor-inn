@@ -19,7 +19,7 @@ enum Speciality
 
 @onready var camera: Camera3D;
 @onready var character: AnimatedSprite3D = $Character
-@onready var health_bar: ProgressBar = %HealthBar
+@onready var health_bar: ColorRect = %HealthBar
 @onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
 @onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
@@ -45,14 +45,20 @@ enum Speciality
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
+@export var current_health: int = health;
+@export var current_sanity: int = mind;
+
 ## SKILL TREE
+
 
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
 	print(unit_name);
-	health_bar.init_health(health);
+	health_bar.health = current_health;
+	health_bar.sanity = current_sanity;
 	health_label.text = "Health: " + str(health);
 	name_label.text = unit_name;
+
 
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = character.global_transform.origin;
