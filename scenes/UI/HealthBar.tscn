@@ -2,48 +2,53 @@
 
 [ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/popups/health_bar.gd" id="1_1u02u"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4av4t"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fhnc"]
+bg_color = Color(0, 0, 0, 0)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xfmwm"]
-bg_color = Color(0.18725458, 0.6159643, 0.4897607, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23qt1"]
+bg_color = Color(1, 0.2024239, 0.32685488, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhiy5"]
-bg_color = Color(0.04303915, 0.043039158, 0.043039113, 1)
-expand_margin_left = 1.0
-expand_margin_top = 1.0
-expand_margin_right = 1.0
-expand_margin_bottom = 1.0
-shadow_color = Color(0, 0, 0, 0.078431375)
-shadow_offset = Vector2(0, 1)
+bg_color = Color(0.043137256, 0, 0.043137256, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8d75"]
-bg_color = Color(0.9779369, 0.97793704, 0.9779369, 1)
+bg_color = Color(0.76173335, 0.1953432, 0.9999936, 1)
 
-[node name="HealthBar" type="ProgressBar"]
+[node name="HealthBar" type="ColorRect"]
 z_index = 1
 offset_right = 32.0
 offset_bottom = 4.0
-theme_override_styles/background = SubResource("StyleBoxEmpty_4av4t")
-theme_override_styles/fill = SubResource("StyleBoxFlat_xfmwm")
-value = 60.0
-show_percentage = false
+mouse_filter = 2
+color = Color(0, 0, 0, 0)
 script = ExtResource("1_1u02u")
 
-[node name="DamageBar" type="ProgressBar" parent="."]
-z_index = -1
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_mhiy5")
-theme_override_styles/fill = SubResource("StyleBoxFlat_j8d75")
+theme_override_constants/separation = 0
+
+[node name="Health" type="ProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_5fhnc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_23qt1")
 value = 80.0
 show_percentage = false
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.4
-one_shot = true
-
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[node name="Sanity" type="ProgressBar" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_mhiy5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_j8d75")
+value = 80.0
+fill_mode = 1
+show_percentage = false

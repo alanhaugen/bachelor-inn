@@ -6,7 +6,7 @@
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_8tmoo"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_8tmoo"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_hvfss"]
-[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/ui/movePopup.tscn" id="7_8tmoo"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turnTransition.tscn" id="8_57geo"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
 
@@ -32,11 +32,18 @@ data = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 mesh_library = ExtResource("4_8tmoo")
 data = {
-"cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65532, 1, 1048583, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 3, 1, 655367, 3, 0, 1441794, 65533, 65534, 1, 2, 65535, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0)
+"cells": PackedInt32Array(65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65532, 1, 1048583, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 3, 1, 655367, 3, 0, 1441794, 65533, 65534, 1, 2, 65535, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0)
 }
 metadata/_editor_floor_ = Vector3(0, 5, 0)
 
 [node name="MovementDots" type="GridMap" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+mesh_library = ExtResource("5_8tmoo")
+data = {
+"cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65534, 65533, 2, 3, 1, 655367, 3, 0, 1048576, 65533, 65534, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 0, 1048576, 1, 65534, 1179649, 1, 65535, 1179649, 1, 0, 1179649)
+}
+
+[node name="PathArrow" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("5_8tmoo")
 data = {
@@ -47,6 +54,7 @@ data = {
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, -5.99705, 8.331018, 2.948822)
 environment = SubResource("Environment_hm5u0")
 current = true
+fov = 50.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 5, 5, 0)
@@ -57,4 +65,5 @@ texture = ExtResource("5_hvfss")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
-[node name="MovePopup" parent="." instance=ExtResource("7_8tmoo")]
+[node name="TurnTransition" parent="." instance=ExtResource("8_57geo")]
+mouse_filter = 2

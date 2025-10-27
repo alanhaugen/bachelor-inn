@@ -1,0 +1,126 @@
+[gd_scene load_steps=5 format=3 uid="uid://blrc6hr2mnarg"]
+
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="1_k3ym5"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v7bq"]
+atlas = ExtResource("1_k3ym5")
+region = Rect2(184, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1do4"]
+atlas = ExtResource("1_k3ym5")
+region = Rect2(176, 0, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b741m"]
+atlas = ExtResource("1_k3ym5")
+region = Rect2(184, 8, 7, 7)
+
+[node name="GUI_POPUP" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1038.0
+offset_bottom = -612.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="NinePatchRect" parent="."]
+z_index = -3
+layout_mode = 0
+offset_right = 114.0
+offset_bottom = 39.0
+texture = ExtResource("1_k3ym5")
+region_rect = Rect2(96, 0, 32, 32)
+patch_margin_left = 11
+patch_margin_top = 11
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Icon" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 35.0
+offset_bottom = 35.0
+texture = ExtResource("1_k3ym5")
+region_rect = Rect2(128, 0, 32, 32)
+patch_margin_left = 11
+patch_margin_top = 11
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Icon_texture" type="TextureRect" parent="Icon"]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.20700002
+anchor_top = 0.20700002
+anchor_right = 0.79300004
+anchor_bottom = 0.79300004
+offset_left = -0.41700077
+offset_top = -0.41700077
+offset_right = 0.4169979
+offset_bottom = 0.4169979
+
+[node name="Health_Border" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 8.0
+offset_right = 105.0
+offset_bottom = 15.0
+texture = ExtResource("1_k3ym5")
+region_rect = Rect2(32, 0, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Magic_Border" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 16.0
+offset_right = 105.0
+offset_bottom = 23.0
+texture = ExtResource("1_k3ym5")
+region_rect = Rect2(64, 0, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Sanity_border" type="NinePatchRect" parent="."]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 24.0
+offset_right = 105.0
+offset_bottom = 31.0
+texture = ExtResource("1_k3ym5")
+region_rect = Rect2(64, 0, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="Sanity_Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 24.0
+offset_right = 45.0
+offset_bottom = 31.0
+texture = SubResource("AtlasTexture_0v7bq")
+
+[node name="Health_Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 8.0
+offset_right = 45.0
+offset_bottom = 15.0
+texture = SubResource("AtlasTexture_l1do4")
+
+[node name="Magic_Icon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 38.0
+offset_top = 16.0
+offset_right = 45.0
+offset_bottom = 23.0
+texture = SubResource("AtlasTexture_b741m")

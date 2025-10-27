@@ -1,60 +1,69 @@
 class_name Map extends Node3D
-
+## Map logic for combat levels.
+##
+## All state and animation logic is found here,
+## as well as input handling and audio playback.
 # TODO: Stackable tiles for enemies
 # TODO: Make your own units passable
 # TODO: camp?
 
-@export var cameraSpeed :float = 5.0;
-@export var mouseDragSensitivity :float = 50.0;
-@export var dialogue : Array[String];
+@export var camera_speed: float = 5.0;
+@export var mouse_drag_sensitivity: float = 50.0;
+@export var dialogue: Array[String];
 
-@onready var camera: 					Camera3D 			= $Camera3D;
-@onready var cursor: 					Sprite3D 			= $Cursor;
-@onready var map:						GridMap 				= $Map;
-@onready var unitsMap:					GridMap 				= $Units;
-@onready var movementMap:				GridMap 				= $MovementDots;
-#@onready var collidable_terrain_layer:	GridMap 				= $CollidableTerrainLayer
-@onready var move_popup:					Control 				= $MovePopup
-#@onready var path_arrow:					TileMapLayer 		= $PathArrow
-#@onready var animated_unit:				AnimatedSprite2D 	= $AnimatedUnit
-@onready var turn_transition	:			CanvasLayer			= $TurnTransition/CanvasLayer
-@onready var animation_player:			AnimationPlayer 		= $TurnTransition/AnimationPlayer
+@onready var camera: Camera3D = $Camera3D;
+@onready var cursor: Sprite3D = $Cursor;
+@onready var map: GridMap = $Map;
+@onready var units_map: GridMap = $Units;
+@onready var movement_map: GridMap = $MovementDots;
+#@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
+@onready var path_arrow: GridMap = $PathArrow
+@onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
+@onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-const UNIT = preload("uid://dac2gtsm1iwar")
-const ENEMY = preload("uid://beocud5p1563r")
+var animated_unit: AnimatableBody3D;
+var move_popup: Control;
 
-var animationPath :Array[Vector2];
-var isAnimationJustFinished :bool = false;
+const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
+const UNIT = preload("res://scenes/characters/unit.tscn")
+const ENEMY = preload("res://scenes/characters/enemy.tscn")
+const CHEST = preload("res://scenes/grid_items/chest.tscn")
 
-var dragging :bool = false;
+var animation_path :Array[Vector3i];
+var is_animation_just_finished :bool = false;
+
+var is_dragging :bool = false;
 
 enum States { PLAYING, ANIMATING };
 var state :int = States.PLAYING;
 
-var isUnitSelected :bool = false;
-var inMenu         :bool = false;
-var activeMove     :Move;
-var movesStack     :Array;
+var is_unit_selected: bool = false;
+var is_in_menu: bool = false;
+var active_move: Move;
+var moves_stack: Array;
 
 const Move = preload("res://scripts/combat/move.gd");
 
-var playerTurn     :bool = true;
-var unitPos        :Vector3;
-var playerCode     :int = 0;
-var playerCodeDone :int = 3;
-var enemyCode      :int = 1;
-var attackCode     :int = 0;
+var is_player_turn: bool = true;
+var unit_pos: Vector3;
+var player_code: int = 0;
+var player_code_done: int = 3;
+var enemy_code: int = 1;
+var attack_code: int = 0;
+var move_code: int = 1;
 
-func Touch(pos :Vector3) -> bool:
-	if (GetTileName(pos) != "Water" && unitsMap.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
-		movementMap.set_cell_item(pos, 0);
+
+func touch(pos :Vector3) -> bool:
+	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
+		movement_map.set_cell_item(pos, move_code);
 		return true;
 	return false;
 
-func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
+
+func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	var frontier :int = 0;
 	var frontierPositions :Array;
 	var nextFrontierPositions :Array;
@@ -63,11 +72,11 @@ func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	var moves :Array[Move];
 	
 	frontierPositions.append(pos);
-	var type :int = unitsMap.get_cell_item(pos);
+	var type :int = units_map.get_cell_item(pos);
 	
-	var tempEnemyCode :int = enemyCode;
-	if (playerTurn == false):
-		enemyCode = playerCode;
+	var temp_enemy_code :int = enemy_code;
+	if (is_player_turn == false):
+		enemy_code = player_code;
 	
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
@@ -77,55 +86,57 @@ func Dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 		var east  :Vector3 = Vector3(pos.x + 1, 0, pos.z);
 		var west  :Vector3 = Vector3(pos.x - 1, 0, pos.z);
 		
-		if (Touch(north)):
+		if (touch(north)):
 			nextFrontierPositions.append(north);
-			moves.append(Move.new(startPos, north, type, unitsMap));
+			moves.append(Move.new(startPos, north, type, units_map));
 		
-		if (Touch(south)):
+		if (touch(south)):
 			nextFrontierPositions.append(south);
-			moves.append(Move.new(startPos, south, type, unitsMap));
+			moves.append(Move.new(startPos, south, type, units_map));
 		
-		if (Touch(east)):
+		if (touch(east)):
 			nextFrontierPositions.append(east);
-			moves.append(Move.new(startPos, east, type, unitsMap));
+			moves.append(Move.new(startPos, east, type, units_map));
 		
-		if (Touch(west)):
+		if (touch(west)):
 			nextFrontierPositions.append(west);
-			moves.append(Move.new(startPos, west, type, unitsMap));
+			moves.append(Move.new(startPos, west, type, units_map));
 		
 		# Add attack moves
-		if (unitsMap.get_cell_item(north) == enemyCode):
-			moves.append(Move.new(startPos, north, type, unitsMap, true));
-			movementMap.set_cell_item(north, 0, attackCode);
-		if (unitsMap.get_cell_item(south) == enemyCode):
-			moves.append(Move.new(startPos, south, type, unitsMap, true));
-			movementMap.set_cell_item(south, 0, attackCode);
-		if (unitsMap.get_cell_item(east) == enemyCode):
-			moves.append(Move.new(startPos, east, type, unitsMap, true));
-			movementMap.set_cell_item(east, 0, attackCode);
-		if (unitsMap.get_cell_item(west) == enemyCode):
-			moves.append(Move.new(startPos, west, type, unitsMap, true));
-			movementMap.set_cell_item(west, 0, attackCode);
+		if (units_map.get_cell_item(north) == enemy_code):
+			moves.append(Move.new(startPos, north, type, units_map, true));
+			movement_map.set_cell_item(north, 0, attack_code);
+		if (units_map.get_cell_item(south) == enemy_code):
+			moves.append(Move.new(startPos, south, type, units_map, true));
+			movement_map.set_cell_item(south, 0, attack_code);
+		if (units_map.get_cell_item(east) == enemy_code):
+			moves.append(Move.new(startPos, east, type, units_map, true));
+			movement_map.set_cell_item(east, 0, attack_code);
+		if (units_map.get_cell_item(west) == enemy_code):
+			moves.append(Move.new(startPos, west, type, units_map, true));
+			movement_map.set_cell_item(west, 0, attack_code);
 		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
 			frontierPositions = nextFrontierPositions.duplicate();
 			nextFrontierPositions.clear();
 	
-	enemyCode = tempEnemyCode;
+	enemy_code = temp_enemy_code;
 	
 	return moves;
 
-func ShowMovePopup(windowPos :Vector2) -> void:
+
+func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.show();
-	inMenu = true;
-	move_popup.position = Vector2(windowPos.x + 64, windowPos.y);
-	if (activeMove.isAttack):
+	is_in_menu = true;
+	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
+	if (active_move.isAttack):
 		move_popup.attack_button.show();
-	if (activeMove.isWait):
+	if (active_move.isWait):
 		move_popup.wait_button.show();
-	if (activeMove.isAttack == false && activeMove.isWait == false):
+	if (active_move.isAttack == false && active_move.isWait == false):
 		move_popup.move_button.show();
+
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
@@ -138,6 +149,7 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	if result:
 		return result.position
 	return Vector3();
+
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
@@ -153,28 +165,35 @@ func get_grid_cell_from_mouse() -> Vector3i:
 
 	return Vector3i();
 
-func GetTileName(pos: Vector3) -> String:
+
+func get_tile_name(pos: Vector3) -> String:
+	if map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return "null";
 	return map.mesh_library.get_item_name(map.get_cell_item(pos));
 
-func GetUnitName(pos: Vector3) -> String:
-	return unitsMap.mesh_library.get_item_name(unitsMap.get_cell_item(pos));
+
+func get_unit_name(pos: Vector3) -> String:
+	if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return "null";
+	return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
+
 
 func _input(event: InputEvent) -> void:
 	if (state != States.PLAYING):
 		return;
-	if (inMenu):
+	if (is_in_menu):
 		return;
 	
-	if (event is InputEventMouseMotion and dragging):
-		camera.global_translate(Vector3(event.relative.x,0,event.relative.y) / mouseDragSensitivity);
+	if (event is InputEventMouseMotion and is_dragging):
+		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
-			dragging = true;
+			is_dragging = true;
 		if (event.pressed == false):
-			dragging = false;
+			is_dragging = false;
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE;
 			return;
 		
@@ -182,7 +201,7 @@ func _input(event: InputEvent) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
 		
-		if (GetTileName(pos) == "Water"):
+		if (get_tile_name(pos) == "Water"):
 			return;
 		
 		var globalPos: Vector3i = map.map_to_local(pos);
@@ -191,32 +210,34 @@ func _input(event: InputEvent) -> void:
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
-		if (GetUnitName(pos) == "Unit"):
-			unitPos = pos;
-			movementMap.clear();
-			Dijkstra(pos, 3);
-			#if (isUnitSelected == true):
-			#	activeMove = Move.new(pos, pos, playerCodeDone, unitsMap);
-			#	activeMove.isWait = true;
-			#	##ShowMovePopup(windowPos);
-			#else:
-			#	Dijkstra(pos, 3);
-			#	isUnitSelected = true;
-		elif (movementMap.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			activeMove = Move.new(unitPos, pos, playerCodeDone, unitsMap);
-			if (movementMap.get_cell_item(pos) == attackCode):
-				activeMove.isAttack = true;
-			##ShowMovePopup(windowPos);
-			##AStar(unitPos, pos);
+		var windowPos: Vector2 = Vector2(0,0);
+		
+		if (get_unit_name(pos) == "Unit"):
+			unit_pos = pos;
+			movement_map.clear();
+			if (is_unit_selected == true):
+				active_move = Move.new(pos, pos, player_code_done, units_map);
+				active_move.isWait = true;
+				show_move_popup(windowPos);
+			else:
+				dijkstra(pos, 3);
+				is_unit_selected = true;
+		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
+			active_move = Move.new(unit_pos, pos, player_code_done, units_map);
+			if (movement_map.get_cell_item(pos) == attack_code):
+				active_move.isAttack = true;
 			
-			activeMove.execute();
+			show_move_popup(windowPos);
+			a_star(unit_pos, pos);
+			
+			#activeMove.execute();
 			
 			#unitsMap.set_cell_item(pos, playerCodeDone);
 			#unitsMap.set_cell_item(unitPos, -1);
-			movementMap.clear();
+			movement_map.clear();
 			#isUnitSelected = false;
 		else:
-			movementMap.clear();
+			movement_map.clear();
 			#isUnitSelected = false;
 		
 	#elif event is InputEventMouseMotion:
@@ -227,40 +248,47 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	cursor.hide();
-	movementMap.clear();
-	unitsMap.hide();
+	movement_map.clear();
+	units_map.hide();
+	path_arrow.clear();
 	
-	var units :Array[Vector3i] = unitsMap.get_used_cells();
+	var units :Array[Vector3i] = units_map.get_used_cells();
 	
 	for i in units.size():
 		var pos: Vector3 = units[i];
 		var newUnit: Node = null;
-		if (GetUnitName(pos) == "Unit"):
+		if (get_unit_name(pos) == "Unit"):
 			newUnit = UNIT.instantiate();
-		elif (GetUnitName(pos) == "Enemy"):
+			newUnit.scale *= 5;
+		elif (get_unit_name(pos) == "Enemy"):
 			newUnit = ENEMY.instantiate();
+			newUnit.scale *= 5;
+		elif (get_unit_name(pos) == "Chest"):
+			newUnit = CHEST.instantiate();
 			
 		if (newUnit != null):
 			#unitArray.append(newUnit);
 			newUnit.position = pos * 2;
 			newUnit.position += Vector3(1, 0, 1);
-			newUnit.scale *= 5;
 			#newUnit = 2;
 			add_child(newUnit);
 	
+	move_popup = MOVE_POPUP.instantiate();
 	move_popup.hide();
-	#turn_transition
-	##animation_player.play();
+	Main.gui.add_child(move_popup);
+	
+	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
 
-func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
-##	path_arrow.clear();
+
+func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
+	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
 	
-	astar.region = Rect2i(0, 0, 18, 10);
+	astar.region = Rect2i(0, 0, 40, 40);
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -270,40 +298,42 @@ func AStar(start :Vector2i, end :Vector2i, showPath :bool = true) -> void:
 	for i in range(astar.region.position.x, astar.region.end.x):
 		for j in range(astar.region.position.y, astar.region.end.y):
 			var pos :Vector2i = Vector2i(i, j);
-##			if (collidable_terrain_layer.get_cell_source_id(pos) != -1):
-##				astar.set_point_solid(pos);
-			if (unitsMap.get_cell_source_id(pos) != -1 && pos != end):
+			var pos3D :Vector3i = Vector3i(i, 0, j);
+			if (get_tile_name(pos3D) == "Water"):
+				astar.set_point_solid(pos);
+			if (get_unit_name(pos3D) != "null" && pos3D != end):
 				astar.set_point_solid(pos);
 
-	var path :PackedVector2Array = astar.get_point_path(start, end);
+	var path :PackedVector2Array = astar.get_point_path(Vector2i(start.x, start.z), Vector2i(end.x, end.z));
 	
 	if not path.is_empty():
-##		if (showPath):
-##			path_arrow.set_cells_terrain_connect(path, 0, 0);
+		if (showPath):
+			path_arrow.set_cells_terrain_connect(path, 0, 0);
 	
-		animationPath.clear();
+		animation_path.clear();
 		
-		##for i :int in path.size():
-		##	animationPath.append(map.map_to_local(path[i]) * map.transform.get_scale());
+		for i :int in path.size():
+			animation_path.append(map.map_to_local(Vector3(path[i].x, 0.0, path[i].y)));
 
-##	if (animationPath.is_empty() == false):
-##		animated_unit.position = animationPath.pop_front();
+	if (animation_path.is_empty() == false):
+		animated_unit.position = animation_path.pop_front();
 	
-##	path_arrow.set_cell(start);
+	path_arrow.set_cell_item(start, -1);
+
 
 func MoveAI() -> void:
-	var units :Array[Vector3i] = unitsMap.get_used_cells();
+	var units :Array[Vector3i] = units_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (unitsMap.get_cell_item(pos) == playerCodeDone):
-			unitsMap.set_cell_item(pos, playerCode);
+		if (units_map.get_cell_item(pos) == player_code_done):
+			units_map.set_cell_item(pos, player_code);
 	
 	var aiUnitsMoves :Array;
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (unitsMap.get_cell_item(pos) == enemyCode):
+		if (units_map.get_cell_item(pos) == enemy_code):
 			aiUnitsMoves.append(Array());
-			aiUnitsMoves[aiUnitsMoves.size() - 1] += Dijkstra(pos, 3);
+			aiUnitsMoves[aiUnitsMoves.size() - 1] += dijkstra(pos, 3);
 	
 	# Move each enemy unit
 	for i :int in aiUnitsMoves.size():
@@ -315,30 +345,30 @@ func MoveAI() -> void:
 				move = aiUnitsMoves[i][j];
 		
 		# No attacks found, choose a random move
-		if (move == null):
+		if move == null:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
-		movesStack.append(move);
+		moves_stack.append(move);
 
-	movementMap.clear();
-	##animationPath.clear();
+	movement_map.clear();
+	animation_path.clear();
 	
-##	if (movesStack.is_empty() == false):
-##		AStar(movesStack.front().startPos, movesStack.front().endPos, false);
-##		state = States.ANIMATING;
-	state = States.ANIMATING; # removeme
+	if (moves_stack.is_empty() == false):
+		a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
+		state = States.ANIMATING;
+
 
 func CheckVictoryConditions() -> void:
-	var units :Array[Vector3i] = unitsMap.get_used_cells();
+	var units :Array[Vector3i] = units_map.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
 	var numberOfEnemyUnits  :int = 0;
 	
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (unitsMap.get_cell_item(pos) == playerCode || unitsMap.get_cell_item(pos) == playerCodeDone):
+		if (units_map.get_cell_item(pos) == player_code || units_map.get_cell_item(pos) == player_code_done):
 			numberOfPlayerUnits += 1;
-		elif (unitsMap.get_cell_item(pos) == enemyCode):
+		elif (units_map.get_cell_item(pos) == enemy_code):
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
@@ -346,80 +376,69 @@ func CheckVictoryConditions() -> void:
 	elif (numberOfEnemyUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
 
+
 func _process(delta: float) -> void:
-	##if (animation_player.is_playing()):
-	##	turn_transition.show();
-	##	return;
+	if (turn_transition_animation_player.is_playing()):
+		turn_transition.show();
+		return;
 	
-	##turn_transition.hide();
+	turn_transition.hide();
 	
 	if Input.is_action_pressed("pan_right"):
-		camera.global_translate(Vector3(1,0,0) * cameraSpeed * delta);
+		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
 	if Input.is_action_pressed("pan_left"):
-		camera.global_translate(Vector3(-1,0,0) * cameraSpeed * delta);
+		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
 	if Input.is_action_pressed("pan_up"):
-		camera.global_translate(Vector3(0,0,-1) * cameraSpeed * delta);
+		camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_down"):
-		camera.global_translate(Vector3(0,0,1) * cameraSpeed * delta);
+		camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
 	if Input.is_action_pressed("selected"):
 		pass;
 	
 	if (state == States.PLAYING):
-		if (isAnimationJustFinished):
-			isAnimationJustFinished = false;
-			animation_player.play();
+		if (is_animation_just_finished):
+			is_animation_just_finished = false;
+			turn_transition_animation_player.play();
 			enemy_label.hide();
 			player_label.show();
-		if (playerTurn):
-			playerTurn = false;
-			var units :Array[Vector3i] = unitsMap.get_used_cells();
+		if (is_player_turn):
+			is_player_turn = false;
+			var units :Array[Vector3i] = units_map.get_used_cells();
 			for i in units.size():
 				var pos :Vector3i = units[i];
-				if (unitsMap.get_cell_item(pos) == playerCode):
-					playerTurn = true;
-##			if (playerTurn == false):
-##				animation_player.play();
-##				enemy_label.show();
-##				player_label.hide();
+				if (units_map.get_cell_item(pos) == player_code):
+					is_player_turn = true;
+			if (is_player_turn == false):
+				turn_transition_animation_player.play();
+				enemy_label.show();
+				player_label.hide();
 		else:
 			MoveAI();
 			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
-		## -- Remove followig code:
-		if (movesStack.is_empty()):
-			playerTurn = true;
-			state = States.PLAYING;
-			return;
-		var move :Move = movesStack.pop_front();
-		move.execute();
-		return;
-		## -- end remove following code
-		
-		##animated_unit.show();
 		# Animations done: stop animating
-		if (movesStack.is_empty()):
+		if (moves_stack.is_empty()):
 			state = States.PLAYING;
-			##animated_unit.hide();
-			if (playerTurn == false):
-				isAnimationJustFinished = true;
-				playerTurn = true;
+			if (is_player_turn == false):
+				is_animation_just_finished = true;
+				is_player_turn = true;
 		# Done with one move, execute it and start on next
-		elif (animationPath.is_empty()):
-			activeMove = movesStack.pop_front();
-			activeMove.execute();
+		elif (animation_path.is_empty()):
+			active_move = moves_stack.pop_front();
+			active_move.execute();
 			
-			if (movesStack.is_empty() == false):
-				AStar(movesStack.front().startPos, movesStack.front().endPos, false);
+			if (moves_stack.is_empty() == false):
+				a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
 			
-			##if (animationPath.is_empty() == false):
-			##	animated_unit.position = animationPath.pop_front();
+			if (animation_path.is_empty() == false):
+				animated_unit.position = animation_path.pop_front();
 		# Process animation
-		##else:
-			##if (is_equal_approx(animated_unit.position.x, animationPath.front().x) && is_equal_approx(animated_unit.position.y, animationPath.front().y)):
-			##	animated_unit.position = animationPath.pop_front();
-			##else:
-			##	var movement_speed :float = 5;
-			##	var dir :Vector2 = animationPath.front() - animated_unit.position;
-			##	animated_unit.position += dir.normalized() * movement_speed;# * delta);
+		else:
+			if (is_equal_approx(animated_unit.position.x, animation_path.front().x) && is_equal_approx(animated_unit.position.y, animation_path.front().y)):
+				animated_unit.position = animation_path.pop_front();
+			else:
+				var movement_speed :float = 5;
+				var dir :Vector3 = animation_path.front() - animated_unit.position;
+				animated_unit.position += dir.normalized() * movement_speed;# * delta);
 			
 			#animated_unit.position.x = animationPath

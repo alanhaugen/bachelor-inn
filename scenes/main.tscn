@@ -1,12 +1,12 @@
-[gd_scene load_steps=20 format=4 uid="uid://bmw6hxcb71v0c"]
+[gd_scene load_steps=20 format=4 uid="uid://lt5m8gbbf6jk"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_85g3d"]
-[ext_resource type="Texture2D" uid="uid://dckp5sqvm15ev" path="res://art/textures/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png" id="2_choun"]
+[ext_resource type="Texture2D" uid="uid://dckp5sqvm15ev" path="res://art/Environment/Game Boy Advance - Fire Emblem_ The Blazing Blade - Maps - Chapter 05.png" id="2_choun"]
 [ext_resource type="Texture2D" uid="uid://c34bud74r3ged" path="res://art/textures/mercenary.png" id="3_ya4ey"]
 [ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/textures/MoveDot.png" id="4_eb6dy"]
 [ext_resource type="Texture2D" uid="uid://jm00os0n3vhj" path="res://art/textures/05.tileset-autotile.png" id="5_trceg"]
 [ext_resource type="PackedScene" uid="uid://dlfwm0w3j2kio" path="res://scenes/ui/cursor.tscn" id="6_a8y0u"]
-[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/ui/movePopup.tscn" id="7_jkv2x"]
+[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/ui/move_popup.tscn" id="7_jkv2x"]
 [ext_resource type="PackedScene" uid="uid://byvsg74rc2sk8" path="res://scenes/ui/AnimatedUnit.tscn" id="8_jbj1t"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turnTransition.tscn" id="9_muem4"]
 

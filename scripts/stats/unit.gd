@@ -19,13 +19,12 @@ enum Speciality
 
 @onready var camera: Camera3D;
 @onready var character: AnimatedSprite3D = $Character
-@onready var health_bar: ProgressBar = %HealthBar
-@onready var sub_viewport: SubViewport = $Character/Sprite3D/SubViewport
+@onready var health_bar: ColorRect = %HealthBar
 @onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
 @onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
-@export var isPlayable :bool = true; ## Friend or foe
-@export var unitName :String = "Bernard Grunderburger"; ## Unit name
+@export var is_playable :bool = true; ## Friend or foe
+@export var unit_name :String = "Bernard Grunderburger"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
 
 @export var health :int       = 4;    ## Unit health
@@ -46,21 +45,27 @@ enum Speciality
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
-## SKILL TREE	
+@export var current_health: int = health;
+@export var current_sanity: int = mind;
+
+## SKILL TREE
+
 
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
-	print(unitName);
-	health_bar.init_health(health);
+	print(unit_name);
+	health_bar.health = current_health;
+	health_bar.sanity = current_sanity;
 	health_label.text = "Health: " + str(health);
-	name_label.text = unitName;
+	name_label.text = unit_name;
 
-func _process(delta: float) -> void:
+
+func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = character.global_transform.origin;
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(32, 0);
+		health_bar.position = screen_position_2d - Vector2(64, 0);
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical

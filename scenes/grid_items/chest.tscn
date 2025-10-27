@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bajx21wdflkf8"]
+
+[ext_resource type="PackedScene" uid="uid://ctcbsf1b8tg5x" path="res://art/gltf/Chest.gltf" id="1_6rfxg"]
+
+[node name="Chest" type="Node3D"]
+
+[node name="blockbench_export" parent="." instance=ExtResource("1_6rfxg")]
