@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=15 format=3 uid="uid://dan04754q5nkc"]
 
-[ext_resource type="Texture2D" uid="uid://c6aabj6m658ya" path="res://art/textures/MoveDot.png" id="1_cdbv5"]
+[ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/textures/MoveDot.png" id="1_cdbv5"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_skouf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xku5"]

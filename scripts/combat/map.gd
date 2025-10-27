@@ -167,6 +167,8 @@ func get_grid_cell_from_mouse() -> Vector3i:
 
 
 func get_tile_name(pos: Vector3) -> String:
+	if map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return "null";
 	return map.mesh_library.get_item_name(map.get_cell_item(pos));
 
 
