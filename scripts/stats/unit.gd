@@ -79,13 +79,21 @@ func show_ui() -> void:
 
 
 func move_to(pos: Vector3i) -> void:
-	hide_ui();
+	reset();
 	grid_position = pos;
 	character.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
+	hide_ui();
+	character.show();
 	character.modulate = Color(1.0, 1.0, 1.0, 1.0);
+
+
+func die() -> void:
+	hide_ui();
+	character.hide();
+	grid_position = Vector3(-100, -100, -100);
 
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
