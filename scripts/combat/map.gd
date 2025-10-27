@@ -217,12 +217,15 @@ func _input(event: InputEvent) -> void:
 		if (get_unit_name(pos) == "Unit"):
 			unit_pos = pos;
 			movement_map.clear();
-			if (selected_unit != null):
+			if (selected_unit == get_unit(pos)):
 				active_move = Move.new(pos, pos, player_code_done, units_map);
 				active_move.isWait = true;
 				show_move_popup(windowPos);
 			else:
 				dijkstra(pos, 3);
+				if selected_unit != null:
+					var character_script: Character = selected_unit;
+					character_script.hide_ui();
 				selected_unit = get_unit(pos);
 				if selected_unit is Character:
 					var character_script: Character = selected_unit;
@@ -304,9 +307,11 @@ func _ready() -> void:
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
-		var unit: Character = characters[i];
-		if unit.grid_position == pos:
-			return unit;
+		if (is_instance_valid(characters[i])):
+			if characters[i] is Character:
+				var unit: Character = characters[i];
+				if unit.grid_position == pos:
+					return unit;
 	push_error("Did not find character at " + str(pos));
 	return null;
 
@@ -343,7 +348,9 @@ func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 		animation_path.clear();
 		
 		for i :int in path.size():
-			animation_path.append(map.map_to_local(Vector3(path[i].x - 11, 0.0, path[i].y - 15)));
+			var anim_pos: Vector3 = map.map_to_local(Vector3(path[i].x - 11, 0.0, path[i].y - 15));
+			anim_pos.y = 0;
+			animation_path.append(anim_pos);
 	
 	selected_unit = get_unit(start);
 	
@@ -359,6 +366,10 @@ func MoveAI() -> void:
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == player_code_done):
 			units_map.set_cell_item(pos, player_code);
+			var character: Character = get_unit(pos);
+			if character is Character:
+				var character_script: Character = character;
+				character.reset();
 	
 	var aiUnitsMoves :Array;
 	for i in units.size():
@@ -456,9 +467,13 @@ func _process(delta: float) -> void:
 				is_player_turn = true;
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
+			if (active_move.isAttack):
+				var attacked_unit: Character = get_unit(active_move.endPos);
+				if attacked_unit is Character:
+					attacked_unit.queue_free();
 			if selected_unit is Character:
 					var character_script: Character = selected_unit;
-					character_script.hide_ui();
+					character_script.move_to(active_move.endPos);
 			selected_unit = null;
 			active_move = moves_stack.pop_front();
 			active_move.execute();
@@ -470,10 +485,10 @@ func _process(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			if (is_equal_approx(selected_unit.position.x, animation_path.front().x) && is_equal_approx(selected_unit.position.y, animation_path.front().y)):
+			if (is_equal_approx(selected_unit.position.x, animation_path.front().x) && is_equal_approx(selected_unit.position.z, animation_path.front().z)):
 				selected_unit.position = animation_path.pop_front();
 			else:
-				var movement_speed :float = 0.01;
+				var movement_speed :float = 0.05;
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
 			
