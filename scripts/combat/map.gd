@@ -27,10 +27,10 @@ class_name Map extends Node3D
 var animated_unit: AnimatableBody3D;
 var move_popup: Control;
 
-const MOVE_POPUP = preload("uid://cswysjv240iry")
-const UNIT = preload("uid://btmpi20wskms7")
-const ENEMY = preload("uid://beocud5p1563r")
-const CHEST = preload("uid://ctcbsf1b8tg5x")
+const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
+const UNIT = preload("res://scenes/characters/unit.tscn")
+const ENEMY = preload("res://scenes/characters/enemy.tscn")
+const CHEST = preload("res://scenes/GridItems/Chest.tscn")
 
 var animation_path :Array[Vector3i];
 var is_animation_just_finished :bool = false;
