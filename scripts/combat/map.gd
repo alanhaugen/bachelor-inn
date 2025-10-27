@@ -30,7 +30,7 @@ var move_popup: Control;
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const UNIT = preload("res://scenes/characters/unit.tscn")
 const ENEMY = preload("res://scenes/characters/enemy.tscn")
-const CHEST = preload("res://scenes/GridItems/Chest.tscn")
+const CHEST = preload("res://scenes/grid_items/chest.tscn")
 
 var animation_path :Array[Vector3i];
 var is_animation_just_finished :bool = false;
