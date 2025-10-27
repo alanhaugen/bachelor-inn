@@ -257,8 +257,6 @@ func _input(event: InputEvent) -> void:
 	#	print("Mouse Motion at: ", event.position)
 
 
-#func _init() -> void:
-
 func _ready() -> void:
 	cursor.hide();
 	movement_map.clear();
@@ -369,7 +367,7 @@ func MoveAI() -> void:
 			var character: Character = get_unit(pos);
 			if character is Character:
 				var character_script: Character = character;
-				character.reset();
+				character_script.reset();
 	
 	var aiUnitsMoves :Array;
 	for i in units.size():
@@ -491,5 +489,9 @@ func _process(delta: float) -> void:
 				var movement_speed :float = 0.05;
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
+				if (dir.x >= 0):
+					selected_unit.character.flip_h = true;
+				else:
+					selected_unit.character.flip_h = false;
 			
 			#animated_unit.position.x = animationPath
