@@ -12,7 +12,6 @@ func _ready() -> void:
 
 func HidePopup() -> void:
 	map.is_in_menu = false;
-	map.is_unit_selected = false;
 	map.path_arrow.clear();
 	move_button.hide();
 	attack_button.hide();

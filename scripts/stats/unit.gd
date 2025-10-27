@@ -1,5 +1,6 @@
-class_name unit extends Node
+class_name Character extends Node
 
+#region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
 enum Speciality
 {
@@ -39,6 +40,7 @@ enum Speciality
 @export var magic :int        = 4;    ## Damage with magic
 @export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
 @export var weapon :Weapon    = null; ## Weapon held by unit
+#endregion
 
 @export var experience : int  = 0;
 @export var skills : Array[Skill];
@@ -47,6 +49,7 @@ enum Speciality
 
 @export var current_health: int = health;
 @export var current_sanity: int = mind;
+@export var grid_position: Vector3i;
 
 ## SKILL TREE
 
@@ -66,6 +69,15 @@ func _process(_delta: float) -> void:
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
 		health_bar.position = screen_position_2d - Vector2(64, 0);
+
+
+func hide_ui() -> void:
+	health_bar.hide();
+
+
+func show_ui() -> void:
+	health_bar.show();
+
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical
