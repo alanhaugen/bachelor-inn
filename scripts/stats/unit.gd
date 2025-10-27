@@ -65,7 +65,7 @@ func _process(_delta: float) -> void:
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(32, 0);
+		health_bar.position = screen_position_2d - Vector2(64, 0);
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical

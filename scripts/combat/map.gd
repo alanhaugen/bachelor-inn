@@ -227,7 +227,7 @@ func _input(event: InputEvent) -> void:
 				active_move.isAttack = true;
 			
 			show_move_popup(windowPos);
-			AStar(unit_pos, pos);
+			a_star(unit_pos, pos);
 			
 			#activeMove.execute();
 			
@@ -282,7 +282,7 @@ func _ready() -> void:
 #	units.append(unit);
 
 
-func AStar(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
+func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
@@ -354,7 +354,7 @@ func MoveAI() -> void:
 	animation_path.clear();
 	
 	if (moves_stack.is_empty() == false):
-		AStar(moves_stack.front().startPos, moves_stack.front().endPos, false);
+		a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
 		state = States.ANIMATING;
 
 
@@ -427,7 +427,7 @@ func _process(delta: float) -> void:
 			active_move.execute();
 			
 			if (moves_stack.is_empty() == false):
-				AStar(moves_stack.front().startPos, moves_stack.front().endPos, false);
+				a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
 			
 			if (animation_path.is_empty() == false):
 				animated_unit.position = animation_path.pop_front();
