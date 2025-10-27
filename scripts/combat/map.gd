@@ -53,12 +53,12 @@ var player_code: int = 0;
 var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
-var moveCode: int = 1;
+var move_code: int = 1;
 
 
 func touch(pos :Vector3) -> bool:
 	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
-		movement_map.set_cell_item(pos, 1);
+		movement_map.set_cell_item(pos, move_code);
 		return true;
 	return false;
 
