@@ -28,7 +28,7 @@ var animated_unit: AnimatableBody3D;
 var move_popup: Control;
 
 const MOVE_POPUP = preload("uid://cswysjv240iry")
-const UNIT = preload("uid://btmpi20wskms7")
+const UNIT = preload("uid://c3xxj5stgpwig")
 const ENEMY = preload("uid://beocud5p1563r")
 const CHEST = preload("uid://ctcbsf1b8tg5x")
 
@@ -272,7 +272,7 @@ func _ready() -> void:
 			#newUnit = 2;
 			add_child(newUnit);
 	
-	move_popup = MOVE_POPUP.instantiate();
+	#move_popup = MOVE_POPUP.instantiate();
 	move_popup.hide();
 	Main.gui.add_child(move_popup);
 	
