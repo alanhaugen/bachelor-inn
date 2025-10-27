@@ -27,10 +27,10 @@ class_name Map extends Node3D
 var animated_unit: AnimatableBody3D;
 var move_popup: Control;
 
-const MOVE_POPUP = preload("uid://cswysjv240iry")
-const UNIT = preload("uid://c3xxj5stgpwig")
-const ENEMY = preload("uid://beocud5p1563r")
-const CHEST = preload("uid://ctcbsf1b8tg5x")
+const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
+const UNIT = preload("res://scenes/characters/unit.tscn")
+const ENEMY = preload("res://scenes/characters/enemy.tscn")
+const CHEST = preload("res://scenes/grid_items/chest.tscn")
 
 var animation_path :Array[Vector3i];
 var is_animation_just_finished :bool = false;
@@ -53,12 +53,12 @@ var player_code: int = 0;
 var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
-var moveCode: int = 1;
+var move_code: int = 1;
 
 
 func touch(pos :Vector3) -> bool:
 	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
-		movement_map.set_cell_item(pos, 1);
+		movement_map.set_cell_item(pos, move_code);
 		return true;
 	return false;
 
@@ -227,7 +227,7 @@ func _input(event: InputEvent) -> void:
 				active_move.isAttack = true;
 			
 			show_move_popup(windowPos);
-			AStar(unit_pos, pos);
+			a_star(unit_pos, pos);
 			
 			#activeMove.execute();
 			
@@ -272,7 +272,7 @@ func _ready() -> void:
 			#newUnit = 2;
 			add_child(newUnit);
 	
-	#move_popup = MOVE_POPUP.instantiate();
+	move_popup = MOVE_POPUP.instantiate();
 	move_popup.hide();
 	Main.gui.add_child(move_popup);
 	
@@ -282,7 +282,7 @@ func _ready() -> void:
 #	units.append(unit);
 
 
-func AStar(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
+func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
 	
 	var astar :AStarGrid2D = AStarGrid2D.new();
@@ -354,7 +354,7 @@ func MoveAI() -> void:
 	animation_path.clear();
 	
 	if (moves_stack.is_empty() == false):
-		AStar(moves_stack.front().startPos, moves_stack.front().endPos, false);
+		a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
 		state = States.ANIMATING;
 
 
@@ -427,7 +427,7 @@ func _process(delta: float) -> void:
 			active_move.execute();
 			
 			if (moves_stack.is_empty() == false):
-				AStar(moves_stack.front().startPos, moves_stack.front().endPos, false);
+				a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
 			
 			if (animation_path.is_empty() == false):
 				animated_unit.position = animation_path.pop_front();
