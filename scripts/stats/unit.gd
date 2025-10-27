@@ -50,6 +50,7 @@ enum Speciality
 
 @export var current_health: int = health;
 @export var current_sanity: int = mind;
+@export var current_magic: int = magic;
 @export var grid_position: Vector3i;
 
 ## SKILL TREE

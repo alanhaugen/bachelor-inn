@@ -25,8 +25,12 @@ class_name Map extends Node3D
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
 var selected_unit: Character = null;
+var selected_enemy_unit: Character = null;
 var move_popup: Control;
+var stat_popup: Control;
 
+
+const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const UNIT = preload("res://scenes/characters/unit.tscn")
 const ENEMY = preload("res://scenes/characters/enemy.tscn")
@@ -199,6 +203,10 @@ func _input(event: InputEvent) -> void:
 		if (event.button_index != MOUSE_BUTTON_LEFT):
 			return;
 		
+		if (selected_enemy_unit != null):
+			selected_enemy_unit.hide_ui();
+			stat_popup.hide();
+		
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
@@ -230,6 +238,15 @@ func _input(event: InputEvent) -> void:
 				if selected_unit is Character:
 					var character_script: Character = selected_unit;
 					character_script.show_ui();
+					if stat_popup is StatPopUp:
+						var stat_script: StatPopUp = stat_popup;
+						stat_script.max_health = character_script.health;
+						stat_script.health = character_script.current_health;
+						stat_script.max_magic = character_script.magic;
+						stat_script.magic = character_script.current_magic;
+						stat_script.max_sanity = character_script.mind;
+						stat_script.sanity = character_script.current_sanity;
+						stat_popup.show();
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			active_move = Move.new(unit_pos, pos, player_code_done, units_map, selected_unit);
 			if (movement_map.get_cell_item(pos) == attack_code):
@@ -249,11 +266,25 @@ func _input(event: InputEvent) -> void:
 			movement_map.clear();
 			
 			if selected_unit is Character:
-					var character_script: Character = selected_unit;
-					character_script.hide_ui();
+				var character_script: Character = selected_unit;
+				character_script.hide_ui();
 			
 			selected_unit = null;
 		
+		if (get_unit_name(pos) == "Enemy"):
+			selected_enemy_unit = get_unit(pos);
+			if selected_enemy_unit is Character:
+					var character_script: Character = selected_enemy_unit;
+					character_script.show_ui();
+					if stat_popup is StatPopUp:
+						var stat_script: StatPopUp = stat_popup;
+						stat_script.max_health = character_script.health;
+						stat_script.health = character_script.current_health;
+						stat_script.max_magic = character_script.magic;
+						stat_script.magic = character_script.current_magic;
+						stat_script.max_sanity = character_script.mind;
+						stat_script.sanity = character_script.current_sanity;
+						stat_popup.show();
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
@@ -297,6 +328,11 @@ func _ready() -> void:
 	move_popup = MOVE_POPUP.instantiate();
 	move_popup.hide();
 	Main.gui.add_child(move_popup);
+	
+	stat_popup = STATS_POPUP.instantiate();
+	stat_popup.hide();
+	stat_popup.scale = Vector2(3,3);
+	Main.gui.add_child(stat_popup);
 	
 	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
