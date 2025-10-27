@@ -173,8 +173,7 @@ func get_tile_name(pos: Vector3) -> String:
 
 
 func get_unit_name(pos: Vector3) -> String:
-	print(str(pos) + " " + str(units_map.get_cell_item(pos)));
-	if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM or units_map.get_cell_item(pos) == 7:
+	if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return "null";
 	return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
 
