@@ -27,7 +27,8 @@ class_name Map extends Node3D
 var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
-var stat_popup: Control;
+var stat_popup_player: Control;
+var stat_popup_enemy: Control;
 
 
 const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
@@ -205,7 +206,9 @@ func _input(event: InputEvent) -> void:
 		
 		if (selected_enemy_unit != null):
 			selected_enemy_unit.hide_ui();
-			stat_popup.hide();
+			stat_popup_enemy.hide();
+			if selected_unit == null:
+				stat_popup_player.hide();
 		
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
@@ -235,20 +238,20 @@ func _input(event: InputEvent) -> void:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
-				camera.position.x = selected_unit.position.x;
-				camera.position.z = selected_unit.position.z + 7.5;
+				camera.position.x = selected_unit.position.x + 4.5;
+				camera.position.z = selected_unit.position.z + 6.5;
 				if selected_unit is Character:
 					var character_script: Character = selected_unit;
 					character_script.show_ui();
-					if stat_popup is StatPopUp:
-						var stat_script: StatPopUp = stat_popup;
+					if stat_popup_player is StatPopUp:
+						var stat_script: StatPopUp = stat_popup_player;
 						stat_script.max_health = character_script.health;
 						stat_script.health = character_script.current_health;
 						stat_script.max_magic = character_script.magic;
 						stat_script.magic = character_script.current_magic;
 						stat_script.max_sanity = character_script.mind;
 						stat_script.sanity = character_script.current_sanity;
-						stat_popup.show();
+						stat_popup_player.show();
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			active_move = Move.new(unit_pos, pos, player_code_done, units_map, selected_unit);
 			if (movement_map.get_cell_item(pos) == attack_code):
@@ -278,15 +281,15 @@ func _input(event: InputEvent) -> void:
 			if selected_enemy_unit is Character:
 					var character_script: Character = selected_enemy_unit;
 					character_script.show_ui();
-					if stat_popup is StatPopUp:
-						var stat_script: StatPopUp = stat_popup;
+					if stat_popup_player is StatPopUp:
+						var stat_script: StatPopUp = stat_popup_player;
 						stat_script.max_health = character_script.health;
 						stat_script.health = character_script.current_health;
 						stat_script.max_magic = character_script.magic;
 						stat_script.magic = character_script.current_magic;
 						stat_script.max_sanity = character_script.mind;
 						stat_script.sanity = character_script.current_sanity;
-						stat_popup.show();
+						stat_popup_enemy.show();
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
@@ -331,10 +334,17 @@ func _ready() -> void:
 	move_popup.hide();
 	Main.gui.add_child(move_popup);
 	
-	stat_popup = STATS_POPUP.instantiate();
-	stat_popup.hide();
-	stat_popup.scale = Vector2(3,3);
-	Main.gui.add_child(stat_popup);
+	stat_popup_player = STATS_POPUP.instantiate();
+	stat_popup_player.hide();
+	stat_popup_player.scale = Vector2(3,3);
+	stat_popup_player.position = Vector2(-555, 235);
+	Main.gui.add_child(stat_popup_player);
+	
+	stat_popup_enemy = STATS_POPUP.instantiate();
+	stat_popup_enemy.hide();
+	stat_popup_enemy.scale = Vector2(3,3);
+	stat_popup_enemy.position = Vector2(250, 235);
+	Main.gui.add_child(stat_popup_enemy);
 	
 	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
@@ -472,13 +482,13 @@ func _process(delta: float) -> void:
 	turn_transition.hide();
 	
 	if Input.is_action_pressed("pan_right"):
-		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+		camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_left"):
-		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+		camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_up"):
-		camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+		camera.global_translate(Vector3(-1,0,-1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_down"):
-		camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+		camera.global_translate(Vector3(1,0,1) * camera_speed * delta);
 	if Input.is_action_pressed("selected"):
 		pass;
 	
@@ -529,8 +539,8 @@ func _process(delta: float) -> void:
 				var movement_speed :float = 0.05;
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
-				camera.position.x = selected_unit.position.x;
-				camera.position.z = selected_unit.position.z + 7.5;
+				camera.position.x = selected_unit.position.x + 4.5;
+				camera.position.z = selected_unit.position.z + 6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:
