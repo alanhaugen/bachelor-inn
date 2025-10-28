@@ -50,13 +50,13 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 8.331, 0)
+transform = Transform3D(1, 0, 0, 0, 0.81915194, 0.5735764, 0, -0.5735764, 0.81915194, 0, 8.331, 0)
 environment = SubResource("Environment_hm5u0")
 current = true
 fov = 50.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048954323, 5, 5, 0)
+transform = Transform3D(0.91841877, 0.019366808, 0.3951352, -0.34594762, 0.5238193, 0.7784173, -0.19190401, -0.8516092, 0.48778543, 3.4095209, 5, 2.213087)
 
 [node name="Cursor" type="Sprite3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.1, -1.017)
