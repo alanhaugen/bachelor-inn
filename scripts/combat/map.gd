@@ -504,11 +504,11 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("selected"):
 		pass;
 	
-	if camera.global_position.z > 0.3:
+	if camera.global_position.y > 0.3:
 		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
+			camera.global_position -= camera.global_transform.basis.z * camera_speed * delta;
 	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-		camera.global_position -= camera.global_transform.basis.z * camera_speed * delta;
+		camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
