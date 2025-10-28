@@ -32,6 +32,9 @@ enum Speciality
 @export var health :int       = 4;    ## Unit health
 @export var movement :int     = 4;    ## Movement range
 @export var mind :int         = 4;    ## Mind reduces sanity loss from combat or other events
+@export var focus :int        = 4;    ## 
+@export var agility :int      = 4;    ## 
+@export var endurance :int    = 4;    ## 
 @export var defense :int      = 4;    ## Lowers damage of weapon attacks
 @export var resistence :int   = 4;    ## Lowers damage of magic attacks
 @export var luck  :int        = 4;    ## Affects many other skills

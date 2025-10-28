@@ -25,7 +25,7 @@ script = ExtResource("1_vvr86")
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31031227, 0)
-billboard = 2
+billboard = 1
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_gic7v")
 autoplay = "default"

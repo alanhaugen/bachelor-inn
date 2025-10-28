@@ -1,9 +1,19 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpce0elf5r6ky"]
+[gd_scene load_steps=9 format=3 uid="uid://dpce0elf5r6ky"]
 
 [ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/textures/MoveDot.png" id="1_surpk"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_0xku5"]
+[ext_resource type="Shader" uid="uid://dv1u0vifov2kh" path="res://shaders/Stencilp2.gdshader" id="2_7052x"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qu0n2"]
+render_priority = 0
+shader = ExtResource("2_7052x")
+shader_parameter/diffuse_tex = ExtResource("1_surpk")
+shader_parameter/dot_size = -1.0
+shader_parameter/grid_density = 16.0
+shader_parameter/shadow_colour = Color(0.13809991, 0.12529224, 0.27526784, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdbv5"]
+next_pass = SubResource("ShaderMaterial_qu0n2")
 transparency = 1
 albedo_texture = ExtResource("1_surpk")
 texture_filter = 0

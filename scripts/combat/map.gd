@@ -239,7 +239,7 @@ func _input(event: InputEvent) -> void:
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 7.5;#6.5;
+				camera.position.z = selected_unit.position.z + 7.0;#6.5;
 				if selected_unit is Character:
 					var character_script: Character = selected_unit;
 					character_script.show_ui();
@@ -440,6 +440,7 @@ func MoveAI() -> void:
 		for j :int in aiUnitsMoves[i].size():
 			if (aiUnitsMoves[i][j].is_attack == true):
 				move = aiUnitsMoves[i][j];
+				break;
 		
 		# No attacks found, choose a random move
 		if move == null:
@@ -447,6 +448,13 @@ func MoveAI() -> void:
 		
 		# Do the attack or move
 		moves_stack.append(move);
+		
+		# Remove move from ai stack
+		for j :int in aiUnitsMoves.size():
+			for k :int in aiUnitsMoves[j].size():
+				if move == aiUnitsMoves[j][k]:
+					aiUnitsMoves[j].remove_at(k);
+					break;
 
 	movement_map.clear();
 	animation_path.clear();
@@ -498,10 +506,8 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed("zoom_in"):
 		camera.global_position.y -= 5 * delta;
-		print("a");
 	if Input.is_action_pressed("zoom_out"):
 		camera.global_position.y += 5 * delta;
-		print("b");
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
@@ -551,7 +557,7 @@ func _process(delta: float) -> void:
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 7.5;#6.5;
+				camera.position.z = selected_unit.position.z + 7.0;#6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:

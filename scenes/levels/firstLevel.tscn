@@ -50,7 +50,7 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 8.331, 7)
+transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 8.331, 0)
 environment = SubResource("Environment_hm5u0")
 current = true
 fov = 50.0
@@ -60,6 +60,7 @@ transform = Transform3D(1, 0, 0, 0, 0.048954323, 0.9988011, 0, -0.9988011, 0.048
 
 [node name="Cursor" type="Sprite3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.1, -1.017)
+texture_filter = 0
 texture = ExtResource("5_hvfss")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
