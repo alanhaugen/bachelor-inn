@@ -544,7 +544,7 @@ func _process(delta: float) -> void:
 			active_move.execute();
 			
 			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
