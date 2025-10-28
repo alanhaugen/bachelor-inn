@@ -27,9 +27,9 @@ region = Rect2(184, 8, 7, 7)
 [node name="GUI_POPUP" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -549.0
+offset_left = -550.0
 offset_top = 221.0
-offset_right = -549.0
+offset_right = -550.0
 offset_bottom = 221.0
 script = ExtResource("1_0a5f3")
 
