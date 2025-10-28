@@ -50,7 +50,7 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.70710677, -0.49999994, 0.49999994, 0, 0.7071067, 0.7071067, -0.70710677, -0.49999994, 0.49999994, 0, 8.331, 7)
+transform = Transform3D(1, 0, 0, 0, 0.7071067, 0.7071067, 0, -0.7071067, 0.7071067, 0, 8.331, 7)
 environment = SubResource("Environment_hm5u0")
 current = true
 fov = 50.0
