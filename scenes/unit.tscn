@@ -1,0 +1,160 @@
+[gd_scene load_steps=11 format=3 uid="uid://bn8by58nd6ckh"]
+
+[ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/unit.gd" id="1_a6jp0"]
+[ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_k673f"]
+[ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/HealthBar.tscn" id="3_1jvru"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="4_gic7v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tb304"]
+atlas = ExtResource("2_k673f")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gic7v"]
+atlas = ExtResource("2_k673f")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gic7v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tb304")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gic7v")
+}],
+"loop": true,
+"name": &"enemy",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ruro2"]
+atlas = ExtResource("2_k673f")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8hdl"]
+atlas = ExtResource("2_k673f")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_oee7j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ruro2")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e8hdl")
+}],
+"loop": true,
+"name": &"enemyTest",
+"speed": 5.0
+}]
+
+[node name="Unit2" type="Node3D"]
+script = ExtResource("1_a6jp0")
+
+[node name="Character" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31031227, 0)
+billboard = 2
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_gic7v")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HealthBar" parent="CanvasLayer" instance=ExtResource("3_1jvru")]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -575.0
+offset_top = -323.0
+offset_right = -543.0
+offset_bottom = -319.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HealthBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -19.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Name" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_gic7v")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Health" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_gic7v")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+sprite_frames = SubResource("SpriteFrames_oee7j")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="AnimatedSprite3D"]
+
+[node name="HealthBar" parent="AnimatedSprite3D/CanvasLayer" instance=ExtResource("3_1jvru")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -575.0
+offset_top = -323.0
+offset_right = -543.0
+offset_bottom = -319.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AnimatedSprite3D/CanvasLayer/HealthBar"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -19.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Name" type="Label" parent="AnimatedSprite3D/CanvasLayer/HealthBar/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_gic7v")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
+
+[node name="Health" type="Label" parent="AnimatedSprite3D/CanvasLayer/HealthBar/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_gic7v")
+theme_override_font_sizes/font_size = 8
+horizontal_alignment = 1
