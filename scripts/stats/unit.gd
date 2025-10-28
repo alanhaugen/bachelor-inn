@@ -1,5 +1,9 @@
-class_name unit extends Node
+class_name Character extends Node
+## This class has all the Character stats and visuals
+##
+## Use this class to make new units and enemies for the game
 
+#region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
 enum Speciality
 {
@@ -20,8 +24,6 @@ enum Speciality
 @onready var camera: Camera3D;
 @onready var character: AnimatedSprite3D = $Character
 @onready var health_bar: ColorRect = %HealthBar
-@onready var health_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Health
-@onready var name_label: Label = $CanvasLayer/HealthBar/VBoxContainer/Name
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Bernard Grunderburger"; ## Unit name
@@ -39,6 +41,7 @@ enum Speciality
 @export var magic :int        = 4;    ## Damage with magic
 @export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
 @export var weapon :Weapon    = null; ## Weapon held by unit
+#endregion
 
 @export var experience : int  = 0;
 @export var skills : Array[Skill];
@@ -47,17 +50,17 @@ enum Speciality
 
 @export var current_health: int = health;
 @export var current_sanity: int = mind;
+@export var current_magic: int = magic;
+@export var grid_position: Vector3i;
 
 ## SKILL TREE
 
 
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
-	print(unit_name);
 	health_bar.health = current_health;
 	health_bar.sanity = current_sanity;
-	health_label.text = "Health: " + str(health);
-	name_label.text = unit_name;
+	health_bar.name_label = unit_name;
 
 
 func _process(_delta: float) -> void:
@@ -65,7 +68,34 @@ func _process(_delta: float) -> void:
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(64, 0);
+		health_bar.position = screen_position_2d - Vector2(150, 0);
+
+
+func hide_ui() -> void:
+	health_bar.hide();
+
+
+func show_ui() -> void:
+	health_bar.show();
+
+
+func move_to(pos: Vector3i) -> void:
+	reset();
+	grid_position = pos;
+	character.modulate = Color(0.338, 0.338, 0.338, 1.0);
+
+
+func reset() -> void:
+	hide_ui();
+	character.show();
+	character.modulate = Color(1.0, 1.0, 1.0, 1.0);
+
+
+func die() -> void:
+	hide_ui();
+	character.hide();
+	grid_position = Vector3(-100, -100, -100);
+
 
 # Hit = [(Skill x 3 + Luck) / 2] + Weapon Hit Rate
 # Crit = (Skill / 2) + Weapon's Critical
@@ -171,9 +201,3 @@ var units: = {
 		"experience": 0
 	}
 }
-
-func attack() -> void:
-	pass;
-
-func move() -> void:
-	pass;

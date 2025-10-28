@@ -1,9 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://btmpi20wskms7"]
+[gd_scene load_steps=6 format=3 uid="uid://btmpi20wskms7"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/unit.gd" id="1_vvr86"]
 [ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_x7j7d"]
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/HealthBar.tscn" id="3_hysan"]
-[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="4_owi4b"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vvr86"]
 atlas = ExtResource("2_x7j7d")
@@ -21,6 +20,7 @@ animations = [{
 }]
 
 [node name="Unit" type="Node3D"]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 script = ExtResource("1_vvr86")
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
@@ -48,25 +48,3 @@ grow_vertical = 2
 scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HealthBar"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="Name" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_owi4b")
-theme_override_font_sizes/font_size = 16
-horizontal_alignment = 1
-
-[node name="Health" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_owi4b")
-theme_override_font_sizes/font_size = 8
-horizontal_alignment = 1
