@@ -3,6 +3,7 @@
 /android/
 .DS_Store
 *~
+*autosave.kra
 *.import
 *.swp
 *.tmp
