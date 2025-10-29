@@ -239,7 +239,7 @@ func _input(event: InputEvent) -> void:
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 7.0;#6.5;
+				camera.position.z = selected_unit.position.z + 10.0;#6.5;
 				if selected_unit is Character:
 					var character_script: Character = selected_unit;
 					character_script.show_ui();
@@ -558,7 +558,7 @@ func _process(delta: float) -> void:
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 7.0;#6.5;
+				camera.position.z = selected_unit.position.z + 10.0;#6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:

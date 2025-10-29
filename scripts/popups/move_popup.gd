@@ -39,3 +39,5 @@ func _on_wait_button_pressed() -> void:
 
 func _on_cancel_button_pressed() -> void:
 	HidePopup();
+	map.selected_unit.reset();
+	map.selected_unit = null;
