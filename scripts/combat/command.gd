@@ -1,7 +1,13 @@
-class_name Command extends Node
+class_name Command
+extends Node
+## Command pattern
+##
+## https://gameprogrammingpatterns.com/command.html
+
 
 func execute() -> void:
-	return;
-	
+	pass;
+
+
 func undo() -> void:
-	return;
+	pass;

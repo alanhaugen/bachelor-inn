@@ -1,4 +1,5 @@
-class_name Map extends Node3D
+class_name Map
+extends Node3D
 ## Map logic for combat levels.
 ##
 ## All state and animation logic is found here,
@@ -49,8 +50,7 @@ var is_in_menu: bool = false;
 var active_move: Move;
 var moves_stack: Array;
 
-const Move = preload("res://scripts/combat/move.gd");
-
+var current_moves: Array[Move];
 var is_player_turn: bool = true;
 var unit_pos: Vector3;
 var player_code: int = 0;
@@ -108,17 +108,18 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 			moves.append(Move.new(startPos, west, type, units_map, selected_unit));
 		
 		# Add attack moves
+		var neighbour_move: Move = Move.new(startPos, pos, type, units_map, selected_unit);
 		if (units_map.get_cell_item(north) == enemy_code):
-			moves.append(Move.new(startPos, north, type, units_map, selected_unit, true, get_unit(north)));
+			moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
 			movement_map.set_cell_item(north, 0, attack_code);
 		if (units_map.get_cell_item(south) == enemy_code):
-			moves.append(Move.new(startPos, south, type, units_map, selected_unit, true, get_unit(south)));
+			moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
 			movement_map.set_cell_item(south, 0, attack_code);
 		if (units_map.get_cell_item(east) == enemy_code):
-			moves.append(Move.new(startPos, east, type, units_map, selected_unit, true, get_unit(east)));
+			moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
 			movement_map.set_cell_item(east, 0, attack_code);
 		if (units_map.get_cell_item(west) == enemy_code):
-			moves.append(Move.new(startPos, west, type, units_map, selected_unit, true, get_unit(west)));
+			moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
 			movement_map.set_cell_item(west, 0, attack_code);
 		
 		if (frontierPositions.is_empty() == true):
@@ -233,7 +234,7 @@ func _input(event: InputEvent) -> void:
 				active_move.is_wait = true;
 				show_move_popup(windowPos);
 			else:
-				dijkstra(pos, get_unit(pos).movement);
+				current_moves = dijkstra(pos, get_unit(pos).movement);
 				if selected_unit != null:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
@@ -253,10 +254,15 @@ func _input(event: InputEvent) -> void:
 						stat_script.sanity = character_script.current_sanity;
 						stat_popup_player.show();
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			active_move = Move.new(unit_pos, pos, player_code_done, units_map, selected_unit);
-			if (movement_map.get_cell_item(pos) == attack_code):
-				active_move.is_attack = true;
-				active_move.character2 = get_unit(active_move.end_pos);
+			for i in range(current_moves.size()):
+				if current_moves[i].end_pos == pos:
+					active_move = current_moves[i];
+					active_move.character1 = selected_unit;
+					active_move.grid_code = player_code_done;
+					if active_move.neighbour_move:
+						active_move.neighbour_move.grid_code = player_code_done;
+						active_move.neighbour_move.character1 = active_move.character1;
+					break;
 			
 			show_move_popup(windowPos);
 			a_star(unit_pos, pos);
@@ -447,6 +453,8 @@ func MoveAI() -> void:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
+		if move.is_attack:
+			moves_stack.append(move.neighbour_move);
 		moves_stack.append(move);
 		
 		# Remove move from ai stack
@@ -544,7 +552,7 @@ func _process(delta: float) -> void:
 			active_move = moves_stack.pop_front();
 			active_move.execute();
 			
-			if (moves_stack.is_empty() == false):
+			if (moves_stack.is_empty() == false and moves_stack.front().is_attack == false):
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
 			
 			if (animation_path.is_empty() == false):
