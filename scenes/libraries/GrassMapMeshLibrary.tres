@@ -2,12 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://demvwevb4wv4c" path="res://art/dae/Link_Blend.aseprite.png" id="1_afddy"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7yyb"]
-resource_name = "Material.002"
-cull_mode = 2
-albedo_texture = ExtResource("1_afddy")
-roughness = 0.07647059
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_6pjpr"]
 _surfaces = [{
 "aabb": AABB(-0.5000002, 0, -0.5000002, 1.0000004, 0.1875, 1.0000004),
@@ -30,7 +24,6 @@ _surfaces = [{
 "format": 34896613399,
 "index_count": 54,
 "index_data": PackedByteArray("AAABAAIAAwABAAAABAAAAAIAAAAFAAMABAAGAAAAAAAHAAUABgAHAAAABgAIAAcACAAJAAcACgAIAAYACAALAAkACgAMAAgACwAIAA0ADQAIAAwADgAPABAAEQASABMAFAAVABYAFwAYABkA"),
-"material": SubResource("StandardMaterial3D_n7yyb"),
 "name": "Material.002",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
@@ -51,6 +44,12 @@ data = {
 
 [sub_resource type="ImageTexture" id="ImageTexture_tce3v"]
 image = SubResource("Image_afddy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n7yyb"]
+resource_name = "Material.002"
+cull_mode = 2
+albedo_texture = ExtResource("1_afddy")
+texture_filter = 0
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_5a8n8"]
 _surfaces = [{

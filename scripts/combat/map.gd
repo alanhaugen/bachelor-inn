@@ -1,4 +1,5 @@
-class_name Map extends Node3D
+class_name Map
+extends Node3D
 ## Map logic for combat levels.
 ##
 ## All state and animation logic is found here,
@@ -27,7 +28,8 @@ class_name Map extends Node3D
 var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
-var stat_popup: Control;
+var stat_popup_player: Control;
+var stat_popup_enemy: Control;
 
 
 const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
@@ -48,8 +50,7 @@ var is_in_menu: bool = false;
 var active_move: Move;
 var moves_stack: Array;
 
-const Move = preload("res://scripts/combat/move.gd");
-
+var current_moves: Array[Move];
 var is_player_turn: bool = true;
 var unit_pos: Vector3;
 var player_code: int = 0;
@@ -107,17 +108,18 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 			moves.append(Move.new(startPos, west, type, units_map, selected_unit));
 		
 		# Add attack moves
+		var neighbour_move: Move = Move.new(startPos, pos, type, units_map, selected_unit);
 		if (units_map.get_cell_item(north) == enemy_code):
-			moves.append(Move.new(startPos, north, type, units_map, selected_unit, true, get_unit(north)));
+			moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
 			movement_map.set_cell_item(north, 0, attack_code);
 		if (units_map.get_cell_item(south) == enemy_code):
-			moves.append(Move.new(startPos, south, type, units_map, selected_unit, true, get_unit(south)));
+			moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
 			movement_map.set_cell_item(south, 0, attack_code);
 		if (units_map.get_cell_item(east) == enemy_code):
-			moves.append(Move.new(startPos, east, type, units_map, selected_unit, true, get_unit(east)));
+			moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
 			movement_map.set_cell_item(east, 0, attack_code);
 		if (units_map.get_cell_item(west) == enemy_code):
-			moves.append(Move.new(startPos, west, type, units_map, selected_unit, true, get_unit(west)));
+			moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
 			movement_map.set_cell_item(west, 0, attack_code);
 		
 		if (frontierPositions.is_empty() == true):
@@ -215,7 +217,9 @@ func _input(event: InputEvent) -> void:
 		
 		if (selected_enemy_unit != null):
 			selected_enemy_unit.hide_ui();
-			stat_popup.hide();
+			stat_popup_enemy.hide();
+			if selected_unit == null:
+				stat_popup_player.hide();
 		
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
@@ -240,30 +244,24 @@ func _input(event: InputEvent) -> void:
 				active_move.is_wait = true;
 				show_move_popup(windowPos);
 			else:
-				dijkstra(pos, get_unit(pos).movement);
+				current_moves = dijkstra(pos, get_unit(pos).movement);
 				if selected_unit != null:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
-				camera.position.x = selected_unit.position.x;
-				camera.position.z = selected_unit.position.z + 7.5;
-				if selected_unit is Character:
-					var character_script: Character = selected_unit;
-					character_script.show_ui();
-					if stat_popup is StatPopUp:
-						var stat_script: StatPopUp = stat_popup;
-						stat_script.max_health = character_script.health;
-						stat_script.health = character_script.current_health;
-						stat_script.max_magic = character_script.magic;
-						stat_script.magic = character_script.current_magic;
-						stat_script.max_sanity = character_script.mind;
-						stat_script.sanity = character_script.current_sanity;
-						stat_popup.show();
+				camera.position.x = selected_unit.position.x;# + 4.5;
+				camera.position.z = selected_unit.position.z + 10.0;#6.5;
+				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			active_move = Move.new(unit_pos, pos, player_code_done, units_map, selected_unit);
-			if (movement_map.get_cell_item(pos) == attack_code):
-				active_move.is_attack = true;
-				active_move.character2 = get_unit(active_move.end_pos);
+			for i in range(current_moves.size()):
+				if current_moves[i].end_pos == pos:
+					active_move = current_moves[i];
+					active_move.character1 = selected_unit;
+					active_move.grid_code = player_code_done;
+					if active_move.neighbour_move:
+						active_move.neighbour_move.grid_code = player_code_done;
+						active_move.neighbour_move.character1 = active_move.character1;
+					break;
 			
 			show_move_popup(windowPos);
 			a_star(unit_pos, pos);
@@ -285,21 +283,24 @@ func _input(event: InputEvent) -> void:
 		
 		if (get_unit_name(pos) == "Enemy"):
 			selected_enemy_unit = get_unit(pos);
-			if selected_enemy_unit is Character:
-					var character_script: Character = selected_enemy_unit;
-					character_script.show_ui();
-					if stat_popup is StatPopUp:
-						var stat_script: StatPopUp = stat_popup;
-						stat_script.max_health = character_script.health;
-						stat_script.health = character_script.current_health;
-						stat_script.max_magic = character_script.magic;
-						stat_script.magic = character_script.current_magic;
-						stat_script.max_sanity = character_script.mind;
-						stat_script.sanity = character_script.current_sanity;
-						stat_popup.show();
+			update_stat(selected_enemy_unit, stat_popup_enemy);
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
+
+func update_stat(character: Character, popup: StatPopUp) -> void:
+	if character is Character:
+		var character_script: Character = character;
+		character_script.show_ui();
+		if popup is StatPopUp:
+			var stat_script: StatPopUp = popup;
+			stat_script.max_health = character_script.max_health;
+			stat_script.health = character_script.current_health;
+			stat_script.max_magic = character_script.magic;
+			stat_script.magic = character_script.current_magic;
+			stat_script.max_sanity = character_script.mind;
+			stat_script.sanity = character_script.current_sanity;
+			popup.show();
 
 func _ready() -> void:
 	cursor.hide();
@@ -348,10 +349,17 @@ func _ready() -> void:
 	move_popup.hide();
 	Main.gui.add_child(move_popup);
 	
-	stat_popup = STATS_POPUP.instantiate();
-	stat_popup.hide();
-	stat_popup.scale = Vector2(3,3);
-	Main.gui.add_child(stat_popup);
+	stat_popup_player = STATS_POPUP.instantiate();
+	stat_popup_player.hide();
+	stat_popup_player.scale = Vector2(3,3);
+	stat_popup_player.position = Vector2(-555, 235);
+	Main.gui.add_child(stat_popup_player);
+	
+	stat_popup_enemy = STATS_POPUP.instantiate();
+	stat_popup_enemy.hide();
+	stat_popup_enemy.scale = Vector2(3,3);
+	stat_popup_enemy.position = Vector2(250, 235);
+	Main.gui.add_child(stat_popup_enemy);
 	
 	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
@@ -447,13 +455,23 @@ func MoveAI() -> void:
 		for j :int in aiUnitsMoves[i].size():
 			if (aiUnitsMoves[i][j].is_attack == true):
 				move = aiUnitsMoves[i][j];
+				break;
 		
 		# No attacks found, choose a random move
 		if move == null:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
+		if move.is_attack:
+			moves_stack.append(move.neighbour_move);
 		moves_stack.append(move);
+		
+		# Remove move from ai stack
+		for j :int in aiUnitsMoves.size():
+			for k :int in aiUnitsMoves[j].size():
+				if move == aiUnitsMoves[j][k]:
+					aiUnitsMoves[j].remove_at(k);
+					break;
 
 	movement_map.clear();
 	animation_path.clear();
@@ -490,14 +508,24 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed("pan_right"):
 		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+		#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_left"):
 		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+		#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_up"):
 		camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+		#camera.global_translate(Vector3(-1,0,-1) * camera_speed * delta);
 	if Input.is_action_pressed("pan_down"):
 		camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+		#camera.global_translate(Vector3(1,0,1) * camera_speed * delta);
 	if Input.is_action_pressed("selected"):
 		pass;
+	
+	if camera.global_position.y > 0.3:
+		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
+			camera.global_position -= camera.global_transform.basis.z * camera_speed * delta;
+	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+		camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
@@ -533,8 +561,8 @@ func _process(delta: float) -> void:
 			active_move = moves_stack.pop_front();
 			active_move.execute();
 			
-			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().startPos, moves_stack.front().endPos, false);
+			if (moves_stack.is_empty() == false and moves_stack.front().is_attack == false):
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
@@ -546,8 +574,8 @@ func _process(delta: float) -> void:
 				var movement_speed :float = 0.05;
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
-				camera.position.x = selected_unit.position.x;
-				camera.position.z = selected_unit.position.z + 7.5;
+				camera.position.x = selected_unit.position.x;# + 4.5;
+				camera.position.z = selected_unit.position.z + 10.0;#6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:

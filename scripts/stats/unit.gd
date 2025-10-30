@@ -30,16 +30,20 @@ enum Speciality
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
 
 @export var health :int       = 4;    ## Unit health
+@export var strength :int     = 4;    ## Damage with weapons
 @export var movement :int     = 4;    ## Movement range
 @export var mind :int         = 4;    ## Mind reduces sanity loss from combat or other events
+@export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
+@export var agility :int      = 4;    ## 
+@export var focus :int        = 4;    ## 
+
+@export var endurance :int    = 4;    ## 
 @export var defense :int      = 4;    ## Lowers damage of weapon attacks
 @export var resistence :int   = 4;    ## Lowers damage of magic attacks
 @export var luck  :int        = 4;    ## Affects many other skills
 @export var intimidation :int = 4;    ## How the unit affects sanity in battle.
 @export var skill :int        = 4;    ## Chance to hit critical.
-@export var strength :int     = 4;    ## Damage with weapons
 @export var magic :int        = 4;    ## Damage with magic
-@export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
 @export var weapon :Weapon    = null; ## Weapon held by unit
 #endregion
 
@@ -48,19 +52,24 @@ enum Speciality
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
-@export var current_health: int = health;
+var max_health: int = health + endurance + floor(strength / 2.0);
+@export var current_health: int = max_health;
 @export var current_sanity: int = mind;
 @export var current_magic: int = magic;
-@export var grid_position: Vector3i;
+
+var grid_position: Vector3i;
 
 ## SKILL TREE
+
+func update_health_bar() -> void:
+	health_bar.health = current_health;
+	health_bar.sanity = current_sanity;
+	health_bar.name_label = unit_name;
 
 
 func _ready() -> void:
 	camera = get_viewport().get_camera_3d();
-	health_bar.health = current_health;
-	health_bar.sanity = current_sanity;
-	health_bar.name_label = unit_name;
+	update_health_bar();
 
 
 func _process(_delta: float) -> void:
@@ -68,7 +77,7 @@ func _process(_delta: float) -> void:
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(150, 0);
+		health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
 
 
 func hide_ui() -> void:

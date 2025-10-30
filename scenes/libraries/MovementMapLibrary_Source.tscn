@@ -1,15 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpce0elf5r6ky"]
+[gd_scene load_steps=6 format=3 uid="uid://dpce0elf5r6ky"]
 
-[ext_resource type="Texture2D" uid="uid://c4ycu1eas0ikq" path="res://art/textures/MoveDot.png" id="1_surpk"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_0xku5"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdbv5"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_surpk"]
 transparency = 1
-albedo_texture = ExtResource("1_surpk")
-texture_filter = 0
+albedo_texture = ExtResource("2_0xku5")
+uv1_scale = Vector3(0.125, 0.125, 0.125)
+uv1_offset = Vector3(0.25, 0, 0)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_7052x"]
-material = SubResource("StandardMaterial3D_cdbv5")
+material = SubResource("StandardMaterial3D_surpk")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7052x"]
 transparency = 1

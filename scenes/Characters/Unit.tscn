@@ -1,8 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://btmpi20wskms7"]
+[gd_scene load_steps=10 format=3 uid="uid://btmpi20wskms7"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/unit.gd" id="1_vvr86"]
+[ext_resource type="Shader" path="res://shaders/EdgeHighlight.gdshader" id="2_hysan"]
 [ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_x7j7d"]
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/HealthBar.tscn" id="3_hysan"]
+[ext_resource type="Texture2D" uid="uid://bf0epe8pmd02y" path="res://art/textures/MASK_Character edge highlight poc.png" id="4_owi4b"]
+[ext_resource type="Texture2D" uid="uid://cvm3u3yuefrd3" path="res://art/textures/NRML_Character edge highlight poc2.png" id="5_q0mn7"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_drwnb"]
+render_priority = 0
+shader = ExtResource("2_hysan")
+shader_parameter/diffuse_tex = ExtResource("2_x7j7d")
+shader_parameter/normal_map = ExtResource("5_q0mn7")
+shader_parameter/edge_mask = ExtResource("4_owi4b")
+shader_parameter/edge_strength = 5.0
+shader_parameter/edge_tint = Color(1, 1, 1, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vvr86"]
 atlas = ExtResource("2_x7j7d")
@@ -20,11 +35,12 @@ animations = [{
 }]
 
 [node name="Unit" type="Node3D"]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0)
 script = ExtResource("1_vvr86")
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31031227, 0)
+material_override = SubResource("ShaderMaterial_drwnb")
 billboard = 2
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_gic7v")
