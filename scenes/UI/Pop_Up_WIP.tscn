@@ -1,6 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://blrc6hr2mnarg"]
+[gd_scene load_steps=9 format=3 uid="uid://61t26jjb7n3p"]
 
-[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="1_k3ym5"]
+[ext_resource type="Script" uid="uid://y5jmxyksgjji" path="res://scripts/ui/pop_up_wip.gd" id="1_0a5f3"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="1_k3ym5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1htk0"]
+bg_color = Color(0.9711141, 0, 0.53540385, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3i2e"]
+bg_color = Color(0.9999997, 0.5726849, 0.15946901, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgqxh"]
+bg_color = Color(0.8995731, 0.22001407, 1, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0v7bq"]
 atlas = ExtResource("1_k3ym5")
@@ -16,13 +26,8 @@ region = Rect2(184, 8, 7, 7)
 
 [node name="GUI_POPUP" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = -1038.0
-offset_bottom = -612.0
-grow_horizontal = 2
-grow_vertical = 2
+anchors_preset = 0
+script = ExtResource("1_0a5f3")
 
 [node name="Background" type="NinePatchRect" parent="."]
 z_index = -3
@@ -35,6 +40,7 @@ patch_margin_left = 11
 patch_margin_top = 11
 patch_margin_right = 11
 patch_margin_bottom = 11
+metadata/_edit_use_anchors_ = true
 
 [node name="Icon" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -48,8 +54,10 @@ patch_margin_left = 11
 patch_margin_top = 11
 patch_margin_right = 11
 patch_margin_bottom = 11
+metadata/_edit_use_anchors_ = true
 
 [node name="Icon_texture" type="TextureRect" parent="Icon"]
+unique_name_in_owner = true
 z_index = -1
 layout_mode = 1
 anchors_preset = -1
@@ -61,6 +69,7 @@ offset_left = -0.41700077
 offset_top = -0.41700077
 offset_right = 0.4169979
 offset_bottom = 0.4169979
+metadata/_edit_use_anchors_ = true
 
 [node name="Health_Border" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -74,6 +83,19 @@ patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthBar" type="ProgressBar" parent="Health_Border"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 57.0
+offset_bottom = 6.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_1htk0")
+value = 80.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
 
 [node name="Magic_Border" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -87,6 +109,19 @@ patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="MagicBar" type="ProgressBar" parent="Magic_Border"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 57.0
+offset_bottom = 6.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_q3i2e")
+value = 80.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
 
 [node name="Sanity_border" type="NinePatchRect" parent="."]
 layout_mode = 0
@@ -100,6 +135,19 @@ patch_margin_left = 2
 patch_margin_top = 2
 patch_margin_right = 2
 patch_margin_bottom = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="SanityBar" type="ProgressBar" parent="Sanity_border"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 57.0
+offset_bottom = 6.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_lgqxh")
+value = 80.0
+show_percentage = false
+metadata/_edit_use_anchors_ = true
 
 [node name="Sanity_Icon" type="TextureRect" parent="."]
 layout_mode = 0
@@ -108,6 +156,7 @@ offset_top = 24.0
 offset_right = 45.0
 offset_bottom = 31.0
 texture = SubResource("AtlasTexture_0v7bq")
+metadata/_edit_use_anchors_ = true
 
 [node name="Health_Icon" type="TextureRect" parent="."]
 layout_mode = 0
@@ -116,6 +165,7 @@ offset_top = 8.0
 offset_right = 45.0
 offset_bottom = 15.0
 texture = SubResource("AtlasTexture_l1do4")
+metadata/_edit_use_anchors_ = true
 
 [node name="Magic_Icon" type="TextureRect" parent="."]
 layout_mode = 0
@@ -124,3 +174,4 @@ offset_top = 16.0
 offset_right = 45.0
 offset_bottom = 23.0
 texture = SubResource("AtlasTexture_b741m")
+metadata/_edit_use_anchors_ = true

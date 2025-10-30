@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://c07c37ch0u8mj" path="res://scripts/combat/cursor.gd" id="2_s0nli"]
 
 [node name="cursor" type="Sprite2D"]
+texture_filter = 1
 texture = ExtResource("1_1eco6")
 centered = false
 script = ExtResource("2_s0nli")
