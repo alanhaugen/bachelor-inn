@@ -177,11 +177,21 @@ func get_tile_name(pos: Vector3) -> String:
 		return "null";
 	return map.mesh_library.get_item_name(map.get_cell_item(pos));
 
-
+# Expanded the function to do some error searching
 func get_unit_name(pos: Vector3) -> String:
-	if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
-		return "null";
-	return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
+	var item_id: int = units_map.get_cell_item(pos)
+	if item_id == GridMap.INVALID_CELL_ITEM:
+		return "null"
+		
+	if item_id >= units_map.mesh_library.get_item_list().size():
+		push_warning("Invalid MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
+		return "null"
+		
+	return units_map.mesh_library.get_item_name(item_id)
+	
+	#if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		#return "null";
+	#return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
 
 
 func _input(event: InputEvent) -> void:
@@ -240,7 +250,7 @@ func _input(event: InputEvent) -> void:
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 10.0;#6.5;
+				camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
@@ -299,6 +309,13 @@ func _ready() -> void:
 	path_arrow.clear();
 	
 	var units :Array[Vector3i] = units_map.get_used_cells();
+	
+	# Added for-loop for error searching
+	for pos in units:
+		var item_id: int = units_map.get_cell_item(pos)
+		if item_id == 7:
+			print("Found item 7 at position: ", pos)
+			units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)  # Remove it
 	
 	for i in units.size():
 		var pos: Vector3 = units[i];
@@ -359,7 +376,14 @@ func get_unit(pos: Vector3i) -> Character:
 					return unit;
 	push_error("Did not find character at " + str(pos));
 	return null;
+	
+func set_unit_gray(unit: Character) -> void:
+	if unit.character is AnimatedSprite3D:
+		unit.character.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
+func set_unit_color(unit: Character) -> void:
+	if unit.character is AnimatedSprite3D:
+		unit.character.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
@@ -558,7 +582,7 @@ func _process(delta: float) -> void:
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
 				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 10.0;#6.5;
+				camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:
