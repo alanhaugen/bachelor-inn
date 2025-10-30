@@ -23,10 +23,6 @@ Main="*res://scripts/main.gd"
 
 gdscript/warnings/untyped_declaration=2
 
-[display]
-
-window/handheld/orientation=5
-
 [input]
 
 selected={
