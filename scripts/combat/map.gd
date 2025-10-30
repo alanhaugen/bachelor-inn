@@ -376,7 +376,14 @@ func get_unit(pos: Vector3i) -> Character:
 					return unit;
 	push_error("Did not find character at " + str(pos));
 	return null;
+	
+func set_unit_gray(unit: Character) -> void:
+	if unit.character is AnimatedSprite3D:
+		unit.character.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
+func set_unit_color(unit: Character) -> void:
+	if unit.character is AnimatedSprite3D:
+		unit.character.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
