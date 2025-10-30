@@ -34,6 +34,7 @@ func execute() -> void:
 			weapon_damage = character1.weapondamage_modifier
 		var attack_strength: int = character1.strength + weapon_damage;
 		character2.current_health -= attack_strength;
+		character2.update_health_bar();
 		if character2.current_health <= 0:
 			character2.die();
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));

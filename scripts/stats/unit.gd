@@ -60,12 +60,15 @@ var is_done :bool = false;
 
 ## SKILL TREE
 
-
-func _ready() -> void:
-	camera = get_viewport().get_camera_3d();
+func update_health_bar() -> void:
 	health_bar.health = current_health;
 	health_bar.sanity = current_sanity;
 	health_bar.name_label = unit_name;
+
+
+func _ready() -> void:
+	camera = get_viewport().get_camera_3d();
+	update_health_bar();
 
 
 func _process(_delta: float) -> void:
@@ -73,7 +76,7 @@ func _process(_delta: float) -> void:
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(150, 0);
+		health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
 
 
 func hide_ui() -> void:
