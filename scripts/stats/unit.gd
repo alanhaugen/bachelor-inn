@@ -52,11 +52,12 @@ enum Speciality
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
 
-@export var current_health: int = health + endurance + floor(strength / 2.0);
+var max_health: int = health + endurance + floor(strength / 2.0);
+@export var current_health: int = max_health;
 @export var current_sanity: int = mind;
 @export var current_magic: int = magic;
-@export var grid_position: Vector3i;
-var is_done :bool = false;
+
+var grid_position: Vector3i;
 
 ## SKILL TREE
 
@@ -90,14 +91,12 @@ func show_ui() -> void:
 func move_to(pos: Vector3i) -> void:
 	reset();
 	grid_position = pos;
-	is_done = true;
 	character.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
 	hide_ui();
 	character.show();
-	is_done = false;
 	character.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 

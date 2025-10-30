@@ -31,10 +31,14 @@ func execute() -> void:
 	if is_attack:
 		var weapon_damage: int = 0;
 		if character1.weapon:
-			weapon_damage = character1.weapondamage_modifier
+			weapon_damage = character1.weapon.damage_modifier
 		var attack_strength: int = character1.strength + weapon_damage;
 		character2.current_health -= attack_strength;
 		character2.update_health_bar();
+		if character2.is_playable == false:
+			Main.level.update_stat(character2, Main.level.stat_popup_player);
+		else:
+			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
 		if character2.current_health <= 0:
 			character2.die();
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));

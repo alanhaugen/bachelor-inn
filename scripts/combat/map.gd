@@ -241,18 +241,7 @@ func _input(event: InputEvent) -> void:
 				selected_unit = get_unit(pos);
 				camera.position.x = selected_unit.position.x;# + 4.5;
 				camera.position.z = selected_unit.position.z + 10.0;#6.5;
-				if selected_unit is Character:
-					var character_script: Character = selected_unit;
-					character_script.show_ui();
-					if stat_popup_player is StatPopUp:
-						var stat_script: StatPopUp = stat_popup_player;
-						stat_script.max_health = character_script.health;
-						stat_script.health = character_script.current_health;
-						stat_script.max_magic = character_script.magic;
-						stat_script.magic = character_script.current_magic;
-						stat_script.max_sanity = character_script.mind;
-						stat_script.sanity = character_script.current_sanity;
-						stat_popup_player.show();
+				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
 				if current_moves[i].end_pos == pos:
@@ -284,21 +273,24 @@ func _input(event: InputEvent) -> void:
 		
 		if (get_unit_name(pos) == "Enemy"):
 			selected_enemy_unit = get_unit(pos);
-			if selected_enemy_unit is Character:
-					var character_script: Character = selected_enemy_unit;
-					character_script.show_ui();
-					if stat_popup_player is StatPopUp:
-						var stat_script: StatPopUp = stat_popup_player;
-						stat_script.max_health = character_script.health;
-						stat_script.health = character_script.current_health;
-						stat_script.max_magic = character_script.magic;
-						stat_script.magic = character_script.current_magic;
-						stat_script.max_sanity = character_script.mind;
-						stat_script.sanity = character_script.current_sanity;
-						stat_popup_enemy.show();
+			update_stat(selected_enemy_unit, stat_popup_enemy);
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
+
+func update_stat(character: Character, popup: StatPopUp) -> void:
+	if character is Character:
+		var character_script: Character = character;
+		character_script.show_ui();
+		if popup is StatPopUp:
+			var stat_script: StatPopUp = popup;
+			stat_script.max_health = character_script.max_health;
+			stat_script.health = character_script.current_health;
+			stat_script.max_magic = character_script.magic;
+			stat_script.magic = character_script.current_magic;
+			stat_script.max_sanity = character_script.mind;
+			stat_script.sanity = character_script.current_sanity;
+			popup.show();
 
 func _ready() -> void:
 	cursor.hide();

@@ -60,6 +60,7 @@ mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_5fhnc")
 theme_override_styles/fill = SubResource("StyleBoxFlat_23qt1")
 value = 80.0
+fill_mode = 1
 show_percentage = false
 
 [node name="SanityBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
