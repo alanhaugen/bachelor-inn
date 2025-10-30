@@ -205,7 +205,7 @@ func _input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
-		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
 			is_dragging = true;
 		if (event.pressed == false):
