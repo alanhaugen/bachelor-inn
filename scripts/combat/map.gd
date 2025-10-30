@@ -205,7 +205,7 @@ func _input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
-		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
 			is_dragging = true;
 		if (event.pressed == false):
@@ -249,8 +249,8 @@ func _input(event: InputEvent) -> void:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
-				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 3.0;#6.5;
+				#camera.position.x = selected_unit.position.x;# + 4.5;
+				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
@@ -581,8 +581,8 @@ func _process(delta: float) -> void:
 				var movement_speed :float = 0.05;
 				var dir :Vector3 = animation_path.front() - selected_unit.position;
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
-				camera.position.x = selected_unit.position.x;# + 4.5;
-				camera.position.z = selected_unit.position.z + 3.0;#6.5;
+				#camera.position.x = selected_unit.position.x;# + 4.5;
+				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				if (dir.x >= 0):
 					selected_unit.character.flip_h = true;
 				else:
