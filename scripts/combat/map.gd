@@ -243,6 +243,7 @@ func _input(event: InputEvent) -> void:
 				active_move = Move.new(pos, pos, player_code_done, units_map, selected_unit);
 				active_move.is_wait = true;
 				show_move_popup(windowPos);
+				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				current_moves = dijkstra(pos, get_unit(pos).movement);
 				if selected_unit != null:
