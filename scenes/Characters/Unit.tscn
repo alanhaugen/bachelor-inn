@@ -20,13 +20,10 @@ animations = [{
 }]
 
 [node name="Unit" type="Node3D"]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 script = ExtResource("1_vvr86")
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.17759222)
-billboard = 1
-no_depth_test = true
+transform = Transform3D(4, 0, 0, 0, 2.2507002, 3.3067126, 0, -3.3067126, 2.2507002, 0, 0.7359731, -0.4634822)
 texture_filter = 0
 sprite_frames = SubResource("SpriteFrames_gic7v")
 autoplay = "default"
