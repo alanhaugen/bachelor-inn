@@ -25,7 +25,7 @@ script = ExtResource("1_5uy6h")
 unit_name = "Old Man"
 
 [node name="Character" type="AnimatedSprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.2724703)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
 billboard = 1
 no_depth_test = true
 texture_filter = 0
