@@ -25,6 +25,9 @@ extends Node3D
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
+@export var minimum_camera_height: float = 1.0;
+@export var maximum_camera_height: float = 15.0;
+
 var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
@@ -529,11 +532,12 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("selected"):
 		pass;
 	
-	if camera.global_position.y > 0.3:
+	if camera.global_position.y > minimum_camera_height:
 		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
 			camera.global_position -= camera.global_transform.basis.z * camera_speed * delta;
-	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-		camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
+	if camera.global_position.y < maximum_camera_height:
+		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+			camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
