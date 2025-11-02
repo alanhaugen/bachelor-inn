@@ -1,4 +1,5 @@
-class_name Move extends Command
+class_name Move
+extends Command
 ## This is a move
 ##
 ## The game consists of moves played in a queue
@@ -10,9 +11,17 @@ var units: GridMap;
 var is_attack: bool;
 var is_wait: bool;
 var neighbour_move: Move = null;
+var is_done: bool = false;
+var weapon_damage: int = 0;
+var weapon_crit: int = 0;
+var attack_strength: int = 0;
 
 var character1: Character = null; ## The moving character
 var character2: Character = null; ## The character being attacked
+
+
+func save(json_file_path: String) -> void:
+	pass;
 
 
 func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: GridMap, inCharacter1: Character, inIsAttack :bool = false, inCharacter2: Character = null, in_neighbour_move: Move = null) -> void:
@@ -29,12 +38,11 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 
 func execute() -> void:
 	if is_attack:
-		var weapon_damage: int = 0;
-		var weapon_crit: int = 0;
 		if character1.weapon:
 			weapon_damage = character1.weapon.damage_modifier
 			weapon_crit = character1.weapon.weapon_critical;
-		var attack_strength: int = character1.strength + weapon_damage;
+		
+		attack_strength = character1.strength + weapon_damage;
 		
 		print("Attacker: ");
 		character1.print_stats();
@@ -79,10 +87,24 @@ func execute() -> void:
 		units.set_cell_item(end_pos, grid_code);
 
 
+func redo() -> void:
+	if is_done == false:
+		execute();
+	else:
+		if is_attack:
+			character2.health -= attack_strength;
+		else:
+			character1.move_to(end_pos);
+			units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
+			units.set_cell_item(end_pos, grid_code);
+
+
 func undo() -> void:
-	units.set_cell_item(end_pos, GridMap.INVALID_CELL_ITEM);
-	units.set_cell_item(start_pos, grid_code);
-	
-	character1.move_to(start_pos);
-	if is_attack:
-		character2.move_to(end_pos);
+	if is_done:
+		units.set_cell_item(end_pos, GridMap.INVALID_CELL_ITEM);
+		units.set_cell_item(start_pos, grid_code);
+		
+		if is_attack:
+			character2.health += attack_strength;
+			character2.move_to(end_pos);
+		character1.move_to(start_pos);
