@@ -47,7 +47,7 @@ enum Speciality
 @export var weapon :Weapon    = null; ## Weapon held by unit
 #endregion
 
-@export var experience : int  = 0;
+@export var experience : int  = 0 : set = _set_experience;
 @export var skills : Array[Skill];
 
 @export var spawn_location :Vector3i; ## Where the unit will spawn
@@ -59,7 +59,29 @@ var max_health: int = health + endurance + floor(strength / 2.0);
 
 var grid_position: Vector3i;
 
+var next_level_experience: int = 10;
+
 ## SKILL TREE
+
+
+func _set_experience(in_experience: int) -> void:
+	experience += in_experience;
+	print(unit_name + " gains " + str(in_experience) + " experience points.");
+	if (experience > next_level_experience):
+		print("Level up!");
+		if (speciality == Speciality.Fighter):
+			if (next_level_experience >= 10):
+				health += 1;
+				mind += 1;
+			if (next_level_experience >= 100):
+				health += 1;
+				mind += 1;
+			if (next_level_experience >= 1000):
+				luck += 1;
+				skill += 1;
+		print_stats();
+		next_level_experience *= 10;
+
 
 func update_health_bar() -> void:
 	health_bar.health = current_health;

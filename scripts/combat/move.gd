@@ -36,6 +36,12 @@ func execute() -> void:
 			weapon_crit = character1.weapon.weapon_critical;
 		var attack_strength: int = character1.strength + weapon_damage;
 		
+		print("Attacker: ");
+		character1.print_stats();
+		print("-----");
+		print("Victim: ");
+		character2.print_stats();
+		
 		# Miss logic
 		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
 			print ("Miss");
@@ -50,9 +56,6 @@ func execute() -> void:
 		
 		character1.update_health_bar();
 		character2.update_health_bar();
-		
-		character1.print_stats();
-		character2.print_stats();
 		
 		print(character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.");
 		print(character1.unit_name + " loses " + str(character2.intimidation) + " sanity");
