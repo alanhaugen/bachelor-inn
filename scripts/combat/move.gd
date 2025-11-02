@@ -21,7 +21,9 @@ var character2: Character = null; ## The character being attacked
 
 
 func save(json_file_path: String) -> void:
-	pass;
+	#var save_file: Object = FileAccess.open(json_file_path, FileAccess.WRITE);
+	#save_file
+	#save_file.close();
 
 
 func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: GridMap, inCharacter1: Character, inIsAttack :bool = false, inCharacter2: Character = null, in_neighbour_move: Move = null) -> void:
