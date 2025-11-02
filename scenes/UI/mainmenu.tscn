@@ -39,29 +39,22 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "Load first level"
+text = "Load save 1"
 icon = ExtResource("2_nudk7")
 
 [node name="LoadMap1" type="Button" parent="UI/MapSelector"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "Load first level"
+text = "Load save 2"
+icon = ExtResource("2_nudk7")
 
 [node name="LoadMap2" type="Button" parent="UI/MapSelector"]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-text = "Load first level"
-
-[node name="LoadMap3" type="Button" parent="UI/MapSelector"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-text = "Load first level"
+text = "Load save 3"
+icon = ExtResource("2_nudk7")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/MapSelector"]
 layout_mode = 2
@@ -70,3 +63,5 @@ patch_margin_left = 10
 [node name="World" type="Node3D" parent="."]
 
 [connection signal="pressed" from="UI/MapSelector/LoadMap0" to="." method="_on_load_map_0_pressed"]
+[connection signal="pressed" from="UI/MapSelector/LoadMap1" to="." method="_on_load_map_1_pressed"]
+[connection signal="pressed" from="UI/MapSelector/LoadMap2" to="." method="_on_load_map_2_pressed"]

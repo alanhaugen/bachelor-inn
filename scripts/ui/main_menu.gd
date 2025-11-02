@@ -33,5 +33,14 @@ func _ready() -> void:
 ## Called when the Load Map 0 button is pressed
 func _on_load_map_0_pressed() -> void:
 	$UI/MapSelector.visible = false;
+	Main.save.read(0);
+	Main.load_level("first"); # Load the test level
+func _on_load_map_1_pressed() -> void:
+	$UI/MapSelector.visible = false;
+	Main.save.read(1);
+	Main.load_level("first"); # Load the test level
+func _on_load_map_2_pressed() -> void:
+	$UI/MapSelector.visible = false;
+	Main.save.read(2);
 	Main.load_level("first"); # Load the test level
 #endregion
