@@ -68,7 +68,8 @@ func execute() -> void:
 			Main.level.update_stat(character2, Main.level.stat_popup_player);
 		if character2.current_health <= 0:
 			character2.die();
-			character1.experience += character2.intimidation;
+			if character1.is_playable:
+				character1.experience += character2.intimidation;
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));
 		
 		character1.hide_ui();
