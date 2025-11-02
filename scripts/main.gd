@@ -18,6 +18,9 @@ var world: Node3D;
 
 ## Reference to the GUI
 var gui: Control;
+
+## Save file
+@onready var save: SaveGame = SaveGame.new();
 #endregion
 
 #region: --- Methods ---

@@ -15,6 +15,16 @@ func _ready() -> void:
 	Main.gui = gui;
 	Main.world = world;
 	
+	print(OS.get_data_dir());
+	
+	var success:bool = Main.save.read(0);
+	
+	if success:
+		print("loaded save");
+	else:
+		print("loading save failed. Creating new save");
+		Main.save.create_new_save_data();
+	
 	# Set focus on the first button
 	levelButton.grab_focus();
 #endregion

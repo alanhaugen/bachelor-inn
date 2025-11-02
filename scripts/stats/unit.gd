@@ -29,22 +29,22 @@ enum Speciality
 @export var unit_name :String = "Bernard Grunderburger"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
 
-@export var health :int       = 4;    ## Unit health
-@export var strength :int     = 4;    ## Damage with weapons
-@export var movement :int     = 4;    ## Movement range
-@export var mind :int         = 4;    ## Mind reduces sanity loss from combat or other events
-@export var speed :int        = 4;    ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-@export var agility :int      = 4;    ## 
-@export var focus :int        = 4;    ## 
+@export var health :int = 4; ## Unit health
+@export var strength :int = 4; ## Damage with weapons
+@export var movement :int = 4; ## Movement range
+@export var mind :int = 4; ## Mind reduces sanity loss from combat or other events
+@export var speed :int = 4; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
+@export var agility :int = 4; ## Agility increases the evasion and hit rate of a unit
+@export var focus :int = 4; ## Focus increases hit rate and crit rate of a unit. It also increases defense against sanity attacks
 
-@export var endurance :int    = 4;    ## 
-@export var defense :int      = 4;    ## Lowers damage of weapon attacks
-@export var resistence :int   = 4;    ## Lowers damage of magic attacks
-@export var luck  :int        = 4;    ## Affects many other skills
-@export var intimidation :int = 4;    ## How the unit affects sanity in battle.
-@export var skill :int        = 4;    ## Chance to hit critical.
-@export var magic :int        = 4;    ## Damage with magic
-@export var weapon :Weapon    = null; ## Weapon held by unit
+@export var endurance :int = 4; ## 
+@export var defense :int = 4; ## Lowers damage of weapon attacks
+@export var resistence :int = 4; ## Lowers damage of magic attacks
+@export var luck  :int = 4; ## Affects many other skills
+@export var intimidation :int = 4; ## How the unit affects sanity in battle.
+@export var skill :int = 4; ## Chance to hit critical.
+@export var magic :int = 4; ## Damage with magic
+@export var weapon :Weapon = null; ## Weapon held by unit
 #endregion
 
 @export var experience : int  = 0 : set = _set_experience;

@@ -20,7 +20,8 @@ var character1: Character = null; ## The moving character
 var character2: Character = null; ## The character being attacked
 
 
-func save(json_file_path: String) -> void:
+func save(json_file_path: String) -> String:
+	return "";
 	#var save_file: Object = FileAccess.open(json_file_path, FileAccess.WRITE);
 	#save_file
 	#save_file.close();

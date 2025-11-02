@@ -33,6 +33,7 @@ var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
 var stat_popup_enemy: Control;
+var completed_moves :Array[Move];
 
 
 const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
@@ -572,6 +573,7 @@ func _process(delta: float) -> void:
 			selected_unit = null;
 			active_move = moves_stack.pop_front();
 			active_move.execute();
+			completed_moves.append(active_move);
 			
 			if (moves_stack.is_empty() == false and moves_stack.front().is_attack == false):
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
