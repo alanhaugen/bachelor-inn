@@ -41,6 +41,7 @@ func execute() -> void:
 			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
 		if character2.current_health <= 0:
 			character2.die();
+			character1.experience += character2.intimidation;
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));
 	else:
 		character1.move_to(end_pos);
