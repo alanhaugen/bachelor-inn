@@ -12,21 +12,140 @@ const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
-	var saves: Array[String];
+	var units := {
+		"Withburn, the Cleric": 
+		{
+			"name": "Withburn",
+			"speciality": "Magican",
+			"unit_type": "Playble",
+			"texture referance": "res://art/WithburnSpriteSheet",
+			"stats": 
+				{
+					"hp": 15, 
+					"max_hp": 15,
+					"strenght": 5, 
+					"magic": 10,
+					"skill": 10, 
+					"speed": 5,
+					"defence": 8, 
+					"resistance": 8,
+					"movement": 5, 
+					"luck": 5
+				},
+			"level_up_stats":
+				{
+					"max_hp": 2,
+					"strenght": 1, 
+					"magic": 3,
+					"skill": 1, 
+					"speed": 1,
+					"defence": 1, 
+					"resistance": 2,
+					"movement": 0, 
+					"luck": 1
+				},
+				
+			"weapon": "Staff of the Generic",
+			"level": 1,
+			"experience": 0
+		},
+		"Fen, the Warrior": 
+		{
+			"name": "Fen",
+			"speciality": "Fighter",
+			"unit_type": "Playble",
+			"texture referance": "res://art/FenSpriteSheet",
+			"stats": 
+				{
+					"hp": 20, 
+					"max_hp": 20,
+					"strenght": 15, 
+					"magic": 3,
+					"skill": 10, 
+					"speed": 7,
+					"defence": 12, 
+					"resistance": 4,
+					"movement": 6, 
+					"luck": 4
+				},
+			"level_up_stats":
+				{
+					"max_hp": 2,
+					"strenght": 2, 
+					"magic": 1,
+					"skill": 1, 
+					"speed": 1,
+					"defence": 2, 
+					"resistance": 1,
+					"movement": 0, 
+					"luck": 1
+				},
+				
+			"weapon": "Sword of the Generic",
+			"level": 1,
+			"experience": 0
+		},
+		"bandit": 
+		{
+			"name": "bandi",
+			"speciality": "Fighter",
+			"unit_type": "Enemy",
+			"texture referance": "res://art/BanditSpriteSheet",
+			"stats": 
+				{
+					"hp": 10, "max_hp": 10,
+					"strenght": 8, "magic": 1,
+					"skill": 4, "speed": 4,
+					"defence": 6, "resistance": 6,
+					"movement": 5, "luck": 2
+				},
+			"level_up_stats":
+				{
+					"max_hp": 2,
+					"strenght": 1, "magic": 3,
+					"skill": 1, "speed": 1,
+					"defence": 1, "resistance": 2,
+					"movement": 0, "luck": 1
+				},
+				
+			"weapon": "Club of the Generic",
+			"level": 1,
+			"experience": 0
+		}
+	}
 	
-	saves.append("Slot 0");
-	saves.append("Slot 1");
-	saves.append("Slot 2");
+	var saves := {
+		"Slot 1":
+		{
+			"level": "first",
+			"units": units
+		},
+		"Slot 2":
+		{
+			"level": "first",
+			"units": units
+		},
+		"Slot 3":
+		{
+			"level": "first",
+			"units": units
+		},
+	}
 	
 	var json_string: String = JSON.stringify(saves);
 	
 	save_file.store_string(json_string);
 	
 	save_file.close();
-	
+
 
 func write(save_slot :int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
+	
+	if is_instance_valid(Main.level):
+		push_error("Main level does not exist");
+		return;
+	
 	var moves: Array[Move] = Main.level.moves;
 	for move: Move in moves:
 		# Check the node has a save function.

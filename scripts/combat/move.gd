@@ -58,6 +58,7 @@ func execute() -> void:
 			print ("Miss");
 			return;
 		
+		# Critical logic
 		if (randi_range(0,100) < (character1.skill / 2) + weapon_crit):
 			print("Critical hit!");
 			attack_strength *= 2;
