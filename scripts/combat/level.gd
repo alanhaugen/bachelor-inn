@@ -1,4 +1,4 @@
-class_name Map
+class_name Level
 extends Node3D
 ## Map logic for combat levels.
 ##

@@ -1,4 +1,5 @@
-class_name Character extends Node
+class_name Character
+extends Node
 ## This class has all the Character stats and visuals
 ##
 ## Use this class to make new units and enemies for the game
