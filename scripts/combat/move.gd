@@ -46,6 +46,7 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 func execute() -> void:
 	if is_attack:
 		if character1.weapon:
+			@warning_ignore("integer_division")
 			weapon_damage = character1.weapon.damage_modifier / character2.defense;
 			weapon_crit = character1.weapon.weapon_critical;
 		
@@ -58,16 +59,19 @@ func execute() -> void:
 		character2.print_stats();
 		
 		# Miss logic
+		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
 			print ("Miss");
 			return;
 		
 		# Critical logic
+		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (character1.skill / 2) + weapon_crit):
 			print("Critical hit!");
 			attack_strength *= 2;
 		
 		character2.current_health -= attack_strength;
+		@warning_ignore("integer_division")
 		character1.current_sanity -= character2.intimidation / character1.mind;
 		
 		character1.update_health_bar();
