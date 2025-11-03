@@ -49,7 +49,7 @@ func execute() -> void:
 			weapon_damage = character1.weapon.damage_modifier;
 			weapon_crit = character1.weapon.weapon_critical;
 		
-		attack_strength = (character1.strength + weapon_damage) / character2.defense;
+		attack_strength = max(1, (character1.strength + weapon_damage) - character2.defense / 2);
 		
 		print("Attacker: ");
 		character1.print_stats();
