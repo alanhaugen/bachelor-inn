@@ -1,8 +1,10 @@
 class_name Character
-extends Node
+extends Node3D
 ## This class has all the Character stats and visuals
 ##
 ## Use this class to make new units and enemies for the game
+
+var sprite: AnimatedSprite3D;
 
 #region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
@@ -23,12 +25,12 @@ enum Speciality
 }
 
 @onready var camera: Camera3D;
-@onready var character: AnimatedSprite3D = $Character
 @onready var health_bar: ColorRect = %HealthBar
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
+@export var sprite_sheet_path: String = "res://art/textures/DFFS_Character edge highlight poc.png";
 
 @export var health: int = 4; ## Unit health
 @export var strength: int = 4; ## Damage with weapons
@@ -85,47 +87,69 @@ func _set_experience(in_experience: int) -> void:
 
 
 func update_health_bar() -> void:
-	health_bar.health = current_health;
-	health_bar.sanity = current_sanity;
-	health_bar.name_label = unit_name;
+	pass;
+	#health_bar.health = current_health;
+	#health_bar.sanity = current_sanity;
+	#health_bar.name_label = unit_name;
 
 
 func _ready() -> void:
+	sprite = AnimatedSprite3D.new();
+	sprite.sprite_frames = SpriteFrames.new();
+	sprite.sprite_frames.add_animation("idle");
+	
+	#if speciality == Speciality.Scout:
+	var texture: Texture2D = load(sprite_sheet_path);
+	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
+	sprite.sprite_frames.add_frame("idle", texture);
+	
+	sprite.play("idle");
+	
+	#translate(Vector3(0,0.736,-0.463));
+	sprite.translate(Vector3(0,0.8,0));
+	sprite.rotate(Vector3(1,0,0), 56);
+	sprite.scale = Vector3(4,4,4);
+	
 	camera = get_viewport().get_camera_3d();
 	update_health_bar();
+	
+	add_child(sprite);
 
 
 func _process(_delta: float) -> void:
-	var mesh_3d_position: Vector3 = character.global_transform.origin;
+	pass;
+	#var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	if camera:
-		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
+	#if camera:
+	#	var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
+	#	health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
 
 
 func hide_ui() -> void:
-	health_bar.hide();
+	pass;
+	#health_bar.hide();
 
 
 func show_ui() -> void:
-	health_bar.show();
+	pass;
+	#health_bar.show();
 
 
 func move_to(pos: Vector3i) -> void:
 	reset();
 	grid_position = pos;
-	character.modulate = Color(0.338, 0.338, 0.338, 1.0);
+	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
 	hide_ui();
-	character.show();
-	character.modulate = Color(1.0, 1.0, 1.0, 1.0);
+	show();
+	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die() -> void:
 	hide_ui();
-	character.hide();
+	hide();
 	grid_position = Vector3(-100, -100, -100);
 
 
@@ -135,6 +159,8 @@ func print_stats() -> void:
 
 func save() -> Dictionary:
 	var stats := {
+		"Is Playable": is_playable,
+		"Sprite sheet path": sprite_sheet_path,
 		"Unit name": unit_name,
 		"Speciality": speciality,
 		"Health": health,

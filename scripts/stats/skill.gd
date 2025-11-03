@@ -1,1 +1,2 @@
-class_name Skill extends Node
+class_name Skill
+extends Node

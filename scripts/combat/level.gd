@@ -35,11 +35,10 @@ var stat_popup_player: Control;
 var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
+var characters :Array[Character];
 
 const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
-const UNIT = preload("res://scenes/characters/unit.tscn")
-const ENEMY = preload("res://scenes/characters/enemy.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 
 var animation_path :Array[Vector3];
@@ -62,7 +61,6 @@ var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
 var move_code: int = 1;
-var characters: Array[Character];
 
 
 func touch(pos :Vector3) -> bool:
@@ -77,11 +75,11 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	var frontierPositions :Array;
 	var nextFrontierPositions :Array;
 	
-	var pos   :Vector3i = startPos;
-	var moves :Array[Move];
+	var pos: Vector3i = startPos;
+	var moves: Array[Move];
 	
 	frontierPositions.append(pos);
-	var type :int = units_map.get_cell_item(pos);
+	var type: int = units_map.get_cell_item(pos);
 	
 	var temp_enemy_code :int = enemy_code;
 	if (is_player_turn == false):
@@ -90,10 +88,10 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	while (frontier < movementLength && frontierPositions.is_empty() == false):
 		pos = frontierPositions.pop_front();
 		
-		var north :Vector3 = Vector3(pos.x, 0, pos.z - 1);
-		var south :Vector3 = Vector3(pos.x, 0, pos.z + 1);
-		var east  :Vector3 = Vector3(pos.x + 1, 0, pos.z);
-		var west  :Vector3 = Vector3(pos.x - 1, 0, pos.z);
+		var north: Vector3 = Vector3(pos.x, 0, pos.z - 1);
+		var south: Vector3 = Vector3(pos.x, 0, pos.z + 1);
+		var east: Vector3 = Vector3(pos.x + 1, 0, pos.z);
+		var west :Vector3 = Vector3(pos.x - 1, 0, pos.z);
 		
 		if (touch(north)):
 			nextFrontierPositions.append(north);
@@ -165,7 +163,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
 	var ray_origin: Vector3 = camera.project_ray_origin(mouse_pos)
 	var ray_direction: Vector3 = camera.project_ray_normal(mouse_pos)
-
+	
 	# Cast ray and get intersection point
 	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
 	if intersection != null:
@@ -180,6 +178,7 @@ func get_tile_name(pos: Vector3) -> String:
 	if map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return "null";
 	return map.mesh_library.get_item_name(map.get_cell_item(pos));
+
 
 # Expanded the function to do some error searching
 func get_unit_name(pos: Vector3) -> String:
@@ -287,6 +286,7 @@ func _input(event: InputEvent) -> void:
 			selected_unit = null;
 		
 		if (get_unit_name(pos) == "Enemy"):
+			
 			selected_enemy_unit = get_unit(pos);
 			update_stat(selected_enemy_unit, stat_popup_enemy);
 	#elif event is InputEventMouseMotion:
@@ -297,6 +297,7 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 	if character is Character:
 		var character_script: Character = character;
 		character_script.show_ui();
+		character_script.print_stats();
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
 			stat_script.max_health = character_script.max_health;
@@ -307,6 +308,7 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.sanity = character_script.current_sanity;
 			popup.show();
 
+
 func _ready() -> void:
 	cursor.hide();
 	movement_map.clear();
@@ -315,28 +317,33 @@ func _ready() -> void:
 	
 	var units :Array[Vector3i] = units_map.get_used_cells();
 	
-	# Added for-loop for error searching
-	for pos in units:
-		var item_id: int = units_map.get_cell_item(pos)
-		if item_id == 7:
-			print("Found item 7 at position: ", pos)
-			units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)  # Remove it
+	var characters_placed := 0;
 	
 	for i in units.size():
 		var pos: Vector3 = units[i];
 		var new_unit: Character = null;
 		
 		if (get_unit_name(pos) == "Unit"):
-			new_unit = UNIT.instantiate();
-			characters.append(new_unit);
+			if characters_placed < Main.characters.size():
+				new_unit = Main.characters[characters_placed];
+				characters_placed += 1;
+			else:
+				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
-			new_unit = ENEMY.instantiate();
-			characters.append(new_unit);
+			#new_unit = ENEMY.instantiate();
+			new_unit = Character.new();
+			new_unit.unit_name = "Pth'Khuleroth";
+			if randi_range(1,2) == 1:
+				new_unit.sprite_sheet_path = "res://art/textures/enemy1.png";
+			else:
+				new_unit.sprite_sheet_path = "res://art/textures/enemy2.png";
 		elif (get_unit_name(pos) == "Chest"):
 			var chest: Node = CHEST.instantiate();
 			chest.position = pos * 2;
 			chest.position += Vector3(1, 0, 1);
 			add_child(chest);
+		else:
+			units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 			
 		if (new_unit != null):
 			#unitArray.append(newUnit);
@@ -344,6 +351,7 @@ func _ready() -> void:
 			new_unit.position += Vector3(1, 0, 1);
 			#newUnit = 2;
 			add_child(new_unit);
+			characters.append(new_unit);
 			
 			if new_unit is Character:
 				var character_script: Character = new_unit;
@@ -374,21 +382,24 @@ func _ready() -> void:
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
-		if (is_instance_valid(characters[i])):
+		if is_instance_valid(characters[i]):
 			if characters[i] is Character:
 				var unit: Character = characters[i];
 				if unit.grid_position == pos:
 					return unit;
 	push_error("Did not find character at " + str(pos));
 	return null;
-	
+
+
 func set_unit_gray(unit: Character) -> void:
 	if unit.character is AnimatedSprite3D:
 		unit.character.modulate = Color(0.5, 0.5, 0.5, 1.0)
 
+
 func set_unit_color(unit: Character) -> void:
 	if unit.character is AnimatedSprite3D:
 		unit.character.modulate = Color(1.0, 1.0, 1.0, 1.0)
+
 
 func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 	path_arrow.clear();
@@ -591,8 +602,8 @@ func _process(delta: float) -> void:
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				if (dir.x >= 0):
-					selected_unit.character.flip_h = true;
+					selected_unit.sprite.flip_h = true;
 				else:
-					selected_unit.character.flip_h = false;
+					selected_unit.sprite.flip_h = false;
 			
 			#animated_unit.position.x = animationPath

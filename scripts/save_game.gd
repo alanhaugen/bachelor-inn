@@ -5,114 +5,35 @@ const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 
 ## Use this to detect old player save files and update them 
 @export var version := 1;
+@export var map_name := "first";
 
-@export var map_name := "";
+
+func is_savefile_existing() -> bool:
+	return FileAccess.file_exists(SAVE_GAME_PATH);
 
 
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
-	var units := {
-		"Withburn, the Cleric": 
-		{
-			"name": "Withburn",
-			"speciality": "Magican",
-			"unit_type": "Playble",
-			"texture referance": "res://art/WithburnSpriteSheet",
-			"stats": 
-				{
-					"hp": 15, 
-					"max_hp": 15,
-					"strength": 5, 
-					"magic": 10,
-					"skill": 10, 
-					"speed": 5,
-					"defence": 8, 
-					"resistance": 8,
-					"movement": 5, 
-					"luck": 5
-				},
-			"level_up_stats":
-				{
-					"max_hp": 2,
-					"strenght": 1, 
-					"magic": 3,
-					"skill": 1, 
-					"speed": 1,
-					"defence": 1, 
-					"resistance": 2,
-					"movement": 0, 
-					"luck": 1
-				},
-				
-			"weapon": "Staff of the Generic",
-			"level": 1,
-			"experience": 0
-		},
-		"Fen, the Warrior": 
-		{
-			"name": "Fen",
-			"speciality": "Fighter",
-			"unit_type": "Playble",
-			"texture referance": "res://art/FenSpriteSheet",
-			"stats": 
-				{
-					"hp": 20, 
-					"max_hp": 20,
-					"strenght": 15, 
-					"magic": 3,
-					"skill": 10, 
-					"speed": 7,
-					"defence": 12, 
-					"resistance": 4,
-					"movement": 6, 
-					"luck": 4
-				},
-			"level_up_stats":
-				{
-					"max_hp": 2,
-					"strenght": 2, 
-					"magic": 1,
-					"skill": 1, 
-					"speed": 1,
-					"defence": 2, 
-					"resistance": 1,
-					"movement": 0, 
-					"luck": 1
-				},
-				
-			"weapon": "Sword of the Generic",
-			"level": 1,
-			"experience": 0
-		},
-		"bandit": 
-		{
-			"name": "bandi",
-			"speciality": "Fighter",
-			"unit_type": "Enemy",
-			"texture referance": "res://art/BanditSpriteSheet",
-			"stats": 
-				{
-					"hp": 10, "max_hp": 10,
-					"strenght": 8, "magic": 1,
-					"skill": 4, "speed": 4,
-					"defence": 6, "resistance": 6,
-					"movement": 5, "luck": 2
-				},
-			"level_up_stats":
-				{
-					"max_hp": 2,
-					"strenght": 1, "magic": 3,
-					"skill": 1, "speed": 1,
-					"defence": 1, "resistance": 2,
-					"movement": 0, "luck": 1
-				},
-				
-			"weapon": "Club of the Generic",
-			"level": 1,
-			"experience": 0
-		}
-	}
+	var first: Character = Character.new();
+	first.unit_name = "Alan og Erik";
+	first.speciality = Character.Speciality.Support;
+	first.movement = 3;
+	first.strength = 1;
+	
+	var second: Character = Character.new();
+	second.unit_name = "Fen";
+	second.speciality = Character.Speciality.Fighter;
+	second.strength = 10;
+	second.sprite_sheet_path = "res://art/textures/fen.png";
+	
+	var third: Character = Character.new();
+	third.unit_name = "Andreas";
+	third.speciality = Character.Speciality.Scout;
+	third.movement = 10;
+	third.sprite_sheet_path = "res://art/textures/andreas.png";
+	
+	var units: Array[Dictionary] = [first.save(), second.save(), third.save()];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -123,7 +44,7 @@ func create_new_save_data() -> void:
 		},
 		"Slot 2":
 		{
-			"level": "first",
+			"level": "second",
 			"units": units
 		},
 		"Slot 3":
@@ -184,7 +105,51 @@ func read(save_slot: int) -> bool:
 	# Get the data from the JSON object.
 	var save: Dictionary = json.data;
 	
-	print(save);
+	var save_slot_data: Dictionary = save.get_or_add("Slot " + str(save_slot + 1));
+	
+	var level: String = save_slot_data.get_or_add("level");
+	
+	var characters: Array = save_slot_data.get("units");
+	
+	Main.characters.clear();
+	
+	print(characters);
+	
+	for i in range(characters.size()):
+		var new_character: Character = Character.new();
+		new_character.unit_name = characters[i].get("Unit name");
+		new_character.strength = characters[i].get("Strength");
+		new_character.sprite_sheet_path = characters[i].get("Sprite sheet path");
+		new_character.speed = characters[i].get("Speed");
+		new_character.speciality = characters[i].get("Speciality");
+		new_character.skill = characters[i].get("Skill");
+		new_character.resistence = characters[i].get("Resistence");
+		new_character.movement = characters[i].get("Movement");
+		new_character.mind = characters[i].get("Mind");
+		new_character.magic = characters[i].get("Magic");
+		new_character.luck = characters[i].get("Luck");
+		new_character.is_playable = characters[i].get("Is Playable");
+		new_character.intimidation = characters[i].get("Intimidation");
+		new_character.health = characters[i].get("Health");
+		new_character.focus = characters[i].get("Focus");
+		new_character.experience = characters[i].get("Experience");
+		new_character.endurance = characters[i].get("Endurance");
+		new_character.defense = characters[i].get("Defense");
+		new_character.current_sanity = characters[i].get("Current sanity");
+		new_character.current_magic = characters[i].get("Current magic");
+		new_character.current_health = characters[i].get("Current health");
+		new_character.agility = characters[i].get("Agility");
+		
+		Main.characters.append(new_character);
+	
+	Main.load_level(level);
+	
+	#var unit: Character = Character.new();
+	#unit.name = "Withburn";
+	#unit.speciality = Character.Speciality.Support;
+	#unit.sprite;
+	
+	#Main.characters.append(unit);
 
 	# Firstly, we need to create the object and add it to the tree and set its position.
 	#var new_object = load(node_data["filename"]).instantiate()

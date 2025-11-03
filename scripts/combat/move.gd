@@ -46,10 +46,10 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 func execute() -> void:
 	if is_attack:
 		if character1.weapon:
-			weapon_damage = character1.weapon.damage_modifier / character2.defense;
+			weapon_damage = character1.weapon.damage_modifier;
 			weapon_crit = character1.weapon.weapon_critical;
 		
-		attack_strength = character1.strength + weapon_damage;
+		attack_strength = (character1.strength + weapon_damage) / character2.defense;
 		
 		print("Attacker: ");
 		character1.print_stats();
@@ -60,6 +60,7 @@ func execute() -> void:
 		# Miss logic
 		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
 			print ("Miss");
+			attack_strength = 0;
 			return;
 		
 		# Critical logic
@@ -114,5 +115,6 @@ func undo() -> void:
 		
 		if is_attack:
 			character2.health += attack_strength;
+			character2.sanity += attack_strength;
 			character2.move_to(end_pos);
 		character1.move_to(start_pos);
