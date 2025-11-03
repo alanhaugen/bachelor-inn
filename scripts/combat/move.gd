@@ -42,7 +42,7 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 func execute() -> void:
 	if is_attack:
 		if character1.weapon:
-			weapon_damage = character1.weapon.damage_modifier
+			weapon_damage = character1.weapon.damage_modifier / character2.defense;
 			weapon_crit = character1.weapon.weapon_critical;
 		
 		attack_strength = character1.strength + weapon_damage;
@@ -64,7 +64,7 @@ func execute() -> void:
 			attack_strength *= 2;
 		
 		character2.current_health -= attack_strength;
-		character1.current_sanity -= character2.intimidation;
+		character1.current_sanity -= character2.intimidation / character1.mind;
 		
 		character1.update_health_bar();
 		character2.update_health_bar();
