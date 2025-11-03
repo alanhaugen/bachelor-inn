@@ -129,24 +129,33 @@ func die() -> void:
 
 
 func print_stats() -> void:
-	print("Unit name: " + unit_name);
-	print("Unit type/speciality: " + str(speciality));
-	print("Max health: " + str(health));
-	print("Strength (Damage with weapons): " + str(strength));
-	print("Movement range: " + str(movement));
-	print("Mind (Mind reduces sanity loss from combat or other events): " + str(mind));
-	print("Speed (Speed is chance to Avoid = (Speed x 3 + Luck) / 2): " + str(speed));
-	print("Agility: " + str(agility));
-	print("Focus: " + str(focus));
+	print(save());
+
+
+func save() -> Dictionary:
+	var stats := {
+		"Unit name": unit_name,
+		"Speciality": speciality,
+		"Health": health,
+		"Strength": strength,
+		"Movement": movement,
+		"Mind": mind,
+		"Speed": speed,
+		"Agility": agility,
+		"Focus": focus,
+		
+		"Endurance": endurance,
+		"Defense": defense,
+		"Resistence": resistence,
+		"Luck": luck,
+		"Intimidation": intimidation,
+		"Skill": skill,
+		"Magic": magic,
+		
+		"Experience": experience,
+		"Current health": current_health,
+		"Current magic": current_magic,
+		"Current sanity": current_sanity
+	}
 	
-	print("Endurance: " + str(endurance));
-	print("Defense: " + str(defense));
-	print("Resistence: " + str(resistence));
-	print("Luck (Affects many other skills): " + str(luck));
-	print("Intimidation (How the unit affects sanity in battle): " + str(intimidation));
-	print("Skill (Chance to hit critical): " + str(skill));
-	print("Magic (Damage with magic): " + str(magic));
-	print("Experience: " + str(experience));
-	print("Current health: " + str(current_health));
-	print("Current magic: " + str(current_magic));
-	print("Current sanity: " + str(current_sanity));
+	return stats;

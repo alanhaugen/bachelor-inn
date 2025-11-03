@@ -20,11 +20,15 @@ var character1: Character = null; ## The moving character
 var character2: Character = null; ## The character being attacked
 
 
-func save(json_file_path: String) -> String:
-	return "";
-	#var save_file: Object = FileAccess.open(json_file_path, FileAccess.WRITE);
-	#save_file
-	#save_file.close();
+func save() -> Dictionary:
+	var state := {"start_pos": start_pos,
+				  "end_pos": end_pos,
+				  "grid_code": grid_code,
+				  "is_attack": is_attack,
+				  "is_wait": is_wait
+				  };
+	
+	return state;
 
 
 func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: GridMap, inCharacter1: Character, inIsAttack :bool = false, inCharacter2: Character = null, in_neighbour_move: Move = null) -> void:
@@ -72,7 +76,7 @@ func execute() -> void:
 		print(character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.");
 		print(character1.unit_name + " loses " + str(character2.intimidation) + " sanity");
 		
-		if character2.is_playable == false:
+		if character1.is_playable:
 			Main.level.update_stat(character1, Main.level.stat_popup_player);
 			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
 		else:
