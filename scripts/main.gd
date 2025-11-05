@@ -11,13 +11,19 @@ extends Node
 
 #region: --- Props ---
 ## Current level running
-var level: Map;
+var level: Level;
 
 ## Reference to the World node
 var world: Node3D;
 
 ## Reference to the GUI
 var gui: Control;
+
+## Character Units held by the gaming session 
+var characters: Array[Character];
+
+## Save file
+@onready var save: SaveGame = SaveGame.new();
 #endregion
 
 #region: --- Methods ---

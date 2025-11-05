@@ -9,5 +9,9 @@ func execute() -> void:
 	pass;
 
 
+func redo() -> void:
+	pass;
+
+
 func undo() -> void:
 	pass;

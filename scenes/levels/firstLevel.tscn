@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://bibvxf0718edk"]
 
-[ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/map.gd" id="1_f5yf2"]
+[ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_f5yf2"]
 [ext_resource type="MeshLibrary" uid="uid://4jk1m4xre0br" path="res://scenes/libraries/GrassMapMeshLibrary.tres" id="2_11u0d"]
 [ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/CombatMapMeshLibrary.tres" id="2_p1sjd"]
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_8tmoo"]
@@ -47,11 +47,11 @@ data = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("5_8tmoo")
 data = {
-"cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 3, 0, 1048576, 65533, 65534, 1, 2, 65535, 1048576, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 1048576, 65535, 65534, 0, 65535, 0, 1048576, 1, 65534, 1179649, 1, 65533, 1179649, 1, 65535, 1179649, 1, 0, 1179649)
+"cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 3, 0, 1048576, 65533, 65534, 1, 2, 65535, 2, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 1048576, 65535, 65534, 0, 65535, 0, 1048576, 1, 65534, 1179649, 1, 65533, 1179649, 1, 65535, 1179649, 1, 0, 1179649)
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 8.331, 7.6245956)
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, -1.9859755, 8.331, 2.9106221)
 environment = SubResource("Environment_hm5u0")
 current = true
 fov = 50.0
@@ -60,7 +60,7 @@ fov = 50.0
 transform = Transform3D(0.91841877, 0.019366808, 0.3951352, -0.34594762, 0.5238193, 0.7784173, -0.19190401, -0.8516092, 0.48778543, 3.4095209, 5, 2.213087)
 
 [node name="Cursor" type="Sprite3D" parent="."]
-transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.1, -1.017)
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.06, -1.017)
 texture_filter = 0
 texture = ExtResource("5_hvfss")
 region_enabled = true

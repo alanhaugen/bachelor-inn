@@ -1,4 +1,5 @@
-class_name StatPopUp extends Control
+class_name StatPopUp
+extends Control
 
 @onready var icon_texture: TextureRect = %Icon_texture
 @onready var health_bar: ProgressBar = %HealthBar
