@@ -23,6 +23,10 @@ Main="*res://scripts/main.gd"
 
 gdscript/warnings/untyped_declaration=2
 
+[gui]
+
+theme/custom_font="uid://bltfi0bh6lptu"
+
 [input]
 
 selected={
