@@ -1,15 +1,15 @@
-[gd_resource type="MeshLibrary" load_steps=14 format=3 uid="uid://dan04754q5nkc"]
+[gd_resource type="MeshLibrary" load_steps=15 format=3 uid="uid://dan04754q5nkc"]
 
+[ext_resource type="Texture2D" uid="uid://c6aabj6m658ya" path="res://art/textures/MoveDot.png" id="1_cdbv5"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_skouf"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdbv5"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xku5"]
 transparency = 1
-albedo_texture = ExtResource("2_skouf")
-uv1_scale = Vector3(0.13, 0.13, 0.13)
-uv1_offset = Vector3(0.125, 0, 0)
+albedo_texture = ExtResource("1_cdbv5")
+texture_filter = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_skouf"]
-material = SubResource("StandardMaterial3D_cdbv5")
+material = SubResource("StandardMaterial3D_0xku5")
 
 [sub_resource type="Image" id="Image_skouf"]
 data = {
