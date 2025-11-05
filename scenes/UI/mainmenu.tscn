@@ -1,10 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=26 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e6rwi"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2gien"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(0, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1nqvl"]
 texture = ExtResource("3_v8ire")
 texture_margin_left = 8.0
 texture_margin_top = 8.0
@@ -18,6 +26,38 @@ texture_margin_left = 8.0
 texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
+region_rect = Rect2(128, 128, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(0, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nsnfg"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(0, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e6rwi"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(0, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_74hbn"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
 region_rect = Rect2(0, 0, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wxwbn"]
@@ -26,7 +66,119 @@ texture_margin_left = 8.0
 texture_margin_top = 8.0
 texture_margin_right = 8.0
 texture_margin_bottom = 8.0
-region_rect = Rect2(32, 0, 32, 32)
+region_rect = Rect2(192, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_beadd"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(160, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_huha7"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(64, 128, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4hx67"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_snox8"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(32, 160, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vus0j"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4y25g"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_iy0in"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(32, 160, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_jcc73"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6srpe"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_8o0t5"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(32, 160, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6cb08"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(128, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0ui2e"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(192, 32, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_negop"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(160, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5vttb"]
+texture = ExtResource("3_v8ire")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+region_rect = Rect2(64, 128, 32, 32)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("3_wxwbn")
@@ -64,72 +216,85 @@ grow_vertical = 2
 layout_mode = 2
 
 [node name="LoadMap0" type="Button" parent="UI/VBoxContainer/LevelSelect"]
-custom_minimum_size = Vector2(150, 50)
+custom_minimum_size = Vector2(192, 96)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
-theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
+theme_override_styles/normal = SubResource("StyleBoxTexture_2gien")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_1nqvl")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
 text = "Load save 1"
 
-[node name="LoadMap3" type="Button" parent="UI/VBoxContainer/LevelSelect"]
-custom_minimum_size = Vector2(150, 50)
+[node name="LoadMap1" type="Button" parent="UI/VBoxContainer/LevelSelect"]
+custom_minimum_size = Vector2(192, 96)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
-theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
+theme_override_styles/normal = SubResource("StyleBoxTexture_ds07i")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_nsnfg")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
 text = "Load save 2"
 
-[node name="LoadMap4" type="Button" parent="UI/VBoxContainer/LevelSelect"]
-custom_minimum_size = Vector2(150, 50)
+[node name="LoadMap2" type="Button" parent="UI/VBoxContainer/LevelSelect"]
+custom_minimum_size = Vector2(192, 96)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_74hbn")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
 text = "Load save 3"
 
-[node name="LoadMap5" type="Button" parent="UI/VBoxContainer/LevelSelect"]
+[node name="BackButton" type="Button" parent="UI/VBoxContainer/LevelSelect"]
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_styles/normal = SubResource("StyleBoxTexture_wxwbn")
-theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_beadd")
+theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
 text = "Back"
-
-[node name="NinePatchRect" type="NinePatchRect" parent="UI/VBoxContainer/LevelSelect"]
-layout_mode = 2
-patch_margin_left = 10
 
 [node name="MainMenu" type="VBoxContainer" parent="UI/VBoxContainer"]
 layout_mode = 2
 
 [node name="StartGameButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_4hx67")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_snox8")
+theme_override_styles/hover = SubResource("StyleBoxTexture_vus0j")
 text = "Start Game"
 
 [node name="OptionsButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
-text = "Options"
+theme_override_styles/normal = SubResource("StyleBoxTexture_4y25g")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_iy0in")
+theme_override_styles/hover = SubResource("StyleBoxTexture_jcc73")
+text = "											Options"
 
 [node name="CreditsButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_6srpe")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_8o0t5")
+theme_override_styles/hover = SubResource("StyleBoxTexture_6cb08")
 text = "Credits"
 
 [node name="QuitButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_0ui2e")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_negop")
+theme_override_styles/hover = SubResource("StyleBoxTexture_5vttb")
 text = "Quit"
 
 [node name="World" type="Node3D" parent="."]
 
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap0" to="." method="_on_load_map_0_pressed"]
-[connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap4" to="." method="_on_load_map_0_pressed"]
-[connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap5" to="." method="_on_load_map_0_pressed"]
+[connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap1" to="." method="_on_load_map_1_pressed"]
+[connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap2" to="." method="_on_load_map_2_pressed"]
+[connection signal="pressed" from="UI/VBoxContainer/LevelSelect/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="UI/VBoxContainer/MainMenu/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="UI/VBoxContainer/MainMenu/QuitButton" to="." method="_on_quit_button_pressed"]
