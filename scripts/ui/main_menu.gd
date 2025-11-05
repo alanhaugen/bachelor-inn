@@ -20,6 +20,7 @@ func _ready() -> void:
 	print(OS.get_data_dir());
 	
 	var success:bool = Main.save.is_savefile_existing();
+	success = false; # Let's make a new save each time until the save format is stable
 	
 	if success:
 		print("loaded save");

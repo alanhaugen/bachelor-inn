@@ -1,28 +1,43 @@
-[gd_scene load_steps=9 format=3 uid="uid://61t26jjb7n3p"]
+[gd_scene load_steps=11 format=3 uid="uid://61t26jjb7n3p"]
 
 [ext_resource type="Script" uid="uid://y5jmxyksgjji" path="res://scripts/ui/pop_up_wip.gd" id="1_0a5f3"]
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="1_k3ym5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1htk0"]
-bg_color = Color(0.9711141, 0, 0.53540385, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3i2e"]
-bg_color = Color(0.9999997, 0.5726849, 0.15946901, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgqxh"]
-bg_color = Color(0.8995731, 0.22001407, 1, 1)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0v7bq"]
-atlas = ExtResource("1_k3ym5")
-region = Rect2(184, 0, 7, 7)
+[ext_resource type="Texture2D" uid="uid://bqs3gw33e3f2u" path="res://art/textures/fen.png" id="3_1htk0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l1do4"]
 atlas = ExtResource("1_k3ym5")
 region = Rect2(176, 0, 7, 7)
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1htk0"]
+texture = ExtResource("1_k3ym5")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q3i2e"]
+texture = ExtResource("1_k3ym5")
+expand_margin_top = 1.0
+region_rect = Rect2(208, 16, 10, 15)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_b741m"]
 atlas = ExtResource("1_k3ym5")
 region = Rect2(184, 8, 7, 7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q3i2e"]
+bg_color = Color(0.9999997, 0.5726849, 0.15946901, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v7bq"]
+atlas = ExtResource("1_k3ym5")
+region = Rect2(184, 0, 7, 7)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lgqxh"]
+bg_color = Color(0.8995731, 0.22001407, 1, 1)
 
 [node name="GUI_POPUP" type="Control"]
 layout_mode = 3
@@ -34,125 +49,185 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Container" type="Container" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 36)
+[node name="Control" type="Control" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Background" type="NinePatchRect" parent="VBoxContainer/Container"]
+[node name="Background" type="NinePatchRect" parent="VBoxContainer/Control"]
 z_index = -3
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -31.0
+offset_right = 81.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("1_k3ym5")
-region_rect = Rect2(96, 0, 32, 32)
+region_rect = Rect2(96, 0, 32.077, 32)
 patch_margin_left = 11
 patch_margin_top = 11
 patch_margin_right = 11
 patch_margin_bottom = 11
-metadata/_edit_use_anchors_ = true
 
-[node name="Icon" type="NinePatchRect" parent="VBoxContainer/Container"]
-layout_mode = 2
+[node name="Icon" type="NinePatchRect" parent="VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -27.0
+offset_right = 5.0
+offset_bottom = 6.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("1_k3ym5")
 region_rect = Rect2(128, 0, 32, 32)
 patch_margin_left = 11
 patch_margin_top = 11
 patch_margin_right = 11
 patch_margin_bottom = 11
-metadata/_edit_use_anchors_ = true
 
-[node name="Icon_texture" type="TextureRect" parent="VBoxContainer/Container/Icon"]
+[node name="ColorRect" type="ColorRect" parent="VBoxContainer/Control/Icon"]
+clip_contents = true
+layout_mode = 0
+offset_right = 28.0
+offset_bottom = 28.0
+color = Color(1, 1, 1, 0)
+
+[node name="Icon_texture" type="TextureRect" parent="VBoxContainer/Control/Icon/ColorRect"]
 unique_name_in_owner = true
 z_index = -1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.20700002
-anchor_top = 0.20700002
-anchor_right = 0.79300004
-anchor_bottom = 0.79300004
-offset_left = -0.41700077
-offset_top = -0.41700077
-offset_right = 0.4169979
-offset_bottom = 0.4169979
-
-[node name="Health_Border" type="NinePatchRect" parent="VBoxContainer/Container"]
-layout_mode = 2
-texture = ExtResource("1_k3ym5")
-region_rect = Rect2(32, 0, 32, 32)
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
+anchor_left = 0.071428575
+anchor_top = 0.10714286
+anchor_right = 0.071428575
+anchor_bottom = 0.10714286
+offset_right = 31.0
+offset_bottom = 51.0
+texture = ExtResource("3_1htk0")
+stretch_mode = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/Container/Health_Border"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.89800006
+anchor_right = 0.89800006
+offset_left = -12.920002
+offset_top = -22.0
+offset_right = 58.079998
+offset_bottom = 7.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/HBoxContainer"]
+layout_mode = 2
+
+[node name="Health_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_l1do4")
+stretch_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer/Health_Icon"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 57.0
-offset_bottom = 6.0
-theme_override_styles/fill = SubResource("StyleBoxFlat_1htk0")
-value = 80.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 9.5
+offset_top = -2.5
+offset_right = 65.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxTexture_1htk0")
+theme_override_styles/fill = SubResource("StyleBoxTexture_q3i2e")
+value = 70.0
 show_percentage = false
 
-[node name="Magic_Border" type="NinePatchRect" parent="VBoxContainer/Container"]
+[node name="Magic_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-texture = ExtResource("1_k3ym5")
-region_rect = Rect2(64, 0, 32, 32)
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-metadata/_edit_use_anchors_ = true
+texture = SubResource("AtlasTexture_b741m")
+stretch_mode = 2
 
-[node name="MagicBar" type="ProgressBar" parent="VBoxContainer/Container/Magic_Border"]
+[node name="MagicBar" type="ProgressBar" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer/Magic_Icon"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 57.0
-offset_bottom = 6.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 9.5
+offset_top = -2.5
+offset_right = 65.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_q3i2e")
 value = 80.0
 show_percentage = false
 
-[node name="Sanity_border" type="NinePatchRect" parent="VBoxContainer/Container"]
+[node name="Sanity_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-texture = ExtResource("1_k3ym5")
-region_rect = Rect2(64, 0, 32, 32)
-patch_margin_left = 2
-patch_margin_top = 2
-patch_margin_right = 2
-patch_margin_bottom = 2
-metadata/_edit_use_anchors_ = true
+texture = SubResource("AtlasTexture_0v7bq")
+stretch_mode = 2
 
-[node name="SanityBar" type="ProgressBar" parent="VBoxContainer/Container/Sanity_border"]
+[node name="SanityBar" type="ProgressBar" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer/Sanity_Icon"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 57.0
-offset_bottom = 6.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 9.5
+offset_top = -2.5
+offset_right = 65.5
+offset_bottom = 2.5
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_lgqxh")
 value = 80.0
 show_percentage = false
 
-[node name="Sanity_Icon" type="TextureRect" parent="VBoxContainer/Container"]
-layout_mode = 2
-texture = SubResource("AtlasTexture_0v7bq")
-metadata/_edit_use_anchors_ = true
-
-[node name="Health_Icon" type="TextureRect" parent="VBoxContainer/Container"]
-layout_mode = 2
-texture = SubResource("AtlasTexture_l1do4")
-metadata/_edit_use_anchors_ = true
-
-[node name="Magic_Icon" type="TextureRect" parent="VBoxContainer/Container"]
-layout_mode = 2
-texture = SubResource("AtlasTexture_b741m")
-metadata/_edit_use_anchors_ = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Control2" type="Control" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Control2"]
+layout_mode = 0
+offset_left = -6.0
+offset_top = 12.0
+offset_right = 102.0
+offset_bottom = 40.0
+
+[node name="Button" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
 layout_mode = 2
+text = "1"
+
+[node name="Button2" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+text = "2"
+
+[node name="Button3" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+text = "3"
+
+[node name="Button4" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+text = "4"
+
+[node name="Button5" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+text = "5"
+
+[node name="Button6" type="Button" parent="VBoxContainer/Control2/HBoxContainer"]
+layout_mode = 2
+text = "6"

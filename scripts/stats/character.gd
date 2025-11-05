@@ -106,8 +106,8 @@ func _ready() -> void:
 	sprite.play("idle");
 	
 	#translate(Vector3(0,0.736,-0.463));
-	sprite.translate(Vector3(0,0.8,0));
-	sprite.rotate(Vector3(1,0,0), 56);
+	sprite.translate(Vector3(0,0.8,-0.4));
+	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60));
 	sprite.scale = Vector3(4,4,4);
 	
 	camera = get_viewport().get_camera_3d();
