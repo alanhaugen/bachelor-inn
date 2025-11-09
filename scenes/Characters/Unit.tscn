@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://btmpi20wskms7"]
 
-[ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/unit.gd" id="1_vvr86"]
+[ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/character.gd" id="1_vvr86"]
 [ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_x7j7d"]
-[ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/HealthBar.tscn" id="3_hysan"]
+[ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/health_bar.tscn" id="3_hysan"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vvr86"]
 atlas = ExtResource("2_x7j7d")

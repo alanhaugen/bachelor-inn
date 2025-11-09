@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://csv3482xf34ay"]
 
-[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/popups/health_bar.gd" id="1_1u02u"]
-[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_23qt1"]
+[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/popups/health_bar.gd" id="1_qi2ti"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_4rf34"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fhnc"]
 bg_color = Color(0, 0, 0, 0)
@@ -21,7 +21,7 @@ offset_right = 32.0
 offset_bottom = 4.0
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
-script = ExtResource("1_1u02u")
+script = ExtResource("1_qi2ti")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
@@ -37,14 +37,14 @@ mouse_filter = 2
 [node name="NameLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_23qt1")
+theme_override_fonts/font = ExtResource("2_4rf34")
 theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="HealthLabel" type="Label" parent="VBoxContainer/VBoxContainer"]
 visible = false
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_23qt1")
+theme_override_fonts/font = ExtResource("2_4rf34")
 theme_override_font_sizes/font_size = 8
 horizontal_alignment = 1
 

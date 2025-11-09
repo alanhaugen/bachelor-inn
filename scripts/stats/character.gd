@@ -26,7 +26,7 @@ enum Speciality
 
 @onready var camera: Camera3D;
 var health_bar: ColorRect;
-@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/HealthBar.tscn");
+@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
@@ -115,6 +115,27 @@ func _ready() -> void:
 		atlas.atlas = texture;
 		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height);
 		sprite.sprite_frames.add_frame("idle", atlas);
+	
+	# Add walk sideways animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_side", atlas);
+	
+	# Add walk down animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width * 2, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_down", atlas);
+	
+	# Add walk up animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width * 3, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_up", atlas);
 	
 	sprite.play("idle");
 	

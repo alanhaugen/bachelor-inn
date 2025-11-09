@@ -38,7 +38,7 @@ var completed_moves :Array[Move];
 var characters: Array[Character];
 var player_characters: Array[Character];
 
-const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
+const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 
@@ -615,9 +615,16 @@ func _process(delta: float) -> void:
 				selected_unit.position += dir.normalized() * movement_speed;# * delta);
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
-				if (dir.x >= 0):
+				
+				if (dir.z > 0):
+					selected_unit.sprite.play("walk_up");
+				elif (dir.z < 0):
+					selected_unit.sprite.play("walk_down");
+				elif (dir.x > 0):
+					selected_unit.sprite.play("walk_side");
 					selected_unit.sprite.flip_h = true;
-				else:
+				elif (dir.x < 0):
+					selected_unit.sprite.play("walk_side");
 					selected_unit.sprite.flip_h = false;
 			
 			#animated_unit.position.x = animationPath
