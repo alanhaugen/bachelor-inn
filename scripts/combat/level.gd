@@ -345,6 +345,7 @@ func _ready() -> void:
 		elif (get_unit_name(pos) == "Enemy"):
 			#new_unit = ENEMY.instantiate();
 			new_unit = Character.new();
+			new_unit.is_playable = false;
 			new_unit.unit_name = "Pth'Khuleroth";
 			if randi_range(1,2) == 1:
 				new_unit.sprite_sheet_path = "res://art/textures/enemy1.png";

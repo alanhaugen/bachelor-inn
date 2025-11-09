@@ -25,8 +25,9 @@ enum Speciality
 }
 
 @onready var camera: Camera3D;
-var health_bar: ColorRect;
+var health_bar: HealthBar;
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
+@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
@@ -96,7 +97,11 @@ func update_health_bar() -> void:
 
 
 func _ready() -> void:
-	health_bar = HEALTH_BAR_SCENE.instantiate();
+	if is_playable:
+		health_bar = HEALTH_BAR_SCENE.instantiate();
+	else:
+		health_bar = ENEMY_HEALTH_BAR_SCENE.instantiate();
+	
 	add_child(health_bar);
 	
 	sprite = AnimatedSprite3D.new();
