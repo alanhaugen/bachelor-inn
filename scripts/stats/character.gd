@@ -65,6 +65,8 @@ var grid_position: Vector3i;
 
 var next_level_experience: int = 10;
 
+var is_alive: bool = true;
+
 ## SKILL TREE
 
 
@@ -153,7 +155,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	show_ui(); # hack, TODO: removeme
+	if is_alive:
+		show_ui(); # hack, TODO: removeme
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
@@ -170,18 +173,21 @@ func show_ui() -> void:
 
 
 func move_to(pos: Vector3i) -> void:
+	is_alive = true;
 	reset();
 	grid_position = pos;
 	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
+	is_alive = true;
 	hide_ui();
 	show();
 	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die() -> void:
+	is_alive = false;
 	hide_ui();
 	hide();
 	grid_position = Vector3(-100, -100, -100);
