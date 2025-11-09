@@ -31,7 +31,7 @@ var health_bar: ColorRect;
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
-@export var sprite_sheet_path: String = "res://art/textures/DFFS_Character edge highlight poc.png";
+@export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health
 @export var strength: int = 4; ## Damage with weapons
@@ -98,13 +98,23 @@ func _ready() -> void:
 	add_child(health_bar);
 	
 	sprite = AnimatedSprite3D.new();
+	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
 	sprite.sprite_frames = SpriteFrames.new();
 	sprite.sprite_frames.add_animation("idle");
 	
+	var frame_count := 8; # Number of frames in your "idle" animation
+	var frame_width := 32; # Width of each individual sprite frame
+	var frame_height := 32; # Height of each individual sprite frame
+	
 	#if speciality == Speciality.Scout:
 	var texture: Texture2D = load(sprite_sheet_path);
-	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
-	sprite.sprite_frames.add_frame("idle", texture);
+	
+	# Add idle animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("idle", atlas);
 	
 	sprite.play("idle");
 	
