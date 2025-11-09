@@ -5,6 +5,7 @@ extends Control
 @onready var health_bar: ProgressBar = %HealthBar
 @onready var magic_bar: ProgressBar = %MagicBar
 @onready var sanity_bar: ProgressBar = %SanityBar
+@onready var name_label: Label = %CharacterName
 
 var icon: TextureRect = null : set = _set_icon;
 var health: int = 0 : set = _set_health;
