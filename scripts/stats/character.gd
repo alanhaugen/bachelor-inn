@@ -24,7 +24,7 @@ enum Speciality
 	Fighter
 }
 
-@onready var camera: Camera3D;
+var camera: Camera3D;
 var health_bar: HealthBar;
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
@@ -54,8 +54,6 @@ var health_bar: HealthBar;
 
 @export var experience : int  = 0 : set = _set_experience;
 @export var skills : Array[Skill];
-
-@export var spawn_location :Vector3i; ## Where the unit will spawn
 
 var max_health: int = health + endurance + floor(strength / 2.0);
 @export var current_health: int = max_health;
