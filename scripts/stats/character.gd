@@ -107,6 +107,9 @@ func _ready() -> void:
 	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
 	sprite.sprite_frames = SpriteFrames.new();
 	sprite.sprite_frames.add_animation("idle");
+	sprite.sprite_frames.add_animation("walk_side");
+	sprite.sprite_frames.add_animation("walk_down");
+	sprite.sprite_frames.add_animation("walk_up");
 	
 	var frame_count := 8; # Number of frames in your "idle" animation
 	var frame_width := 32; # Width of each individual sprite frame
@@ -138,14 +141,14 @@ func _ready() -> void:
 		var atlas := AtlasTexture.new();
 		atlas.atlas = texture;
 		atlas.region = Rect2(i * frame_width, frame_width * 2, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("walk_down", atlas);
+		sprite.sprite_frames.add_frame("walk_up", atlas);
 	
 	# Add walk up animation
 	for i in range(frame_count):
 		var atlas := AtlasTexture.new();
 		atlas.atlas = texture;
 		atlas.region = Rect2(i * frame_width, frame_width * 3, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("walk_up", atlas);
+		sprite.sprite_frames.add_frame("walk_down", atlas);
 	
 	sprite.play("idle");
 	
