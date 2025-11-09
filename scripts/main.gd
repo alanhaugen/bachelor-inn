@@ -22,6 +22,9 @@ var gui: Control;
 ## Character Units held by the gaming session 
 var characters: Array[Character];
 
+## All levels
+@export var levels: Array[Level];
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion

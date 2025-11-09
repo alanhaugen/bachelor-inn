@@ -1,8 +1,13 @@
-[gd_scene load_steps=26 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=29 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
+[ext_resource type="Shader" uid="uid://beua1shvmn38p" path="res://shaders/balatro_bg.gdshader" id="2_v8ire"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
+[ext_resource type="Texture2D" uid="uid://bcjv85d3vws2n" path="res://art/textures/logo_noble.png" id="5_v8ire"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_e6rwi"]
+shader = ExtResource("2_v8ire")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2gien"]
 texture = ExtResource("3_v8ire")
@@ -198,6 +203,19 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 6
 
+[node name="Background" type="ColorRect" parent="UI"]
+material = SubResource("ShaderMaterial_e6rwi")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -572.0
+offset_top = -311.0
+offset_right = 601.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="VBoxContainer" type="VBoxContainer" parent="UI"]
 layout_mode = 1
 anchors_preset = 8
@@ -221,6 +239,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_2gien")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_1nqvl")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
@@ -232,6 +251,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_ds07i")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_nsnfg")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
@@ -243,6 +263,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_74hbn")
 theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
@@ -262,8 +283,15 @@ text = "Back"
 [node name="MainMenu" type="VBoxContainer" parent="UI/VBoxContainer"]
 layout_mode = 2
 
+[node name="TextureRect" type="TextureRect" parent="UI/VBoxContainer/MainMenu"]
+custom_minimum_size = Vector2(0, 400)
+layout_mode = 2
+texture = ExtResource("5_v8ire")
+expand_mode = 3
+
 [node name="StartGameButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_4hx67")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_snox8")
 theme_override_styles/hover = SubResource("StyleBoxTexture_vus0j")
@@ -271,6 +299,7 @@ text = "Start Game"
 
 [node name="OptionsButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_4y25g")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_iy0in")
 theme_override_styles/hover = SubResource("StyleBoxTexture_jcc73")
@@ -278,6 +307,7 @@ text = "											Options"
 
 [node name="CreditsButton" type="Button" parent="UI/VBoxContainer/MainMenu"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_6srpe")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_8o0t5")
 theme_override_styles/hover = SubResource("StyleBoxTexture_6cb08")

@@ -35,12 +35,15 @@ func _ready() -> void:
 #region: --- Signals ---
 ## Called when the Load Map 0 button is pressed
 func _on_load_map_0_pressed() -> void:
+	$UI/Background.visible = false;
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	Main.save.read(0);
 func _on_load_map_1_pressed() -> void:
+	$UI/Background.visible = false;
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	Main.save.read(1);
 func _on_load_map_2_pressed() -> void:
+	$UI/Background.visible = false;
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	Main.save.read(2);
 #endregion
