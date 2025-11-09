@@ -23,7 +23,10 @@ var gui: Control;
 var characters: Array[Character];
 
 ## All levels
-@export var levels: Array[Level];
+var levels: Array[String];
+
+## Level index into levels array
+var current_level_index: int = 0;
 
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
@@ -35,6 +38,13 @@ func unload_level() -> void:
 	if is_instance_valid(level):
 		level.queue_free(); # Free the current level instance
 	level = null
+
+func next_level() -> void:
+	current_level_index += 1;
+	if current_level_index > levels.size():
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
+	else:
+		load_level(levels[current_level_index]);
 
 ## Loads a new level and cleanup previously loaded level
 ##

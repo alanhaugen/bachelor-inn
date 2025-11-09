@@ -39,17 +39,17 @@ func create_new_save_data() -> void:
 		"Noble Nights Save format": version,
 		"Slot 1":
 		{
-			"level": "first",
+			"level": 0,
 			"units": units
 		},
 		"Slot 2":
 		{
-			"level": "second",
+			"level": 1,
 			"units": units
 		},
 		"Slot 3":
 		{
-			"level": "first",
+			"level": 1,
 			"units": units
 		},
 	}
@@ -107,7 +107,7 @@ func read(save_slot: int) -> bool:
 	
 	var save_slot_data: Dictionary = save.get_or_add("Slot " + str(save_slot + 1));
 	
-	var level: String = save_slot_data.get_or_add("level");
+	var level: int = save_slot_data.get_or_add("level");
 	
 	var characters: Array = save_slot_data.get("units");
 	
@@ -142,7 +142,7 @@ func read(save_slot: int) -> bool:
 		
 		Main.characters.append(new_character);
 	
-	Main.load_level(level);
+	Main.load_level(Main.levels[level]);
 	
 	#var unit: Character = Character.new();
 	#unit.name = "Withburn";

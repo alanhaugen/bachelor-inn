@@ -519,7 +519,7 @@ func CheckVictoryConditions() -> void:
 	if (numberOfPlayerUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
-		Main.load_level("second");
+		Main.next_level();
 
 
 func _process(delta: float) -> void:

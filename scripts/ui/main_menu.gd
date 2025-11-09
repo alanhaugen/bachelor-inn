@@ -9,11 +9,15 @@ extends Node3D
 ## Level buttons
 @onready var levelButton: Button = $UI/VBoxContainer/LevelSelect/LoadMap0;
 
+## Names of levels in the order they will be played
+@export var levels: Array[String];
+
 #region: --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
 	Main.gui = gui;
 	Main.world = world;
+	Main.levels = levels;
 	
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	
