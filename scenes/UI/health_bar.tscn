@@ -75,5 +75,4 @@ mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_mhiy5")
 theme_override_styles/fill = SubResource("StyleBoxFlat_j8d75")
 value = 80.0
-fill_mode = 1
 show_percentage = false
