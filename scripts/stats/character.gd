@@ -25,7 +25,8 @@ enum Speciality
 }
 
 @onready var camera: Camera3D;
-@onready var health_bar: ColorRect = %HealthBar
+var health_bar: ColorRect;
+@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/HealthBar.tscn");
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
@@ -87,13 +88,15 @@ func _set_experience(in_experience: int) -> void:
 
 
 func update_health_bar() -> void:
-	pass;
-	#health_bar.health = current_health;
-	#health_bar.sanity = current_sanity;
-	#health_bar.name_label = unit_name;
+	health_bar.health = current_health;
+	health_bar.sanity = current_sanity;
+	health_bar.name_label = unit_name;
 
 
 func _ready() -> void:
+	health_bar = HEALTH_BAR_SCENE.instantiate();
+	add_child(health_bar);
+	
 	sprite = AnimatedSprite3D.new();
 	sprite.sprite_frames = SpriteFrames.new();
 	sprite.sprite_frames.add_animation("idle");
@@ -117,22 +120,22 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	pass;
-	#var mesh_3d_position: Vector3 = global_transform.origin;
+	var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	#if camera:
-	#	var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-	#	health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
+	show_ui(); # hack, TODO: removeme
+	
+	if camera:
+		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
+		health_bar.position = screen_position_2d - Vector2(3 * 7, 0);
+		health_bar.position.y += 70; # move down a little 
 
 
 func hide_ui() -> void:
-	pass;
-	#health_bar.hide();
+	health_bar.hide();
 
 
 func show_ui() -> void:
-	pass;
-	#health_bar.show();
+	health_bar.show();
 
 
 func move_to(pos: Vector3i) -> void:

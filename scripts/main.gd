@@ -37,7 +37,7 @@ var current_level_index: int = 0;
 func unload_level() -> void:
 	if is_instance_valid(level):
 		level.queue_free(); # Free the current level instance
-	level = null
+	level = null;
 
 func next_level() -> void:
 	current_level_index += 1;

@@ -35,7 +35,8 @@ var stat_popup_player: Control;
 var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
-var characters :Array[Character];
+var characters: Array[Character];
+var player_characters: Array[Character];
 
 const STATS_POPUP = preload("res://scenes/ui/Pop_Up_WIP.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
@@ -309,6 +310,14 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			popup.show();
 
 
+func _exit_tree() -> void:
+	# This doesn't seem to  be working
+	# (the goal is to copy over all the characters
+	# to preserve the remaining characters, character
+	# health and other stats etc)
+	Main.characters = player_characters.duplicate();
+
+
 func _ready() -> void:
 	cursor.hide();
 	movement_map.clear();
@@ -325,8 +334,9 @@ func _ready() -> void:
 		
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed];
+				new_unit = Main.characters[characters_placed].duplicate();
 				characters_placed += 1;
+				player_characters.append(new_unit);
 			else:
 				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
@@ -481,13 +491,17 @@ func MoveAI() -> void:
 				break;
 		
 		# No attacks found, choose a random move
-		if move == null:
+		if move == null and aiUnitsMoves.is_empty() == false:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
 		if move.is_attack:
 			moves_stack.append(move.neighbour_move);
-		moves_stack.append(move);
+		
+		if move == null:
+			push_error("No moves found for enemy");
+		else:
+			moves_stack.append(move);
 		
 		# Remove move from ai stack
 		for j :int in aiUnitsMoves.size():
