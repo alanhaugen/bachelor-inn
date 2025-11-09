@@ -304,6 +304,7 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 		character_script.print_stats();
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
+			stat_script.icon_texture.texture = character_script.portrait;
 			stat_script.max_health = character_script.max_health;
 			stat_script.health = character_script.current_health;
 			stat_script.max_magic = character_script.magic;

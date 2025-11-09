@@ -5,6 +5,7 @@ extends Node3D
 ## Use this class to make new units and enemies for the game
 
 var sprite: AnimatedSprite3D;
+var portrait: Texture2D;
 
 #region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
@@ -113,6 +114,10 @@ func _ready() -> void:
 	
 	#if speciality == Speciality.Scout:
 	var texture: Texture2D = load(sprite_sheet_path);
+	var region_to_extract := Rect2(0, 0, frame_width, frame_height);
+	portrait = AtlasTexture.new();
+	portrait.atlas = texture;
+	portrait.region = region_to_extract;
 	
 	# Add idle animation
 	for i in range(frame_count):
