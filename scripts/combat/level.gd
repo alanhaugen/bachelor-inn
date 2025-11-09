@@ -240,7 +240,7 @@ func _input(event: InputEvent) -> void:
 		
 		var windowPos: Vector2 = Vector2(0,0);
 		
-		if (get_unit_name(pos) == "Unit"):
+		if (get_unit_name(pos) == CharacterStates.Player):
 			unit_pos = pos;
 			movement_map.clear();
 			if (selected_unit == get_unit(pos)):
@@ -286,10 +286,13 @@ func _input(event: InputEvent) -> void:
 			
 			selected_unit = null;
 		
-		if (get_unit_name(pos) == "Enemy"):
+		if (get_unit_name(pos) == CharacterStates.Enemy):
 			
 			selected_enemy_unit = get_unit(pos);
 			update_stat(selected_enemy_unit, stat_popup_enemy);
+		
+		if (get_unit_name(pos) == CharacterStates.PlayerDone):
+			update_stat(get_unit(pos), stat_popup_player);
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
