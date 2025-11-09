@@ -627,9 +627,9 @@ func _process(delta: float) -> void:
 					selected_unit.sprite.play("walk_down");
 				elif (dir.x > 0):
 					selected_unit.sprite.play("walk_side");
-					selected_unit.sprite.flip_h = true;
+					selected_unit.sprite.flip_h = false;
 				elif (dir.x < 0):
 					selected_unit.sprite.play("walk_side");
-					selected_unit.sprite.flip_h = false;
+					selected_unit.sprite.flip_h = true;
 			
 			#animated_unit.position.x = animationPath
