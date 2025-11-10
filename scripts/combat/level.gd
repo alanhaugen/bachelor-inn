@@ -405,16 +405,23 @@ func _ready() -> void:
 	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
 	
-	side_bar_1 = SIDE_BAR.instantiate();
-	Main.gui.add_child(side_bar_1);
+	for i in range(Main.characters.size()):
+		var new_side_bar := SIDE_BAR.instantiate();
+		if i != 0:
+			new_side_bar.offset_bottom = -get_window().size.y/(15)*i;
+		Main.gui.add_child(new_side_bar);
 	
-	side_bar_2 = SIDE_BAR.instantiate();
-	side_bar_2.offset_bottom = -get_window().size.y/15;
-	Main.gui.add_child(side_bar_2);
 	
-	side_bar_3 = SIDE_BAR.instantiate();
-	side_bar_3.offset_bottom = -get_window().size.y/7.5;
-	Main.gui.add_child(side_bar_3);
+	#side_bar_1 = SIDE_BAR.instantiate();
+	#Main.gui.add_child(side_bar_1);
+	#
+	#side_bar_2 = SIDE_BAR.instantiate();
+	#side_bar_2.offset_bottom = -get_window().size.y/15;
+	#Main.gui.add_child(side_bar_2);
+	#
+	#side_bar_3 = SIDE_BAR.instantiate();
+	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
+	#Main.gui.add_child(side_bar_3);
 
 	
 	turn_transition_animation_player.play();
