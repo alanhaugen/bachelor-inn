@@ -96,6 +96,11 @@ func update_health_bar() -> void:
 
 
 func _ready() -> void:
+	
+	var children :  = get_children()
+	for child in children:
+		child.free()
+	
 	if is_playable:
 		health_bar = HEALTH_BAR_SCENE.instantiate();
 	else:

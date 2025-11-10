@@ -17,6 +17,9 @@ extends Node3D
 
 @onready var camera: Camera3D = $Camera3D;
 @onready var cursor: Sprite3D = $Cursor;
+@onready var mouse_pointer : Vector2;
+@onready var screen_width : int = 1152 /2;
+@onready var screen_height : int = 648 /2;
 @onready var map: GridMap = $Map;
 @onready var units_map: GridMap = $Units;
 @onready var movement_map: GridMap = $MovementDots;
@@ -135,19 +138,18 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 	enemy_code = temp_enemy_code;
 	
 	return moves;
-
-
-func show_move_popup(window_pos :Vector2) -> void:
+	
+func show_move_popup() -> void: 
 	move_popup.show();
 	is_in_menu = true;
-	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
+	move_popup.global_position = mouse_pointer;
+	
 	if (active_move.is_attack):
 		move_popup.attack_button.show();
 	if (active_move.is_wait):
 		move_popup.wait_button.show();
 	if (active_move.is_attack == false && active_move.is_wait == false):
 		move_popup.move_button.show();
-
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
@@ -205,12 +207,15 @@ func _input(event: InputEvent) -> void:
 		return;
 	if (is_in_menu):
 		return;
-	
+		
 	if (event is InputEventMouseMotion and is_dragging):
 		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
+		mouse_pointer = event.position;
+		print("Mouse X pos = " + str(event.position.x) + " and Mouse Y pos = " + str(event.position.y) + ".")
+	
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
 			is_dragging = true;
@@ -248,7 +253,7 @@ func _input(event: InputEvent) -> void:
 			if (selected_unit == get_unit(pos)):
 				active_move = Move.new(pos, pos, player_code_done, units_map, selected_unit);
 				active_move.is_wait = true;
-				show_move_popup(windowPos);
+				show_move_popup(); #windowPos
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				current_moves = dijkstra(pos, get_unit(pos).movement);
@@ -270,7 +275,7 @@ func _input(event: InputEvent) -> void:
 						active_move.neighbour_move.character1 = active_move.character1;
 					break;
 			
-			show_move_popup(windowPos);
+			show_move_popup(); #windowPos
 			a_star(unit_pos, pos);
 			
 			#activeMove.execute();
