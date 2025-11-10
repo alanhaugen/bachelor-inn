@@ -4,8 +4,8 @@
 [ext_resource type="MeshLibrary" uid="uid://dq7c17a5w0h5q" path="res://scenes/libraries/CombatMapMeshLibrary.tres" id="1_quibh"]
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="2_4ig3v"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="3_oq4ji"]
-[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_3j2w6"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turn_transition.tscn" id="6_aot7u"]
+[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="5_3j2w6"]
+[ext_resource type="PackedScene" path="res://scenes/UI/turn_transition.tscn" id="6_aot7u"]
 
 [sub_resource type="Environment" id="Environment_3j2w6"]
 
