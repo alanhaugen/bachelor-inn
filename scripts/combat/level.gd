@@ -35,6 +35,9 @@ var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
+var side_bar_1: Control;
+var side_bar_2: Control;
+var side_bar_3: Control;
 var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
@@ -43,6 +46,7 @@ var characters: Array[Character];
 const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
+const SIDE_BAR = preload("res://scenes/UI/side_bar.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -400,6 +404,25 @@ func _ready() -> void:
 	#stat_popup_enemy.position = Vector2(250, 235);
 	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
+	
+	for i in range(Main.characters.size()):
+		var new_side_bar := SIDE_BAR.instantiate();
+		if i != 0:
+			new_side_bar.offset_bottom = -get_window().size.y/(15)*i;
+		Main.gui.add_child(new_side_bar);
+	
+	
+	#side_bar_1 = SIDE_BAR.instantiate();
+	#Main.gui.add_child(side_bar_1);
+	#
+	#side_bar_2 = SIDE_BAR.instantiate();
+	#side_bar_2.offset_bottom = -get_window().size.y/15;
+	#Main.gui.add_child(side_bar_2);
+	#
+	#side_bar_3 = SIDE_BAR.instantiate();
+	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
+	#Main.gui.add_child(side_bar_3);
+
 	
 	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
