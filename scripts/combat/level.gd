@@ -368,7 +368,8 @@ func _ready() -> void:
 			new_unit.position = pos * 2;
 			new_unit.position += Vector3(1, 0, 1);
 			#newUnit = 2;
-			new_unit.reparent(Main.world, false);
+			if new_unit.get_parent():
+				new_unit.reparent(Main.world, false);
 			add_child(new_unit);
 			characters.append(new_unit);
 			
