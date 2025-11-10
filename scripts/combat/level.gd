@@ -389,14 +389,16 @@ func _ready() -> void:
 	
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
-	stat_popup_player.scale = Vector2(3,3);
-	stat_popup_player.position = Vector2(-555, 235);
+	#stat_popup_player.scale = Vector2(3,3);
+	#stat_popup_player.position = Vector2(-555, 235);
+	stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	Main.gui.add_child(stat_popup_player);
 	
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
-	stat_popup_enemy.scale = Vector2(3,3);
-	stat_popup_enemy.position = Vector2(250, 235);
+	#stat_popup_enemy.scale = Vector2(3,3);
+	#stat_popup_enemy.position = Vector2(250, 235);
+	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
 	
 	turn_transition_animation_player.play();

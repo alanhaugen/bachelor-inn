@@ -23,6 +23,11 @@ Main="*res://scripts/main.gd"
 
 gdscript/warnings/untyped_declaration=2
 
+[display]
+
+window/stretch/mode="viewport"
+window/stretch/aspect="expand"
+
 [gui]
 
 theme/custom_font="uid://bltfi0bh6lptu"
