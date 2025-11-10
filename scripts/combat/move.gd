@@ -71,18 +71,18 @@ func execute() -> void:
 			attack_strength *= 2;
 		
 		character2.current_health -= attack_strength;
-		character1.current_sanity -= character2.intimidation / character1.mind;
 		
 		character1.update_health_bar();
 		character2.update_health_bar();
 		
-		Main.battle_log.text = (character1.unit_name + " loses " + str(character2.intimidation) + " sanity\n") + Main.battle_log.text;
 		Main.battle_log.text = (character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		
 		if character1.is_playable:
+			character1.current_sanity -= character2.intimidation / character1.mind;
 			Main.level.update_stat(character1, Main.level.stat_popup_player);
 			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
 		else:
+			character2.current_sanity -= character1.intimidation / character2.mind;
 			Main.level.update_stat(character1, Main.level.stat_popup_enemy);
 			Main.level.update_stat(character2, Main.level.stat_popup_player);
 		if character2.current_health <= 0:

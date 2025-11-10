@@ -61,7 +61,7 @@ var level_up_popup: LevelUpPopUp;
 
 var max_health: int = health + endurance + floor(strength / 2.0);
 @export var current_health: int = max_health;
-@export var current_sanity: int = mind;
+@export var current_sanity: int = mind : set = _set_sanity;
 @export var current_magic: int = magic;
 @export var current_level: int = 1;
 
@@ -76,6 +76,15 @@ var is_alive: bool = true;
 
 func _close_level_up() -> void:
 	pass;
+
+
+func _set_sanity(in_sanity: int) -> void:
+	if (Main.battle_log):
+		Main.battle_log.text = unit_name + " loses " + str(current_sanity - in_sanity) + " sanity\n" + Main.battle_log.text;
+	current_sanity = in_sanity;
+	if current_sanity < 0:
+		is_playable = false;
+		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 
 
 func _set_experience(in_experience: int) -> void:

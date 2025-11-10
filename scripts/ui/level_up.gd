@@ -39,7 +39,7 @@ func _set_health(new_health: int) -> void:
 	health = new_health;
 	var diff := "";
 	if health_diff > 0:
-		diff = " ⬆ " + str(health_diff);
+		diff = " ⬆ +" + str(health_diff);
 	health_stat.text = "Health: " + str(new_health) + diff;
 
 
@@ -48,7 +48,7 @@ func _set_strength(new_strength: int) -> void:
 	strength = new_strength;
 	var diff := "";
 	if strength_diff > 0:
-		diff = " ⬆ " + str(strength_diff);
+		diff = " ⬆ +" + str(strength_diff);
 	strength_stat.text = "Strength: " + str(new_strength) + diff;
 
 
@@ -57,7 +57,7 @@ func _set_movement(new_movement: int) -> void:
 	movement = new_movement;
 	var diff := "";
 	if movement_diff > 0:
-		diff = " ⬆ " + str(movement_diff);
+		diff = " ⬆ +" + str(movement_diff);
 	movement_stat.text = "Movement: " + str(new_movement) + diff;
 
 
@@ -66,7 +66,7 @@ func _set_mind(new_mind: int) -> void:
 	mind = new_mind;
 	var diff := "";
 	if mind_diff > 0:
-		diff = " ⬆ " + str(mind_diff);
+		diff = " ⬆ +" + str(mind_diff);
 	mind_stat.text = "Mind: " + str(new_mind) + diff;
 
 
@@ -75,7 +75,7 @@ func _set_speed(new_speed: int) -> void:
 	speed = new_speed;
 	var diff := "";
 	if speed_diff > 0:
-		diff = " ⬆ " + str(speed_diff);
+		diff = " ⬆ +" + str(speed_diff);
 	speed_stat.text = "Speed: " + str(new_speed) + diff;
 
 
@@ -84,7 +84,7 @@ func _set_agility(new_agility: int) -> void:
 	agility = new_agility;
 	var diff := "";
 	if agility_diff > 0:
-		diff = " ⬆ " + str(agility_diff);
+		diff = " ⬆ +" + str(agility_diff);
 	agility_stat.text = "Agility: " + str(new_agility) + diff;
 
 
@@ -93,7 +93,7 @@ func _set_focus(new_focus: int) -> void:
 	focus = new_focus;
 	var diff := "";
 	if focus_diff > 0:
-		diff = " ⬆ " + str(focus_diff);
+		diff = " ⬆ +" + str(focus_diff);
 	focus_stat.text = "Focus: " + str(new_focus) + diff;
 
 
