@@ -7,10 +7,13 @@ extends Node3D
 # TODO: Stackable tiles for enemies
 # TODO: Make your own units passable
 # TODO: camp?
+# TODO: Make enemies able to occopy several grid-tiles
+# TODO: Abilities on level up
 
 @export var camera_speed: float = 5.0;
 @export var mouse_drag_sensitivity: float = 50.0;
 @export var dialogue: Array[String];
+@onready var battle_log: Label = $BattleLog
 
 @onready var camera: Camera3D = $Camera3D;
 @onready var cursor: Sprite3D = $Cursor;
@@ -328,6 +331,8 @@ func _ready() -> void:
 	movement_map.clear();
 	units_map.hide();
 	path_arrow.clear();
+	
+	Main.battle_log = battle_log;
 	
 	var units :Array[Vector3i] = units_map.get_used_cells();
 	

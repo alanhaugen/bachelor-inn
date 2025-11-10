@@ -28,6 +28,9 @@ var levels: Array[String];
 ## Level index into levels array
 var current_level_index: int = 0;
 
+## Level index into levels array
+var battle_log: Label;
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion

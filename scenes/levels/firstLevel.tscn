@@ -68,3 +68,10 @@ region_rect = Rect2(0, 0, 32, 32)
 
 [node name="TurnTransition" parent="." instance=ExtResource("8_57geo")]
 mouse_filter = 2
+
+[node name="BattleLog" type="Label" parent="."]
+offset_left = 916.0
+offset_top = -148.0
+offset_right = 1158.0
+offset_bottom = 492.0
+autowrap_mode = 2

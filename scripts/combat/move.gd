@@ -51,20 +51,22 @@ func execute() -> void:
 		
 		attack_strength = max(1, (character1.strength + weapon_damage) - character2.defense / 2);
 		
-		print("Attacker: ");
-		character1.print_stats();
-		print("-----");
-		print("Victim: ");
-		character2.print_stats();
+		#Main.battle_log.text += "\nAttacker: \n";
+		#Main.battle_log.text += str(character1.save());
+		#Main.battle_log.text += "\n-----\n";
+		#Main.battle_log.text += "Victim: ";
+		#Main.battle_log.text += str(character2.save());
 		
 		# Miss logic
 		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
+			Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
 			print ("Miss");
 			attack_strength = 0;
 			return;
 		
 		# Critical logic
 		if (randi_range(0,100) < (character1.skill / 2) + weapon_crit):
+			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
 			print("Critical hit!");
 			attack_strength *= 2;
 		
@@ -74,8 +76,8 @@ func execute() -> void:
 		character1.update_health_bar();
 		character2.update_health_bar();
 		
-		print(character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.");
-		print(character1.unit_name + " loses " + str(character2.intimidation) + " sanity");
+		Main.battle_log.text = (character1.unit_name + " loses " + str(character2.intimidation) + " sanity\n") + Main.battle_log.text;
+		Main.battle_log.text = (character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		
 		if character1.is_playable:
 			Main.level.update_stat(character1, Main.level.stat_popup_player);
@@ -85,7 +87,9 @@ func execute() -> void:
 			Main.level.update_stat(character2, Main.level.stat_popup_player);
 		if character2.current_health <= 0:
 			character2.die();
+			Main.battle_log.text = (character2.unit_name + " dies.\n") + Main.battle_log.text;
 			if character1.is_playable:
+				Main.battle_log.text = (character1.unit_name + " gains " + str(character2.intimidation) + " experience.\n") + Main.battle_log.text;
 				character1.experience += character2.intimidation;
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));
 		
