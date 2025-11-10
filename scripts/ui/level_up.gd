@@ -75,7 +75,7 @@ func _set_speed(new_speed: int) -> void:
 	speed = new_speed;
 	var diff := "";
 	if speed_diff > 0:
-		diff = " ⬆️ " + str(speed_diff);
+		diff = " ⬆ " + str(speed_diff);
 	speed_stat.text = "Speed: " + str(new_speed) + diff;
 
 
@@ -84,7 +84,7 @@ func _set_agility(new_agility: int) -> void:
 	agility = new_agility;
 	var diff := "";
 	if agility_diff > 0:
-		diff = " ⬆️ " + str(agility_diff);
+		diff = " ⬆ " + str(agility_diff);
 	agility_stat.text = "Agility: " + str(new_agility) + diff;
 
 
@@ -93,7 +93,7 @@ func _set_focus(new_focus: int) -> void:
 	focus = new_focus;
 	var diff := "";
 	if focus_diff > 0:
-		diff = " ⬆️ " + str(focus_diff);
+		diff = " ⬆ " + str(focus_diff);
 	focus_stat.text = "Focus: " + str(new_focus) + diff;
 
 
