@@ -36,7 +36,6 @@ var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
 var characters: Array[Character];
-var player_characters: Array[Character];
 
 const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
@@ -316,11 +315,12 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 
 
 func _exit_tree() -> void:
+	pass;
 	# This doesn't seem to  be working
 	# (the goal is to copy over all the characters
 	# to preserve the remaining characters, character
 	# health and other stats etc)
-	Main.characters = player_characters.duplicate();
+	#Main.characters = player_characters.duplicate();
 
 
 func _ready() -> void:
@@ -333,15 +333,17 @@ func _ready() -> void:
 	
 	var characters_placed := 0;
 	
+	print("Loading new level, number of playable characters: " + str(Main.characters.size()));
+	
 	for i in units.size():
 		var pos: Vector3 = units[i];
 		var new_unit: Character = null;
 		
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed].duplicate();
+				new_unit = Main.characters[characters_placed];
 				characters_placed += 1;
-				player_characters.append(new_unit);
+				print("This character exists: " + str(new_unit.unit_name) + " health: " + str(new_unit.current_health));
 			else:
 				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
@@ -366,6 +368,7 @@ func _ready() -> void:
 			new_unit.position = pos * 2;
 			new_unit.position += Vector3(1, 0, 1);
 			#newUnit = 2;
+			new_unit.reparent(Main.world, false);
 			add_child(new_unit);
 			characters.append(new_unit);
 			
