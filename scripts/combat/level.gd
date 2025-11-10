@@ -38,6 +38,9 @@ var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
+var side_bar_1: Control;
+var side_bar_2: Control;
+var side_bar_3: Control;
 var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
@@ -46,6 +49,7 @@ var characters: Array[Character];
 const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
+const SIDE_BAR = preload("res://scenes/UI/side_bar.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -352,6 +356,7 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
+				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
 				print("This character exists: " + str(new_unit.unit_name) + " health: " + str(new_unit.current_health));
 			else:
@@ -394,15 +399,36 @@ func _ready() -> void:
 	
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
-	stat_popup_player.scale = Vector2(3,3);
-	stat_popup_player.position = Vector2(-555, 235);
+	#stat_popup_player.scale = Vector2(3,3);
+	#stat_popup_player.position = Vector2(-555, 235);
+	stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	Main.gui.add_child(stat_popup_player);
 	
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
-	stat_popup_enemy.scale = Vector2(3,3);
-	stat_popup_enemy.position = Vector2(250, 235);
+	#stat_popup_enemy.scale = Vector2(3,3);
+	#stat_popup_enemy.position = Vector2(250, 235);
+	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
+	
+	for i in range(Main.characters.size()):
+		var new_side_bar := SIDE_BAR.instantiate();
+		if i != 0:
+			new_side_bar.offset_bottom = -get_window().size.y/(15)*i;
+		Main.gui.add_child(new_side_bar);
+	
+	
+	#side_bar_1 = SIDE_BAR.instantiate();
+	#Main.gui.add_child(side_bar_1);
+	#
+	#side_bar_2 = SIDE_BAR.instantiate();
+	#side_bar_2.offset_bottom = -get_window().size.y/15;
+	#Main.gui.add_child(side_bar_2);
+	#
+	#side_bar_3 = SIDE_BAR.instantiate();
+	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
+	#Main.gui.add_child(side_bar_3);
+
 	
 	turn_transition_animation_player.play();
 	#turn_transition.get_canvas().hide();
