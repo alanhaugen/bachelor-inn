@@ -4,34 +4,13 @@
 [ext_resource type="Shader" uid="uid://beua1shvmn38p" path="res://shaders/balatro_bg.gdshader" id="2_v8ire"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
+[ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/ui/button_normal_style.tres" id="4_wb0q5"]
+[ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/ui/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="Texture2D" uid="uid://bcjv85d3vws2n" path="res://art/textures/logo_noble.png" id="5_v8ire"]
+[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/ui/button_hover_style.tres" id="6_8g5eo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e6rwi"]
 shader = ExtResource("2_v8ire")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2gien"]
-texture = ExtResource("3_v8ire")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-region_rect = Rect2(0, 32, 32, 32)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1nqvl"]
-texture = ExtResource("3_v8ire")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-region_rect = Rect2(0, 0, 32, 32)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_61o3f"]
-texture = ExtResource("3_v8ire")
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
-region_rect = Rect2(128, 128, 32, 32)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
 texture = ExtResource("3_v8ire")
@@ -241,9 +220,9 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 25
-theme_override_styles/normal = SubResource("StyleBoxTexture_2gien")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_1nqvl")
-theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
+theme_override_styles/normal = ExtResource("4_wb0q5")
+theme_override_styles/pressed = ExtResource("5_q85j6")
+theme_override_styles/hover = ExtResource("6_8g5eo")
 text = "Load save 1"
 
 [node name="LoadMap1" type="Button" parent="UI/VBoxContainer/LevelSelect"]
@@ -255,7 +234,7 @@ theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_ds07i")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_nsnfg")
-theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
+theme_override_styles/hover = ExtResource("6_8g5eo")
 text = "Load save 2"
 
 [node name="LoadMap2" type="Button" parent="UI/VBoxContainer/LevelSelect"]
@@ -267,7 +246,7 @@ theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_74hbn")
-theme_override_styles/hover = SubResource("StyleBoxTexture_61o3f")
+theme_override_styles/hover = ExtResource("6_8g5eo")
 text = "Load save 3"
 
 [node name="BackButton" type="Button" parent="UI/VBoxContainer/LevelSelect"]

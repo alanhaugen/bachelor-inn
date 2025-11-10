@@ -27,8 +27,11 @@ enum Speciality
 
 var camera: Camera3D;
 var health_bar: HealthBar;
+var level_up_popup: LevelUpPopUp;
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
+@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
+
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
@@ -60,6 +63,7 @@ var max_health: int = health + endurance + floor(strength / 2.0);
 @export var current_health: int = max_health;
 @export var current_sanity: int = mind;
 @export var current_magic: int = magic;
+@export var current_level: int = 1;
 
 var grid_position: Vector3i;
 
@@ -70,11 +74,16 @@ var is_alive: bool = true;
 ## SKILL TREE
 
 
+func _close_level_up() -> void:
+	pass;
+
+
 func _set_experience(in_experience: int) -> void:
 	experience += in_experience;
 	print(unit_name + " gains " + str(in_experience) + " experience points.");
 	if (experience > next_level_experience):
 		print("Level up!");
+		current_level += 1;
 		if (speciality == Speciality.Fighter):
 			if (next_level_experience >= 10):
 				health += 1;
@@ -85,8 +94,10 @@ func _set_experience(in_experience: int) -> void:
 			if (next_level_experience >= 1000):
 				luck += 1;
 				skill += 1;
-		print_stats();
+		
 		next_level_experience *= 10;
+		calibrate_level_popup();
+		level_up_popup.show();
 
 
 func update_health_bar() -> void:
@@ -95,6 +106,16 @@ func update_health_bar() -> void:
 	health_bar.name_label = unit_name;
 
 
+func calibrate_level_popup() -> void:
+	level_up_popup.health = health;
+	level_up_popup.focus = focus;
+	level_up_popup.level = current_level;
+	level_up_popup.mind = mind;
+	level_up_popup.movement = movement;
+	level_up_popup.speed = speed;
+	level_up_popup.strength = strength;
+	level_up_popup.agility = agility;
+
 func _ready() -> void:
 	if is_playable:
 		health_bar = HEALTH_BAR_SCENE.instantiate();
@@ -102,6 +123,12 @@ func _ready() -> void:
 		health_bar = ENEMY_HEALTH_BAR_SCENE.instantiate();
 	
 	add_child(health_bar);
+	
+	level_up_popup = LEVEL_UP_POPUP.instantiate();
+	add_child(level_up_popup);
+	level_up_popup.hide();
+	level_up_popup.name_label = unit_name;
+	calibrate_level_popup();
 	
 	sprite = AnimatedSprite3D.new();
 	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
@@ -231,6 +258,8 @@ func save() -> Dictionary:
 		"Magic": magic,
 		
 		"Experience": experience,
+		"Next level experience": next_level_experience,
+		"Current level": current_level,
 		"Current health": current_health,
 		"Current magic": current_magic,
 		"Current sanity": current_sanity

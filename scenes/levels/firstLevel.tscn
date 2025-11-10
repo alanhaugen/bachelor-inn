@@ -6,7 +6,7 @@
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_8tmoo"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_8tmoo"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_hvfss"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turnTransition.tscn" id="8_57geo"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turn_transition.tscn" id="8_57geo"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
 
