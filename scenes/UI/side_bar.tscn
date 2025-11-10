@@ -69,13 +69,14 @@ region_rect = Rect2(198, 16, 10, 15)
 
 [node name="GUI_POPUP" type="Control"]
 layout_mode = 3
+anchors_preset = 0
 offset_left = -550.0
 grow_vertical = 0
 script = ExtResource("1_8gc0m")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 0
-offset_right = 72.0
+offset_right = 146.0
 offset_bottom = 46.0
 
 [node name="Control" type="Control" parent="VBoxContainer"]
@@ -128,7 +129,7 @@ z_index = -1
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.071428575
-anchor_top = 0.10714286
+anchor_top = 0.10714284
 anchor_right = 0.071428604
 anchor_bottom = 0.10714284
 offset_right = 31.0
@@ -141,7 +142,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 0
 offset_left = 38.0
 offset_top = 9.0
-offset_right = 62.0
+offset_right = 136.0
 offset_bottom = 38.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/HBoxContainer"]

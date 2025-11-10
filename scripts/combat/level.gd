@@ -406,17 +406,14 @@ func _ready() -> void:
 	Main.gui.add_child(stat_popup_enemy);
 	
 	side_bar_1 = SIDE_BAR.instantiate();
-	side_bar_1.scale = Vector2(3, 3);
 	Main.gui.add_child(side_bar_1);
 	
 	side_bar_2 = SIDE_BAR.instantiate();
-	side_bar_2.scale = Vector2(3, 3);
-	side_bar_2.offset_bottom = -get_window().size.y/5;
+	side_bar_2.offset_bottom = -get_window().size.y/15;
 	Main.gui.add_child(side_bar_2);
 	
 	side_bar_3 = SIDE_BAR.instantiate();
-	side_bar_3.scale = Vector2(3, 3);
-	side_bar_3.offset_bottom = -get_window().size.y/2.5;
+	side_bar_3.offset_bottom = -get_window().size.y/7.5;
 	Main.gui.add_child(side_bar_3);
 
 	
