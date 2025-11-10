@@ -351,6 +351,7 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
+				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
 				print("This character exists: " + str(new_unit.unit_name) + " health: " + str(new_unit.current_health));
 			else:
