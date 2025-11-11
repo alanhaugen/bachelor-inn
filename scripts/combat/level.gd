@@ -560,7 +560,7 @@ func MoveAI() -> void:
 				break;
 		
 		# No attacks found, choose a random move
-		if move == null and aiUnitsMoves.is_empty() == false:
+		if move == null and aiUnitsMoves[i].is_empty() == false:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
