@@ -28,6 +28,8 @@ enum Speciality
 var camera: Camera3D;
 var health_bar: HealthBar;
 var level_up_popup: LevelUpPopUp;
+var health_bar_ally: HealthBar;
+var health_bar_enemy: HealthBar;
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
@@ -82,11 +84,15 @@ func _set_sanity(in_sanity: int) -> void:
 	if (Main.battle_log):
 		Main.battle_log.text = unit_name + " loses " + str(current_sanity - in_sanity) + " sanity\n" + Main.battle_log.text;
 	current_sanity = in_sanity;
-	if current_sanity < 0:
+	if current_sanity < 0 and current_health > 0:
 		is_playable = false;
 		Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		unit_name = unit_name + "'cthulhu";
+		health_bar = health_bar_enemy;
+		update_health_bar();
+		health_bar_ally.hide();
+		health_bar_enemy.show();
 
 
 func _set_experience(in_experience: int) -> void:
@@ -127,13 +133,20 @@ func calibrate_level_popup() -> void:
 	level_up_popup.strength = strength;
 	level_up_popup.agility = agility;
 
+
 func _ready() -> void:
-	if is_playable:
-		health_bar = HEALTH_BAR_SCENE.instantiate();
-	else:
-		health_bar = ENEMY_HEALTH_BAR_SCENE.instantiate();
+	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
+	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
+	health_bar_ally.hide();
+	health_bar_enemy.hide();
 	
-	add_child(health_bar);
+	add_child(health_bar_ally);
+	add_child(health_bar_enemy);
+	
+	if is_playable:
+		health_bar = health_bar_ally;
+	else:
+		health_bar = health_bar_enemy;
 	
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
 	add_child(level_up_popup);

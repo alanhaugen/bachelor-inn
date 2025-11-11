@@ -356,6 +356,12 @@ func _ready() -> void:
 	
 	var characters_placed := 0;
 	
+	# Remove dead characters from character list
+	for i in range(Main.characters.size()):
+		if Main.characters[i].is_alive == false:
+			Main.characters.remove_at(i);
+			i = 0;
+	
 	print("Loading new level, number of playable characters: " + str(Main.characters.size()));
 	
 	for i in units.size():
