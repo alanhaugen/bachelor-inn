@@ -409,15 +409,18 @@ func _ready() -> void:
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
 	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
+	stat_popup_player.position = Vector2(-get_window().size.x / 2.1, get_window().size.y / 2.5);
 	#stat_popup_player.position = Vector2(-555, 235);
-	stat_popup_player.set_anchor(SIDE_LEFT, 0);
+	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
+	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
 	Main.gui.add_child(stat_popup_player);
 	
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
 	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
+	stat_popup_enemy.position = Vector2(get_window().size.x /4.6, get_window().size.y / 2.5);
 	#stat_popup_enemy.position = Vector2(250, 235);
-	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
+	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
 	
 	for i in range(Main.characters.size()):
