@@ -31,6 +31,9 @@ var current_level_index: int = 0;
 ## Level index into levels array
 var battle_log: Label;
 
+## Global UI Scale
+var ui_scale: float = 2.4;
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion

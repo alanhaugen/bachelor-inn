@@ -48,7 +48,7 @@ func execute() -> void:
 		if character1.weapon:
 			weapon_damage = character1.weapon.damage_modifier;
 			weapon_crit = character1.weapon.weapon_critical;
-		
+		@warning_ignore("integer_division")
 		attack_strength = max(1, (character1.strength + weapon_damage) - character2.defense / 2);
 		
 		#Main.battle_log.text += "\nAttacker: \n";
@@ -58,6 +58,7 @@ func execute() -> void:
 		#Main.battle_log.text += str(character2.save());
 		
 		# Miss logic
+		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
 			Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
 			print ("Miss");
@@ -65,6 +66,7 @@ func execute() -> void:
 			return;
 		
 		# Critical logic
+		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (character1.skill / 2) + weapon_crit):
 			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
 			print("Critical hit!");
@@ -78,10 +80,12 @@ func execute() -> void:
 		Main.battle_log.text = (character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		
 		if character1.is_playable:
+			@warning_ignore("integer_division")
 			character1.current_sanity -= character2.intimidation / character1.mind;
 			Main.level.update_stat(character1, Main.level.stat_popup_player);
 			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
 		else:
+			@warning_ignore("integer_division")
 			character2.current_sanity -= character1.intimidation / character2.mind;
 			Main.level.update_stat(character1, Main.level.stat_popup_enemy);
 			Main.level.update_stat(character2, Main.level.stat_popup_player);
