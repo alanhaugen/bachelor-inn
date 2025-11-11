@@ -503,10 +503,10 @@ func reset_all_units() -> void:
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == player_code_done):
 			units_map.set_cell_item(pos, player_code);
-		var character: Character = get_unit(pos);
-		if character is Character:
-			var character_script: Character = character;
-			character_script.reset();
+			var character: Character = get_unit(pos);
+			if character is Character:
+				var character_script: Character = character;
+				character_script.reset();
 
 
 func MoveAI() -> void:

@@ -225,7 +225,8 @@ func move_to(pos: Vector3i) -> void:
 	is_alive = true;
 	reset();
 	grid_position = pos;
-	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+	if is_playable:
+		sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
