@@ -84,7 +84,9 @@ func _set_sanity(in_sanity: int) -> void:
 	current_sanity = in_sanity;
 	if current_sanity < 0:
 		is_playable = false;
+		Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
+		unit_name = unit_name + "'cthulhu";
 
 
 func _set_experience(in_experience: int) -> void:
