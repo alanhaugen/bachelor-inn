@@ -61,7 +61,7 @@ func create_new_save_data() -> void:
 	save_file.close();
 
 
-func write(save_slot: int) -> void:
+func write(_save_slot: int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	
 	if is_instance_valid(Main.level):
