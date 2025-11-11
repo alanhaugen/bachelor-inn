@@ -131,6 +131,20 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 			moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
 			movement_map.set_cell_item(west, 0, attack_code);
 		
+		# Add chest interaction
+		#if (units_map.get_cell_item(north) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
+		#	movement_map.set_cell_item(north, 0, interaction_code);
+		#if (units_map.get_cell_item(south) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
+		#	movement_map.set_cell_item(south, 0, interaction_code);
+		#if (units_map.get_cell_item(east) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
+		#	movement_map.set_cell_item(east, 0, interaction_code);
+		#if (units_map.get_cell_item(west) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
+		#	movement_map.set_cell_item(west, 0, interaction_code);
+		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
 			frontierPositions = nextFrontierPositions.duplicate();
