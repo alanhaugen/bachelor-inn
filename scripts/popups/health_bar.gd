@@ -16,16 +16,14 @@ func _ready() -> void:
 
 
 func _set_health(new_health: int) -> void:
-	if new_health > 0:
-		health_bar.max_value = max(health_bar.max_value, new_health);
-		health_bar.value = new_health;
+	health_bar.max_value = max(health_bar.max_value, new_health);
+	health_bar.value = new_health;
 	health = new_health;
 
 
 func _set_sanity(new_sanity: int) -> void:
-	if new_sanity > 0:
-		sanity_bar.max_value = max(sanity_bar.max_value, new_sanity);
-		sanity_bar.value = new_sanity;
+	sanity_bar.max_value = max(sanity_bar.max_value, new_sanity);
+	sanity_bar.value = new_sanity;
 	sanity = new_sanity;
 
 

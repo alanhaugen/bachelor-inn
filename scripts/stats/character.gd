@@ -137,11 +137,10 @@ func calibrate_level_popup() -> void:
 func _ready() -> void:
 	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
 	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
-	health_bar_ally.hide();
-	health_bar_enemy.hide();
-	
 	add_child(health_bar_ally);
 	add_child(health_bar_enemy);
+	health_bar_ally.hide();
+	health_bar_enemy.hide();
 	
 	if is_playable:
 		health_bar = health_bar_ally;
