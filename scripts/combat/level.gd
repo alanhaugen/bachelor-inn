@@ -336,12 +336,15 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 
 
 func _exit_tree() -> void:
-	pass;
-	# This doesn't seem to  be working
-	# (the goal is to copy over all the characters
-	# to preserve the remaining characters, character
-	# health and other stats etc)
-	#Main.characters = player_characters.duplicate();
+	# Wait... is this never called?
+	print("Unloading level, exit tree called.");
+	move_popup.hide();
+	stat_popup_enemy.hide();
+	stat_popup_enemy.hide();
+	
+	# Remove sidebar
+	#for i in range(Main.characters.size()):
+	# etc.
 
 
 func _ready() -> void:
