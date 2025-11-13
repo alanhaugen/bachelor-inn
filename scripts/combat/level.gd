@@ -632,10 +632,10 @@ func _process(delta: float) -> void:
 	
 	if camera.global_position.y > minimum_camera_height:
 		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			camera.global_position -= camera.global_transform.basis.z * camera_speed * delta;
+			camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
 	if camera.global_position.y < maximum_camera_height:
 		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-			camera.global_position += camera.global_transform.basis.z * camera_speed * delta;
+			camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
