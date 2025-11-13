@@ -28,6 +28,10 @@ gdscript/warnings/untyped_declaration=2
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gltf2meshlib/plugin.cfg")
+
 [gui]
 
 theme/custom_font="uid://bltfi0bh6lptu"
