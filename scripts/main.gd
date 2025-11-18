@@ -22,6 +22,18 @@ var gui: Control;
 ## Character Units held by the gaming session 
 var characters: Array[Character];
 
+## All levels
+var levels: Array[String];
+
+## Level index into levels array
+var current_level_index: int = 0;
+
+## Level index into levels array
+var battle_log: Label;
+
+## Global UI Scale
+var ui_scale: float = 2.4;
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion
@@ -31,7 +43,14 @@ var characters: Array[Character];
 func unload_level() -> void:
 	if is_instance_valid(level):
 		level.queue_free(); # Free the current level instance
-	level = null
+	level = null;
+
+func next_level() -> void:
+	current_level_index += 1;
+	if current_level_index > levels.size():
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
+	else:
+		load_level(levels[current_level_index]);
 
 ## Loads a new level and cleanup previously loaded level
 ##

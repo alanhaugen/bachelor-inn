@@ -1,8 +1,11 @@
 class_name Character
-extends Node
+extends Node3D
 ## This class has all the Character stats and visuals
 ##
 ## Use this class to make new units and enemies for the game
+
+var sprite: AnimatedSprite3D;
+var portrait: Texture2D;
 
 #region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
@@ -22,13 +25,20 @@ enum Speciality
 	Fighter
 }
 
-@onready var camera: Camera3D;
-@onready var character: AnimatedSprite3D = $Character
-@onready var health_bar: ColorRect = %HealthBar
+var camera: Camera3D;
+var health_bar: HealthBar;
+var level_up_popup: LevelUpPopUp;
+var health_bar_ally: HealthBar;
+var health_bar_enemy: HealthBar;
+@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
+@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
+@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
+
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
+@export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health
 @export var strength: int = 4; ## Damage with weapons
@@ -51,18 +61,38 @@ enum Speciality
 @export var experience : int  = 0 : set = _set_experience;
 @export var skills : Array[Skill];
 
-@export var spawn_location :Vector3i; ## Where the unit will spawn
-
 var max_health: int = health + endurance + floor(strength / 2.0);
 @export var current_health: int = max_health;
-@export var current_sanity: int = mind;
+@export var current_sanity: int = mind : set = _set_sanity;
 @export var current_magic: int = magic;
+@export var current_level: int = 1;
 
 var grid_position: Vector3i;
 
 var next_level_experience: int = 10;
 
+var is_alive: bool = true;
+
 ## SKILL TREE
+
+
+func _close_level_up() -> void:
+	pass;
+
+
+func _set_sanity(in_sanity: int) -> void:
+	if (Main.battle_log):
+		Main.battle_log.text = unit_name + " loses " + str(current_sanity - in_sanity) + " sanity\n" + Main.battle_log.text;
+	current_sanity = in_sanity;
+	if current_sanity < 0 and current_health > 0:
+		is_playable = false;
+		Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
+		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
+		unit_name = unit_name + "'cthulhu";
+		health_bar = health_bar_enemy;
+		update_health_bar();
+		health_bar_ally.hide();
+		health_bar_enemy.show();
 
 
 func _set_experience(in_experience: int) -> void:
@@ -70,6 +100,7 @@ func _set_experience(in_experience: int) -> void:
 	print(unit_name + " gains " + str(in_experience) + " experience points.");
 	if (experience > next_level_experience):
 		print("Level up!");
+		current_level += 1;
 		if (speciality == Speciality.Fighter):
 			if (next_level_experience >= 10):
 				health += 1;
@@ -80,8 +111,10 @@ func _set_experience(in_experience: int) -> void:
 			if (next_level_experience >= 1000):
 				luck += 1;
 				skill += 1;
-		print_stats();
+		
 		next_level_experience *= 10;
+		calibrate_level_popup();
+		level_up_popup.show();
 
 
 func update_health_bar() -> void:
@@ -90,17 +123,106 @@ func update_health_bar() -> void:
 	health_bar.name_label = unit_name;
 
 
+func calibrate_level_popup() -> void:
+	level_up_popup.health = health;
+	level_up_popup.focus = focus;
+	level_up_popup.level = current_level;
+	level_up_popup.mind = mind;
+	level_up_popup.movement = movement;
+	level_up_popup.speed = speed;
+	level_up_popup.strength = strength;
+	level_up_popup.agility = agility;
+
+
 func _ready() -> void:
+	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
+	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
+	add_child(health_bar_ally);
+	add_child(health_bar_enemy);
+	health_bar_ally.hide();
+	health_bar_enemy.hide();
+	
+	if is_playable:
+		health_bar = health_bar_ally;
+	else:
+		health_bar = health_bar_enemy;
+	
+	level_up_popup = LEVEL_UP_POPUP.instantiate();
+	add_child(level_up_popup);
+	level_up_popup.hide();
+	level_up_popup.name_label = unit_name;
+	calibrate_level_popup();
+	
+	sprite = AnimatedSprite3D.new();
+	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
+	sprite.sprite_frames = SpriteFrames.new();
+	sprite.sprite_frames.add_animation("idle");
+	sprite.sprite_frames.add_animation("walk_side");
+	sprite.sprite_frames.add_animation("walk_down");
+	sprite.sprite_frames.add_animation("walk_up");
+	
+	var frame_count := 8; # Number of frames in your "idle" animation
+	var frame_width := 32; # Width of each individual sprite frame
+	var frame_height := 32; # Height of each individual sprite frame
+	
+	#if speciality == Speciality.Scout:
+	var texture: Texture2D = load(sprite_sheet_path);
+	var region_to_extract := Rect2(0, 0, frame_width, frame_height);
+	portrait = AtlasTexture.new();
+	portrait.atlas = texture;
+	portrait.region = region_to_extract;
+	
+	# Add idle animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("idle", atlas);
+	
+	# Add walk sideways animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_side", atlas);
+	
+	# Add walk down animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width * 2, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_up", atlas);
+	
+	# Add walk up animation
+	for i in range(frame_count):
+		var atlas := AtlasTexture.new();
+		atlas.atlas = texture;
+		atlas.region = Rect2(i * frame_width, frame_width * 3, frame_width, frame_height);
+		sprite.sprite_frames.add_frame("walk_down", atlas);
+	
+	sprite.play("idle");
+	
+	#translate(Vector3(0,0.736,-0.463));
+	sprite.translate(Vector3(0,0.8,-0.4));
+	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60));
+	sprite.scale = Vector3(4,4,4);
+	
 	camera = get_viewport().get_camera_3d();
 	update_health_bar();
+	
+	add_child(sprite);
 
 
 func _process(_delta: float) -> void:
-	var mesh_3d_position: Vector3 = character.global_transform.origin;
+	var mesh_3d_position: Vector3 = global_transform.origin;
+	
+	if is_alive:
+		show_ui(); # hack, TODO: removeme
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(unit_name.length() * 7, 0);
+		health_bar.position = screen_position_2d - Vector2(3 * 7, 0);
+		health_bar.position.y += 70; # move down a little 
 
 
 func hide_ui() -> void:
@@ -112,20 +234,24 @@ func show_ui() -> void:
 
 
 func move_to(pos: Vector3i) -> void:
+	is_alive = true;
 	reset();
 	grid_position = pos;
-	character.modulate = Color(0.338, 0.338, 0.338, 1.0);
+	if is_playable:
+		sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
+	is_alive = true;
 	hide_ui();
-	character.show();
-	character.modulate = Color(1.0, 1.0, 1.0, 1.0);
+	show();
+	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die() -> void:
+	is_alive = false;
 	hide_ui();
-	character.hide();
+	hide();
 	grid_position = Vector3(-100, -100, -100);
 
 
@@ -135,6 +261,8 @@ func print_stats() -> void:
 
 func save() -> Dictionary:
 	var stats := {
+		"Is Playable": is_playable,
+		"Sprite sheet path": sprite_sheet_path,
 		"Unit name": unit_name,
 		"Speciality": speciality,
 		"Health": health,
@@ -154,6 +282,8 @@ func save() -> Dictionary:
 		"Magic": magic,
 		
 		"Experience": experience,
+		"Next level experience": next_level_experience,
+		"Current level": current_level,
 		"Current health": current_health,
 		"Current magic": current_magic,
 		"Current sanity": current_sanity

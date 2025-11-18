@@ -1,12 +1,13 @@
+class_name HealthBar
 extends ColorRect
 
 @onready var health_bar: ProgressBar = %HealthBar;
 @onready var sanity_bar: ProgressBar = %SanityBar;
 @onready var text_label: Label = %NameLabel;
 
-var health : int = 0 : set = _set_health;
-var sanity : int = 0 : set = _set_sanity;
-var name_label : String = "" : set = _set_name;
+var health: int = 0 : set = _set_health;
+var sanity: int = 0 : set = _set_sanity;
+var name_label: String = "" : set = _set_name;
 
 
 func _ready() -> void:
