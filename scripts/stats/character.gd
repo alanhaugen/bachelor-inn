@@ -161,7 +161,7 @@ func _ready() -> void:
 	sprite.sprite_frames.add_animation("walk_down");
 	sprite.sprite_frames.add_animation("walk_up");
 	
-	var frame_count := 8; # Number of frames in your "idle" animation
+	var frame_count := 6; # Number of frames in your "idle" animation
 	var frame_width := 32; # Width of each individual sprite frame
 	var frame_height := 32; # Height of each individual sprite frame
 	
