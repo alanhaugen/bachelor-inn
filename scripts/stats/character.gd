@@ -45,8 +45,9 @@ var health_bar_enemy: HealthBar;
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
+@export var connections :Array = []; ## Connections to other players (how friendly they are to others)
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
-@export var personality :bool = Personality.Normal; ## Friend or foe
+@export var personality :bool = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
 @export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health

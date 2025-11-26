@@ -48,6 +48,7 @@ func execute() -> void:
 		if character1.weapon:
 			weapon_damage = character1.weapon.damage_modifier;
 			weapon_crit = character1.weapon.weapon_critical;
+		
 		@warning_ignore("integer_division")
 		attack_strength = max(1, (character1.strength + weapon_damage) - character2.defense / 2);
 		
