@@ -25,11 +25,19 @@ enum Speciality
 	Fighter
 }
 
+enum Personality
+{
+	Normal,
+	Zealot,
+	Devoted
+}
+
 var camera: Camera3D;
 var health_bar: HealthBar;
 var level_up_popup: LevelUpPopUp;
 var health_bar_ally: HealthBar;
 var health_bar_enemy: HealthBar;
+
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
@@ -37,7 +45,9 @@ var health_bar_enemy: HealthBar;
 
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
+@export var connections :Array = []; ## Connections to other players (how friendly they are to others)
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
+@export var personality :bool = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
 @export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health
@@ -176,7 +186,7 @@ func _ready() -> void:
 	for i in range(frame_count):
 		var atlas := AtlasTexture.new();
 		atlas.atlas = texture;
-		atlas.region = Rect2(i * frame_width, 0, frame_width, frame_height);
+		atlas.region = Rect2((i+2) * frame_width, 0, frame_width, frame_height);
 		sprite.sprite_frames.add_frame("idle", atlas);
 	
 	# Add walk sideways animation
