@@ -131,7 +131,7 @@ func read(save_slot: int) -> bool:
 		new_character.current_sanity = characters[i].get("Current sanity");
 		new_character.current_magic = characters[i].get("Current magic");
 		new_character.current_health = characters[i].get("Current health");
-		new_character.agility = characters[i].get("Agility");
+		#new_character.agility = characters[i].get("Agility");
 		
 		Main.characters.append(new_character);
 	
