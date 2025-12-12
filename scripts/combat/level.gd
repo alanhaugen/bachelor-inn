@@ -46,7 +46,7 @@ var characters: Array[Character];
 const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
-const SIDE_BAR = preload("res://scenes/UI/side_bar.tscn")
+const SIDE_BAR = preload("res://scenes/ui/sidebar.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -443,7 +443,6 @@ func _ready() -> void:
 			new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
 		Main.gui.add_child(new_side_bar);
 	
-	
 	#side_bar_1 = SIDE_BAR.instantiate();
 	#Main.gui.add_child(side_bar_1);
 	#
@@ -471,16 +470,6 @@ func get_unit(pos: Vector3i) -> Character:
 					return unit;
 	push_error("Did not find character at " + str(pos));
 	return null;
-
-
-func set_unit_gray(unit: Character) -> void:
-	if unit.character is AnimatedSprite3D:
-		unit.character.modulate = Color(0.5, 0.5, 0.5, 1.0)
-
-
-func set_unit_color(unit: Character) -> void:
-	if unit.character is AnimatedSprite3D:
-		unit.character.modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 
 func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
@@ -581,8 +570,8 @@ func MoveAI() -> void:
 				if move == aiUnitsMoves[j][k]:
 					aiUnitsMoves[j].remove_at(k);
 					break;
-
-	movement_map.clear();
+	
+	movement_map.clear(); 
 	animation_path.clear();
 	
 	if (moves_stack.is_empty() == false):

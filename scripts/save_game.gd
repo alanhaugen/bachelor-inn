@@ -16,24 +16,17 @@ func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
 	var first: Character = Character.new();
-	first.unit_name = "Alan og Erik";
+	first.unit_name = "Alfred";
 	first.speciality = Character.Speciality.Support;
 	first.movement = 3;
 	first.strength = 1;
 	
 	var second: Character = Character.new();
-	second.unit_name = "Fen";
+	second.unit_name = "Lucy";
 	second.speciality = Character.Speciality.Fighter;
 	second.strength = 10;
-	second.sprite_sheet_path = "res://art/textures/fen.png";
 	
-	var third: Character = Character.new();
-	third.unit_name = "Andreas";
-	third.speciality = Character.Speciality.Scout;
-	third.movement = 10;
-	third.sprite_sheet_path = "res://art/textures/andreas.png";
-	
-	var units: Array[Dictionary] = [first.save(), second.save(), third.save()];
+	var units: Array[Dictionary] = [first.save(), second.save()];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -49,7 +42,7 @@ func create_new_save_data() -> void:
 		},
 		"Slot 3":
 		{
-			"level": 1,
+			"level": 2,
 			"units": units
 		},
 	}
