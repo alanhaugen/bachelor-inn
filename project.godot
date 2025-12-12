@@ -26,8 +26,12 @@ gdscript/warnings/untyped_declaration=2
 
 [dialogic]
 
-directories/dch_directory={}
-directories/dtl_directory={}
+directories/dch_directory={
+"character": "res://dialogue/character.dch"
+}
+directories/dtl_directory={
+"firstLevel": "res://dialogue/firstLevel.dtl"
+}
 layout/style_directory={}
 
 [display]

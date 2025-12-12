@@ -355,6 +355,9 @@ func _ready() -> void:
 	units_map.hide();
 	path_arrow.clear();
 	
+	if (level_name == "first"):
+		Dialogic.start("res://dialogue/" + str(level_name) + "Level.dtl");
+	
 	Main.battle_log = battle_log;
 	
 	var units :Array[Vector3i] = units_map.get_used_cells();
