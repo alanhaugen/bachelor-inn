@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://csv3482xf34ay"]
 
-[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/popups/health_bar.gd" id="1_qi2ti"]
+[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/ui/health_bar.gd" id="1_qi2ti"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_4rf34"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fhnc"]

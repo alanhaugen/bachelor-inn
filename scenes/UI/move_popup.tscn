@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cswysjv240iry"]
 
-[ext_resource type="Script" uid="uid://bw55jgvv8pqry" path="res://scripts/popups/move_popup.gd" id="1_kldpr"]
+[ext_resource type="Script" uid="uid://bw55jgvv8pqry" path="res://scripts/ui/move_popup.gd" id="1_kldpr"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_yxb3c"]
 
 [node name="MovePopup" type="Control"]
