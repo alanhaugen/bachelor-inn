@@ -41,6 +41,8 @@ func _on_wait_button_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if map.is_in_menu == false:
+		return;
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 			_on_cancel_button_pressed();
