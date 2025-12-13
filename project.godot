@@ -33,6 +33,9 @@ directories/dtl_directory={
 "firstLevel": "res://dialogue/firstLevel.dtl"
 }
 layout/style_directory={}
+layout/style_list=[]
+layout/default_style="Default"
+variables={}
 
 [display]
 
