@@ -211,14 +211,13 @@ lifetime = 3.0
 process_material = SubResource("ParticleProcessMaterial_jav84")
 draw_pass_1 = SubResource("QuadMesh_khwvq")
 
-[node name="Node3D" type="Node3D" parent="."]
+[node name="Lamp" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0383062, 6.232548, -0.8650335)
+shadow_enabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+[node name="Orb" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.6226785, 0.7824778, 0, -0.7824778, 0.6226785, 1.0222121, 2.9490032, -0.75935936)
 sorting_offset = 1.1
 mesh = SubResource("QuadMesh_0ucq8")
+skeleton = NodePath("")
 script = ExtResource("13_y13he")
-
-[node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0383062, 6.232548, -0.8650335)
-shadow_enabled = true
