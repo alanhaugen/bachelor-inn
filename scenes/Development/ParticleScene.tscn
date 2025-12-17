@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://mc5u6gfquy7q"]
+[gd_scene load_steps=40 format=3 uid="uid://mc5u6gfquy7q"]
 
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_akwul"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_uhntr"]
@@ -13,13 +13,14 @@
 [ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="11_6lhpm"]
 [ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="12_w357l"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="13_y13he"]
+[ext_resource type="PackedScene" uid="uid://0fu2d4hrnva4" path="res://art/WIP/CharTest.tscn" id="14_dsruw"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_p86jo"]
 render_priority = 0
 shader = ExtResource("1_akwul")
-shader_parameter/albedo_tex = ExtResource("2_uhntr")
+shader_parameter/albedo = ExtResource("2_uhntr")
 shader_parameter/tile_scale = Vector2(0.256, 0.256)
-shader_parameter/fade_dist = 21.135
+shader_parameter/fade_dist = 16.255
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_n2ioa"]
 material = SubResource("ShaderMaterial_p86jo")
@@ -221,3 +222,7 @@ sorting_offset = 1.1
 mesh = SubResource("QuadMesh_0ucq8")
 skeleton = NodePath("")
 script = ExtResource("13_y13he")
+
+[node name="CharTest" parent="." instance=ExtResource("14_dsruw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17461252, 2.7966332, -1.5080466)
+visible = false
