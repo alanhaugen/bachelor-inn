@@ -603,6 +603,10 @@ func _process(delta: float) -> void:
 	
 	turn_transition.hide();
 	
+	#Updating sideBar information
+	for i in side_bar_array.size():
+		update_side_bar(Main.characters[i], side_bar_array[i]);
+	
 	if Input.is_action_pressed("pan_right"):
 		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
 		#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
@@ -645,8 +649,6 @@ func _process(delta: float) -> void:
 		else:
 			MoveAI();
 			CheckVictoryConditions();
-			for i in side_bar_array.size():
-				update_side_bar(Main.characters[i], side_bar_array[i]);
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
