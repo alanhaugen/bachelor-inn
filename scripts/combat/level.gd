@@ -35,9 +35,7 @@ var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
-var side_bar_1: Control;
-var side_bar_2: Control;
-var side_bar_3: Control;
+var side_bar_array : Array[SideBar];
 var stat_popup_enemy: Control;
 var completed_moves :Array[Move];
 
@@ -334,6 +332,17 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.sanity = character_script.current_sanity;
 			popup.show();
 
+func update_side_bar(character: Character, side_bar: SideBar) -> void:
+	if character is Character:
+		var character_script: Character = character;
+		side_bar.icon_texture.texture = character_script.portrait;
+		#side_bar.name_label.text = character_script.unit_name;
+		side_bar.max_health = character_script.max_health;
+		side_bar.health = character_script.current_health;
+		side_bar.max_magic = character_script.magic;
+		side_bar.magic = character_script.current_magic;
+		side_bar.max_sanity = character_script.mind;
+		side_bar.sanity = character_script.current_sanity;
 
 func _exit_tree() -> void:
 	# Wait... is this never called?
@@ -441,18 +450,8 @@ func _ready() -> void:
 		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
 		if i != 0:
 			new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
+		side_bar_array.append(new_side_bar);
 		Main.gui.add_child(new_side_bar);
-	
-	#side_bar_1 = SIDE_BAR.instantiate();
-	#Main.gui.add_child(side_bar_1);
-	#
-	#side_bar_2 = SIDE_BAR.instantiate();
-	#side_bar_2.offset_bottom = -get_window().size.y/15;
-	#Main.gui.add_child(side_bar_2);
-	#
-	#side_bar_3 = SIDE_BAR.instantiate();
-	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
-	#Main.gui.add_child(side_bar_3);
 
 	
 	turn_transition_animation_player.play();
@@ -646,6 +645,8 @@ func _process(delta: float) -> void:
 		else:
 			MoveAI();
 			CheckVictoryConditions();
+			for i in side_bar_array.size():
+				update_side_bar(Main.characters[i], side_bar_array[i]);
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
