@@ -660,7 +660,6 @@ func _process(delta: float) -> void:
 			if (is_player_turn == false):
 				is_animation_just_finished = true;
 				is_player_turn = true;
-				reset_all_units();
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			selected_unit = null;
