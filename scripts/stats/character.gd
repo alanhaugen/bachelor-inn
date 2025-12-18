@@ -96,7 +96,10 @@ func _close_level_up() -> void:
 
 func _set_sanity(in_sanity: int) -> void:
 	if (Main.battle_log):
-		Main.battle_log.text = unit_name + " loses " + str(current_sanity - in_sanity) + " sanity\n" + Main.battle_log.text;
+		var dir := " loses ";
+		if current_sanity < in_sanity:
+			dir = " gains ";
+		Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
 	current_sanity = in_sanity;
 	if current_sanity < 0 and current_health > 0:
 		is_playable = false;
@@ -257,6 +260,9 @@ func move_to(pos: Vector3i) -> void:
 
 func reset() -> void:
 	is_alive = true;
+	# slowly heal sanity
+	if is_playable:
+		current_sanity += 1;
 	hide_ui();
 	show();
 	is_moved = false;
