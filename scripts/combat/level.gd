@@ -102,21 +102,23 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 		var east: Vector3 = Vector3(pos.x + 1, 0, pos.z);
 		var west :Vector3 = Vector3(pos.x - 1, 0, pos.z);
 		
-		if (touch(north)):
-			nextFrontierPositions.append(north);
-			moves.append(Move.new(startPos, north, type, units_map, selected_unit));
-		
-		if (touch(south)):
-			nextFrontierPositions.append(south);
-			moves.append(Move.new(startPos, south, type, units_map, selected_unit));
-		
-		if (touch(east)):
-			nextFrontierPositions.append(east);
-			moves.append(Move.new(startPos, east, type, units_map, selected_unit));
-		
-		if (touch(west)):
-			nextFrontierPositions.append(west);
-			moves.append(Move.new(startPos, west, type, units_map, selected_unit));
+		# Only register non-attack moves for characters that have not moved yet
+		if selected_unit.is_moved == false:
+			if (touch(north)):
+				nextFrontierPositions.append(north);
+				moves.append(Move.new(startPos, north, type, units_map, selected_unit));
+			
+			if (touch(south)):
+				nextFrontierPositions.append(south);
+				moves.append(Move.new(startPos, south, type, units_map, selected_unit));
+			
+			if (touch(east)):
+				nextFrontierPositions.append(east);
+				moves.append(Move.new(startPos, east, type, units_map, selected_unit));
+			
+			if (touch(west)):
+				nextFrontierPositions.append(west);
+				moves.append(Move.new(startPos, west, type, units_map, selected_unit));
 		
 		# Add attack moves
 		var neighbour_move: Move = Move.new(startPos, pos, type, units_map, selected_unit);
@@ -271,11 +273,11 @@ func _input(event: InputEvent) -> void:
 				show_move_popup(windowPos);
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
-				current_moves = dijkstra(pos, get_unit(pos).movement);
 				if selected_unit != null:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
+				current_moves = dijkstra(pos, get_unit(pos).movement);
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
@@ -284,7 +286,7 @@ func _input(event: InputEvent) -> void:
 				if current_moves[i].end_pos == pos:
 					active_move = current_moves[i];
 					active_move.aggressor = selected_unit;
-					active_move.grid_code = player_code_done;
+					active_move.grid_code = player_code;
 					if active_move.neighbour_move:
 						active_move.neighbour_move.grid_code = player_code_done;
 						active_move.neighbour_move.aggressor = active_move.aggressor;
@@ -527,10 +529,10 @@ func reset_all_units() -> void:
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == player_code_done):
 			units_map.set_cell_item(pos, player_code);
-			var character: Character = get_unit(pos);
-			if character is Character:
-				var character_script: Character = character;
-				character_script.reset();
+		var character: Character = get_unit(pos);
+		if character is Character:
+			var character_script: Character = character;
+			character_script.reset();
 
 
 func MoveAI() -> void:

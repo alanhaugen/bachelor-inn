@@ -41,6 +41,8 @@ func _on_wait_button_pressed() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if is_instance_valid(map) == false:
+		return;
 	if map.is_in_menu == false:
 		return;
 	if event is InputEventMouseButton:
@@ -50,5 +52,5 @@ func _input(event: InputEvent) -> void:
 
 func _on_cancel_button_pressed() -> void:
 	HidePopup();
-	map.selected_unit.reset();
+	#map.selected_unit.reset();
 	map.selected_unit = null;

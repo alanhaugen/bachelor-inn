@@ -83,6 +83,10 @@ var next_level_experience: int = 10;
 
 var is_alive: bool = true;
 
+## Has move been done yet?
+## only attack moves will then be possible
+var is_moved :bool = false; 
+
 ## SKILL TREE
 
 
@@ -247,14 +251,15 @@ func move_to(pos: Vector3i) -> void:
 	is_alive = true;
 	reset();
 	grid_position = pos;
-	if is_playable:
-		sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+	#if is_playable:
+	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
 	is_alive = true;
 	hide_ui();
 	show();
+	is_moved = false;
 	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 

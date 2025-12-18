@@ -81,10 +81,12 @@ func execute() -> void:
 		Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		
 		if aggressor.is_playable:
-			@warning_ignore("integer_division")
-			aggressor.current_sanity -= victim.intimidation / aggressor.mind;
-			Main.level.update_stat(aggressor, Main.level.stat_popup_player);
-			Main.level.update_stat(victim, Main.level.stat_popup_enemy);
+			# Do not go insane on victory
+			if victim.current_health > 0:
+				@warning_ignore("integer_division")
+				aggressor.current_sanity -= victim.intimidation / aggressor.mind;
+				Main.level.update_stat(aggressor, Main.level.stat_popup_player);
+				Main.level.update_stat(victim, Main.level.stat_popup_enemy);
 		else:
 			@warning_ignore("integer_division")
 			victim.current_sanity -= aggressor.intimidation / victim.mind;
@@ -99,10 +101,14 @@ func execute() -> void:
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, aggressor));
 		
 		aggressor.hide_ui();
+		aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 	else:
 		aggressor.move_to(end_pos);
 		units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
 		units.set_cell_item(end_pos, grid_code);
+		aggressor.is_moved = true;
+		if end_pos == start_pos:
+			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func redo() -> void:
@@ -126,4 +132,7 @@ func undo() -> void:
 			victim.health += attack_strength;
 			victim.sanity += attack_strength;
 			victim.move_to(end_pos);
+		else:
+			aggressor.is_moved = false;
 		aggressor.move_to(start_pos);
+		aggressor.sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
