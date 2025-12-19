@@ -57,6 +57,18 @@ func start_tutorial() -> void:
 	Dialogic.start_timeline("tutorial1");
 	level.is_in_menu = false;
 
+## Make tutorial wait for signal
+## 
+## Disable inputs from the player
+func tutorial_wait_for_signal() -> void:
+	Dialogic.Inputs.manual_advance.system_enabled = false;
+
+## React to camera moving in tutorial
+func tutorial_camera_moved() -> void:
+	if Dialogic.Inputs.manual_advance.system_enabled == false:
+		Dialogic.Inputs.manual_advance.system_enabled = true;
+		Dialogic.start_timeline("tutorial2");
+
 ## Loads a new level and cleanup previously loaded level
 ##
 ## @param level_name: New level name to load

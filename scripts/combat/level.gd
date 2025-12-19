@@ -615,6 +615,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("pan_right"):
 		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
 		#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
+		Main.tutorial_camera_moved();
 	if Input.is_action_pressed("pan_left"):
 		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
 		#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
