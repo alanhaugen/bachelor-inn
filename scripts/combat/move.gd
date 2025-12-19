@@ -101,16 +101,16 @@ func execute() -> void:
 			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, aggressor));
 		
 		aggressor.hide_ui();
-		if aggressor.is_playable:
-			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+#		if aggressor.is_playable:
+#			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 	else:
 		aggressor.move_to(end_pos);
 		units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
 		units.set_cell_item(end_pos, grid_code);
 		aggressor.is_moved = true;
-		if aggressor.is_playable:
-			if end_pos == start_pos:
-				aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+#		if aggressor.is_playable:
+#			if end_pos == start_pos:
+#				aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func redo() -> void:
@@ -137,4 +137,4 @@ func undo() -> void:
 		else:
 			aggressor.is_moved = false;
 		aggressor.move_to(start_pos);
-		aggressor.sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
+		#aggressor.sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);

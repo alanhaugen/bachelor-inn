@@ -268,7 +268,7 @@ func reset() -> void:
 	hide_ui();
 	show();
 	is_moved = false;
-	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
+#	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die() -> void:
