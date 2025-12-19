@@ -34,6 +34,9 @@ var battle_log: Label;
 ## Global UI Scale
 var ui_scale: float = 2.4;
 
+## Tutorial state
+var tutorial_state: TutorialStates = TutorialStates.new();
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion
@@ -65,9 +68,19 @@ func tutorial_wait_for_signal() -> void:
 
 ## React to camera moving in tutorial
 func tutorial_camera_moved() -> void:
-	if Dialogic.Inputs.manual_advance.system_enabled == false:
-		Dialogic.Inputs.manual_advance.system_enabled = true;
-		Dialogic.start_timeline("tutorial2");
+	if tutorial_state.CameraTutorial == false:
+		if Dialogic.Inputs.manual_advance.system_enabled == false:
+			Dialogic.Inputs.manual_advance.system_enabled = true;
+			tutorial_state.CameraTutorial = true;
+			Dialogic.start_timeline("tutorial2");
+
+## React to player selecting unit in tutorial
+func tutorial_unit_selected() -> void:
+	if tutorial_state.SelectTutorial == false:
+		if Dialogic.Inputs.manual_advance.system_enabled == false:
+			Dialogic.Inputs.manual_advance.system_enabled = true;
+			tutorial_state.SelectTutorial = true;
+			Dialogic.start_timeline("tutorial3");
 
 ## Loads a new level and cleanup previously loaded level
 ##

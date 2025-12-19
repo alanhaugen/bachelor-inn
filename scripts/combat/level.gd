@@ -265,6 +265,7 @@ func _input(event: InputEvent) -> void:
 		var windowPos: Vector2 = Vector2(0,0);
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
+			Main.tutorial_unit_selected();
 			unit_pos = pos;
 			movement_map.clear();
 			if (selected_unit == get_unit(pos)):
