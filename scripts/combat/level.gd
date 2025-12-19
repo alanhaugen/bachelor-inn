@@ -358,7 +358,8 @@ func _ready() -> void:
 	path_arrow.clear();
 	
 	if (level_name == "first"):
-		Dialogic.start("res://dialogue/" + str(level_name) + "Level.dtl");
+		Dialogic.start(str(level_name) + "Level");
+		is_in_menu = true;
 	
 	Main.battle_log = battle_log;
 	

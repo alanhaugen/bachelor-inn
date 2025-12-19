@@ -1,2 +1,6 @@
+[background arg="res://art/textures/Particle_Swosh.png" fade="0.0"]
 Whipers of hope
 Find me and I shall grant salvation
+[background fade="3.0"]
+[wait time="1.0"]
+do Main.start_tutorial()

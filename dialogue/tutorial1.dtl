@@ -1,1 +1,4 @@
-Go here
+Use WASD to move camera.
+[signal arg="wait_for_move"]
+Good! Now select a unit.
+[signal arg="wait_for_select"]

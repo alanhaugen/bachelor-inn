@@ -52,6 +52,11 @@ func next_level() -> void:
 	else:
 		load_level(levels[current_level_index]);
 
+## Start the first tutorial
+func start_tutorial() -> void:
+	Dialogic.start_timeline("tutorial1");
+	level.is_in_menu = false;
+
 ## Loads a new level and cleanup previously loaded level
 ##
 ## @param level_name: New level name to load
