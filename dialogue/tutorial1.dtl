@@ -1,2 +1,4 @@
+Welcome.\
+Let’s look around.
 Use WASD to move camera.
 [signal arg="wait_for_move"]

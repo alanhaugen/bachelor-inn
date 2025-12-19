@@ -1,0 +1,3 @@
+Selected.
+Left-click a square to move.
+[signal arg="wait_for_move"]
