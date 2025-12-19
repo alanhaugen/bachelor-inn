@@ -20,7 +20,7 @@ func play(anim : SpriteAnim) -> void:
 	if anim == null:
 		return
 
-	current_animation = anim
+	current_animation = anim;
 	frame_index = 0
 	frame_timer = 0.0
 
@@ -29,14 +29,17 @@ func play(anim : SpriteAnim) -> void:
 		push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
 		return
 
-	mat.set_shader_parameter("diffuse_atlas", anim.diffuse_atlas)
-	mat.set_shader_parameter("normal_atlas", anim.normal_atlas)
-	mat.set_shader_parameter("mask_atlas", anim.mask_atlas)
+	mat.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
+	mat.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
+	mat.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
 
 	mat.set_shader_parameter("frame_index", 0)
 	mat.set_shader_parameter("frame_columns", current_animation.frame_columns)
 	mat.set_shader_parameter("frame_rows", current_animation.frame_rows)
 
+
+func play_clip(anim :String) -> void:
+	pass;
 
 func _ready() -> void:
 	if autoplay and base_animation:

@@ -563,13 +563,13 @@ func MoveAI() -> void:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
+		if move == null:
+			push_error("No moves found for enemy");
+			
 		if move.is_attack:
 			moves_stack.append(move.neighbour_move);
 		
-		if move == null:
-			push_error("No moves found for enemy");
-		else:
-			moves_stack.append(move);
+		moves_stack.append(move);
 		
 		# Remove move from ai stack
 		for j :int in aiUnitsMoves.size():
@@ -684,14 +684,14 @@ func _process(delta: float) -> void:
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				
 				if (dir.z > 0):
-					selected_unit.sprite.play("walk_up");
+					selected_unit.sprite.play_clip("walk_up");
 				elif (dir.z < 0):
-					selected_unit.sprite.play("walk_down");
+					selected_unit.sprite.play_clip("walk_down");
 				elif (dir.x > 0):
-					selected_unit.sprite.play("walk_side");
+					selected_unit.sprite.play_clip("walk_side");
 					selected_unit.sprite.flip_h = false;
 				elif (dir.x < 0):
-					selected_unit.sprite.play("walk_side");
+					selected_unit.sprite.play_clip("walk_side");
 					selected_unit.sprite.flip_h = true;
 			
 			#animated_unit.position.x = animationPath

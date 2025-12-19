@@ -4,7 +4,9 @@ extends Node3D
 ##
 ## Use this class to make new units and enemies for the game
 
-var sprite: AnimatedSprite3D;
+const SPRITE = preload("res://art/WIP/CharTest.tscn");
+
+var sprite: Node3D;
 var portrait: Texture2D;
 
 #region: --- Unit Stats ---
@@ -170,54 +172,54 @@ func _ready() -> void:
 	level_up_popup.name_label = unit_name;
 	calibrate_level_popup();
 	
-	sprite = AnimatedSprite3D.new();
-	sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST;
-	sprite.sprite_frames = SpriteFrames.new();
-	sprite.sprite_frames.add_animation("idle");
-	sprite.sprite_frames.add_animation("walk_side");
-	sprite.sprite_frames.add_animation("walk_down");
-	sprite.sprite_frames.add_animation("walk_up");
+	sprite = SPRITE.instantiate();
 	
-	var frame_count := 6; # Number of frames in your "idle" animation
-	var frame_width := 32; # Width of each individual sprite frame
-	var frame_height := 32; # Height of each individual sprite frame
+	#sprite.sprite_frames = SpriteFrames.new();
+	#sprite.sprite_frames.add_animation("idle");
+	#sprite.sprite_frames.add_animation("walk_side");
+	#sprite.sprite_frames.add_animation("walk_down");
+	#sprite.sprite_frames.add_animation("walk_up");
+	
+	#var frame_count := 6; # Number of frames in your "idle" animation
+	#var frame_width := 32; # Width of each individual sprite frame
+	#var frame_height := 32; # Height of each individual sprite frame
 	
 	#if speciality == Speciality.Scout:
-	var texture: Texture2D = load(sprite_sheet_path);
-	var region_to_extract := Rect2(0, 0, frame_width, frame_height);
-	portrait = AtlasTexture.new();
-	portrait.atlas = texture;
-	portrait.region = region_to_extract;
+	#var texture: Texture2D = load(sprite_sheet_path);
+	#var region_to_extract := Rect2(0, 0, frame_width, frame_height);
+	#portrait = AtlasTexture.new();
+	#portrait.atlas = texture;
+	#portrait.region = region_to_extract;
 	
 	# Add idle animation
-	for i in range(frame_count):
-		var atlas := AtlasTexture.new();
-		atlas.atlas = texture;
-		atlas.region = Rect2((i+2) * frame_width, 0, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("idle", atlas);
+	#for i in range(frame_count):
+	#	var atlas := AtlasTexture.new();
+	#	atlas.atlas = texture;
+	#	atlas.region = Rect2((i+2) * frame_width, 0, frame_width, frame_height);
+	#	sprite.sprite_frames.add_frame("idle", atlas);
 	
 	# Add walk sideways animation
-	for i in range(frame_count):
-		var atlas := AtlasTexture.new();
-		atlas.atlas = texture;
-		atlas.region = Rect2(i * frame_width, frame_width, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("walk_side", atlas);
+	#for i in range(frame_count):
+	#	var atlas := AtlasTexture.new();
+	#	atlas.atlas = texture;
+	#	atlas.region = Rect2(i * frame_width, frame_width, frame_width, frame_height);
+	#	sprite.sprite_frames.add_frame("walk_side", atlas);
 	
 	# Add walk down animation
-	for i in range(frame_count):
-		var atlas := AtlasTexture.new();
-		atlas.atlas = texture;
-		atlas.region = Rect2(i * frame_width, frame_width * 2, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("walk_up", atlas);
+	#for i in range(frame_count):
+	#	var atlas := AtlasTexture.new();
+	#	atlas.atlas = texture;
+	#	atlas.region = Rect2(i * frame_width, frame_width * 2, frame_width, frame_height);
+	#	sprite.sprite_frames.add_frame("walk_up", atlas);
 	
 	# Add walk up animation
-	for i in range(frame_count):
-		var atlas := AtlasTexture.new();
-		atlas.atlas = texture;
-		atlas.region = Rect2(i * frame_width, frame_width * 3, frame_width, frame_height);
-		sprite.sprite_frames.add_frame("walk_down", atlas);
+	#for i in range(frame_count):
+	#	var atlas := AtlasTexture.new();
+	#	atlas.atlas = texture;
+	#	atlas.region = Rect2(i * frame_width, frame_width * 3, frame_width, frame_height);
+	#	sprite.sprite_frames.add_frame("walk_down", atlas);
 	
-	sprite.play("idle");
+	#sprite.play("idle");
 	
 	#translate(Vector3(0,0.736,-0.463));
 	sprite.translate(Vector3(0,0.8,-0.4));

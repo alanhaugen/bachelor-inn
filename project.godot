@@ -30,7 +30,8 @@ directories/dch_directory={
 "character": "res://dialogue/character.dch"
 }
 directories/dtl_directory={
-"firstLevel": "res://dialogue/firstLevel.dtl"
+"firstLevel": "res://dialogue/firstLevel.dtl",
+"tutorial1": "res://dialogue/tutorial1.dtl"
 }
 layout/style_directory={}
 layout/style_list=[]
