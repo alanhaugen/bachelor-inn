@@ -683,15 +683,15 @@ func _process(delta: float) -> void:
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				
-				if (dir.z > 0):
-					selected_unit.sprite.play_clip("walk_up");
-				elif (dir.z < 0):
-					selected_unit.sprite.play_clip("walk_down");
-				elif (dir.x > 0):
-					selected_unit.sprite.play_clip("walk_side");
-					selected_unit.sprite.flip_h = false;
-				elif (dir.x < 0):
-					selected_unit.sprite.play_clip("walk_side");
-					selected_unit.sprite.flip_h = true;
+				#if (dir.z > 0):
+				#	selected_unit.sprite.play_clip("walk_up");
+				#elif (dir.z < 0):
+				#	selected_unit.sprite.play_clip("walk_down");
+				#elif (dir.x > 0):
+				#	selected_unit.sprite.play_clip("walk_side");
+				#	selected_unit.sprite.flip_h = false;
+				#elif (dir.x < 0):
+				#	selected_unit.sprite.play_clip("walk_side");
+				#	selected_unit.sprite.flip_h = true;
 			
 			#animated_unit.position.x = animationPath
