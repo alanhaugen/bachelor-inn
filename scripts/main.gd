@@ -58,7 +58,6 @@ func next_level() -> void:
 ## Start the first tutorial
 func start_tutorial() -> void:
 	Dialogic.start_timeline("tutorial1");
-	level.is_in_menu = false;
 
 ## Make tutorial wait for signal
 ## 
@@ -73,6 +72,7 @@ func tutorial_camera_moved() -> void:
 			Dialogic.Inputs.manual_advance.system_enabled = true;
 			tutorial_state.CameraTutorial = true;
 			Dialogic.start_timeline("tutorial2");
+			level.is_in_menu = false;
 
 ## React to player selecting unit in tutorial
 func tutorial_unit_selected() -> void:
@@ -81,6 +81,12 @@ func tutorial_unit_selected() -> void:
 			Dialogic.Inputs.manual_advance.system_enabled = true;
 			tutorial_state.SelectTutorial = true;
 			Dialogic.start_timeline("tutorial3");
+			#set_mouse_filter(Control.MOUSE_FILTER_IGNORE);
+
+## React to player moving units in tutorial
+func tutorial_unit_moved() -> void:
+	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
+		Dialogic.start("tutorial4");
 
 ## Loads a new level and cleanup previously loaded level
 ##

@@ -14,7 +14,6 @@ extends Node3D
 
 @export var camera_speed: float = 5.0;
 @export var mouse_drag_sensitivity: float = 50.0;
-@export var dialogue: Array[String];
 @onready var battle_log: Label = $BattleLog
 
 @onready var camera: Camera3D = $Camera3D;

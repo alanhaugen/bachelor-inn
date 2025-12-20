@@ -1,3 +1,4 @@
 Selected.
-Left-click a square to move.
-[signal arg="wait_for_move"]
+Left-click a square to move there.\
+A popup will ask you what you want to do.\
+Select Move.
