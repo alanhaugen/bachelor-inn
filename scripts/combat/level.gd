@@ -10,8 +10,6 @@ extends Node3D
 # TODO: Make enemies able to occopy several grid-tiles
 # TODO: Abilities on level up
 
-@export var level_name :String;
-
 @export var camera_speed: float = 5.0;
 @export var mouse_drag_sensitivity: float = 50.0;
 @export var dialogue: Array[String];
@@ -281,11 +279,11 @@ func _input(event: InputEvent) -> void:
 			for i in range(current_moves.size()):
 				if current_moves[i].end_pos == pos:
 					active_move = current_moves[i];
-					active_move.aggressor = selected_unit;
+					active_move.character1 = selected_unit;
 					active_move.grid_code = player_code_done;
 					if active_move.neighbour_move:
 						active_move.neighbour_move.grid_code = player_code_done;
-						active_move.neighbour_move.aggressor = active_move.aggressor;
+						active_move.neighbour_move.character1 = active_move.character1;
 					break;
 			
 			show_move_popup(windowPos);
@@ -363,9 +361,6 @@ func _ready() -> void:
 	movement_map.clear();
 	units_map.hide();
 	path_arrow.clear();
-	
-	if (level_name == "first"):
-		Dialogic.start("res://dialogue/" + str(level_name) + "Level.dtl");
 	
 	Main.battle_log = battle_log;
 	
