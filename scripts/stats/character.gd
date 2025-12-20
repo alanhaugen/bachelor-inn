@@ -47,15 +47,14 @@ var health_bar_enemy: HealthBar;
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var connections :Array = []; ## Connections to other players (how friendly they are to others)
 @export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
-@export var personality :bool = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
+@export var personality :Personality = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
 @export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health
 @export var strength: int = 4; ## Damage with weapons
-@export var movement: int = 4; ## Movement range
 @export var mind: int = 4; ## Mind reduces sanity loss from combat or other events
 @export var speed: int = 4; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-@export var agility: int = 4; ## Agility increases the evasion and hit rate of a unit
+#@export var agility: int = 4; ## Agility increases the evasion and hit rate of a unit
 @export var focus: int = 4; ## Focus increases hit rate and crit rate of a unit. It also increases defense against sanity attacks
 
 @export var endurance: int = 4; ## Endurance increases defense against physical and magic attacks. It also increases the health of the unit
@@ -72,6 +71,7 @@ var health_bar_enemy: HealthBar;
 @export var skills : Array[Skill];
 
 var max_health: int = health + endurance + floor(strength / 2.0);
+@export var movement: int = 4 + floor(speed / 3); ## Movement range
 @export var current_health: int = max_health;
 @export var current_sanity: int = mind : set = _set_sanity;
 @export var current_magic: int = magic;
@@ -141,7 +141,7 @@ func calibrate_level_popup() -> void:
 	level_up_popup.movement = movement;
 	level_up_popup.speed = speed;
 	level_up_popup.strength = strength;
-	level_up_popup.agility = agility;
+	#level_up_popup.agility = agility;
 
 
 func _ready() -> void:
@@ -280,7 +280,7 @@ func save() -> Dictionary:
 		"Movement": movement,
 		"Mind": mind,
 		"Speed": speed,
-		"Agility": agility,
+		#"Agility": agility,
 		"Focus": focus,
 		
 		"Endurance": endurance,

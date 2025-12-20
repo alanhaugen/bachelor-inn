@@ -59,5 +59,6 @@ func load_level(level_name: String) -> void:
 	unload_level();
 	var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	level = load(level_path).instantiate();
+	level.level_name = level_name;
 	world.add_child(level) # Add the new level to the World node
 #endregion

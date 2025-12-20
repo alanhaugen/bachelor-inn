@@ -16,8 +16,8 @@ var weapon_damage: int = 0;
 var weapon_crit: int = 0;
 var attack_strength: int = 0;
 
-var character1: Character = null; ## The moving character
-var character2: Character = null; ## The character being attacked
+var aggressor: Character = null; ## The moving character
+var victim: Character = null; ## The character being attacked
 
 
 func save() -> Dictionary:
@@ -38,19 +38,19 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: G
 	units = inUnits;
 	is_attack = inIsAttack;
 	is_wait = false;
-	character1 = inCharacter1;
-	character2 = inCharacter2;
+	aggressor = inCharacter1;
+	victim = inCharacter2;
 	neighbour_move = in_neighbour_move;
 
 
 func execute() -> void:
 	if is_attack:
-		if character1.weapon:
-			weapon_damage = character1.weapon.damage_modifier;
-			weapon_crit = character1.weapon.weapon_critical;
+		if aggressor.weapon:
+			weapon_damage = aggressor.weapon.damage_modifier;
+			weapon_crit = aggressor.weapon.weapon_critical;
 		
 		@warning_ignore("integer_division")
-		attack_strength = max(1, (character1.strength + weapon_damage) - character2.defense / 2);
+		attack_strength = max(1, (aggressor.strength + weapon_damage) - victim.defense / 2);
 		
 		#Main.battle_log.text += "\nAttacker: \n";
 		#Main.battle_log.text += str(character1.save());
@@ -60,7 +60,7 @@ func execute() -> void:
 		
 		# Miss logic
 		@warning_ignore("integer_division")
-		if (randi_range(0,100) < (character2.speed * 3 + character2.luck) / 2):
+		if (randi_range(0,100) < (victim.speed * 3 + victim.luck) / 2):
 			Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
 			print ("Miss");
 			attack_strength = 0;
@@ -68,39 +68,39 @@ func execute() -> void:
 		
 		# Critical logic
 		@warning_ignore("integer_division")
-		if (randi_range(0,100) < (character1.skill / 2) + weapon_crit):
+		if (randi_range(0,100) < (aggressor.skill / 2) + weapon_crit):
 			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
 			print("Critical hit!");
 			attack_strength *= 2;
 		
-		character2.current_health -= attack_strength;
+		victim.current_health -= attack_strength;
 		
-		character1.update_health_bar();
-		character2.update_health_bar();
+		aggressor.update_health_bar();
+		victim.update_health_bar();
 		
-		Main.battle_log.text = (character1.unit_name + " attacks " + character2.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
+		Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		
-		if character1.is_playable:
+		if aggressor.is_playable:
 			@warning_ignore("integer_division")
-			character1.current_sanity -= character2.intimidation / character1.mind;
-			Main.level.update_stat(character1, Main.level.stat_popup_player);
-			Main.level.update_stat(character2, Main.level.stat_popup_enemy);
+			aggressor.current_sanity -= victim.intimidation / aggressor.mind;
+			Main.level.update_stat(aggressor, Main.level.stat_popup_player);
+			Main.level.update_stat(victim, Main.level.stat_popup_enemy);
 		else:
 			@warning_ignore("integer_division")
-			character2.current_sanity -= character1.intimidation / character2.mind;
-			Main.level.update_stat(character1, Main.level.stat_popup_enemy);
-			Main.level.update_stat(character2, Main.level.stat_popup_player);
-		if character2.current_health <= 0:
-			character2.die();
-			Main.battle_log.text = (character2.unit_name + " dies.\n") + Main.battle_log.text;
-			if character1.is_playable:
-				Main.battle_log.text = (character1.unit_name + " gains " + str(character2.intimidation) + " experience.\n") + Main.battle_log.text;
-				character1.experience += character2.intimidation;
-			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, character1));
+			victim.current_sanity -= aggressor.intimidation / victim.mind;
+			Main.level.update_stat(aggressor, Main.level.stat_popup_enemy);
+			Main.level.update_stat(victim, Main.level.stat_popup_player);
+		if victim.current_health <= 0:
+			victim.die();
+			Main.battle_log.text = (victim.unit_name + " dies.\n") + Main.battle_log.text;
+			if aggressor.is_playable:
+				Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
+				aggressor.experience += victim.intimidation;
+			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, aggressor));
 		
-		character1.hide_ui();
+		aggressor.hide_ui();
 	else:
-		character1.move_to(end_pos);
+		aggressor.move_to(end_pos);
 		units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
 		units.set_cell_item(end_pos, grid_code);
 
@@ -110,9 +110,9 @@ func redo() -> void:
 		execute();
 	else:
 		if is_attack:
-			character2.health -= attack_strength;
+			victim.health -= attack_strength;
 		else:
-			character1.move_to(end_pos);
+			aggressor.move_to(end_pos);
 			units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
 			units.set_cell_item(end_pos, grid_code);
 
@@ -123,7 +123,7 @@ func undo() -> void:
 		units.set_cell_item(start_pos, grid_code);
 		
 		if is_attack:
-			character2.health += attack_strength;
-			character2.sanity += attack_strength;
-			character2.move_to(end_pos);
-		character1.move_to(start_pos);
+			victim.health += attack_strength;
+			victim.sanity += attack_strength;
+			victim.move_to(end_pos);
+		aggressor.move_to(start_pos);
