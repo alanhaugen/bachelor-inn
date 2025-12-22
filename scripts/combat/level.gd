@@ -539,10 +539,10 @@ func reset_all_units() -> void:
 func MoveAI() -> void:
 	reset_all_units();
 	
-	var aiUnitsMoves :Array;
+	var aiUnitsMoves :Array = [];
 	var units :Array[Vector3i] = units_map.get_used_cells();
 	
-	for i in units.size():
+	for i in range(units.size()):
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == enemy_code):
 			aiUnitsMoves.append(Array());
@@ -550,11 +550,11 @@ func MoveAI() -> void:
 			aiUnitsMoves[aiUnitsMoves.size() - 1] += dijkstra(pos, get_unit(pos).movement);
 	
 	# Move each enemy unit
-	for i :int in aiUnitsMoves.size():
+	for i :int in range(aiUnitsMoves.size()):
 		var move :Move = null;
 		
 		# First look for an attack
-		for j :int in aiUnitsMoves[i].size():
+		for j :int in range(aiUnitsMoves[i].size()):
 			if (aiUnitsMoves[i][j].is_attack == true):
 				move = aiUnitsMoves[i][j];
 				break;
@@ -566,6 +566,7 @@ func MoveAI() -> void:
 		# Do the attack or move
 		if move == null:
 			push_error("No moves found for enemy");
+			continue;
 			
 		if move.is_attack:
 			moves_stack.append(move.neighbour_move);
@@ -573,11 +574,7 @@ func MoveAI() -> void:
 		moves_stack.append(move);
 		
 		# Remove move from ai stack
-		for j :int in aiUnitsMoves.size():
-			for k :int in aiUnitsMoves[j].size():
-				if move == aiUnitsMoves[j][k]:
-					aiUnitsMoves[j].remove_at(k);
-					break;
+		aiUnitsMoves[i].erase(move);
 	
 	movement_map.clear(); 
 	animation_path.clear();
