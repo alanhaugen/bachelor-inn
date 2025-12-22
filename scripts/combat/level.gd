@@ -251,6 +251,7 @@ func _input(event: InputEvent) -> void:
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
+		pos.y = 0;
 		
 		if (get_tile_name(pos) == "Water"):
 			return;
@@ -369,7 +370,7 @@ func _ready() -> void:
 	
 	# Remove dead characters from character list
 	var is_done := false;
-	while (is_done == false):
+	while is_done == false:
 		for i in range(Main.characters.size()):
 			is_done = true;
 			if Main.characters[i].is_alive == false:
@@ -419,7 +420,7 @@ func _ready() -> void:
 			characters.append(new_unit);
 			
 			if new_unit is Character:
-				var character_script: Character = new_unit;
+				var character_script : Character = new_unit;
 				character_script.hide_ui();
 				new_unit.grid_position = pos;
 	
