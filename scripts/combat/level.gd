@@ -541,13 +541,18 @@ func MoveAI() -> void:
 	
 	var aiUnitsMoves :Array = [];
 	var units :Array[Vector3i] = units_map.get_used_cells();
+	var current_state : GameState = GameState.new();
 	
+	# Make array of all possible moves
 	for i in range(units.size()):
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == enemy_code):
 			aiUnitsMoves.append(Array());
 			selected_unit = get_unit(pos);
 			aiUnitsMoves[aiUnitsMoves.size() - 1] += dijkstra(pos, get_unit(pos).movement);
+			
+			current_state.units.append(get_unit(pos));
+			current_state.moves += dijkstra(pos, get_unit(pos).movement);
 	
 	# Move each enemy unit
 	for i :int in range(aiUnitsMoves.size()):
@@ -559,8 +564,10 @@ func MoveAI() -> void:
 				move = aiUnitsMoves[i][j];
 				break;
 		
-		# No attacks found, choose a random move
+		# No attacks found, choose the best move based on minimax algorithm
 		if move == null and aiUnitsMoves[i].is_empty() == false:
+			#move = choose_best_move(current_state, 2);
+			# Choose random move
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move
