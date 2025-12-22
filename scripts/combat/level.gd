@@ -560,7 +560,7 @@ func MoveAI() -> void:
 		
 		# First look for an attack
 		for j :int in range(aiUnitsMoves[i].size()):
-			if (aiUnitsMoves[i][j].is_attack == true):
+			if aiUnitsMoves[i][j].is_attack == true:
 				move = aiUnitsMoves[i][j];
 				break;
 		

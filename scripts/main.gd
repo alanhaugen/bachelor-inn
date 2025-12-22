@@ -6,8 +6,6 @@ extends Node
 
 # TODO:
 # load settings
-# load units
-# load games
 
 #region: --- Props ---
 ## Current level running
@@ -48,6 +46,7 @@ func unload_level() -> void:
 		level.queue_free(); # Free the current level instance
 	level = null;
 
+
 func next_level() -> void:
 	current_level_index += 1;
 	if current_level_index > levels.size():
@@ -55,15 +54,18 @@ func next_level() -> void:
 	else:
 		load_level(levels[current_level_index]);
 
+
 ## Start the first tutorial
 func start_tutorial() -> void:
 	Dialogic.start_timeline("tutorial1");
+
 
 ## Make tutorial wait for signal
 ## 
 ## Disable inputs from the player
 func tutorial_wait_for_signal() -> void:
 	Dialogic.Inputs.manual_advance.system_enabled = false;
+
 
 ## React to camera moving in tutorial
 func tutorial_camera_moved() -> void:
@@ -74,6 +76,7 @@ func tutorial_camera_moved() -> void:
 			Dialogic.start_timeline("tutorial2");
 			level.is_in_menu = false;
 
+
 ## React to player selecting unit in tutorial
 func tutorial_unit_selected() -> void:
 	if tutorial_state.SelectTutorial == false:
@@ -83,11 +86,13 @@ func tutorial_unit_selected() -> void:
 			Dialogic.start_timeline("tutorial3");
 			#set_mouse_filter(Control.MOUSE_FILTER_IGNORE);
 
+
 ## React to player moving units in tutorial
 func tutorial_unit_moved() -> void:
 	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
 		tutorial_state.MoveTutorial = true;
 		Dialogic.start("tutorial4");
+
 
 ## Loads a new level and cleanup previously loaded level
 ##
