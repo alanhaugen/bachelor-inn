@@ -86,6 +86,7 @@ func tutorial_unit_selected() -> void:
 ## React to player moving units in tutorial
 func tutorial_unit_moved() -> void:
 	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
+		tutorial_state.MoveTutorial = true;
 		Dialogic.start("tutorial4");
 
 ## Loads a new level and cleanup previously loaded level
