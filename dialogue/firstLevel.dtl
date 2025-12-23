@@ -2,7 +2,7 @@ do Tutorial.tutorial_lock_camera()
 [background arg="res://art/textures/bg.png" fade="0.0"]
 Whipers of hope
 [background fade="0.0"]
-Find me and I shall grant salvation
+character (Orb): Find me and I shall grant salvation
 [wait time="1.0"]
 do Tutorial.hide_object("Orb_Intro")
 do Tutorial.start_tutorial()
