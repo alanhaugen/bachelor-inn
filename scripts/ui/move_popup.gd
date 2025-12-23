@@ -21,7 +21,6 @@ func HidePopup() -> void:
 
 
 func _on_move_button_pressed() -> void:
-	Tutorial.tutorial_unit_moved();
 	map.moves_stack.append(map.active_move);
 	map.state = map.States.ANIMATING;
 	HidePopup();

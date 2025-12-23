@@ -1,3 +1,4 @@
+do Tutorial.tutorial_lock_menus()
 Nice.
 The goal is simple\:\
 survive the enemy units.\
@@ -6,3 +7,4 @@ Take your time.\
 You can think before each move.
 That’s it.\
 You’re on your own now.
+do Tutorial.tutorial_unlock_menus()

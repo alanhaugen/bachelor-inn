@@ -618,24 +618,22 @@ func _process(delta: float) -> void:
 	
 	turn_transition.hide();
 	
-	if lock_camera:
-		return;
-	
-	if Input.is_action_pressed("pan_right"):
-		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-		#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
-		Tutorial.tutorial_camera_moved();
-	if Input.is_action_pressed("pan_left"):
-		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-		#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
-	if Input.is_action_pressed("pan_up"):
-		camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-		#camera.global_translate(Vector3(-1,0,-1) * camera_speed * delta);
-	if Input.is_action_pressed("pan_down"):
-		camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
-		#camera.global_translate(Vector3(1,0,1) * camera_speed * delta);
-	if Input.is_action_pressed("selected"):
-		pass;
+	if lock_camera == false:
+		if Input.is_action_pressed("pan_right"):
+			camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+			#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
+			Tutorial.tutorial_camera_moved();
+		if Input.is_action_pressed("pan_left"):
+			camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+			#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
+		if Input.is_action_pressed("pan_up"):
+			camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+			#camera.global_translate(Vector3(-1,0,-1) * camera_speed * delta);
+		if Input.is_action_pressed("pan_down"):
+			camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+			#camera.global_translate(Vector3(1,0,1) * camera_speed * delta);
+		if Input.is_action_pressed("selected"):
+			pass;
 	
 	if camera.global_position.y > minimum_camera_height:
 		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
@@ -680,6 +678,7 @@ func _process(delta: float) -> void:
 			active_move = moves_stack.pop_front();
 			active_move.execute();
 			completed_moves.append(active_move);
+			Tutorial.tutorial_unit_moved();
 			
 			if (moves_stack.is_empty() == false and moves_stack.front().is_attack == false):
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
