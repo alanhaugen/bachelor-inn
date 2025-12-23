@@ -561,6 +561,8 @@ func MoveAI() -> void:
 	var current_state : GameState = GameState.new();
 	
 	# Make array of all possible moves
+	# TODO: Convert this into gamestate
+	# Move it so state is mutated after each move!
 	for i in range(units.size()):
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == enemy_code):
