@@ -17,13 +17,13 @@ func create_new_save_data() -> void:
 	
 	var first: Character = Character.new();
 	first.unit_name = "Alfred";
-	first.speciality = Character.Speciality.Support;
+	first.speciality = Character.Speciality.Scholar;
 	first.movement = 3;
 	first.strength = 1;
 	
 	var second: Character = Character.new();
 	second.unit_name = "Lucy";
-	second.speciality = Character.Speciality.Fighter;
+	second.speciality = Character.Speciality.Militia;
 	second.strength = 10;
 	
 	var units: Array[Dictionary] = [first.save(), second.save()];

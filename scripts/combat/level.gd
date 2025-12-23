@@ -344,6 +344,13 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.magic = character_script.current_magic;
 			stat_script.max_sanity = character_script.mind;
 			stat_script.sanity = character_script.current_sanity;
+			
+			stat_script.strength = character_script.strength;
+			stat_script.mind = character_script.mind;
+			stat_script.speed = character_script.speed;
+			stat_script.focus = character_script.focus;
+			stat_script.endurance = character_script.endurance;
+			
 			popup.show();
 
 
@@ -438,7 +445,7 @@ func _ready() -> void:
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
 	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_player.position = Vector2(-get_window().size.x / 2.1, get_window().size.y / 2.5);
+	stat_popup_player.position = Vector2(-get_window().size.x / 2.1, get_window().size.y / 2.8);
 	#stat_popup_player.position = Vector2(-555, 235);
 	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
@@ -447,7 +454,7 @@ func _ready() -> void:
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
 	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_enemy.position = Vector2(get_window().size.x /4.6, get_window().size.y / 2.5);
+	stat_popup_enemy.position = Vector2(get_window().size.x /4.6, get_window().size.y / 2.8);
 	#stat_popup_enemy.position = Vector2(250, 235);
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);

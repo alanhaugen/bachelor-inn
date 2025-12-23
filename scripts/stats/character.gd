@@ -14,17 +14,19 @@ var portrait: Texture2D;
 enum Speciality
 {
 	## This class has more movement than the other classes
-	## allowing them to get to objectives or outrun enemies
-	Scout,
+	## allowing them to get to objectives or outrun enemies.
+	## This could for example be a horse rider in a medieval
+	## setting or a ranger in a fantasy setting
+	Runner,
 	## Most classes usually fall in this category in games
-	## like fire emblem. If we want to use the sanity
-	## mechanic for our game, then these units might have
-	## extra resistance from sanity damage from battles.
-	Support,
-	## The classic healer/utility buffer. Their abilities
-	## do not necessarily have to affect battles, they
-	## could improve movement or conjure terrain.
-	Fighter
+	## like fire emblem. If we want to use the sanity mechanic
+	## for our game, then these units might have extra resistance
+	## from sanity damage from battles
+	Militia,
+	## The classic healer/utility buffer. Their abilities do not
+	## necessarily have to affect battles, they could improve
+	## movement or conjure terrain.
+	Scholar
 }
 
 enum Personality
@@ -48,7 +50,7 @@ var health_bar_enemy: HealthBar;
 @export var is_playable :bool = true; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var connections :Array = []; ## Connections to other players (how friendly they are to others)
-@export var speciality :Speciality = Speciality.Fighter; ## Unit speciality
+@export var speciality :Speciality = Speciality.Militia; ## Unit speciality
 @export var personality :Personality = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
 @export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
@@ -120,7 +122,7 @@ func _set_experience(in_experience: int) -> void:
 	if (experience > next_level_experience):
 		print("Level up!");
 		current_level += 1;
-		if (speciality == Speciality.Fighter):
+		if (speciality == Speciality.Militia):
 			if (next_level_experience >= 10):
 				health += 1;
 				mind += 1;
