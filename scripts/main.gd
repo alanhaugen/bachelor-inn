@@ -94,6 +94,14 @@ func tutorial_unit_moved() -> void:
 		Dialogic.start("tutorial4");
 
 
+## Hide an object in the level
+## This function can be called via Dialogic
+##
+## @param object_name: Name of Node3D object
+func hide_object(object_name : String) -> void:
+	var object :Node3D = world.get_node("Map3d/" + object_name);
+	object.hide();
+
 ## Loads a new level and cleanup previously loaded level
 ##
 ## @param level_name: New level name to load

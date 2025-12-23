@@ -1,6 +1,7 @@
-[background arg="res://art/textures/Orb.png" fade="0.0"]
+[background arg="res://art/textures/bg.png" fade="0.0"]
 Whipers of hope
+[background fade="0.0"]
 Find me and I shall grant salvation
-[background fade="3.0"]
 [wait time="1.0"]
+do Main.hide_object("Orb_Intro")
 do Main.start_tutorial()
