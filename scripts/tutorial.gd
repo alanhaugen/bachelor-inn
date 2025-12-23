@@ -24,6 +24,14 @@ func tutorial_unlock_camera() -> void:
 	Main.level.lock_camera = false;
 
 
+func tutorial_lock_menus() -> void:
+	Main.level.is_in_menu = true;
+
+
+func tutorial_unlock_menus() -> void:
+	Main.level.is_in_menu = false;
+
+
 ## React to camera moving in tutorial
 func tutorial_camera_moved() -> void:
 	if tutorial_state.CameraTutorial == false:
@@ -31,7 +39,6 @@ func tutorial_camera_moved() -> void:
 			Dialogic.Inputs.manual_advance.system_enabled = true;
 			tutorial_state.CameraTutorial = true;
 			Dialogic.start_timeline("tutorial2");
-			Main.level.is_in_menu = false;
 
 
 ## React to player selecting unit in tutorial

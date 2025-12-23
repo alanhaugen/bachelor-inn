@@ -1,3 +1,4 @@
 Good.
+do Tutorial.tutorial_unlock_menus()
 do Tutorial.tutorial_wait_for_signal()
 Click a unit to select it.

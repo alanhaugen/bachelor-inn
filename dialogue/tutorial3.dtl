@@ -1,4 +1,6 @@
+do Tutorial.tutorial_lock_menus()
 Selected.
+do Tutorial.tutorial_unlock_menus()
 Left-click a square to move there.\
 A popup will ask you what you want to do.\
 Select Move.
