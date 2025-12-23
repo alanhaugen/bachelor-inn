@@ -351,6 +351,8 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.focus = character_script.focus;
 			stat_script.endurance = character_script.endurance;
 			
+			stat_script._set_type(Character.Speciality.keys()[character_script.speciality] + " " + Character.Personality.keys()[character_script.personality]);
+			
 			popup.show();
 
 
@@ -459,12 +461,12 @@ func _ready() -> void:
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
 	
-	for i in range(Main.characters.size()):
-		var new_side_bar := SIDE_BAR.instantiate();
-		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
-		if i != 0:
-			new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
-		Main.gui.add_child(new_side_bar);
+	#for i in range(Main.characters.size()):
+	#	var new_side_bar := SIDE_BAR.instantiate();
+	#	new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
+	#	if i != 0:
+	#		new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
+	#	Main.gui.add_child(new_side_bar);
 	
 	#side_bar_1 = SIDE_BAR.instantiate();
 	#Main.gui.add_child(side_bar_1);

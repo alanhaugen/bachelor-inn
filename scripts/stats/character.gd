@@ -33,7 +33,26 @@ enum Personality
 {
 	Normal,
 	Zealot,
-	Devoted
+	Devoted,
+	Young,
+	Old,
+	Jester,
+	Therapist,
+	Vindictive,
+	Snob,
+	Crashout,
+	Grmp,
+	Determined,
+	Silly,
+	SmartAlec,
+	HeroComplex,
+	Vitriolic,
+	Noble,
+	Selfish,
+	Tired,
+	ExCultist,
+	FactoryWorker,
+	FactoryOwner
 }
 
 var camera: Camera3D;

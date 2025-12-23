@@ -94,7 +94,7 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -73.0
+offset_top = -106.0
 offset_right = 161.0
 offset_bottom = 5.0
 grow_vertical = 0
@@ -316,9 +316,9 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
-offset_top = -63.0
+offset_top = -97.0
 offset_right = 38.0
-offset_bottom = -30.0
+offset_bottom = -64.0
 grow_vertical = 0
 texture = ExtResource("1_k3ym5")
 region_rect = Rect2(128, 0, 32, 32)
@@ -354,9 +354,9 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 36.0
-offset_top = -56.0
-offset_right = 136.0
+offset_left = 20.0
+offset_top = -86.0
+offset_right = 145.0
 offset_bottom = -9.0
 grow_vertical = 0
 
@@ -365,6 +365,12 @@ layout_mode = 2
 theme_override_constants/separation = 7
 
 [node name="CharacterName" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Type" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2
