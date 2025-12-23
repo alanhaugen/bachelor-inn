@@ -1,3 +1,3 @@
 Good.
-do Main.tutorial_wait_for_signal()
+do Tutorial.tutorial_wait_for_signal()
 Click a unit to select it.

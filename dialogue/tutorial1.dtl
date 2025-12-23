@@ -1,4 +1,4 @@
 Welcome.\
 Let’s look around.
-do Main.tutorial_wait_for_signal()
+do Tutorial.tutorial_wait_for_signal()
 Use WASD to move camera.

@@ -32,9 +32,6 @@ var battle_log: Label;
 ## Global UI Scale
 var ui_scale: float = 2.4;
 
-## Tutorial state
-var tutorial_state: TutorialStates = TutorialStates.new();
-
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion
@@ -53,54 +50,6 @@ func next_level() -> void:
 		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
 	else:
 		load_level(levels[current_level_index]);
-
-
-## Start the first tutorial
-func start_tutorial() -> void:
-	Dialogic.start_timeline("tutorial1");
-
-
-## Make tutorial wait for signal
-## 
-## Disable inputs from the player
-func tutorial_wait_for_signal() -> void:
-	Dialogic.Inputs.manual_advance.system_enabled = false;
-
-
-## React to camera moving in tutorial
-func tutorial_camera_moved() -> void:
-	if tutorial_state.CameraTutorial == false:
-		if Dialogic.Inputs.manual_advance.system_enabled == false:
-			Dialogic.Inputs.manual_advance.system_enabled = true;
-			tutorial_state.CameraTutorial = true;
-			Dialogic.start_timeline("tutorial2");
-			level.is_in_menu = false;
-
-
-## React to player selecting unit in tutorial
-func tutorial_unit_selected() -> void:
-	if tutorial_state.SelectTutorial == false:
-		if Dialogic.Inputs.manual_advance.system_enabled == false:
-			Dialogic.Inputs.manual_advance.system_enabled = true;
-			tutorial_state.SelectTutorial = true;
-			Dialogic.start_timeline("tutorial3");
-			#set_mouse_filter(Control.MOUSE_FILTER_IGNORE);
-
-
-## React to player moving units in tutorial
-func tutorial_unit_moved() -> void:
-	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
-		tutorial_state.MoveTutorial = true;
-		Dialogic.start("tutorial4");
-
-
-## Hide an object in the level
-## This function can be called via Dialogic
-##
-## @param object_name: Name of Node3D object
-func hide_object(object_name : String) -> void:
-	var object :Node3D = world.get_node("Map3d/" + object_name);
-	object.hide();
 
 ## Loads a new level and cleanup previously loaded level
 ##

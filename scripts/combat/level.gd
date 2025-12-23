@@ -265,7 +265,7 @@ func _input(event: InputEvent) -> void:
 		var windowPos: Vector2 = Vector2(0,0);
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
-			Main.tutorial_unit_selected();
+			Tutorial.tutorial_unit_selected();
 			unit_pos = pos;
 			movement_map.clear();
 			if (selected_unit == get_unit(pos)):
@@ -620,7 +620,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("pan_right"):
 		camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
 		#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
-		Main.tutorial_camera_moved();
+		Tutorial.tutorial_camera_moved();
 	if Input.is_action_pressed("pan_left"):
 		camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
 		#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
