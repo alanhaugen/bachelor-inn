@@ -46,7 +46,7 @@ func _set_magic(in_magic: int) -> void:
 
 
 func _set_sanity(in_sanity: int) -> void:
-	sanity_bar.max_value = in_sanity;
+	sanity_bar.value = in_sanity;
 	sanity_text.text = str(in_sanity) + "/" + str(max_sanity);
 
 

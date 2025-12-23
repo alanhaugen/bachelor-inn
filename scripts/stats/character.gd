@@ -118,6 +118,8 @@ func _close_level_up() -> void:
 
 
 func _set_sanity(in_sanity: int) -> void:
+	if in_sanity > mind:
+		in_sanity = mind;
 	if (Main.battle_log):
 		var dir := " loses ";
 		if current_sanity < in_sanity:
@@ -130,9 +132,10 @@ func _set_sanity(in_sanity: int) -> void:
 		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		unit_name = unit_name + "'cthulhu";
 		health_bar = health_bar_enemy;
-		update_health_bar();
 		health_bar_ally.hide();
 		health_bar_enemy.show();
+	if health_bar:
+		update_health_bar();
 
 
 func _set_experience(in_experience: int) -> void:
