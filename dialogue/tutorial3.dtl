@@ -1,6 +1,7 @@
 do Tutorial.tutorial_lock_menus()
 Selected.
 do Tutorial.tutorial_unlock_menus()
+do Tutorial.tutorial_highlight_tile(3, 3)
 Left-click a square to move there.\
 A popup will ask you what you want to do.\
 Select Move.

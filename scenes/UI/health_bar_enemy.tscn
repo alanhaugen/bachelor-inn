@@ -2,9 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/ui/health_bar.gd" id="1_01hod"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_3su62"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fhnc"]
-bg_color = Color(0, 0, 0, 0)
+[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/ui/progress_bar_silver.tres" id="3_3su62"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23qt1"]
 bg_color = Color(0, 0.54563475, 0.82764375, 1)
@@ -60,10 +58,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_5fhnc")
+theme_override_constants/outline_size = 3
+theme_override_styles/background = ExtResource("3_3su62")
 theme_override_styles/fill = SubResource("StyleBoxFlat_23qt1")
 value = 80.0
-show_percentage = false
 
 [node name="SanityBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true

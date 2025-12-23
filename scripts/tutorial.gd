@@ -41,6 +41,10 @@ func tutorial_camera_moved() -> void:
 			Dialogic.start_timeline("tutorial2");
 
 
+func tutorial_highlight_tile(x : int, y : int) -> void:
+	Main.level.movement_map.set_cell_item(Vector3i(x, y, 0), 1);
+
+
 ## React to player selecting unit in tutorial
 func tutorial_unit_selected() -> void:
 	if tutorial_state.SelectTutorial == false:
