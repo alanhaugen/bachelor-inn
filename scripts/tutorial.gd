@@ -16,6 +16,14 @@ func tutorial_wait_for_signal() -> void:
 	Dialogic.Inputs.manual_advance.system_enabled = false;
 
 
+func tutorial_lock_camera() -> void:
+	Main.level.lock_camera = true;
+
+
+func tutorial_unlock_camera() -> void:
+	Main.level.lock_camera = false;
+
+
 ## React to camera moving in tutorial
 func tutorial_camera_moved() -> void:
 	if tutorial_state.CameraTutorial == false:

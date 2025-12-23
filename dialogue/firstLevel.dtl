@@ -1,3 +1,4 @@
+do Tutorial.tutorial_lock_camera()
 [background arg="res://art/textures/bg.png" fade="0.0"]
 Whipers of hope
 [background fade="0.0"]
