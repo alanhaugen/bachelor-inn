@@ -32,8 +32,10 @@ extends Node3D
 @export var minimum_camera_height: float = 1.0;
 @export var maximum_camera_height: float = 15.0;
 
-#@export var minimum_camera_xdir: float = 1.0;
-#@export var maximum_camera_zdir: float = 15.0;
+@export var minimum_camera_x: float = -10.0;
+@export var maximum_camera_x: float = 10.0;
+@export var minimum_camera_z: float = -10.0;
+@export var maximum_camera_z: float = 10.0;
 
 var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
@@ -623,19 +625,19 @@ func _process(delta: float) -> void:
 	turn_transition.hide();
 	
 	if lock_camera == false:
-		if Input.is_action_pressed("pan_right"):
-			camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-			#camera.global_translate(Vector3(1,0,-1) * camera_speed * delta);
-			Tutorial.tutorial_camera_moved();
-		if Input.is_action_pressed("pan_left"):
-			camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-			#camera.global_translate(Vector3(-1,0,1) * camera_speed * delta);
-		if Input.is_action_pressed("pan_up"):
-			camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-			#camera.global_translate(Vector3(-1,0,-1) * camera_speed * delta);
-		if Input.is_action_pressed("pan_down"):
-			camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
-			#camera.global_translate(Vector3(1,0,1) * camera_speed * delta);
+		if camera.position.x < maximum_camera_x:
+			if Input.is_action_pressed("pan_right"):
+				camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+				Tutorial.tutorial_camera_moved();
+		if camera.position.x > minimum_camera_x:
+			if Input.is_action_pressed("pan_left"):
+				camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+		if camera.position.z > minimum_camera_z:
+			if Input.is_action_pressed("pan_up"):
+				camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+		if camera.position.z < maximum_camera_z:
+			if Input.is_action_pressed("pan_down"):
+				camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
 		if Input.is_action_pressed("selected"):
 			pass;
 	
