@@ -32,6 +32,9 @@ extends Node3D
 @export var minimum_camera_height: float = 1.0;
 @export var maximum_camera_height: float = 15.0;
 
+#@export var minimum_camera_xdir: float = 1.0;
+#@export var maximum_camera_zdir: float = 15.0;
+
 var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
@@ -233,9 +236,10 @@ func _input(event: InputEvent) -> void:
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
-		if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
-			is_dragging = true;
+		if lock_camera == false:
+			if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+				Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
+				is_dragging = true;
 		if (event.pressed == false):
 			is_dragging = false;
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE;

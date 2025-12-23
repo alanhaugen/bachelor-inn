@@ -16,18 +16,24 @@ func tutorial_wait_for_signal() -> void:
 	Dialogic.Inputs.manual_advance.system_enabled = false;
 
 
+## Lock the camera so it can't be moved with
+## the mouse, WASD or the arrow keys
 func tutorial_lock_camera() -> void:
 	Main.level.lock_camera = true;
 
 
+## Unlock the camera so it can be moved with
+## the mouse, WASD or the arrow keys
 func tutorial_unlock_camera() -> void:
 	Main.level.lock_camera = false;
 
 
+## Make it so the buttons in the game do nothing
 func tutorial_lock_menus() -> void:
 	Main.level.is_in_menu = true;
 
 
+## Make the menus in the game operable again
 func tutorial_unlock_menus() -> void:
 	Main.level.is_in_menu = false;
 
@@ -41,6 +47,7 @@ func tutorial_camera_moved() -> void:
 			Dialogic.start_timeline("tutorial2");
 
 
+## Give a specific tile a special marker
 func tutorial_highlight_tile(x : int, y : int) -> void:
 	Main.level.movement_map.set_cell_item(Vector3i(x, y, 0), 1);
 
