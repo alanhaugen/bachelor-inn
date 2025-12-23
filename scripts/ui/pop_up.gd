@@ -51,14 +51,17 @@ func _set_sanity(in_sanity: int) -> void:
 
 func _set_max_health(in_health: int) -> void:
 	health_bar.max_value = in_health;
+	max_health = in_health;
 
 
 func _set_max_magic(in_magic: int) -> void:
 	magic_bar.max_value = in_magic;
+	max_magic = in_magic;
 
 
 func _set_max_sanity(in_sanity: int) -> void:
 	sanity_bar.max_value = in_sanity;
+	max_sanity = in_sanity;
 
 
 func _set_strength(in_strength: int) -> void:
