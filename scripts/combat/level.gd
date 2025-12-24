@@ -556,53 +556,15 @@ func reset_all_units() -> void:
 func MoveAI() -> void:
 	reset_all_units();
 	
-	var aiUnitsMoves :Array = [];
-	var units :Array[Vector3i] = units_map.get_used_cells();
-	var current_state : GameState = GameState.new();
+	var ai := MinimaxAI.new();
+	var current_state := GameState.from_level(self);
 	
-	# Make array of all possible moves
-	# TODO: Convert this into gamestate
-	# Move it so state is mutated after each move!
-	for i in range(units.size()):
-		var pos :Vector3i = units[i];
-		if (units_map.get_cell_item(pos) == enemy_code):
-			aiUnitsMoves.append(Array());
-			selected_unit = get_unit(pos);
-			aiUnitsMoves[aiUnitsMoves.size() - 1] += dijkstra(pos, get_unit(pos).movement);
-			
-			current_state.units.append(get_unit(pos));
-			current_state.moves += dijkstra(pos, get_unit(pos).movement);
-	
-	# Move each enemy unit
-	for i :int in range(aiUnitsMoves.size()):
-		var move :Move = null;
-		
-		# First look for an attack
-		for j :int in range(aiUnitsMoves[i].size()):
-			if aiUnitsMoves[i][j].is_attack == true:
-				move = aiUnitsMoves[i][j];
-				break;
-		
-		# No attacks found, choose the best move based on minimax algorithm
-		if move == null and aiUnitsMoves[i].is_empty() == false:
-			#move = choose_best_move(current_state, 2);
-			# Choose random move
-			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
-		
-		# Do the attack or move
-		if move == null:
-			push_error("No moves found for enemy");
-			continue;
-			
-		if move.is_attack:
-			moves_stack.append(move.neighbour_move);
-		
+	while current_state.has_enemy_moves():
+		var move : Move = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
-		
-		# Remove move from ai stack
-		aiUnitsMoves[i].erase(move);
+		current_state.apply_move(move);
 	
-	movement_map.clear(); 
+	movement_map.clear();
 	animation_path.clear();
 	
 	if (moves_stack.is_empty() == false):

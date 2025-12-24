@@ -1,5 +1,5 @@
 class_name Command
-extends Node
+extends RefCounted
 ## Command pattern
 ##
 ## https://gameprogrammingpatterns.com/command.html
