@@ -6,6 +6,7 @@ extends Control
 @onready var wait_button: Button = $VBoxContainer/WaitButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
 
+# TODO: remove
 
 func _ready() -> void:
 	map = Main.level;
