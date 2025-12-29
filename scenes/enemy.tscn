@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bq3f1lx8lkmgp"]
+[gd_scene load_steps=8 format=3 uid="uid://beocud5p1563r"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/character.gd" id="1_5uy6h"]
 [ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_c4w8v"]
