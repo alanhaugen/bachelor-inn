@@ -66,7 +66,8 @@ var health_bar_enemy: HealthBar;
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
 
 
-@export var is_playable :bool = true; ## Friend or foe
+@export var is_playable :bool = true; ## Player unit or NPC
+@export var is_enemy :bool = false; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
 @export var connections :Array = []; ## Connections to other players (how friendly they are to others)
 @export var speciality :Speciality = Speciality.Militia; ## Unit speciality
@@ -189,6 +190,7 @@ func _ready() -> void:
 		health_bar = health_bar_ally;
 	else:
 		health_bar = health_bar_enemy;
+		is_enemy = true;
 	
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
 	add_child(level_up_popup);

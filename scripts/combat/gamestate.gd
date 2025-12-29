@@ -6,7 +6,18 @@ var is_current_player_enemy := true;
 
 
 static func from_level(level : Level) -> GameState:
-	return GameState.new();
+	var state : GameState = GameState.new();
+	
+	var level_units :Array[Vector3i] = level.units_map.get_used_cells();
+	for i in level_units.size():
+		var pos :Vector3i = level_units[i];
+		var character: Character = level.get_unit(pos);
+		if character is Character:
+			state.units.append(character);
+	
+	state.is_current_player_enemy = (level.is_player_turn == false);
+	
+	return state;
 
 
 func clone() -> GameState:
