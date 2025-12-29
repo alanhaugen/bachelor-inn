@@ -55,6 +55,10 @@ func next_level() -> void:
 ##
 ## @param level_name: New level name to load
 func load_level(level_name: String) -> void:
+	if OS.has_feature("mobile"):
+		Dialogic.VAR.PLATFORM = "MOBILE";
+	else:
+		Dialogic.VAR.PLATFORM = "DESKTOP";
 	unload_level();
 	var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	level = load(level_path).instantiate();
