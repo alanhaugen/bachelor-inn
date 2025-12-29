@@ -37,4 +37,13 @@ func get_legal_moves() -> Array[Move]:
 
 
 func has_enemy_moves() -> bool:
-	return false;
+	var moves : Array[Move] = [];
+	
+	for unit in units:
+		if unit.is_enemy:
+			moves += MoveGenerator.generate(unit, self);
+	
+	if moves.is_empty():
+		return false;
+	
+	return true;
