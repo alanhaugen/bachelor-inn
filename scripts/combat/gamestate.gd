@@ -2,6 +2,7 @@ class_name GameState
 extends RefCounted
 
 var units :Array[Character] = [];
+var terrain :Array[Terrain] = [];
 var is_current_player_enemy := true;
 
 
@@ -69,3 +70,17 @@ func has_enemy_moves() -> bool:
 		return false;
 	
 	return true;
+
+
+func is_inside_map(pos : Vector3i) -> bool:
+	return false;
+
+
+func is_free(pos : Vector3i) -> bool:
+	return false;
+
+
+func save() -> Dictionary:
+	var state := {"units": units };
+	
+	return state;

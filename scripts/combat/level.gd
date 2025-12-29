@@ -61,6 +61,7 @@ var is_dragging :bool = false;
 
 enum States { PLAYING, ANIMATING };
 var state :int = States.PLAYING;
+var game_state : GameState = GameState.new();
 
 var is_in_menu: bool = false;
 var lock_camera: bool = false;
@@ -82,86 +83,6 @@ func touch(pos :Vector3) -> bool:
 		movement_map.set_cell_item(pos, move_code);
 		return true;
 	return false;
-
-
-func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
-	var frontier :int = 0;
-	var frontierPositions :Array;
-	var nextFrontierPositions :Array;
-	
-	var pos: Vector3i = startPos;
-	var moves: Array[Move];
-	
-	frontierPositions.append(pos);
-	var type: int = units_map.get_cell_item(pos);
-	
-	var temp_enemy_code :int = enemy_code;
-	if (is_player_turn == false):
-		enemy_code = player_code;
-	
-	while (frontier < movementLength && frontierPositions.is_empty() == false):
-		pos = frontierPositions.pop_front();
-		
-		var north: Vector3 = Vector3(pos.x, 0, pos.z - 1);
-		var south: Vector3 = Vector3(pos.x, 0, pos.z + 1);
-		var east: Vector3 = Vector3(pos.x + 1, 0, pos.z);
-		var west :Vector3 = Vector3(pos.x - 1, 0, pos.z);
-		
-		# Only register non-attack moves for characters that have not moved yet
-		if selected_unit.is_moved == false:
-			if (touch(north)):
-				nextFrontierPositions.append(north);
-				moves.append(Move.new(startPos, north, type, units_map, selected_unit));
-			
-			if (touch(south)):
-				nextFrontierPositions.append(south);
-				moves.append(Move.new(startPos, south, type, units_map, selected_unit));
-			
-			if (touch(east)):
-				nextFrontierPositions.append(east);
-				moves.append(Move.new(startPos, east, type, units_map, selected_unit));
-			
-			if (touch(west)):
-				nextFrontierPositions.append(west);
-				moves.append(Move.new(startPos, west, type, units_map, selected_unit));
-		
-		# Add attack moves
-		var neighbour_move: Move = Move.new(startPos, pos, type, units_map, selected_unit);
-		if (units_map.get_cell_item(north) == enemy_code):
-			moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
-			movement_map.set_cell_item(north, 0, attack_code);
-		if (units_map.get_cell_item(south) == enemy_code):
-			moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
-			movement_map.set_cell_item(south, 0, attack_code);
-		if (units_map.get_cell_item(east) == enemy_code):
-			moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
-			movement_map.set_cell_item(east, 0, attack_code);
-		if (units_map.get_cell_item(west) == enemy_code):
-			moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
-			movement_map.set_cell_item(west, 0, attack_code);
-		
-		# Add chest interaction
-		#if (units_map.get_cell_item(north) == chest_code):
-		#	moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
-		#	movement_map.set_cell_item(north, 0, interaction_code);
-		#if (units_map.get_cell_item(south) == chest_code):
-		#	moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
-		#	movement_map.set_cell_item(south, 0, interaction_code);
-		#if (units_map.get_cell_item(east) == chest_code):
-		#	moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
-		#	movement_map.set_cell_item(east, 0, interaction_code);
-		#if (units_map.get_cell_item(west) == chest_code):
-		#	moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
-		#	movement_map.set_cell_item(west, 0, interaction_code);
-		
-		if (frontierPositions.is_empty() == true):
-			frontier += 1;
-			frontierPositions = nextFrontierPositions.duplicate();
-			nextFrontierPositions.clear();
-	
-	enemy_code = temp_enemy_code;
-	
-	return moves;
 
 
 func show_move_popup(window_pos :Vector2) -> void:
@@ -285,7 +206,9 @@ func _input(event: InputEvent) -> void:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
-				current_moves = dijkstra(pos, get_unit(pos).movement);
+				current_moves = MoveGenerator.generate(selected_unit, game_state);#dijkstra(pos, get_unit(pos).movement);
+				for move in current_moves:
+					touch(move.end_pos);
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
