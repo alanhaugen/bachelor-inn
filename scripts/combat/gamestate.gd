@@ -9,6 +9,17 @@ static func from_level(level : Level) -> GameState:
 	return GameState.new();
 
 
+func clone() -> GameState:
+	var cloned_state : GameState = GameState.new();
+	
+	for unit in units:
+		cloned_state.units.append(unit);
+	
+	cloned_state.is_current_player_enemy = is_current_player_enemy;
+	
+	return cloned_state;
+
+
 func apply_move(move : Move) -> GameState:
 	var new_state : GameState = GameState.new();# := duplicate(true);
 
