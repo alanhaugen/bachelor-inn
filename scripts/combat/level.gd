@@ -490,8 +490,8 @@ func MoveAI() -> void:
 		moves_stack.append(move);
 		current_state.apply_move(move);
 	
-	movement_map.clear();
-	animation_path.clear();
+	#movement_map.clear();
+	#animation_path.clear();
 	
 	if (moves_stack.is_empty() == false):
 		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
@@ -580,7 +580,7 @@ func _process(delta: float) -> void:
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
-			active_move.execute();
+			active_move.execute(game_state);
 			var code := enemy_code;
 			if is_player_turn:
 				code = player_code_done;

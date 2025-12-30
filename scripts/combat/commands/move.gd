@@ -25,7 +25,7 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i) -> void:
 	is_wait = false;
 
 
-func execute() -> void:
+func execute(state : GameState) -> void:
 	is_done = true;
 	#aggressor.move_to(end_pos);
 	#units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
@@ -36,10 +36,5 @@ func execute() -> void:
 #				aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
-func redo() -> void:
-	if is_done == false:
-		execute();
-
-
-func undo() -> void:
+func undo(state : GameState) -> void:
 	pass;

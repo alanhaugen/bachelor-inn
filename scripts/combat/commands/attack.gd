@@ -16,7 +16,7 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, in_attacker : Character, 
 	attack_pos = inEndPos;
 
 
-func execute() -> void:
+func execute(state : GameState) -> void:
 	var weapon_damage : int;
 	var weapon_crit : int;
 	if aggressor.weapon:

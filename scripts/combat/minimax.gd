@@ -51,7 +51,7 @@ func choose_best_move(state : GameState, depth : int) -> Move:
 	var best_score := -INF;
 	var best_move : Command = null;
 	
-	for move : Command in state.moves:
+	for move : Command in state.get_legal_moves():
 		var next_state : GameState = state.apply_move(move);
 		var score : int = minimax(next_state, depth - 1, false);
 

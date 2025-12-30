@@ -47,25 +47,16 @@ func clone() -> GameState:
 	return cloned_state;
 
 
-func apply_move(move : Move) -> GameState:
-	var new_state : GameState = GameState.new();# := duplicate(true);
-
-	# Move unit
-	for unit : Character in units:
-		if unit.pos == move.start_pos:
-			unit.pos = move.end_pos;
-
-	# Handle attack
-	if move.is_attack:
-		for unit : Character in units:
-			if unit.pos == move.attack_pos:
-				unit.hp -= move.damage;
+func apply_move(move : Command) -> GameState:
+	var new_state : GameState = clone();
+	
+	move.execute(new_state);
 	
 	return new_state;
 
 
-func get_legal_moves() -> Array[Move]:
-	var moves : Array[Move] = []
+func get_legal_moves() -> Array[Command]:
+	var moves : Array[Command] = []
 
 	for unit in units:
 		if unit.is_enemy == is_current_player_enemy:
@@ -75,13 +66,7 @@ func get_legal_moves() -> Array[Move]:
 
 
 func has_enemy_moves() -> bool:
-	var moves : Array[Command] = [];
-	
-	for unit in units:
-		if unit.is_enemy:
-			moves += MoveGenerator.generate(unit, self);
-	
-	if moves.is_empty():
+	if get_legal_moves().is_empty():
 		return false;
 	
 	return true;

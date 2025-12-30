@@ -5,13 +5,9 @@ extends RefCounted
 ## https://gameprogrammingpatterns.com/command.html
 
 
-func execute() -> void:
+func execute(state : GameState) -> void:
 	pass;
 
 
-func redo() -> void:
-	pass;
-
-
-func undo() -> void:
+func undo(state : GameState) -> void:
 	pass;
