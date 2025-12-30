@@ -83,6 +83,7 @@ enum CameraStates {
 	RETURN }; ## interpolating back to saved position
 var camera_mode : CameraStates = CameraStates.FREE;
 var saved_transform : Transform3D;
+var camera_pos : Transform3D;
 
 func touch(pos :Vector3) -> bool:
 	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM && movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
@@ -549,6 +550,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 		1.0 - exp(-camera_speed * delta)
 	)
 
+
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show();
@@ -564,6 +566,11 @@ func _process(delta: float) -> void:
 	
 	if camera_mode == CameraStates.FREE:
 		saved_transform = global_transform;
+	
+	if camera_mode == CameraStates.RETURN:
+		camera_pos = saved_transform;
+	
+	interpolate_to(camera_pos, delta);
 	
 	if lock_camera == false:
 		if camera.position.x < maximum_camera_x:

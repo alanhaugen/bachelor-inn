@@ -37,7 +37,7 @@ func _on_attack_button_pressed() -> void:
 
 
 func _on_wait_button_pressed() -> void:
-	map.active_move.execute();
+	map.active_move.execute(map.game_state);
 	map.units_map.set_cell_item(map.active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 	map.units_map.set_cell_item(map.active_move.end_pos, map.player_code_done);
 	HidePopup()
