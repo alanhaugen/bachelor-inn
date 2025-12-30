@@ -26,6 +26,8 @@ func execute(state : GameState) -> void:
 	@warning_ignore("integer_division")
 	var attack_strength :int = max(1, (aggressor.strength + weapon_damage) - victim.defense / 2);
 	
+	aggressor.is_moved = true;
+	
 	#Main.battle_log.text += "\nAttacker: \n";
 	#Main.battle_log.text += str(character1.save());
 	#Main.battle_log.text += "\n-----\n";
@@ -49,8 +51,8 @@ func execute(state : GameState) -> void:
 	
 	victim.current_health -= attack_strength;
 	
-	#aggressor.update_health_bar();
-	#victim.update_health_bar();
+	aggressor.update_health_bar();
+	victim.update_health_bar();
 	
 	#Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 	

@@ -147,6 +147,18 @@ func get_unit_name(pos: Vector3) -> String:
 		#return "null";
 	#return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
 
+func show_attack_tiles(pos : Vector3i) -> void:
+	#MoveGenerator.get_valid_neighbour_tiles();
+	var directions := [
+			Vector3i(pos.x, 0, pos.z - 1),
+			Vector3i(pos.x, 0, pos.z + 1),
+			Vector3i(pos.x + 1, 0, pos.z),
+			Vector3i(pos.x - 1, 0, pos.z)
+		]
+	
+	for tile :Vector3i in directions:
+		path_arrow.set_cell_item(tile, 0);
+
 
 func _input(event: InputEvent) -> void:
 	if (state != States.PLAYING):
@@ -224,7 +236,11 @@ func _input(event: InputEvent) -> void:
 					active_move = current_moves[i];
 			
 			show_move_popup(windowPos);
-			a_star(unit_pos, pos);
+			
+			if active_move is Attack:
+				show_attack_tiles(pos);
+			elif active_move is Move:
+				a_star(unit_pos, pos);
 			
 			#activeMove.execute();
 			
@@ -486,7 +502,7 @@ func MoveAI() -> void:
 	var current_state := GameState.from_level(self);
 	
 	while current_state.has_enemy_moves():
-		var move : Move = ai.choose_best_move(current_state, 2);
+		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
 		current_state.apply_move(move);
 	

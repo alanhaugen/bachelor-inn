@@ -40,7 +40,7 @@ func clone() -> GameState:
 	var cloned_state : GameState = GameState.new();
 	
 	for unit in units:
-		cloned_state.units.append(unit);
+		cloned_state.units.append(unit.clone());
 	
 	cloned_state.is_current_player_enemy = is_current_player_enemy;
 	
@@ -59,7 +59,7 @@ func get_legal_moves() -> Array[Command]:
 	var moves : Array[Command] = []
 
 	for unit in units:
-		if unit.is_enemy == is_current_player_enemy:
+		if unit.is_moved == false and unit.is_enemy == is_current_player_enemy:
 			moves += MoveGenerator.generate(unit, self);
 
 	return moves

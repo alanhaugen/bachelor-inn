@@ -8,7 +8,7 @@ extends Command
 var start_pos: Vector3i;
 var end_pos: Vector3i;
 var is_wait: bool;
-var is_done: bool = false;
+
 
 func save() -> Dictionary:
 	var state := {"start_pos": start_pos,
@@ -26,7 +26,8 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i) -> void:
 
 
 func execute(state : GameState) -> void:
-	is_done = true;
+	var unit := state.get_unit(start_pos);
+	unit.move_to(end_pos);
 	#aggressor.move_to(end_pos);
 	#units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
 	#units.set_cell_item(end_pos, grid_code);

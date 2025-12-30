@@ -113,6 +113,18 @@ var is_moved :bool = false;
 
 ## SKILL TREE
 
+func clone() -> Character:
+	var c := Character.new();
+	c.grid_position = grid_position;
+	c.current_health = current_health;
+	c.current_sanity = current_sanity;
+	c.is_moved = is_moved;
+	c.is_enemy = is_enemy;
+	c.weapon = weapon;  # clone if weapon has mutable state
+	# ...copy all relevant fields...
+	return c
+
+
 
 func _close_level_up() -> void:
 	pass;
@@ -282,6 +294,7 @@ func move_to(pos: Vector3i) -> void:
 	is_alive = true;
 	#reset();
 	grid_position = pos;
+	is_moved = true;
 	#if is_playable:
 	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 

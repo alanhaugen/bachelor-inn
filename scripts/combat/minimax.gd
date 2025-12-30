@@ -8,13 +8,13 @@ func minimax(state : GameState, depth : int, maximizing : bool) -> int:
 
 	if maximizing:
 		var best := -INF;
-		for move : Move in state.moves:
+		for move : Command in state.get_legal_moves():
 			var next_state : GameState = state.apply_move(move);
 			best = max(best, minimax(next_state, depth - 1, false));
 		return best
 	else:
 		var best := INF;
-		for move : Move in state.moves:
+		for move : Command in state.get_legal_moves():
 			var next_state : GameState = state.apply_move(move);
 			best = min(best, minimax(next_state, depth - 1, true));
 		return best;
@@ -25,10 +25,9 @@ func evaluate(state : GameState) -> int:
 
 	for unit in state.units:
 		if unit.is_playable == false:
-			score += unit.hp * 10;
+			score += unit.current_health * 10;
 		else:
-			score -= unit.hp * 10;
-		pass;
+			score -= unit.current_health * 10;
 
 	return score;
 
