@@ -1,5 +1,7 @@
 class_name GameState
 extends RefCounted
+## GameState is pure simulation state for AI and rules.
+## No scene or node access should happen here.
 
 var units : Array[Character] = [];
 var terrain : Array[Terrain] = [];
@@ -114,6 +116,14 @@ func is_enemy(pos : Vector3i) -> bool:
 			return true;
 	
 	return false;
+
+
+func get_unit(pos : Vector3i) -> Character:
+	for u in units:
+		if u.grid_position == pos:
+			return u;
+	
+	return null;
 
 
 func save() -> Dictionary:

@@ -28,8 +28,8 @@ func _on_move_button_pressed() -> void:
 
 
 func _on_attack_button_pressed() -> void:
-	if map.active_move.aggressor.weapon == null or map.active_move.aggressor.weapon.is_melee:
-		map.moves_stack.append(map.active_move.neighbour_move);
+	#if map.active_move.aggressor.weapon == null or map.active_move.aggressor.weapon.is_melee:
+	#	map.moves_stack.append(map.active_move.neighbour_move);
 	map.moves_stack.append(map.active_move);
 	map.a_star(map.moves_stack.front().start_pos, map.moves_stack.front().end_pos, false);
 	map.state = map.States.ANIMATING;

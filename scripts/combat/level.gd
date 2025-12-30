@@ -93,7 +93,7 @@ func show_move_popup(window_pos :Vector2) -> void:
 		move_popup.attack_button.show();
 	elif (active_move.is_wait):
 		move_popup.wait_button.show();
-	elif (active_move.is_attack == false && active_move.is_wait == false):
+	else:
 		move_popup.move_button.show();
 
 
@@ -197,7 +197,7 @@ func _input(event: InputEvent) -> void:
 			unit_pos = pos;
 			movement_map.clear();
 			if (selected_unit == get_unit(pos)):
-				active_move = Move.new(pos, pos, player_code_done, selected_unit);
+				active_move = Move.new(pos, pos);
 				active_move.is_wait = true;
 				show_move_popup(windowPos);
 				#show_move_popup(selected_unit.get_unit(pos))
@@ -211,13 +211,16 @@ func _input(event: InputEvent) -> void:
 					if command is Move:
 						touch(command.end_pos);
 					if command is Attack:
-						movement_map.set_cell_item(command.pos, attack_code);
+						movement_map.set_cell_item(command.attack_pos, attack_code);
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
-				if current_moves[i].end_pos == pos:
+				if current_moves[i] is Attack:
+					if current_moves[i].attack_pos == pos:
+						active_move = current_moves[i];
+				elif current_moves[i].end_pos == pos:
 					active_move = current_moves[i];
 			
 			show_move_popup(windowPos);
@@ -576,12 +579,15 @@ func _process(delta: float) -> void:
 				is_player_turn = true;
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
-			selected_unit = null;
 			active_move = moves_stack.pop_front();
 			active_move.execute();
-			if active_move.is_attack == false:
-				units_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-				units_map.set_cell_item(active_move.end_pos, active_move.grid_code);
+			var code := enemy_code;
+			if is_player_turn:
+				code = player_code;
+			units_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+			units_map.set_cell_item(active_move.end_pos, code);
+			selected_unit.move_to(active_move.end_pos);
+			selected_unit = null;
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
 			

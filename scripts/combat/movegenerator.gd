@@ -28,7 +28,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 			Vector3i(pos.x + 1, 0, pos.z),
 			Vector3i(pos.x - 1, 0, pos.z)
 		]
-
+		
 		if unit.is_moved == false:
 			for dir : Vector3i in directions:
 				if dir == start_pos:
@@ -51,12 +51,44 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	
 	for tile :Vector3i in reachable:
 		commands.append(
-			Move.new(start_pos, tile, unit.speciality, unit)
+			Move.new(start_pos, tile)
 		);
 	
 	for tile :Vector3i in attacks:
+		var neighbour := start_pos;
+		if is_neighbour(start_pos, tile) == false:
+			neighbour = get_valid_neighbour(tile, reachable);
 		commands.append(
-			Attack.new(tile, unit, null)
+			Attack.new(start_pos, tile, unit, state.get_unit(tile), neighbour)
 		);
 	
 	return commands;
+
+
+static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
+	var directions := [
+			Vector3i(pos.x, 0, pos.z - 1),
+			Vector3i(pos.x, 0, pos.z + 1),
+			Vector3i(pos.x + 1, 0, pos.z),
+			Vector3i(pos.x - 1, 0, pos.z)
+		]
+	
+	if end_pos in directions:
+		return true;
+	
+	return false;
+
+
+static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> Vector3i:
+	var directions := [
+			Vector3i(pos.x, 0, pos.z - 1),
+			Vector3i(pos.x, 0, pos.z + 1),
+			Vector3i(pos.x + 1, 0, pos.z),
+			Vector3i(pos.x - 1, 0, pos.z)
+		]
+	
+	for tile in reachable:
+		if tile in directions:
+			return tile;
+	
+	return Vector3i(-1, -1, -1);

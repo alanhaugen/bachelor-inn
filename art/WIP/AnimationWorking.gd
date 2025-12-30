@@ -41,11 +41,10 @@ func play(anim : SpriteAnim) -> void:
 func play_clip(anim :String) -> void:
 	pass;
 
+
 func _ready() -> void:
 	if autoplay and base_animation:
 		play(base_animation)
-
-
 
 
 func _process(delta : float) -> void:
