@@ -17,12 +17,14 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, in_attacker : Character, 
 
 
 func execute() -> void:
-	#if aggressor.weapon:
-	#	weapon_damage = aggressor.weapon.damage_modifier;
-	#	weapon_crit = aggressor.weapon.weapon_critical;
+	var weapon_damage : int;
+	var weapon_crit : int;
+	if aggressor.weapon:
+		weapon_damage = aggressor.weapon.damage_modifier;
+		weapon_crit = aggressor.weapon.weapon_critical;
 	
-	#@warning_ignore("integer_division")
-	#attack_strength = max(1, (aggressor.strength + weapon_damage) - victim.defense / 2);
+	@warning_ignore("integer_division")
+	var attack_strength :int = max(1, (aggressor.strength + weapon_damage) - victim.defense / 2);
 	
 	#Main.battle_log.text += "\nAttacker: \n";
 	#Main.battle_log.text += str(character1.save());
@@ -45,7 +47,7 @@ func execute() -> void:
 	#	print("Critical hit!");
 	#	attack_strength *= 2;
 	
-	#victim.current_health -= attack_strength;
+	victim.current_health -= attack_strength;
 	
 	#aggressor.update_health_bar();
 	#victim.update_health_bar();

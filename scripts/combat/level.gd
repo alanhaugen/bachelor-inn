@@ -583,7 +583,7 @@ func _process(delta: float) -> void:
 			active_move.execute();
 			var code := enemy_code;
 			if is_player_turn:
-				code = player_code;
+				code = player_code_done;
 			units_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			units_map.set_cell_item(active_move.end_pos, code);
 			selected_unit.move_to(active_move.end_pos);
