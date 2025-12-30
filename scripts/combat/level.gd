@@ -536,6 +536,10 @@ func _process(delta: float) -> void:
 	
 	turn_transition.hide();
 	
+	if selected_unit and is_in_menu == false:
+		var pos :Vector3i = get_grid_cell_from_mouse();
+		a_star(selected_unit.grid_position, pos);
+	
 	if lock_camera == false:
 		if camera.position.x < maximum_camera_x:
 			if Input.is_action_pressed("pan_right"):
