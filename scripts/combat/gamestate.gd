@@ -10,11 +10,18 @@ static func from_level(level : Level) -> GameState:
 	var state : GameState = GameState.new();
 	
 	var level_units :Array[Vector3i] = level.units_map.get_used_cells();
-	for i in level_units.size():
+	for i in range(level_units.size()):
 		var pos :Vector3i = level_units[i];
 		var character: Character = level.get_unit(pos);
 		if character is Character:
 			state.units.append(character);
+	
+	var level_terrain :Array[Vector3i] = level.map.get_used_cells();
+	for i in range(level_terrain.size()):
+		var pos : Vector3i = level_terrain[i];
+		var id : int = level.map.get_cell_item(pos);
+		var type : String = level.map.mesh_library.get_item_name(id);
+		state.terrain.append(Terrain.new(pos, type));
 	
 	state.is_current_player_enemy = (level.is_player_turn == false);
 	
@@ -73,11 +80,24 @@ func has_enemy_moves() -> bool:
 
 
 func is_inside_map(pos : Vector3i) -> bool:
+	for t in terrain:
+		if t.position == pos:
+			return true;
+	
 	return false;
 
 
 func is_free(pos : Vector3i) -> bool:
-	return false;
+	for t in terrain:
+		if t.position == pos and t.type == "Water":
+			return false;
+	
+	for u in units:
+		print(u.grid_position);
+		if u.grid_position == pos:
+			return false;
+	
+	return true;
 
 
 func save() -> Dictionary:

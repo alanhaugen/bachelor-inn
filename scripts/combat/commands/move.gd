@@ -31,11 +31,11 @@ func save() -> Dictionary:
 	return state;
 
 
-func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inUnits: GridMap, inCharacter1: Character, inIsAttack :bool = false, inCharacter2: Character = null, in_neighbour_move: Move = null) -> void:
+func _init(inStartPos :Vector3i, inEndPos :Vector3i, inGridCode :int, inCharacter1: Character, inIsAttack :bool = false, inCharacter2: Character = null, in_neighbour_move: Move = null) -> void:
 	start_pos = inStartPos;
 	end_pos = inEndPos;
 	grid_code = inGridCode;
-	units = inUnits;
+	#units = inUnits;
 	is_attack = inIsAttack;
 	is_wait = false;
 	aggressor = inCharacter1;
@@ -98,15 +98,15 @@ func execute() -> void:
 			if aggressor.is_playable:
 				Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
 				aggressor.experience += victim.intimidation;
-			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, units, aggressor));
+			Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, aggressor));
 		
 		aggressor.hide_ui();
 #		if aggressor.is_playable:
 #			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 	else:
 		aggressor.move_to(end_pos);
-		units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
-		units.set_cell_item(end_pos, grid_code);
+		#units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
+		#units.set_cell_item(end_pos, grid_code);
 		aggressor.is_moved = true;
 #		if aggressor.is_playable:
 #			if end_pos == start_pos:
@@ -121,14 +121,14 @@ func redo() -> void:
 			victim.health -= attack_strength;
 		else:
 			aggressor.move_to(end_pos);
-			units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
-			units.set_cell_item(end_pos, grid_code);
+			#units.set_cell_item(start_pos, GridMap.INVALID_CELL_ITEM);
+			#units.set_cell_item(end_pos, grid_code);
 
 
 func undo() -> void:
 	if is_done:
-		units.set_cell_item(end_pos, GridMap.INVALID_CELL_ITEM);
-		units.set_cell_item(start_pos, grid_code);
+		#units.set_cell_item(end_pos, GridMap.INVALID_CELL_ITEM);
+		#units.set_cell_item(start_pos, grid_code);
 		
 		if is_attack:
 			victim.health += attack_strength;

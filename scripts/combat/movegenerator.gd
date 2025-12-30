@@ -7,35 +7,47 @@ static func generate(unit : Character, state : GameState) -> Array[Move]:
 
 
 static func dijkstra(unit : Character, state : GameState) -> Array[Move]:
-	var frontier :int = 0;
-	var frontierPositions :Array;
-	var nextFrontierPositions :Array;
-	
-	var pos: Vector3i = unit.position;
-	var moves: Array[Move];
-	
-	frontierPositions.append(pos);
-	
-	while (frontier < unit.movement && frontierPositions.is_empty() == false):
-		pos = frontierPositions.pop_front();
-		
-		var north : Vector3i = Vector3i(pos.x, 0, pos.z - 1);
-		var south : Vector3i = Vector3i(pos.x, 0, pos.z + 1);
-		var east  : Vector3i = Vector3i(pos.x + 1, 0, pos.z);
-		var west  : Vector3i = Vector3i(pos.x - 1, 0, pos.z);
-		
-		var directions : Array[Vector3i] = [north, south, east, west];
-		
-		# Only register commands for characters that have not moved yet
+	var frontier := 0
+	var frontierPositions :Array = []
+	var nextFrontierPositions :Array = []
+	var visited :Dictionary = {}
+	var moves :Array[Move] = []
+	var reachable :Array[Vector3i] = []
+
+	var start_pos :Vector3i = unit.grid_position
+	frontierPositions.append(start_pos)
+	visited[start_pos] = true
+
+	while frontier < unit.movement and frontierPositions.is_empty() == false:
+		var pos :Vector3i = frontierPositions.pop_front()
+
+		var directions := [
+			Vector3i(pos.x, 0, pos.z - 1),
+			Vector3i(pos.x, 0, pos.z + 1),
+			Vector3i(pos.x + 1, 0, pos.z),
+			Vector3i(pos.x - 1, 0, pos.z)
+		]
+
 		if unit.is_moved == false:
-			for dir in directions:
+			for dir : Vector3i in directions:
+				if dir == start_pos:
+					continue
+				if visited.has(dir):
+					continue;
 				if state.is_inside_map(dir) and state.is_free(dir):
-					nextFrontierPositions.append(dir);
-					#moves.append(Move.new(startPos, north, type, units_map, selected_unit));
-			
-		if (frontierPositions.is_empty() == true):
-			frontier += 1;
-			frontierPositions = nextFrontierPositions.duplicate();
-			nextFrontierPositions.clear();
+					visited[dir] = true
+					nextFrontierPositions.append(dir)
+					if not reachable.has(dir):
+						reachable.append(dir);
+
+		if frontierPositions.is_empty():
+			frontier += 1
+			frontierPositions = nextFrontierPositions.duplicate()
+			nextFrontierPositions.clear()
 	
-	return moves;
+	for tile :Vector3i in reachable:
+		moves.append(
+			Move.new(start_pos, tile, unit.speciality, unit)
+		)
+	
+	return moves
