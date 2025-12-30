@@ -94,7 +94,7 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -106.0
+offset_top = -128.0
 offset_right = 161.0
 offset_bottom = 5.0
 grow_vertical = 0
@@ -371,6 +371,12 @@ layout_mode = 2
 horizontal_alignment = 1
 
 [node name="Type" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Level" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(125, 0)
 layout_mode = 2

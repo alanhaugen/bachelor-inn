@@ -274,6 +274,8 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.focus = character_script.focus;
 			stat_script.endurance = character_script.endurance;
 			
+			stat_script.level = "Level: " + str(character_script.current_level);
+			
 			stat_script._set_type(Character.Speciality.keys()[character_script.speciality] + " " + Character.Personality.keys()[character_script.personality]);
 			
 			popup.show();

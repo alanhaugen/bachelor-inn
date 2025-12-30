@@ -93,7 +93,6 @@ func is_free(pos : Vector3i) -> bool:
 			return false;
 	
 	for u in units:
-		print(u.grid_position);
 		if u.grid_position == pos:
 			return false;
 	

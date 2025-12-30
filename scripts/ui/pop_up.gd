@@ -15,6 +15,7 @@ extends Control
 @onready var focus_text: Label = %Focus
 @onready var endurance_text: Label = %Endurance
 @onready var type: Label = %Type
+@onready var level_text: Label = %Level
 
 var icon: TextureRect = null : set = _set_icon;
 var health: int = 0 : set = _set_health;
@@ -29,6 +30,8 @@ var mind: int = 0 : set = _set_mind;
 var speed: int = 0 : set = _set_speed;
 var focus: int = 0 : set = _set_focus;
 var endurance: int = 0 : set = _set_endurance;
+
+var level: String = "" : set = _set_level;
 
 
 func _set_icon(texture: TextureRect) -> void:
@@ -92,3 +95,7 @@ func _set_endurance(in_endurance: int) -> void:
 
 func _set_type(in_text: String) -> void:
 	type.text = in_text;
+
+
+func _set_level(in_text: String) -> void:
+	level_text.text = in_text;
