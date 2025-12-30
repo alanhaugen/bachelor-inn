@@ -9,6 +9,8 @@ Add mechanics by extending the Dialogic timeline and emitting new signals from g
 
 You can make levels by editing the scenes in scenes/levels
 
+They support levels (height)
+
 The first level is firstLevel
 
 You will find the order levels are loaded in scenes/ui/main_menu.tscn (see Levels in inspector)
@@ -24,6 +26,8 @@ As stated above, Units GridMap in the level scenes decide where units are placed
 In Dialogic, you can make characters which players get to choose.
 
 In Dialogic, you can use a call to Event to place units
+
+The original cast of units are made in scripts/save_game.gd
 
 ### What Dialogic can trigger (start battle, end battle, cutscene)
 
@@ -42,3 +46,9 @@ Event lets you
 ### What not to touch
 
 You should be able to build the rest of the game without touching gdscript
+
+The game is essentally a series of events, see scripts/combat/commands
+
+### What next
+
+Remember to work on save/load, interim battle scene, battle sequences, story, ui, etc.

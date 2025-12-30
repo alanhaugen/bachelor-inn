@@ -76,7 +76,13 @@ var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
 var move_code: int = 1;
-
+enum CameraStates {
+	FREE, ## player controlled
+	FOCUS_UNIT, ## interpolating to a unit
+	TRACK_MOVE, ## following a moving unit
+	RETURN }; ## interpolating back to saved position
+var camera_mode : CameraStates = CameraStates.FREE;
+var saved_transform : Transform3D;
 
 func touch(pos :Vector3) -> bool:
 	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM && movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
@@ -532,6 +538,17 @@ func CheckVictoryConditions() -> void:
 		Main.next_level();
 
 
+func interpolate_to(target_transform:Transform3D, delta:float) -> void:
+	global_transform.origin = global_transform.origin.lerp(
+		target_transform.origin,
+		1.0 - exp(-camera_speed * delta)
+	)
+
+	global_transform.basis = global_transform.basis.slerp(
+		target_transform.basis,
+		1.0 - exp(-camera_speed * delta)
+	)
+
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show();
@@ -544,6 +561,9 @@ func _process(delta: float) -> void:
 		a_star(selected_unit.grid_position, pos);
 		if get_unit(pos) is Character and get_unit(pos).is_enemy and stat_popup_enemy.visible == false:
 			update_stat(get_unit(pos), stat_popup_enemy);
+	
+	if camera_mode == CameraStates.FREE:
+		saved_transform = global_transform;
 	
 	if lock_camera == false:
 		if camera.position.x < maximum_camera_x:
