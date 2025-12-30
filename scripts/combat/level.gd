@@ -165,6 +165,7 @@ func _input(event: InputEvent) -> void:
 	
 	if (event is InputEventMouseMotion and is_dragging):
 		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
+		Tutorial.tutorial_camera_moved();
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
