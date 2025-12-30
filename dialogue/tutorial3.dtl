@@ -2,4 +2,7 @@ do Tutorial.tutorial_lock_menus()
 Selected.
 do Tutorial.tutorial_unlock_menus()
 do Tutorial.tutorial_highlight_tile(3, 3)
-Left-click a square to move there.
+if {PLATFORM} == "MOBILE":
+	Tap a square to move there.
+else:
+	Left-click a square to move there.
