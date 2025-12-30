@@ -28,7 +28,7 @@ func execute(state : GameState) -> void:
 	
 	aggressor.is_moved = true;
 	
-	#Main.battle_log.text += "\nAttacker: \n";
+	Main.battle_log.text = "Attacker does " + str(attack_strength) + " damage.\n" + Main.battle_log.text;
 	#Main.battle_log.text += str(character1.save());
 	#Main.battle_log.text += "\n-----\n";
 	#Main.battle_log.text += "Victim: ";
