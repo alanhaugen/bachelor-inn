@@ -162,7 +162,7 @@ region_rect = Rect2(64, 128, 32, 32)
 
 [node name="Main" type="Node3D"]
 script = ExtResource("3_wxwbn")
-levels = Array[String](["first", "bonus", "second"])
+levels = Array[String](["first", "second", "third"])
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

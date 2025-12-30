@@ -1,6 +1,44 @@
 # bachelor-inn
 
-HANDOFF note
+## HANDOFF note
 
 Tutorial text is intentionally minimal.
 Add mechanics by extending the Dialogic timeline and emitting new signals from game logic.
+
+### How levels are authored (GridMap rules)
+
+You can make levels by editing the scenes in scenes/levels
+
+The first level is firstLevel
+
+You will find the order levels are loaded in scenes/ui/main_menu.tscn (see Levels in inspector)
+
+Please edit the GridMap Map to change the appearance and weights of the level
+
+Edit Units to place unit spawn points and interactables.
+
+### How units are placed
+
+As stated above, Units GridMap in the level scenes decide where units are placed
+
+In Dialogic, you can make characters which players get to choose.
+
+In Dialogic, you can use a call to Event to place units
+
+### What Dialogic can trigger (start battle, end battle, cutscene)
+
+Check out Main and Event calls inside Dialogic
+
+Main lets you
+
+* load next level
+* load a specific level
+
+Event lets you
+
+* move a unit
+* can be triggered from the trigger interactable tile
+
+### What not to touch
+
+You should be able to build the rest of the game without touching gdscript
