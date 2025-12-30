@@ -232,12 +232,14 @@ func _input(event: InputEvent) -> void:
 				elif current_moves[i].end_pos == pos:
 					active_move = current_moves[i];
 			
-			show_move_popup(windowPos);
-			
 			if active_move is Attack:
 				show_attack_tiles(pos);
+				show_move_popup(windowPos);
 			elif active_move is Move:
+				moves_stack.append(active_move);
+				state = States.ANIMATING;
 				a_star(unit_pos, pos);
+				path_arrow.clear();
 			
 			#activeMove.execute();
 			
