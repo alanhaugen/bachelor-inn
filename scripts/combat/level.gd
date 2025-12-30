@@ -89,11 +89,11 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.show();
 	is_in_menu = true;
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
-	if (active_move.is_attack):
+	if active_move is Attack:
 		move_popup.attack_button.show();
-	if (active_move.is_wait):
+	elif (active_move.is_wait):
 		move_popup.wait_button.show();
-	if (active_move.is_attack == false && active_move.is_wait == false):
+	elif (active_move.is_attack == false && active_move.is_wait == false):
 		move_popup.move_button.show();
 
 
@@ -219,12 +219,6 @@ func _input(event: InputEvent) -> void:
 			for i in range(current_moves.size()):
 				if current_moves[i].end_pos == pos:
 					active_move = current_moves[i];
-					active_move.aggressor = selected_unit;
-					active_move.grid_code = player_code;
-					if active_move.neighbour_move:
-						active_move.neighbour_move.grid_code = player_code_done;
-						active_move.neighbour_move.aggressor = active_move.aggressor;
-					break;
 			
 			show_move_popup(windowPos);
 			a_star(unit_pos, pos);

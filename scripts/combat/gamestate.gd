@@ -1,8 +1,8 @@
 class_name GameState
 extends RefCounted
 
-var units :Array[Character] = [];
-var terrain :Array[Terrain] = [];
+var units : Array[Character] = [];
+var terrain : Array[Terrain] = [];
 var is_current_player_enemy := true;
 
 
@@ -11,10 +11,16 @@ static func from_level(level : Level) -> GameState:
 	
 	var level_units :Array[Vector3i] = level.units_map.get_used_cells();
 	for i in range(level_units.size()):
-		var pos :Vector3i = level_units[i];
-		var character: Character = level.get_unit(pos);
+		var pos : Vector3i = level_units[i];
+		var character : Character = level.get_unit(pos);
+		# Add a unit to the units array
 		if character is Character:
 			state.units.append(character);
+		else:
+			# Interactables will be considered terrain, but is in the units_map
+			var id : int = level.units_map.get_cell_item(pos);
+			var type : String = level.units_map.mesh_library.get_item_name(id);
+			state.terrain.append(Terrain.new(pos, type));
 	
 	var level_terrain :Array[Vector3i] = level.map.get_used_cells();
 	for i in range(level_terrain.size()):
@@ -89,7 +95,10 @@ func is_inside_map(pos : Vector3i) -> bool:
 
 func is_free(pos : Vector3i) -> bool:
 	for t in terrain:
-		if t.position == pos and t.type == "Water":
+		if t.position == pos and (
+			t.type == "Water" or
+			t.type == "Chest"
+		):
 			return false;
 	
 	for u in units:

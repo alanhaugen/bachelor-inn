@@ -49,9 +49,9 @@ func is_terminal(state : GameState) -> bool:
 
 func choose_best_move(state : GameState, depth : int) -> Move:
 	var best_score := -INF;
-	var best_move : Move = null;
+	var best_move : Command = null;
 
-	for move : Move in state.moves:
+	for move : Command in state.moves:
 		var next_state : GameState = state.apply_move(move);
 		var score : int = minimax(next_state, depth - 1, false);
 
