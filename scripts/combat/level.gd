@@ -148,15 +148,12 @@ func get_unit_name(pos: Vector3) -> String:
 	#return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
 
 func show_attack_tiles(pos : Vector3i) -> void:
-	#MoveGenerator.get_valid_neighbour_tiles();
-	var directions := [
-			Vector3i(pos.x, 0, pos.z - 1),
-			Vector3i(pos.x, 0, pos.z + 1),
-			Vector3i(pos.x + 1, 0, pos.z),
-			Vector3i(pos.x - 1, 0, pos.z)
-		]
+	var reachable : Array[Vector3i] = [];
 	
-	for tile :Vector3i in directions:
+	for move : Move in current_moves:
+		reachable.append(move.end_pos);
+	
+	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
 		path_arrow.set_cell_item(tile, 0);
 
 

@@ -92,3 +92,20 @@ static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> 
 			return tile;
 	
 	return Vector3i(-1, -1, -1);
+
+
+static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) -> Array[Vector3i]:
+	var directions := [
+			Vector3i(pos.x, 0, pos.z - 1),
+			Vector3i(pos.x, 0, pos.z + 1),
+			Vector3i(pos.x + 1, 0, pos.z),
+			Vector3i(pos.x - 1, 0, pos.z)
+		]
+	
+	var valid : Array[Vector3i] = [];
+	
+	for tile in reachable:
+		if tile in directions:
+			valid.append(tile);
+	
+	return valid;
