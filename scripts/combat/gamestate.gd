@@ -67,7 +67,7 @@ func get_legal_moves() -> Array[Move]:
 
 
 func has_enemy_moves() -> bool:
-	var moves : Array[Move] = [];
+	var moves : Array[Command] = [];
 	
 	for unit in units:
 		if unit.is_enemy:
@@ -97,6 +97,14 @@ func is_free(pos : Vector3i) -> bool:
 			return false;
 	
 	return true;
+
+
+func is_enemy(pos : Vector3i) -> bool:
+	for u in units:
+		if u.is_enemy and u.grid_position == pos:
+			return true;
+	
+	return false;
 
 
 func save() -> Dictionary:

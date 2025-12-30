@@ -65,10 +65,10 @@ var game_state : GameState;
 
 var is_in_menu: bool = false;
 var lock_camera: bool = false;
-var active_move: Move;
+var active_move: Command;
 var moves_stack: Array;
 
-var current_moves: Array[Move];
+var current_moves: Array[Command];
 var is_player_turn: bool = true;
 var unit_pos: Vector3;
 var player_code: int = 0;
@@ -207,8 +207,11 @@ func _input(event: InputEvent) -> void:
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
 				current_moves = MoveGenerator.generate(selected_unit, game_state);
-				for move in current_moves:
-					touch(move.end_pos);
+				for command in current_moves:
+					if command is Move:
+						touch(command.end_pos);
+					if command is Attack:
+						movement_map.set_cell_item(command.pos, attack_code);
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);

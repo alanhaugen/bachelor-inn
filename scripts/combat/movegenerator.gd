@@ -1,18 +1,19 @@
 class_name MoveGenerator
 extends RefCounted
 
-static func generate(unit : Character, state : GameState) -> Array[Move]:
-	var moves : Array[Move] = dijkstra(unit, state);
+static func generate(unit : Character, state : GameState) -> Array[Command]:
+	var moves : Array[Command] = dijkstra(unit, state);
 	return moves;
 
 
-static func dijkstra(unit : Character, state : GameState) -> Array[Move]:
+static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	var frontier := 0
 	var frontierPositions :Array = []
 	var nextFrontierPositions :Array = []
 	var visited :Dictionary = {}
-	var moves :Array[Move] = []
+	var commands :Array[Command] = []
 	var reachable :Array[Vector3i] = []
+	var attacks :Array[Vector3i] = []
 
 	var start_pos :Vector3i = unit.grid_position
 	frontierPositions.append(start_pos)
@@ -39,15 +40,23 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Move]:
 					nextFrontierPositions.append(dir)
 					if not reachable.has(dir):
 						reachable.append(dir);
-
+				if state.is_enemy(dir):
+					if not attacks.has(dir):
+						attacks.append(dir);
+		
 		if frontierPositions.is_empty():
 			frontier += 1
 			frontierPositions = nextFrontierPositions.duplicate()
 			nextFrontierPositions.clear()
 	
 	for tile :Vector3i in reachable:
-		moves.append(
+		commands.append(
 			Move.new(start_pos, tile, unit.speciality, unit)
-		)
+		);
 	
-	return moves
+	for tile :Vector3i in attacks:
+		commands.append(
+			Attack.new(tile, unit, null)
+		);
+	
+	return commands;
