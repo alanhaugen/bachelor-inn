@@ -9,15 +9,17 @@ Add mechanics by extending the Dialogic timeline and emitting new signals from g
 
 You can make levels by editing the scenes in scenes/levels
 
-They support levels (height)
+They support Grid Floor level planes (building tiles in height)
 
 The first level is firstLevel
 
 You will find the order levels are loaded in scenes/ui/main_menu.tscn (see Levels in inspector)
 
-Please edit the GridMap Map to change the appearance and weights of the level
+Please edit the GridMap "Map" to change the appearance and weights of the level
 
-Edit Units to place unit spawn points and interactables.
+Edit Units to place unit spawn points and interactables
+
+You can change weights in scripts/combat/terrain.gd
 
 ### How units are placed
 

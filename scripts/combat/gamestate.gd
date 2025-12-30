@@ -82,10 +82,7 @@ func is_inside_map(pos : Vector3i) -> bool:
 
 func is_free(pos : Vector3i) -> bool:
 	for t in terrain:
-		if t.position == pos and (
-			t.type == "Water" or
-			t.type == "Chest"
-		):
+		if t.position == pos and t.is_passable == false:
 			return false;
 	
 	for u in units:
