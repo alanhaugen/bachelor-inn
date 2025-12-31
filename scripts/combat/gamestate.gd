@@ -122,7 +122,7 @@ func is_free(pos : Vector3i) -> bool:
 
 func is_enemy(pos : Vector3i) -> bool:
 	for u in units:
-		if u.is_enemy and u.grid_position == pos:
+		if u.is_enemy == !is_current_player_enemy and u.grid_position == pos:
 			return true;
 	
 	return false;
