@@ -38,4 +38,5 @@ func execute(state : GameState) -> void:
 
 
 func undo(state : GameState) -> void:
-	pass;
+	var unit := state.get_unit(end_pos);
+	unit.move_to(start_pos);

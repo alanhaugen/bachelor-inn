@@ -49,20 +49,46 @@ func clone() -> GameState:
 	return cloned_state;
 
 
+func reset_moves() -> void:
+	for unit in units:
+		unit.is_moved = false;
+
+
 func apply_move(move : Command) -> GameState:
 	var new_state : GameState = clone();
 	
 	move.execute(new_state);
 	
+	if new_state.no_units_remaining():
+		new_state.end_turn();
+	
 	return new_state;
+
+
+func no_units_remaining() -> bool:
+	for unit in units:
+		if unit.is_moved == false:
+			return false;
+	return true;
+
+
+func end_turn() -> void:
+	is_current_player_enemy = !is_current_player_enemy;
+	reset_moves();
 
 
 func get_legal_moves() -> Array[Command]:
 	var moves : Array[Command] = []
 
 	for unit in units:
-		if unit.is_moved == false and unit.current_health > 0 and unit.is_enemy == is_current_player_enemy:
-			moves += MoveGenerator.generate(unit, self);
+		if unit.is_moved:
+			continue;
+		if unit.is_alive == false:
+			continue;
+		if unit.is_enemy != is_current_player_enemy:
+			continue;
+		
+		moves += MoveGenerator.generate(unit, self);
 
 	return moves
 

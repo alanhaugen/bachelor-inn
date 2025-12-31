@@ -115,6 +115,7 @@ var is_moved :bool = false;
 
 func clone() -> Character:
 	var c := Character.new();
+	c.unit_name = unit_name;
 	c.grid_position = grid_position;
 	c.current_health = current_health;
 	c.current_sanity = current_sanity;
@@ -133,22 +134,22 @@ func _close_level_up() -> void:
 func _set_sanity(in_sanity: int) -> void:
 	if in_sanity > mind:
 		in_sanity = mind;
-	if (Main.battle_log):
-		var dir := " loses ";
-		if current_sanity < in_sanity:
-			dir = " gains ";
-		Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
+	#if (Main.battle_log):
+	#	var dir := " loses ";
+	#	if current_sanity < in_sanity:
+	#		dir = " gains ";
+	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
 	current_sanity = in_sanity;
 	if current_sanity < 0 and current_health > 0:
 		is_playable = false;
-		Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
-		Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
+	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
+	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		unit_name = unit_name + "'cthulhu";
 		health_bar = health_bar_enemy;
-		health_bar_ally.hide();
-		health_bar_enemy.show();
-	if health_bar:
-		update_health_bar();
+	#	health_bar_ally.hide();
+	#	health_bar_enemy.show();
+	#if health_bar:
+	#	update_health_bar();
 
 
 func _set_experience(in_experience: int) -> void:
@@ -312,8 +313,8 @@ func reset() -> void:
 
 func die() -> void:
 	is_alive = false;
-	hide_ui();
-	hide();
+	#hide_ui();
+	#hide();
 	grid_position = Vector3(-100, -100, -100);
 
 

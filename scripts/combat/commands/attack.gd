@@ -51,8 +51,8 @@ func execute(state : GameState) -> void:
 	
 	victim.current_health -= attack_strength;
 	
-	aggressor.update_health_bar();
-	victim.update_health_bar();
+	#aggressor.update_health_bar();
+	#victim.update_health_bar();
 	
 	#Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 	
@@ -61,21 +61,21 @@ func execute(state : GameState) -> void:
 		if victim.current_health > 0:
 			@warning_ignore("integer_division")
 			aggressor.current_sanity -= victim.intimidation / aggressor.mind;
-			Main.level.update_stat(aggressor, Main.level.stat_popup_player);
-			Main.level.update_stat(victim, Main.level.stat_popup_enemy);
+			#Main.level.update_stat(aggressor, Main.level.stat_popup_player);
+			#Main.level.update_stat(victim, Main.level.stat_popup_enemy);
 	else:
 		@warning_ignore("integer_division")
 		victim.current_sanity -= aggressor.intimidation / victim.mind;
-		Main.level.update_stat(aggressor, Main.level.stat_popup_enemy);
-		Main.level.update_stat(victim, Main.level.stat_popup_player);
+		#Main.level.update_stat(aggressor, Main.level.stat_popup_enemy);
+		#Main.level.update_stat(victim, Main.level.stat_popup_player);
 	if victim.current_health <= 0:
 		victim.die();
-		Main.battle_log.text = (victim.unit_name + " dies.\n") + Main.battle_log.text;
+		#Main.battle_log.text = (victim.unit_name + " dies.\n") + Main.battle_log.text;
 		if aggressor.is_playable:
-			Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
+			#Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
 			aggressor.experience += victim.intimidation;
 		#Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, aggressor));
 	
-	aggressor.hide_ui();
+	#aggressor.hide_ui();
 #		if aggressor.is_playable:
 #			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
