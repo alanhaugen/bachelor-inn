@@ -311,6 +311,7 @@ patch_margin_right = 11
 patch_margin_bottom = 11
 
 [node name="Icon" type="NinePatchRect" parent="VBoxContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

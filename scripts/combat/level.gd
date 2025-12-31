@@ -383,7 +383,7 @@ func _ready() -> void:
 			#new_unit = ENEMY.instantiate();
 			new_unit = Character.new();
 			new_unit.is_playable = false;
-			new_unit.unit_name = monster_names[randi_range(0, monster_names.size())];
+			new_unit.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 			if randi_range(1,2) == 1:
 				new_unit.sprite_sheet_path = "res://art/textures/enemy1.png";
 			else:

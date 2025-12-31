@@ -113,6 +113,7 @@ var is_moved :bool = false;
 
 ## SKILL TREE
 
+
 func clone() -> Character:
 	var c := Character.new();
 	c.unit_name = unit_name;
@@ -127,7 +128,6 @@ func clone() -> Character:
 	c.weapon = weapon;  # clone if weapon has mutable state
 	# ...copy all relevant fields...
 	return c
-
 
 
 func _close_level_up() -> void:
@@ -324,6 +324,9 @@ func reset() -> void:
 
 
 func die(simulate_only : bool) -> void:
+	if is_alive == false:
+		push_error("Killing already dead unit");
+	
 	is_alive = false;
 	
 	if simulate_only == false:
