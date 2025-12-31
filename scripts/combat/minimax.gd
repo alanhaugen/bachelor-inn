@@ -37,11 +37,11 @@ func is_terminal(state : GameState) -> bool:
 	var player_alive := false;
 
 	for unit in state.units:
-		if unit.is_playable == false:
-			enemy_alive = true;
-		else:
-			player_alive = true;
-		pass;
+		if unit.current_health > 0:
+			if unit.is_playable == false:
+				enemy_alive = true;
+			else:
+				player_alive = true;
 
 	return not enemy_alive or not player_alive;
 

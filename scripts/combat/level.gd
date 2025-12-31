@@ -466,15 +466,15 @@ func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 				astar.set_point_solid(pos);
 			if (get_unit_name(pos3D) != "null" && pos3D != end):
 				astar.set_point_solid(pos);
-
-	var path :PackedVector2Array = astar.get_point_path(Vector2i(start.x + 11, start.z + 15), Vector2i(end.x + 11, end.z + 15));
+	
+	var path : PackedVector2Array = astar.get_point_path(Vector2i(start.x + 11, start.z + 15), Vector2i(end.x + 11, end.z + 15));
 	
 	if not path.is_empty():
 		if (showPath):
 			for i in range(path.size()):
 				var pos: Vector3 = Vector3(path[i].x - 11, 0, path[i].y - 15);
 				path_arrow.set_cell_item(pos, 0);
-	
+		
 		animation_path.clear();
 		
 		for i :int in path.size():
@@ -544,7 +544,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 		target_transform.origin,
 		1.0 - exp(-camera_speed * delta)
 	)
-
+	
 	global_transform.basis = global_transform.basis.slerp(
 		target_transform.basis,
 		1.0 - exp(-camera_speed * delta)
