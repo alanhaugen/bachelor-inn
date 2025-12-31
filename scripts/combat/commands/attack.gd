@@ -29,8 +29,6 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	aggressor.is_moved = true;
 	
 	if simulate_only == false:
-		Main.battle_log.text = "Attacker does " + str(attack_strength) + " damage.\n" + Main.battle_log.text;
-		
 		# Miss logic
 		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (victim.speed * 3 + victim.luck) / 2):
