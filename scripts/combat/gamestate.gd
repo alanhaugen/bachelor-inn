@@ -42,6 +42,8 @@ func clone() -> GameState:
 	for unit in units:
 		cloned_state.units.append(unit.clone());
 	
+	cloned_state.terrain = terrain;
+	
 	cloned_state.is_current_player_enemy = is_current_player_enemy;
 	
 	return cloned_state;

@@ -641,7 +641,7 @@ func _process(delta: float) -> void:
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
 			
-			if (moves_stack.is_empty() == false and moves_stack.front().is_attack == false):
+			if (moves_stack.is_empty() == false):
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
 			
 			if (animation_path.is_empty() == false):
