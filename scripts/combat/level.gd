@@ -45,7 +45,7 @@ var side_bar_1: Control;
 var side_bar_2: Control;
 var side_bar_3: Control;
 var stat_popup_enemy: Control;
-var completed_moves :Array[Move];
+var completed_moves :Array[Command];
 
 var characters: Array[Character];
 
@@ -505,6 +505,8 @@ func reset_all_units() -> void:
 func MoveAI() -> void:
 	reset_all_units();
 	
+	game_state.end_turn();
+	
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
@@ -513,8 +515,7 @@ func MoveAI() -> void:
 		moves_stack.append(move);
 		current_state = current_state.apply_move(move);
 	
-	#movement_map.clear();
-	#animation_path.clear();
+	game_state.end_turn();
 	
 	if (moves_stack.is_empty() == false):
 		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);

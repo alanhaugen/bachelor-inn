@@ -54,10 +54,10 @@ func reset_moves() -> void:
 		unit.is_moved = false;
 
 
-func apply_move(move : Command) -> GameState:
+func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	var new_state : GameState = clone();
 	
-	move.execute(new_state);
+	move.execute(new_state, simulate_only);
 	
 	if new_state.no_units_remaining():
 		new_state.end_turn();
@@ -114,7 +114,7 @@ func is_free(pos : Vector3i) -> bool:
 			return false;
 	
 	for u in units:
-		if u.grid_position == pos:
+		if u.grid_position == pos and u.is_alive:
 			return false;
 	
 	return true;

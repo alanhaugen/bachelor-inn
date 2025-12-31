@@ -121,6 +121,9 @@ func clone() -> Character:
 	c.current_sanity = current_sanity;
 	c.is_moved = is_moved;
 	c.is_enemy = is_enemy;
+	c.health_bar = health_bar;
+	c.health_bar_ally = health_bar_ally;
+	c.health_bar_enemy = health_bar_enemy;
 	c.weapon = weapon;  # clone if weapon has mutable state
 	# ...copy all relevant fields...
 	return c
@@ -291,11 +294,20 @@ func show_ui() -> void:
 	health_bar.show();
 
 
-func move_to(pos: Vector3i) -> void:
+func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
+	if simulate_only == false:
+		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+	
 	is_alive = true;
 	#reset();
 	grid_position = pos;
 	is_moved = true;
+	
+	if simulate_only == false:
+		var grid_code := Main.level.player_code_done;
+		if is_enemy:
+			grid_code = Main.level.enemy_code;
+		Main.level.units_map.set_cell_item(grid_position, grid_code);
 	#if is_playable:
 	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
@@ -311,10 +323,14 @@ func reset() -> void:
 #	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
-func die() -> void:
+func die(simulate_only : bool) -> void:
 	is_alive = false;
-	#hide_ui();
-	#hide();
+	
+	if simulate_only == false:
+		hide_ui();
+		hide();
+		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+	
 	grid_position = Vector3(-100, -100, -100);
 
 

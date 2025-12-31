@@ -16,7 +16,7 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, in_attacker : Character, 
 	attack_pos = inEndPos;
 
 
-func execute(state : GameState) -> void:
+func execute(state : GameState, simulate_only : bool = false) -> void:
 	var weapon_damage : int;
 	var weapon_crit : int;
 	if aggressor.weapon:
@@ -28,33 +28,31 @@ func execute(state : GameState) -> void:
 	
 	aggressor.is_moved = true;
 	
-	Main.battle_log.text = "Attacker does " + str(attack_strength) + " damage.\n" + Main.battle_log.text;
-	#Main.battle_log.text += str(character1.save());
-	#Main.battle_log.text += "\n-----\n";
-	#Main.battle_log.text += "Victim: ";
-	#Main.battle_log.text += str(character2.save());
-	
-	# Miss logic
-	#@warning_ignore("integer_division")
-	#if (randi_range(0,100) < (victim.speed * 3 + victim.luck) / 2):
-	#	Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
-	#	print ("Miss");
-	#	attack_strength = 0;
-	#	return;
-	
-	# Critical logic
-	#@warning_ignore("integer_division")
-	#if (randi_range(0,100) < (aggressor.skill / 2) + weapon_crit):
-	#	Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
-	#	print("Critical hit!");
-	#	attack_strength *= 2;
+	if simulate_only == false:
+		Main.battle_log.text = "Attacker does " + str(attack_strength) + " damage.\n" + Main.battle_log.text;
+		
+		# Miss logic
+		@warning_ignore("integer_division")
+		if (randi_range(0,100) < (victim.speed * 3 + victim.luck) / 2):
+			Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
+			print ("Miss");
+			attack_strength = 0;
+			return;
+		
+		# Critical logic
+		@warning_ignore("integer_division")
+		if (randi_range(0,100) < (aggressor.skill / 2) + weapon_crit):
+			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
+			print("Critical hit!");
+			attack_strength *= 2;
 	
 	victim.current_health -= attack_strength;
 	
-	#aggressor.update_health_bar();
-	#victim.update_health_bar();
-	
-	#Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
+	if simulate_only == false:
+		aggressor.update_health_bar();
+		victim.update_health_bar();
+		
+		Main.battle_log.text = (aggressor.unit_name + " attacks " + victim.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 	
 	if aggressor.is_playable:
 		# Do not go insane on victory
@@ -69,7 +67,7 @@ func execute(state : GameState) -> void:
 		#Main.level.update_stat(aggressor, Main.level.stat_popup_enemy);
 		#Main.level.update_stat(victim, Main.level.stat_popup_player);
 	if victim.current_health <= 0:
-		victim.die();
+		victim.die(simulate_only);
 		#Main.battle_log.text = (victim.unit_name + " dies.\n") + Main.battle_log.text;
 		if aggressor.is_playable:
 			#Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
