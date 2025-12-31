@@ -1,3 +1,4 @@
+do Event.set_objective_find_object("Orb")
 do Tutorial.tutorial_lock_camera()
 [background arg="res://art/textures/bg.png" fade="0.0"]
 Whipers of hope
