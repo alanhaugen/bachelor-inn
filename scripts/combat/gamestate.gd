@@ -59,7 +59,7 @@ func get_legal_moves() -> Array[Command]:
 	var moves : Array[Command] = []
 
 	for unit in units:
-		if unit.is_moved == false and unit.is_enemy == is_current_player_enemy:
+		if unit.is_moved == false and unit.current_health > 0 and unit.is_enemy == is_current_player_enemy:
 			moves += MoveGenerator.generate(unit, self);
 
 	return moves

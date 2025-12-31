@@ -511,7 +511,7 @@ func MoveAI() -> void:
 	while current_state.has_enemy_moves():
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
-		current_state.apply_move(move);
+		current_state = current_state.apply_move(move);
 	
 	#movement_map.clear();
 	#animation_path.clear();
