@@ -85,6 +85,29 @@ var camera_mode : CameraStates = CameraStates.FREE;
 var saved_transform : Transform3D;
 var camera_pos : Transform3D;
 
+var monster_names := [
+	"Xathog-Ruun",
+	"Ylthuun",
+	"Thozra’el",
+	"Khar’Neth",
+	"Ulmaggoth",
+	"Sleeper",
+	"The Thing",
+	"He Who Watches",
+	"The Drowned",
+	"Crawling Silence",
+	"Alien",
+	"Zhae’kul-ith",
+	"Qor’thaal",
+	"Nyss-Vek",
+	"Hrr’kath",
+	"Vool-Xir",
+	"Borrowed Faces",
+	"The Unfinished",
+	"The One Who Arrives Late",
+	"Echo"
+]
+
 func touch(pos :Vector3) -> bool:
 	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM && movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
 		movement_map.set_cell_item(pos, move_code);
@@ -360,7 +383,7 @@ func _ready() -> void:
 			#new_unit = ENEMY.instantiate();
 			new_unit = Character.new();
 			new_unit.is_playable = false;
-			new_unit.unit_name = "Pth'Khuleroth";
+			new_unit.unit_name = monster_names[randi_range(0, monster_names.size())];
 			if randi_range(1,2) == 1:
 				new_unit.sprite_sheet_path = "res://art/textures/enemy1.png";
 			else:
