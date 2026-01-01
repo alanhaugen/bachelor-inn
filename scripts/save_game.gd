@@ -16,24 +16,17 @@ func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
 	var first: Character = Character.new();
-	first.unit_name = "Alan og Erik";
-	first.speciality = Character.Speciality.Support;
+	first.unit_name = "Alfred";
+	first.speciality = Character.Speciality.Scholar;
 	first.movement = 3;
 	first.strength = 1;
 	
 	var second: Character = Character.new();
-	second.unit_name = "Fen";
-	second.speciality = Character.Speciality.Fighter;
+	second.unit_name = "Lucy";
+	second.speciality = Character.Speciality.Militia;
 	second.strength = 10;
-	second.sprite_sheet_path = "res://art/textures/fen.png";
 	
-	var third: Character = Character.new();
-	third.unit_name = "Andreas";
-	third.speciality = Character.Speciality.Scout;
-	third.movement = 10;
-	third.sprite_sheet_path = "res://art/textures/andreas.png";
-	
-	var units: Array[Dictionary] = [first.save(), second.save(), third.save()];
+	var units: Array[Dictionary] = [first.save(), second.save()];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -49,7 +42,7 @@ func create_new_save_data() -> void:
 		},
 		"Slot 3":
 		{
-			"level": 1,
+			"level": 2,
 			"units": units
 		},
 	}
@@ -119,7 +112,6 @@ func read(save_slot: int) -> bool:
 		var new_character: Character = Character.new();
 		new_character.unit_name = characters[i].get("Unit name");
 		new_character.strength = characters[i].get("Strength");
-		new_character.sprite_sheet_path = characters[i].get("Sprite sheet path");
 		new_character.speed = characters[i].get("Speed");
 		new_character.speciality = characters[i].get("Speciality");
 		new_character.skill = characters[i].get("Skill");
@@ -138,7 +130,7 @@ func read(save_slot: int) -> bool:
 		new_character.current_sanity = characters[i].get("Current sanity");
 		new_character.current_magic = characters[i].get("Current magic");
 		new_character.current_health = characters[i].get("Current health");
-		new_character.agility = characters[i].get("Agility");
+		#new_character.agility = characters[i].get("Agility");
 		
 		Main.characters.append(new_character);
 	

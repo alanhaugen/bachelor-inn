@@ -1,0 +1,8 @@
+Welcome.\
+Let’s look around.
+do Tutorial.tutorial_unlock_camera()
+do Tutorial.tutorial_wait_for_signal()
+if {PLATFORM} == "MOBILE":
+	Hold two fingers on the screen at once to pan the camera.
+else:
+	Use WASD to move camera.

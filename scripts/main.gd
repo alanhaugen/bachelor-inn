@@ -6,8 +6,6 @@ extends Node
 
 # TODO:
 # load settings
-# load units
-# load games
 
 #region: --- Props ---
 ## Current level running
@@ -45,6 +43,7 @@ func unload_level() -> void:
 		level.queue_free(); # Free the current level instance
 	level = null;
 
+
 func next_level() -> void:
 	current_level_index += 1;
 	if current_level_index > levels.size():
@@ -56,8 +55,13 @@ func next_level() -> void:
 ##
 ## @param level_name: New level name to load
 func load_level(level_name: String) -> void:
+	if OS.has_feature("mobile"):
+		Dialogic.VAR.PLATFORM = "MOBILE";
+	else:
+		Dialogic.VAR.PLATFORM = "DESKTOP";
 	unload_level();
 	var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	level = load(level_path).instantiate();
+	level.level_name = level_name;
 	world.add_child(level) # Add the new level to the World node
 #endregion

@@ -1,16 +1,12 @@
 [gd_scene load_steps=7 format=3 uid="uid://csv3482xf34ay"]
 
-[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/popups/health_bar.gd" id="1_qi2ti"]
+[ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/ui/health_bar.gd" id="1_qi2ti"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_4rf34"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5fhnc"]
-bg_color = Color(0, 0, 0, 0)
+[ext_resource type="StyleBox" uid="uid://je1nnj4ceyqm" path="res://scenes/ui/progress_bar.tres" id="3_8ymem"]
+[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/ui/progress_bar_silver.tres" id="4_x4hh8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23qt1"]
 bg_color = Color(1, 0.2024239, 0.32685488, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mhiy5"]
-bg_color = Color(0.043137256, 0, 0.043137256, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8d75"]
 bg_color = Color(0.76173335, 0.1953432, 0.9999936, 1)
@@ -48,31 +44,30 @@ theme_override_fonts/font = ExtResource("2_4rf34")
 theme_override_font_sizes/font_size = 8
 horizontal_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(50, 15)
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 mouse_filter = 2
-theme_override_constants/separation = 0
 
-[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_5fhnc")
+theme_override_constants/outline_size = 3
+theme_override_styles/background = ExtResource("3_8ymem")
 theme_override_styles/fill = SubResource("StyleBoxFlat_23qt1")
 value = 80.0
-fill_mode = 1
-show_percentage = false
 
-[node name="SanityBar" type="ProgressBar" parent="VBoxContainer/HBoxContainer"]
+[node name="SanityBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 mouse_filter = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_mhiy5")
+theme_override_constants/outline_size = 3
+theme_override_styles/background = ExtResource("4_x4hh8")
 theme_override_styles/fill = SubResource("StyleBoxFlat_j8d75")
 value = 80.0
-show_percentage = false

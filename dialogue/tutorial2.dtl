@@ -1,0 +1,7 @@
+Good.
+do Tutorial.tutorial_unlock_menus()
+do Tutorial.tutorial_wait_for_signal()
+if {PLATFORM} == "MOBILE":
+	Tap a unit to select it.
+else:
+	Click a unit to select it.

@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://cwb5ihgj4ap4k"]
+
+[ext_resource type="Script" uid="uid://dol0fei43cs7g" path="res://art/WIP/AnimationWorking.gd" id="1_3aqt1"]
+[ext_resource type="Shader" path="res://art/WIP/EdgeHighlightTest.gdshader" id="1_27ljd"]
+[ext_resource type="Texture2D" uid="uid://62qni0klik8s" path="res://art/textures/andreas.png" id="2_maikb"]
+[ext_resource type="Resource" path="res://art/WIP/base.tres" id="4_maikb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ei822"]
+render_priority = 0
+shader = ExtResource("1_27ljd")
+shader_parameter/frame_index = 0
+shader_parameter/frame_columns = 6
+shader_parameter/frame_rows = 4
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_tint = Color(1, 1, 1, 1)
+shader_parameter/normal_tilt = 0.82000003895
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[node name="CharTest" type="Node3D"]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.957655, 18.638418, 24.89195)
+light_energy = 10.7
+omni_range = 34.36
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+material_override = SubResource("ShaderMaterial_ei822")
+texture = ExtResource("2_maikb")
+script = ExtResource("1_3aqt1")
+base_animation = ExtResource("4_maikb")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 28.901043)

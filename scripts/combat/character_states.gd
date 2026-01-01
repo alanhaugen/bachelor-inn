@@ -1,5 +1,5 @@
 class_name CharacterStates
-extends Node
+extends RefCounted
 
 const Player := "Unit";
 const Enemy := "Enemy";
