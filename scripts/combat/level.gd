@@ -532,12 +532,10 @@ func reset_all_units() -> void:
 
 
 func MoveAI() -> void:
-	reset_all_units();
-	
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
-	while current_state.has_enemy_moves():
+	if current_state.has_enemy_moves():
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
 		current_state = current_state.apply_move(move, true);
@@ -644,8 +642,8 @@ func _process(delta: float) -> void:
 				enemy_label.show();
 				player_label.hide();
 		else:
+			reset_all_units();
 			MoveAI();
-			CheckVictoryConditions();
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
@@ -657,6 +655,7 @@ func _process(delta: float) -> void:
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
 			active_move.execute(game_state);
+			CheckVictoryConditions();
 			var code := enemy_code;
 			if is_player_turn:
 				code = player_code_done;
@@ -666,6 +665,9 @@ func _process(delta: float) -> void:
 			selected_unit = null;
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
+			
+			if is_player_turn == false:
+				MoveAI();
 			
 			if (moves_stack.is_empty() == false):
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);

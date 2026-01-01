@@ -99,3 +99,4 @@ func _set_focus(new_focus: int) -> void:
 
 func _on_button_pressed() -> void:
 	hide();
+	Main.level.is_in_menu = false;
