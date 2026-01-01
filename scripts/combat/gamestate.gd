@@ -57,6 +57,9 @@ func reset_moves() -> void:
 func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	var new_state : GameState = clone();
 	
+	var unit : Character = new_state.get_unit(move.start_pos)
+	unit.is_moved = true;
+	
 	move.execute(new_state, simulate_only);
 	
 	if new_state.no_units_remaining():

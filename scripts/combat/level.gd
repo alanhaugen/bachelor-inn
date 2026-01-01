@@ -528,17 +528,13 @@ func reset_all_units() -> void:
 func MoveAI() -> void:
 	reset_all_units();
 	
-	game_state.end_turn();
-	
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
 	while current_state.has_enemy_moves():
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
-		current_state = current_state.apply_move(move);
-	
-	game_state.end_turn();
+		current_state = current_state.apply_move(move, true);
 	
 	if (moves_stack.is_empty() == false):
 		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
