@@ -112,7 +112,6 @@ func read(save_slot: int) -> bool:
 		var new_character: Character = Character.new();
 		new_character.unit_name = characters[i].get("Unit name");
 		new_character.strength = characters[i].get("Strength");
-		new_character.sprite_sheet_path = characters[i].get("Sprite sheet path");
 		new_character.speed = characters[i].get("Speed");
 		new_character.speciality = characters[i].get("Speciality");
 		new_character.skill = characters[i].get("Skill");

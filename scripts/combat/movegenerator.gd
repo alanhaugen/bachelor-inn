@@ -59,7 +59,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		if is_neighbour(start_pos, tile) == false:
 			neighbour = get_valid_neighbour(tile, reachable);
 		commands.append(
-			Attack.new(start_pos, tile, unit, state.get_unit(tile), neighbour)
+			Attack.new(start_pos, tile, neighbour)
 		);
 	
 	return commands;

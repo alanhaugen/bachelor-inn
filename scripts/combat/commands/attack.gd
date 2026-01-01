@@ -3,22 +3,22 @@ extends Move
 ## AttackMove is atomic: movement + attack resolution.
 ## Used as a single minimax action.
 
-var aggressor : Character;
-var victim : Character;
 var attack_pos : Vector3i;
 
 
-func _init(inStartPos : Vector3i, inEndPos : Vector3i, in_attacker : Character, in_victim : Character, inNeighbour : Vector3i) -> void:
+func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -> void:
 	start_pos = inStartPos;
 	end_pos = inNeighbour;
-	aggressor = in_attacker;
-	victim = in_victim;
 	attack_pos = inEndPos;
 
 
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var weapon_damage : int;
 	var weapon_crit : int;
+	
+	var aggressor : Character = state.get_unit(start_pos);
+	var victim : Character = state.get_unit(attack_pos);
+	
 	if aggressor.weapon:
 		weapon_damage = aggressor.weapon.damage_modifier;
 		weapon_crit = aggressor.weapon.weapon_critical;

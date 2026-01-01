@@ -72,7 +72,6 @@ var health_bar_enemy: HealthBar;
 @export var connections :Array = []; ## Connections to other players (how friendly they are to others)
 @export var speciality :Speciality = Speciality.Militia; ## Unit speciality
 @export var personality :Personality = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
-@export var sprite_sheet_path: String = "res://art/textures/WIP_Animation_previewer.png";
 
 @export var health: int = 4; ## Unit health
 @export var strength: int = 4; ## Damage with weapons
@@ -116,17 +115,58 @@ var is_moved :bool = false;
 
 func clone() -> Character:
 	var c := Character.new();
-	c.unit_name = unit_name;
-	c.grid_position = grid_position;
-	c.current_health = current_health;
-	c.current_sanity = current_sanity;
-	c.is_moved = is_moved;
-	c.is_enemy = is_enemy;
+	
+	c.sprite = sprite;
+	c.portrait = portrait;
+	
+	c.camera = camera;
 	c.health_bar = health_bar;
+	c.level_up_popup = level_up_popup;
 	c.health_bar_ally = health_bar_ally;
 	c.health_bar_enemy = health_bar_enemy;
-	c.weapon = weapon;  # clone if weapon has mutable state
-	# ...copy all relevant fields...
+	
+	c.is_playable = is_playable;
+	c.is_enemy = is_enemy;
+	c.unit_name = unit_name;
+	
+	c.connections = connections;
+	c.speciality = speciality;
+	c.personality = personality;
+	
+	c.health = health;
+	c.strength = strength;
+	c.mind = mind;
+	c.speed = speed;
+	c.focus = focus;
+
+	c.endurance = endurance;
+	c.defense = defense;
+	c.resistence = resistence;
+	c.luck = luck;
+	c.intimidation = intimidation;
+	c.skill = skill;
+	c.magic = magic;
+	
+	c.weapon = weapon;
+
+	c.experience = experience;
+	c.skills = skills;
+
+	c.max_health = max_health;
+	c.movement = movement; ## Movement range
+	c.current_health = current_health;
+	c.current_sanity = current_sanity;
+	c.current_magic = current_magic;
+	c.current_level = current_level;
+
+	c.grid_position = grid_position;
+
+	c.next_level_experience = next_level_experience;
+
+	c.is_alive = is_alive;
+	
+	c.is_moved = is_moved; 
+	
 	return c
 
 
@@ -344,7 +384,6 @@ func print_stats() -> void:
 func save() -> Dictionary:
 	var stats := {
 		"Is Playable": is_playable,
-		"Sprite sheet path": sprite_sheet_path,
 		"Unit name": unit_name,
 		"Speciality": speciality,
 		"Health": health,
