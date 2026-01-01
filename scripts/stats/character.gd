@@ -149,7 +149,7 @@ func clone() -> Character:
 	
 	c.weapon = weapon;
 
-	c.experience = experience;
+	#c.experience = experience;
 	c.skills = skills;
 
 	c.max_health = max_health;
