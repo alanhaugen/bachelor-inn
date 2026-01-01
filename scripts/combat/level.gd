@@ -59,7 +59,10 @@ var is_animation_just_finished :bool = false;
 
 var is_dragging :bool = false;
 
-enum States { PLAYING, ANIMATING };
+enum States {
+	PLAYING,
+	ANIMATING,
+	CHOOSING_ATTACK };
 var state :int = States.PLAYING;
 var game_state : GameState;
 
@@ -188,7 +191,7 @@ func show_attack_tiles(pos : Vector3i) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if (state != States.PLAYING):
+	if (state == States.ANIMATING):
 		return;
 	if (is_in_menu):
 		return;
@@ -210,16 +213,24 @@ func _input(event: InputEvent) -> void:
 		if (event.button_index != MOUSE_BUTTON_LEFT):
 			return;
 		
+		# Get the tile clicked on
+		var pos :Vector3i = get_grid_cell_from_mouse();
+		print (pos);
+		pos.y = 0;
+		
+		if state == States.CHOOSING_ATTACK:
+			if movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+				active_move.end_pos = pos;
+				moves_stack.append(active_move);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				state = States.ANIMATING;
+			return;
+		
 		if (selected_enemy_unit != null):
 			selected_enemy_unit.hide_ui();
 			stat_popup_enemy.hide();
 			if selected_unit == null:
 				stat_popup_player.hide();
-		
-		# Get the tile clicked on
-		var pos :Vector3i = get_grid_cell_from_mouse();
-		print (pos);
-		pos.y = 0;
 		
 		if (get_tile_name(pos) == "Water"):
 			return;
@@ -265,7 +276,7 @@ func _input(event: InputEvent) -> void:
 			
 			if active_move is Attack:
 				show_attack_tiles(pos);
-				show_move_popup(windowPos);
+				state = States.CHOOSING_ATTACK;
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
@@ -461,7 +472,6 @@ func get_unit(pos: Vector3i) -> Character:
 				var unit: Character = characters[i];
 				if unit.grid_position == pos:
 					return unit;
-	push_error("Did not find character at " + str(pos));
 	return null;
 
 
