@@ -674,12 +674,16 @@ func _process(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			if (is_equal_approx(selected_unit.position.x, animation_path.front().x) && is_equal_approx(selected_unit.position.z, animation_path.front().z)):
-				selected_unit.position = animation_path.pop_front();
+			var movement_speed := 4.0 # units per second
+			var target : Vector3 = animation_path.front()
+			var dir : Vector3 = target - selected_unit.position
+			var step := movement_speed * delta
+
+			if dir.length() <= step:
+				selected_unit.position = target
+				animation_path.pop_front()
 			else:
-				var movement_speed :float = 0.05;
-				var dir :Vector3 = animation_path.front() - selected_unit.position;
-				selected_unit.position += dir.normalized() * movement_speed;# * delta);
+				selected_unit.position += dir.normalized() * step
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				
