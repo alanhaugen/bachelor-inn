@@ -107,7 +107,6 @@ var monster_names := [
 	"Vool-Xir",
 	"Borrowed Faces",
 	"The Unfinished",
-	"The One Who Arrives Late",
 	"Echo"
 ]
 
@@ -191,12 +190,12 @@ func show_attack_tiles(pos : Vector3i) -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if (state == States.ANIMATING):
+	if state == States.ANIMATING:
 		return;
-	if (is_in_menu):
+	if is_in_menu:
 		return;
 	
-	if (event is InputEventMouseMotion and is_dragging):
+	if event is InputEventMouseMotion and is_dragging:
 		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
 		Tutorial.tutorial_camera_moved();
 	
@@ -586,7 +585,7 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			a_star(selected_unit.grid_position, pos);
-			if get_unit(pos) is Character and get_unit(pos).is_enemy and stat_popup_enemy.visible == false:
+			if get_unit(pos) is Character and get_unit(pos).is_enemy:
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
 	if camera_mode == CameraStates.FREE:

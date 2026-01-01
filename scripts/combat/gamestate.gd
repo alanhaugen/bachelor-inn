@@ -70,7 +70,7 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 
 func no_units_remaining() -> bool:
 	for unit in units:
-		if unit.is_moved == false:
+		if unit.is_moved == false and unit.is_enemy == is_current_player_enemy:
 			return false;
 	return true;
 
