@@ -134,6 +134,20 @@ func dijkstra(startPos :Vector3i, movementLength :int) -> Array[Move]:
 			moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
 			movement_map.set_cell_item(west, 0, attack_code);
 		
+		# Add chest interaction
+		#if (units_map.get_cell_item(north) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, north, type, units_map, selected_unit, true, get_unit(north), neighbour_move));
+		#	movement_map.set_cell_item(north, 0, interaction_code);
+		#if (units_map.get_cell_item(south) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, south, type, units_map, selected_unit, true, get_unit(south), neighbour_move));
+		#	movement_map.set_cell_item(south, 0, interaction_code);
+		#if (units_map.get_cell_item(east) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, east, type, units_map, selected_unit, true, get_unit(east), neighbour_move));
+		#	movement_map.set_cell_item(east, 0, interaction_code);
+		#if (units_map.get_cell_item(west) == chest_code):
+		#	moves.append(Move.new(neighbour_move.end_pos, west, type, units_map, selected_unit, true, get_unit(west), neighbour_move));
+		#	movement_map.set_cell_item(west, 0, interaction_code);
+		
 		if (frontierPositions.is_empty() == true):
 			frontier += 1;
 			frontierPositions = nextFrontierPositions.duplicate();
@@ -327,12 +341,15 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 
 
 func _exit_tree() -> void:
-	pass;
-	# This doesn't seem to  be working
-	# (the goal is to copy over all the characters
-	# to preserve the remaining characters, character
-	# health and other stats etc)
-	#Main.characters = player_characters.duplicate();
+	# Wait... is this never called?
+	print("Unloading level, exit tree called.");
+	move_popup.hide();
+	stat_popup_enemy.hide();
+	stat_popup_enemy.hide();
+	
+	# Remove sidebar
+	#for i in range(Main.characters.size()):
+	# etc.
 
 
 func _ready() -> void:
@@ -346,6 +363,16 @@ func _ready() -> void:
 	var units :Array[Vector3i] = units_map.get_used_cells();
 	
 	var characters_placed := 0;
+	
+	# Remove dead characters from character list
+	var is_done := false;
+	while (is_done == false):
+		for i in range(Main.characters.size()):
+			is_done = true;
+			if Main.characters[i].is_alive == false:
+				Main.characters.remove_at(i);
+				is_done = false;
+				break;
 	
 	print("Loading new level, number of playable characters: " + str(Main.characters.size()));
 	
@@ -399,22 +426,26 @@ func _ready() -> void:
 	
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
-	#stat_popup_player.scale = Vector2(3,3);
+	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
+	stat_popup_player.position = Vector2(-get_window().size.x / 2.1, get_window().size.y / 2.5);
 	#stat_popup_player.position = Vector2(-555, 235);
-	stat_popup_player.set_anchor(SIDE_LEFT, 0);
+	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
+	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
 	Main.gui.add_child(stat_popup_player);
 	
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
-	#stat_popup_enemy.scale = Vector2(3,3);
+	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
+	stat_popup_enemy.position = Vector2(get_window().size.x /4.6, get_window().size.y / 2.5);
 	#stat_popup_enemy.position = Vector2(250, 235);
-	stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
+	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	Main.gui.add_child(stat_popup_enemy);
 	
 	for i in range(Main.characters.size()):
 		var new_side_bar := SIDE_BAR.instantiate();
+		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
 		if i != 0:
-			new_side_bar.offset_bottom = -get_window().size.y/(15)*i;
+			new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
 		Main.gui.add_child(new_side_bar);
 	
 	
@@ -507,10 +538,10 @@ func reset_all_units() -> void:
 		var pos :Vector3i = units[i];
 		if (units_map.get_cell_item(pos) == player_code_done):
 			units_map.set_cell_item(pos, player_code);
-		var character: Character = get_unit(pos);
-		if character is Character:
-			var character_script: Character = character;
-			character_script.reset();
+			var character: Character = get_unit(pos);
+			if character is Character:
+				var character_script: Character = character;
+				character_script.reset();
 
 
 func MoveAI() -> void:
@@ -537,7 +568,7 @@ func MoveAI() -> void:
 				break;
 		
 		# No attacks found, choose a random move
-		if move == null and aiUnitsMoves.is_empty() == false:
+		if move == null and aiUnitsMoves[i].is_empty() == false:
 			move = aiUnitsMoves[i][randi() % aiUnitsMoves[i].size()];
 		
 		# Do the attack or move

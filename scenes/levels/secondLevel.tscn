@@ -5,7 +5,7 @@
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="2_4ig3v"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="3_oq4ji"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="5_3j2w6"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/ui/turn_transition.tscn" id="6_aot7u"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/UI/turn_transition.tscn" id="6_aot7u"]
 
 [sub_resource type="Environment" id="Environment_3j2w6"]
 
@@ -54,3 +54,12 @@ region_rect = Rect2(0, 0, 32, 32)
 
 [node name="TurnTransition" parent="." instance=ExtResource("6_aot7u")]
 mouse_filter = 2
+
+[node name="BattleLog" type="Label" parent="."]
+offset_left = 902.0
+offset_top = 20.0
+offset_right = 1144.0
+offset_bottom = 660.0
+text = "Objective: Defeat all enemies
+"
+autowrap_mode = 2

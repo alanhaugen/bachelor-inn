@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://b2kbb6xacvkow"]
+[gd_scene load_steps=8 format=3 uid="uid://bq3f1lx8lkmgp"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/character.gd" id="1_5uy6h"]
 [ext_resource type="Texture2D" uid="uid://bbc66ims7gpe0" path="res://art/textures/DFFS_Character edge highlight poc.png" id="2_c4w8v"]
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/ui/health_bar.tscn" id="3_xwavj"]
-[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="4_nenq2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5uy6h"]
 atlas = ExtResource("2_c4w8v")
@@ -64,7 +63,7 @@ scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HealthBar"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer/HealthBar"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -76,19 +75,6 @@ offset_top = -19.0
 offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
-
-[node name="Name" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_nenq2")
-theme_override_font_sizes/font_size = 8
-horizontal_alignment = 1
-
-[node name="Health" type="Label" parent="CanvasLayer/HealthBar/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_nenq2")
-theme_override_font_sizes/font_size = 8
-horizontal_alignment = 1
 
 [node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
@@ -112,7 +98,7 @@ scale = Vector2(2, 2)
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="VBoxContainer" type="VBoxContainer" parent="AnimatedSprite3D/CanvasLayer/HealthBar"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="AnimatedSprite3D/CanvasLayer/HealthBar"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -124,16 +110,3 @@ offset_top = -19.0
 offset_right = 20.0
 grow_horizontal = 2
 grow_vertical = 0
-
-[node name="Name" type="Label" parent="AnimatedSprite3D/CanvasLayer/HealthBar/VBoxContainer"]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_nenq2")
-theme_override_font_sizes/font_size = 8
-horizontal_alignment = 1
-
-[node name="Health" type="Label" parent="AnimatedSprite3D/CanvasLayer/HealthBar/VBoxContainer"]
-visible = false
-layout_mode = 2
-theme_override_fonts/font = ExtResource("4_nenq2")
-theme_override_font_sizes/font_size = 8
-horizontal_alignment = 1
