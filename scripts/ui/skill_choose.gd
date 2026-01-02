@@ -1,5 +1,5 @@
-class_name SkillChoose
 extends Control
+class_name SkillChoose
 
 @onready var name_speciality: Label = %NameSpeciality
 @onready var skill_1: Button = %Skill1

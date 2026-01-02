@@ -1,5 +1,5 @@
-class_name Attack
 extends Move
+class_name Attack
 ## AttackMove is atomic: movement + attack resolution.
 ## Used as a single minimax action.
 

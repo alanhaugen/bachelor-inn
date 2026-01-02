@@ -1,5 +1,5 @@
-class_name SaveGame
 extends Resource
+class_name SaveGame
 
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 

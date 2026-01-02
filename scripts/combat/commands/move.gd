@@ -1,5 +1,5 @@
-class_name Move
 extends Command
+class_name Move
 ## This is a move
 ##
 ## The game consists of commands like move played

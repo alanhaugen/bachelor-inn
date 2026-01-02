@@ -1,5 +1,5 @@
-class_name HealthBar
 extends ColorRect
+class_name HealthBar
 
 @onready var health_bar: ProgressBar = %HealthBar;
 @onready var sanity_bar: ProgressBar = %SanityBar;

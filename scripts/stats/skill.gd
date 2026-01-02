@@ -1,5 +1,5 @@
-class_name Skill
 extends Node
+class_name Skill
 
 var skill_name : String;
 var tooltip : String;

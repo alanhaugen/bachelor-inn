@@ -1,5 +1,5 @@
-class_name Console
 extends Command
+class_name Console
 
 var tile_using_ability : Vector3i;
 var tile_to_increase_sanity : Vector3i;

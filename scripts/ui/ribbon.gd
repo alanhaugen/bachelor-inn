@@ -1,5 +1,5 @@
-class_name Ribbon
 extends Control
+class_name Ribbon
 
 @onready var skills: HBoxContainer = %Skills
 @onready var abilities: HBoxContainer = %Abilities

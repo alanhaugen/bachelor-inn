@@ -1,5 +1,5 @@
-class_name Level
 extends Node3D
+class_name Level
 ## Map logic for combat levels.
 ##
 ## All state and animation logic is found here,
