@@ -1,9 +1,9 @@
 [gd_resource type="MeshLibrary" load_steps=163 format=4 uid="uid://d38pmue2k0b7d"]
 
-[ext_resource type="Texture2D" uid="uid://usjorkf67q16" path="res://art/gltf/LIB_GridMapMeshLibrary_0.png" id="1_4a0ec"]
-[ext_resource type="Texture2D" uid="uid://w15bv5sqrosv" path="res://art/gltf/LIB_GridMapMeshLibrary_1.png" id="2_jbaib"]
-[ext_resource type="Texture2D" uid="uid://bhnnp33l7i44i" path="res://art/gltf/LIB_GridMapMeshLibrary_2.png" id="3_w6kgw"]
-[ext_resource type="Texture2D" uid="uid://capvxob1f5h0y" path="res://art/gltf/LIB_GridMapMeshLibrary_3.png" id="4_itof5"]
+[ext_resource type="Texture2D" uid="uid://d1j1teu0mv26" path="res://art/gltf/LIB_GridMapMeshLibrary_0.png" id="1_4a0ec"]
+[ext_resource type="Texture2D" uid="uid://chwijkyc85ff6" path="res://art/gltf/LIB_GridMapMeshLibrary_1.png" id="2_jbaib"]
+[ext_resource type="Texture2D" uid="uid://codd6c1110jgo" path="res://art/gltf/LIB_GridMapMeshLibrary_2.png" id="3_w6kgw"]
+[ext_resource type="Texture2D" uid="uid://lyia07mmgnf5" path="res://art/gltf/LIB_GridMapMeshLibrary_3.png" id="4_itof5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lkgob"]
 resource_name = "material_0"

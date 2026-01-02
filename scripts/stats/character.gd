@@ -104,7 +104,7 @@ var max_health: int = health + endurance + floor(strength / 2.0);
 
 var grid_position: Vector3i;
 
-var next_level_experience: int = 10;
+var next_level_experience: int = 1;
 
 var is_alive: bool = true;
 
@@ -139,6 +139,13 @@ var scholar_skills :Array[Skill] = [
 	Skill.new("Pyrochemistry", "Gains 2 improvised explosives for each combat which can be used for a ranged attack", load("res://art/textures/M_Orb.png"), 0, 1, null),
 	Skill.new("Medicine", "A new ability which gives an adjacent ally healing for the next 3 turns. This is removed if the ally enters combat", load("res://art/textures/M_Orb.png"), 0, 1, null)
 ]
+
+var all_skills :Array[Array] = [
+	generic_skills,
+	runner_skills,
+	militia_skills,
+	scholar_skills
+];
 
 
 func clone() -> Character:
@@ -301,6 +308,11 @@ func _ready() -> void:
 	add_child(health_bar_enemy);
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
+	
+	#if personality == Personality.Zealot:
+	#	skills.append(generic_skills[0]);
+	skills.append(all_skills[speciality][personality % (all_skills[speciality].size() - 1)]);
+	#abilities.append(abilites[0]);
 	
 	if is_playable:
 		health_bar = health_bar_ally;

@@ -11,6 +11,8 @@ func set_skills(in_skills : Array[Skill]) -> void:
 	for skill in in_skills:
 		var icon : TextureRect = TextureRect.new();
 		icon.texture = skill.icon;
+		icon.tooltip_text = skill.skill_name + "\n" + skill.tooltip;
+		icon.custom_minimum_size = Vector2(100,100);
 		skills.add_child(icon);
 
 
