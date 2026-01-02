@@ -597,6 +597,7 @@ func _process(delta: float) -> void:
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:
 		var pos :Vector3i = get_grid_cell_from_mouse();
+		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			a_star(selected_unit.grid_position, pos);
 			if get_unit(pos) is Character and get_unit(pos).is_enemy:

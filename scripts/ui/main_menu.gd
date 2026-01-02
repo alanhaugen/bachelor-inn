@@ -36,7 +36,6 @@ func _ready() -> void:
 #endregion
 
 #region: --- Signals ---
-## Called when the Load Map 0 button is pressed
 func _on_load_map_0_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/VBoxContainer/LevelSelect.visible = false;
@@ -49,18 +48,12 @@ func _on_load_map_2_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	Main.save.read(2);
-#endregion
-
-
 func _on_start_game_button_pressed() -> void:
 	$UI/VBoxContainer/LevelSelect.visible = true;
 	$UI/VBoxContainer/MainMenu.visible = false;
-
-
 func _on_back_button_pressed() -> void:
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	$UI/VBoxContainer/MainMenu.visible = true;
-
-
 func _on_quit_button_pressed() -> void:
 	get_tree().quit();
+#endregion
