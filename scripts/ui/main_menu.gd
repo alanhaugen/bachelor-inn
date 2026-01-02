@@ -15,7 +15,6 @@ extends Node3D
 #region: --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
-	Main.gui = gui;
 	Main.world = world;
 	Main.levels = levels;
 	
