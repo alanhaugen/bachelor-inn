@@ -24,7 +24,7 @@ anchors_preset = -1
 offset_left = -277.36798
 offset_top = -104.0
 offset_right = 277.63202
-offset_bottom = 85.0
+offset_bottom = 122.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_nkx81")
@@ -73,7 +73,7 @@ alignment = 1
 layout_mode = 2
 
 [node name="Button1" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(525, 60)
+custom_minimum_size = Vector2(525, 80)
 layout_mode = 2
 theme = ExtResource("3_nkx81")
 
@@ -81,9 +81,9 @@ theme = ExtResource("3_nkx81")
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 9.0
-offset_top = 10.0
+offset_top = 21.0
 offset_right = 53.0
-offset_bottom = 50.0
+offset_bottom = 61.0
 texture = ExtResource("4_uc41p")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Button1"]
@@ -100,15 +100,17 @@ text = "Title"
 
 [node name="LabelSkill1" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Button1/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 text = "Description"
+autowrap_mode = 3
 
 [node name="VBoxContainer3" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 
 [node name="Skill2" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(525, 60)
+custom_minimum_size = Vector2(525, 80)
 layout_mode = 2
 theme = ExtResource("3_nkx81")
 icon_alignment = 1
@@ -118,9 +120,9 @@ expand_icon = true
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 9.0
-offset_top = 10.0
+offset_top = 18.0
 offset_right = 53.0
-offset_bottom = 50.0
+offset_bottom = 58.0
 texture = ExtResource("4_uc41p")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Skill2"]
@@ -137,8 +139,10 @@ text = "Title"
 
 [node name="LabelSkill2" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Skill2/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 60)
 layout_mode = 2
 text = "Description"
+autowrap_mode = 3
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer/Button1" to="." method="_on_skill_1_pressed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/HBoxContainer/VBoxContainer3/Skill2" to="." method="_on_skill_2_pressed"]
