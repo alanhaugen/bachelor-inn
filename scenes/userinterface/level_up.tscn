@@ -3,10 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="1_jpe5o"]
 [ext_resource type="Script" uid="uid://c4ni51826b2e" path="res://scripts/ui/level_up.gd" id="1_r8t7i"]
 [ext_resource type="Texture2D" uid="uid://bqs3gw33e3f2u" path="res://art/textures/fen.png" id="2_sw2ff"]
-[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/UI/button_theme.tres" id="3_kd365"]
-[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/UI/button_hover_style.tres" id="4_o43dc"]
+[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/userinterface/button_theme.tres" id="3_kd365"]
+[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="4_o43dc"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="5_4mlli"]
-[ext_resource type="StyleBox" uid="uid://b1of47kyh6aop" path="res://scenes/UI/level_up_frame.tres" id="6_qq5ux"]
+[ext_resource type="StyleBox" uid="uid://b1of47kyh6aop" path="res://scenes/userinterface/level_up_frame.tres" id="6_qq5ux"]
 
 [node name="LevelUp" type="Control"]
 layout_mode = 3

@@ -2,10 +2,14 @@ extends Control
 class_name SkillChoose
 
 @onready var name_speciality: Label = %NameSpeciality
-@onready var skill_1: Button = %Skill1
-@onready var skill_2: Button = %Skill2
 @onready var label_skill_1: Label = %LabelSkill1
 @onready var label_skill_2: Label = %LabelSkill2
+@onready var skill_name_1: Label = %SkillName1
+@onready var skill_name_2: Label = %SkillName2
+@onready var icon_1: TextureRect = %Icon1
+@onready var icon_2: TextureRect = %Icon2
+
+
 var unit : Character;
 var first_skill : Skill;
 var second_skill : Skill;

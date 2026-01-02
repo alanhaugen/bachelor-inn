@@ -5,7 +5,7 @@
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_8tmoo"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_8tmoo"]
 [ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="5_hvfss"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/UI/turn_transition.tscn" id="8_57geo"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="8_57geo"]
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="8_gthwb"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/Wenvi.tres" id="9_7kt3n"]
 [ext_resource type="Texture2D" uid="uid://fs45b1kehfnq" path="res://art/textures/WorkingGround_Tex.png" id="9_imtph"]
@@ -178,7 +178,7 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_bb150"]
 material = SubResource("StandardMaterial3D_lfcpp")
 
-[node name="Map3d" type="Node3D"]
+[node name="Map3d2" type="Node3D"]
 script = ExtResource("1_f5yf2")
 
 [node name="Map" type="GridMap" parent="."]

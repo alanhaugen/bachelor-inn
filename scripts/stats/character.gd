@@ -9,6 +9,8 @@ const SPRITE = preload("res://art/WIP/CharTest.tscn");
 var sprite: Node3D;
 var portrait: Texture2D;
 
+@export var data: CharacterData
+
 #region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
 enum Speciality
@@ -63,10 +65,10 @@ var skill_choose_popup: SkillChoose;
 var health_bar_ally: HealthBar;
 var health_bar_enemy: HealthBar;
 
-@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
-@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
-@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
-@onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/UI/skill_choose.tscn");
+@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar.tscn");
+@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
+@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/userinterface/level_up.tscn");
+@onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
 
 @export var is_playable :bool = true; ## Player unit or NPC
 @export var is_enemy :bool = false; ## Friend or foe
@@ -273,13 +275,13 @@ func _set_experience(in_experience: int) -> void:
 		if new_skill_1 != null:
 			skill_choose_popup.unit = self;
 			
-			skill_choose_popup.skill_1.icon = new_skill_1.icon;
-			skill_choose_popup.skill_1.tooltip_text = new_skill_1.tooltip;
-			skill_choose_popup.label_skill_1.text = new_skill_1.skill_name;
+			skill_choose_popup.icon_1.texture = new_skill_1.icon;
+			skill_choose_popup.skill_name_1.text = new_skill_1.skill_name;
+			skill_choose_popup.label_skill_1.text = new_skill_1.tooltip;
 			skill_choose_popup.first_skill = new_skill_1;
-			skill_choose_popup.skill_2.icon = new_skill_2.icon;
-			skill_choose_popup.skill_2.tooltip_text = new_skill_2.tooltip;
-			skill_choose_popup.label_skill_2.text = new_skill_2.skill_name;
+			skill_choose_popup.icon_2.texture = new_skill_2.icon;
+			skill_choose_popup.skill_name_2.text = new_skill_2.skill_name;
+			skill_choose_popup.label_skill_2.text = new_skill_2.tooltip;
 			skill_choose_popup.second_skill = new_skill_2;
 			skill_choose_popup.show();
 

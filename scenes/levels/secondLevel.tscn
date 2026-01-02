@@ -6,7 +6,7 @@
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_vw0c7"]
 [ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_6eke7"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/Wenvi.tres" id="7_5q1wa"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/UI/turn_transition.tscn" id="7_puj55"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_puj55"]
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="8_hpxmd"]
 [ext_resource type="Texture2D" uid="uid://fs45b1kehfnq" path="res://art/textures/WorkingGround_Tex.png" id="9_hewkd"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="10_qcdyl"]
