@@ -52,6 +52,7 @@ const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/ui/sidebar.tscn")
+const RIBBON: PackedScene = preload("res://scenes/UI/ribbon.tscn");
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -69,6 +70,8 @@ var is_in_menu: bool = false;
 var lock_camera: bool = false;
 var active_move: Command;
 var moves_stack: Array;
+
+var ribbon: Ribbon;
 
 var current_moves: Array[Command];
 var is_player_turn: bool = true;
@@ -178,7 +181,9 @@ func get_unit_name(pos: Vector3) -> String:
 		#return "null";
 	#return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
 
+
 func show_attack_tiles(pos : Vector3i) -> void:
+	path_arrow.clear();
 	var reachable : Array[Vector3i] = [];
 	
 	for move : Move in current_moves:
@@ -217,7 +222,7 @@ func _input(event: InputEvent) -> void:
 		pos.y = 0;
 		
 		if state == States.CHOOSING_ATTACK:
-			if movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
 				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
@@ -255,6 +260,9 @@ func _input(event: InputEvent) -> void:
 					var character_script: Character = selected_unit;
 					character_script.hide_ui();
 				selected_unit = get_unit(pos);
+				ribbon.show();
+				ribbon.set_skills(selected_unit.skills);
+				#ribbon.set_abilities(selected_unit.skills);
 				current_moves = MoveGenerator.generate(selected_unit, game_state);
 				for command in current_moves:
 					if command is Move:
@@ -296,6 +304,8 @@ func _input(event: InputEvent) -> void:
 				character_script.hide_ui();
 			
 			selected_unit = null;
+			
+			ribbon.hide();
 		
 		if (get_unit_name(pos) == CharacterStates.Enemy):
 			
@@ -354,6 +364,10 @@ func _ready() -> void:
 	movement_map.clear();
 	units_map.hide();
 	path_arrow.clear();
+	
+	ribbon = RIBBON.instantiate();
+	add_child(ribbon);
+	ribbon.hide();
 	
 	if (level_name == "first"):
 		Dialogic.start(str(level_name) + "Level");
@@ -424,7 +438,7 @@ func _ready() -> void:
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
 	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_player.position = Vector2(0, -70);
+	stat_popup_player.position = Vector2(0, -30);
 	#stat_popup_player.position = Vector2(-555, 235);
 	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
@@ -433,7 +447,7 @@ func _ready() -> void:
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
 	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_enemy.position = Vector2(get_window().size.x - 380, -70);
+	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30);
 	#stat_popup_enemy.position = Vector2(250, 235);
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	add_child(stat_popup_enemy);

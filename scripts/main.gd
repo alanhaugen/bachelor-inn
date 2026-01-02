@@ -30,7 +30,7 @@ var current_level_index: int = 0;
 var battle_log: Label;
 
 ## Global UI Scale
-var ui_scale: float = 2.4;
+var ui_scale: float = 1.0;#2.4;
 
 ## Save file
 @onready var save: SaveGame = SaveGame.new();

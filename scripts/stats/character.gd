@@ -62,14 +62,11 @@ var level_up_popup: LevelUpPopUp;
 var skill_choose_popup: SkillChoose;
 var health_bar_ally: HealthBar;
 var health_bar_enemy: HealthBar;
-var ribbon: Ribbon;
 
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
 @onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/UI/skill_choose.tscn");
-@onready var RIBBON: PackedScene = preload("res://scenes/UI/ribbon.tscn");
-
 
 @export var is_playable :bool = true; ## Player unit or NPC
 @export var is_enemy :bool = false; ## Friend or foe
@@ -304,9 +301,6 @@ func _ready() -> void:
 	add_child(health_bar_enemy);
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
-	
-	ribbon = RIBBON.instantiate();
-	add_child(ribbon);
 	
 	if is_playable:
 		health_bar = health_bar_ally;
