@@ -30,7 +30,7 @@ text = "Skills"
 
 [node name="Skills" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]

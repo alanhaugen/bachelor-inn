@@ -1,5 +1,5 @@
-class_name Character
 extends Node3D
+class_name Character
 ## This class has all the Character stats and visuals
 ##
 ## Use this class to make new units and enemies for the game
