@@ -15,7 +15,7 @@ var level: Level;
 var world: Node3D;
 
 ## Reference to the GUI
-var gui: Control;
+var gui: Control; # TODO: remove?
 
 ## Character Units held by the gaming session 
 var characters: Array[Character];

@@ -72,8 +72,8 @@ layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -648.0
-offset_bottom = -648.0
+offset_top = -680.0
+offset_bottom = -680.0
 grow_vertical = 0
 script = ExtResource("1_0a5f3")
 
@@ -94,7 +94,7 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -128.0
+offset_top = -116.0
 offset_right = 161.0
 offset_bottom = 5.0
 grow_vertical = 0
@@ -385,6 +385,7 @@ horizontal_alignment = 1
 
 [node name="Health_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Health remaining"
 texture = SubResource("AtlasTexture_l1do4")
 stretch_mode = 2
 
@@ -399,6 +400,7 @@ offset_top = -7.0
 offset_right = 66.0
 offset_bottom = -1.0
 grow_vertical = 0
+tooltip_text = "Health remaining"
 theme_override_styles/background = SubResource("StyleBoxTexture_1htk0")
 theme_override_styles/fill = SubResource("StyleBoxTexture_q3i2e")
 value = 80.0
@@ -415,6 +417,7 @@ text = "100/100"
 
 [node name="Magic_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Mana remaining"
 texture = SubResource("AtlasTexture_b741m")
 stretch_mode = 2
 
@@ -428,6 +431,7 @@ offset_left = 10.0
 offset_top = -6.0
 offset_right = 66.0
 grow_vertical = 0
+tooltip_text = "Mana remaining"
 theme_override_styles/background = SubResource("StyleBoxTexture_c7dy5")
 theme_override_styles/fill = SubResource("StyleBoxTexture_pyip5")
 value = 80.0
@@ -444,6 +448,7 @@ text = "100/100"
 
 [node name="Sanity_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 layout_mode = 2
+tooltip_text = "Sanity remaining"
 texture = SubResource("AtlasTexture_0v7bq")
 stretch_mode = 2
 
@@ -457,6 +462,7 @@ offset_left = 10.0
 offset_top = -6.0
 offset_right = 66.0
 grow_vertical = 0
+tooltip_text = "Sanity remaining"
 theme_override_styles/background = SubResource("StyleBoxTexture_b6nfr")
 theme_override_styles/fill = SubResource("StyleBoxTexture_ck02a")
 value = 80.0

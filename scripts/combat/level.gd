@@ -8,7 +8,6 @@ extends Node3D
 # TODO: Make your own units passable
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
-# TODO: Abilities on level up
 
 @export var level_name :String;
 
@@ -240,7 +239,7 @@ func _input(event: InputEvent) -> void:
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show();
 		
-		var windowPos: Vector2 = Vector2(0,0);
+		var windowPos: Vector2 = Vector2(350,300);
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
 			Tutorial.tutorial_unit_selected();
@@ -290,6 +289,7 @@ func _input(event: InputEvent) -> void:
 			#isUnitSelected = false;
 		else:
 			movement_map.clear();
+			path_arrow.clear();
 			
 			if selected_unit is Character:
 				var character_script: Character = selected_unit;
@@ -319,8 +319,8 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.name_label.text = character_script.unit_name;
 			stat_script.max_health = character_script.max_health;
 			stat_script.health = character_script.current_health;
-			stat_script.max_magic = character_script.magic;
-			stat_script.magic = character_script.current_magic;
+			stat_script.max_mana = character_script.mana;
+			stat_script.mana = character_script.current_mana;
 			stat_script.max_sanity = character_script.mind;
 			stat_script.sanity = character_script.current_sanity;
 			
@@ -419,24 +419,24 @@ func _ready() -> void:
 	
 	move_popup = MOVE_POPUP.instantiate();
 	move_popup.hide();
-	Main.gui.add_child(move_popup);
+	add_child(move_popup);
 	
 	stat_popup_player = STATS_POPUP.instantiate();
 	stat_popup_player.hide();
 	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_player.position = Vector2(-get_window().size.x / 2.1, get_window().size.y / 2.8);
+	stat_popup_player.position = Vector2(0, -70);
 	#stat_popup_player.position = Vector2(-555, 235);
 	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
-	Main.gui.add_child(stat_popup_player);
+	add_child(stat_popup_player);
 	
 	stat_popup_enemy = STATS_POPUP.instantiate();
 	stat_popup_enemy.hide();
 	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_enemy.position = Vector2(get_window().size.x / 5.5, get_window().size.y / 2.8);
+	stat_popup_enemy.position = Vector2(get_window().size.x - 380, -70);
 	#stat_popup_enemy.position = Vector2(250, 235);
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
-	Main.gui.add_child(stat_popup_enemy);
+	add_child(stat_popup_enemy);
 	
 	#for i in range(Main.characters.size()):
 	#	var new_side_bar := SIDE_BAR.instantiate();

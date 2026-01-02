@@ -3,21 +3,20 @@
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="1_jpe5o"]
 [ext_resource type="Script" uid="uid://c4ni51826b2e" path="res://scripts/ui/level_up.gd" id="1_r8t7i"]
 [ext_resource type="Texture2D" uid="uid://bqs3gw33e3f2u" path="res://art/textures/fen.png" id="2_sw2ff"]
-[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/ui/button_theme.tres" id="3_kd365"]
-[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/ui/button_hover_style.tres" id="4_o43dc"]
+[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/UI/button_theme.tres" id="3_kd365"]
+[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/UI/button_hover_style.tres" id="4_o43dc"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="5_4mlli"]
-[ext_resource type="StyleBox" uid="uid://b1of47kyh6aop" path="res://scenes/ui/level_up_frame.tres" id="6_qq5ux"]
+[ext_resource type="StyleBox" uid="uid://b1of47kyh6aop" path="res://scenes/UI/level_up_frame.tres" id="6_qq5ux"]
 
 [node name="LevelUp" type="Control"]
 layout_mode = 3
-anchor_left = 0.48900002
+anchor_left = 0.5
 anchor_top = 0.453
-anchor_right = 0.62700003
-anchor_bottom = 0.81700003
-offset_left = 12.671997
+anchor_right = 0.646
+anchor_bottom = 0.96800005
 offset_top = 30.455994
-offset_right = -146.30402
-offset_bottom = -205.41602
+offset_right = -168.19202
+offset_bottom = -303.26404
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r8t7i")
@@ -30,6 +29,15 @@ offset_bottom = 40.0
 [node name="Control" type="Control" parent="VBoxContainer"]
 layout_mode = 2
 
+[node name="Button" type="Button" parent="VBoxContainer/Control"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 264.0
+offset_right = 132.0
+offset_bottom = 294.0
+theme = ExtResource("3_kd365")
+text = "CLOSE"
+
 [node name="Background" type="NinePatchRect" parent="VBoxContainer/Control"]
 z_index = -3
 layout_mode = 1
@@ -41,7 +49,7 @@ anchor_bottom = 0.5
 offset_left = -31.0
 offset_top = -31.0
 offset_right = 150.0
-offset_bottom = 293.0
+offset_bottom = 304.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_jpe5o")
@@ -52,6 +60,7 @@ patch_margin_right = 11
 patch_margin_bottom = 11
 
 [node name="Icon" type="NinePatchRect" parent="VBoxContainer/Control"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -105,6 +114,7 @@ offset_bottom = 7.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Control/HBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 4
 
 [node name="CharacterName" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -132,9 +142,9 @@ layout_mode = 0
 offset_left = -17.0
 offset_top = 33.0
 offset_right = 132.0
-offset_bottom = 240.0
+offset_bottom = 245.0
 texture = ExtResource("5_4mlli")
-region_rect = Rect2(192.4616, 0.9540522, 32.793076, 30.789633)
+region_rect = Rect2(192, 1, 32, 30)
 patch_margin_left = 10
 patch_margin_top = 10
 patch_margin_right = 10
@@ -189,9 +199,4 @@ layout_mode = 2
 theme_override_styles/normal = ExtResource("6_qq5ux")
 text = "Focus 3"
 
-[node name="Button" type="Button" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("3_kd365")
-text = "CLOSE"
-
-[connection signal="pressed" from="VBoxContainer/Control/HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Control/Button" to="." method="_on_button_pressed"]

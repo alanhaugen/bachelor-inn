@@ -13,6 +13,7 @@ var portrait: Texture2D;
 ## This dictates level progression, skills and compatible weapons
 enum Speciality
 {
+	Generic,
 	## This class has more movement than the other classes
 	## allowing them to get to objectives or outrun enemies.
 	## This could for example be a horse rider in a medieval
@@ -41,7 +42,7 @@ enum Personality
 	Vindictive,
 	Snob,
 	Crashout,
-	Grmp,
+	Grump,
 	Determined,
 	Silly,
 	SmartAlec,
@@ -58,12 +59,16 @@ enum Personality
 var camera: Camera3D;
 var health_bar: HealthBar;
 var level_up_popup: LevelUpPopUp;
+var skill_choose_popup: SkillChoose;
 var health_bar_ally: HealthBar;
 var health_bar_enemy: HealthBar;
+var ribbon: Ribbon;
 
 @onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar.tscn");
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/ui/health_bar_enemy.tscn");
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/ui/level_up.tscn");
+@onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/UI/skill_choose.tscn");
+@onready var RIBBON: PackedScene = preload("res://scenes/UI/ribbon.tscn");
 
 
 @export var is_playable :bool = true; ## Player unit or NPC
@@ -86,7 +91,7 @@ var health_bar_enemy: HealthBar;
 @export var luck: int = 4; ## Affects many other skills
 @export var intimidation: int = 4; ## How the unit affects sanity in battle.
 @export var skill: int = 4; ## Chance to hit critical.
-@export var magic: int = 4; ## Damage with magic
+@export var mana: int = 4; ## Amount of magic power
 @export var weapon: Weapon = null; ## Weapon held by unit
 #endregion
 
@@ -97,7 +102,7 @@ var max_health: int = health + endurance + floor(strength / 2.0);
 @export var movement: int = 4 + floor(speed / 3); ## Movement range
 @export var current_health: int = max_health;
 @export var current_sanity: int = mind : set = _set_sanity;
-@export var current_magic: int = magic;
+@export var current_mana: int = mana;
 @export var current_level: int = 1;
 
 var grid_position: Vector3i;
@@ -110,7 +115,33 @@ var is_alive: bool = true;
 ## Only attack commands will then be possible
 var is_moved :bool = false; 
 
-## SKILL TREE
+var generic_skills :Array[Skill] = [
+	Skill.new("Spear training", "Enables wielding of Spear type weapons", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Adrenaline", "The first time health is lost each combat, double movement and attack on the next turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Precision	", "Damage does not vary (damage done = ¾ maxdamage + ¼ mindamage)", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
+
+var runner_skills :Array[Skill] = [
+	Skill.new("Trailblazer", "After moving through negative terrain, the terrain effects are disabled until end of turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Fleet foot", "Unaffected by negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Trapper", "A new action which turns a 2x2 area into negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Archery", "Enables wielding of Bow & Arrow", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Pivot", "Allows you to move again with remaining movement after using an action", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
+
+var militia_skills :Array[Skill] = [
+	Skill.new("Fighting Cause", "Lose 50% less sanity from battling horrors", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Heavy weapons training", "Can use heavy weapons (big axe, big hammer, big stick)", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Obstructor", "Enemies cannot move out of tiles adjacent to this character", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Enhanced constitution", "Regains 1 health at the start of each turn. Gains additional Endurance", load("res://art/textures/M_Orb.png"), 0, 1, null),
+]
+
+var scholar_skills :Array[Skill] = [
+	Skill.new("Console", "A new ability which restores sanity to an adjacent ally. Half of the sanity restored is lost by this unit", load("res://art/textures/M_Orb.png"), 1, 5, null),
+	Skill.new("Firearms enthusiast", "Enables wielding of firearms", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Pyrochemistry", "Gains 2 improvised explosives for each combat which can be used for a ranged attack", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Medicine", "A new ability which gives an adjacent ally healing for the next 3 turns. This is removed if the ally enters combat", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
 
 
 func clone() -> Character:
@@ -122,6 +153,7 @@ func clone() -> Character:
 	c.camera = camera;
 	c.health_bar = health_bar;
 	c.level_up_popup = level_up_popup;
+	c.skill_choose_popup = skill_choose_popup;
 	c.health_bar_ally = health_bar_ally;
 	c.health_bar_enemy = health_bar_enemy;
 	
@@ -145,7 +177,7 @@ func clone() -> Character:
 	c.luck = luck;
 	c.intimidation = intimidation;
 	c.skill = skill;
-	c.magic = magic;
+	c.mana = mana;
 	
 	c.weapon = weapon;
 
@@ -156,7 +188,7 @@ func clone() -> Character:
 	c.movement = movement; ## Movement range
 	c.current_health = current_health;
 	c.current_sanity = current_sanity;
-	c.current_magic = current_magic;
+	c.current_mana = current_mana;
 	c.current_level = current_level;
 
 	c.grid_position = grid_position;
@@ -191,6 +223,24 @@ func _set_sanity(in_sanity: int) -> void:
 	#	update_health_bar();
 
 
+func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
+	var new_skill : Skill = null;
+	var skill_lookup :Array[Skill] = generic_skills;
+	if speciality == Speciality.Runner:
+		skill_lookup = runner_skills;
+	if speciality == Speciality.Militia:
+		skill_lookup = militia_skills;
+	if speciality == Speciality.Scholar:
+		skill_lookup = scholar_skills;
+	if skill_lookup.size() != skills.size():
+		while new_skill == null or new_skill == ignore_skill:
+			new_skill = skill_lookup[randi_range(0, generic_skills.size() -1)];
+	# If you sent in a skill to ignore, but no other skills were found, send back ignored skill
+	if ignore_skill != null and skill == null:
+		return ignore_skill;
+	return new_skill;
+
+
 func _set_experience(in_experience: int) -> void:
 	experience += in_experience;
 	print(unit_name + " gains " + str(in_experience) + " experience points.");
@@ -212,6 +262,22 @@ func _set_experience(in_experience: int) -> void:
 		calibrate_level_popup();
 		level_up_popup.show();
 		Main.level.is_in_menu = true;
+		
+		var new_skill_1 : Skill = get_random_unaquired_skill();
+		var new_skill_2 : Skill = get_random_unaquired_skill(new_skill_1);
+		
+		if new_skill_1 != null:
+			skill_choose_popup.unit = self;
+			
+			skill_choose_popup.skill_1.icon = new_skill_1.icon;
+			skill_choose_popup.skill_1.tooltip_text = new_skill_1.tooltip;
+			skill_choose_popup.label_skill_1.text = new_skill_1.skill_name;
+			skill_choose_popup.first_skill = new_skill_1;
+			skill_choose_popup.skill_2.icon = new_skill_2.icon;
+			skill_choose_popup.skill_2.tooltip_text = new_skill_2.tooltip;
+			skill_choose_popup.label_skill_2.text = new_skill_2.skill_name;
+			skill_choose_popup.second_skill = new_skill_2;
+			skill_choose_popup.show();
 
 
 func update_health_bar() -> void:
@@ -239,6 +305,9 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
+	ribbon = RIBBON.instantiate();
+	add_child(ribbon);
+	
 	if is_playable:
 		health_bar = health_bar_ally;
 	else:
@@ -250,6 +319,11 @@ func _ready() -> void:
 	level_up_popup.hide();
 	level_up_popup.name_label = unit_name;
 	calibrate_level_popup();
+	
+	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate();
+	add_child(skill_choose_popup);
+	skill_choose_popup.text = unit_name + ", " + Speciality.keys()[speciality];
+	skill_choose_popup.hide();
 	
 	sprite = SPRITE.instantiate();
 	
@@ -349,13 +423,13 @@ func save() -> Dictionary:
 		"Luck": luck,
 		"Intimidation": intimidation,
 		"Skill": skill,
-		"Magic": magic,
+		"Mana": mana,
 		
 		"Experience": experience,
 		"Next level experience": next_level_experience,
 		"Current level": current_level,
 		"Current health": current_health,
-		"Current magic": current_magic,
+		"Current mana": current_mana,
 		"Current sanity": current_sanity
 	}
 	

@@ -3,7 +3,7 @@ extends Control
 
 @onready var icon_texture: TextureRect = %Icon_texture
 @onready var health_bar: ProgressBar = %HealthBar
-@onready var magic_bar: ProgressBar = %MagicBar
+@onready var mana_bar: ProgressBar = %MagicBar
 @onready var sanity_bar: ProgressBar = %SanityBar
 @onready var name_label: Label = %CharacterName
 @onready var health_text: Label = %HealthText
@@ -19,10 +19,10 @@ extends Control
 
 var icon: TextureRect = null : set = _set_icon;
 var health: int = 0 : set = _set_health;
-var magic: int = 0 : set = _set_magic;
+var mana: int = 0 : set = _set_magic;
 var sanity: int = 0 : set = _set_sanity;
 var max_health: int = 0 : set = _set_max_health;
-var max_magic: int = 0 : set = _set_max_magic;
+var max_mana: int = 0 : set = _set_max_magic;
 var max_sanity: int = 0 : set = _set_max_sanity;
 
 var strength: int = 0 : set = _set_strength;
@@ -44,8 +44,8 @@ func _set_health(in_health: int) -> void:
 
 
 func _set_magic(in_magic: int) -> void:
-	magic_bar.value = in_magic;
-	magic_text.text = str(in_magic) + "/" + str(max_magic);
+	mana_bar.value = in_magic;
+	magic_text.text = str(in_magic) + "/" + str(max_mana);
 
 
 func _set_sanity(in_sanity: int) -> void:
@@ -59,8 +59,8 @@ func _set_max_health(in_health: int) -> void:
 
 
 func _set_max_magic(in_magic: int) -> void:
-	magic_bar.max_value = in_magic;
-	max_magic = in_magic;
+	mana_bar.max_value = in_magic;
+	max_mana = in_magic;
 
 
 func _set_max_sanity(in_sanity: int) -> void:

@@ -28,10 +28,7 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i) -> void:
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var unit := state.get_unit(start_pos);
 	unit.move_to(end_pos, simulate_only);
-		#aggressor.is_moved = true;
-	#		if aggressor.is_playable:
-	#			if end_pos == start_pos:
-	#				aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+
 
 
 func undo(state : GameState, simulate_only : bool = false) -> void:

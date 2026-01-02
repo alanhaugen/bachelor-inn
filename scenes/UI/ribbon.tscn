@@ -1,0 +1,40 @@
+[gd_scene load_steps=2 format=3 uid="uid://bqxnj06jaw6ps"]
+
+[ext_resource type="Script" uid="uid://d3jhky6totysk" path="res://scripts/ui/ribbon.gd" id="1_aveyg"]
+
+[node name="Ribbon" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 315.0
+offset_top = -132.0
+offset_right = 315.0
+offset_bottom = -132.0
+grow_vertical = 0
+size_flags_horizontal = 0
+size_flags_vertical = 8
+script = ExtResource("1_aveyg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Skills"
+
+[node name="Skills" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Abilities"
+
+[node name="Abilities" type="HBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 10)
+layout_mode = 2

@@ -118,7 +118,7 @@ func read(save_slot: int) -> bool:
 		new_character.resistence = characters[i].get("Resistence");
 		new_character.movement = characters[i].get("Movement");
 		new_character.mind = characters[i].get("Mind");
-		new_character.magic = characters[i].get("Magic");
+		new_character.mana = characters[i].get("Mana");
 		new_character.luck = characters[i].get("Luck");
 		new_character.is_playable = characters[i].get("Is Playable");
 		new_character.intimidation = characters[i].get("Intimidation");
@@ -128,7 +128,7 @@ func read(save_slot: int) -> bool:
 		new_character.endurance = characters[i].get("Endurance");
 		new_character.defense = characters[i].get("Defense");
 		new_character.current_sanity = characters[i].get("Current sanity");
-		new_character.current_magic = characters[i].get("Current magic");
+		new_character.current_mana = characters[i].get("Current mana");
 		new_character.current_health = characters[i].get("Current health");
 		#new_character.agility = characters[i].get("Agility");
 		
