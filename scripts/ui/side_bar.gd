@@ -1,5 +1,5 @@
-class_name SideBar
 extends Control
+class_name SideBar
 
 @onready var icon_texture: TextureRect = %Icon_texture
 @onready var health_bar: ProgressBar = %HealthBar

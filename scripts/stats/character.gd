@@ -1,4 +1,4 @@
-extends Node3D
+extends Node3D # Change to resource?
 class_name Character
 ## This class has all the Character stats and visuals
 ##
