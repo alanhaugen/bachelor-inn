@@ -504,8 +504,10 @@ func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
 		for j in range(astar.region.position.y, astar.region.end.y):
 			var pos: Vector2i = Vector2i(i, j);
 			var pos3D: Vector3i = Vector3i(i - 11, 0, j - 15);
+			
 			if (get_tile_name(pos3D) == "Water"):
 				astar.set_point_solid(pos);
+				#set_point_weight_scale(pos, tile.get_weight());
 			if (get_unit_name(pos3D) != "null" && pos3D != end):
 				astar.set_point_solid(pos);
 	

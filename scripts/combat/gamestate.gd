@@ -123,6 +123,13 @@ func is_free(pos : Vector3i) -> bool:
 	return true;
 
 
+func get_tile_cost(pos : Vector3i) -> int:
+	for t in terrain:
+		if t.position == pos and t.is_passable:
+			return t.weight;
+	return INF;
+
+
 func is_enemy(pos : Vector3i) -> bool:
 	for u in units:
 		if u.is_enemy == !is_current_player_enemy and u.grid_position == pos:
