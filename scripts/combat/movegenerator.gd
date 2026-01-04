@@ -1,5 +1,5 @@
-class_name MoveGenerator
 extends RefCounted
+class_name MoveGenerator
 
 static func generate(unit : Character, state : GameState) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state);

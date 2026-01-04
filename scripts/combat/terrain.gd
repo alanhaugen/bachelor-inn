@@ -1,5 +1,5 @@
-class_name Terrain
 extends RefCounted
+class_name Terrain
 
 var position : Vector3i;
 var type : String;

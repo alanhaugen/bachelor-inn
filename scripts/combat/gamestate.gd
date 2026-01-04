@@ -1,5 +1,5 @@
-class_name GameState
 extends RefCounted
+class_name GameState
 ## GameState is pure simulation state for AI and rules.
 ## No scene or node access should happen here.
 
