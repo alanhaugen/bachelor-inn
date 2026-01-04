@@ -488,51 +488,54 @@ func get_unit(pos: Vector3i) -> Character:
 	return null;
 
 
-func a_star(start :Vector3i, end :Vector3i, showPath :bool = true) -> void:
-	path_arrow.clear();
-	
-	var astar :AStarGrid2D = AStarGrid2D.new();
-	
-	astar.region = Rect2i(0, 0, 40, 40);
+func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
+	path_arrow.clear()
+
+	var astar := AStarGrid2D.new()
+	astar.region = Rect2i(0, 0, 40, 40)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
-	astar.update();
+	astar.update()
 
-	# Fill in the data from the tilemap layers into the a-star datastructure
-	for i in range(astar.region.position.x, astar.region.end.x):
-		for j in range(astar.region.position.y, astar.region.end.y):
-			var pos: Vector2i = Vector2i(i, j);
-			var pos3D: Vector3i = Vector3i(i - 11, 0, j - 15);
-			
-			if (get_tile_name(pos3D) == "Water"):
-				astar.set_point_solid(pos);
-				#set_point_weight_scale(pos, tile.get_weight());
-			if (get_unit_name(pos3D) != "null" && pos3D != end):
-				astar.set_point_solid(pos);
-	
-	var path : PackedVector2Array = astar.get_point_path(Vector2i(start.x + 11, start.z + 15), Vector2i(end.x + 11, end.z + 15));
-	
-	if not path.is_empty():
-		if (showPath):
-			for i in range(path.size()):
-				var pos: Vector3 = Vector3(path[i].x - 11, 0, path[i].y - 15);
-				path_arrow.set_cell_item(pos, 0);
-		
-		animation_path.clear();
-		
-		for i :int in path.size():
-			var anim_pos: Vector3 = map.map_to_local(Vector3(path[i].x - 11, 0.0, path[i].y - 15));
-			anim_pos.y = 0;
-			animation_path.append(anim_pos);
-	
-	selected_unit = get_unit(start);
-	
-	#if (animation_path.is_empty() == false):
-	#	animated_unit.position = animation_path.pop_front();
-	
-	path_arrow.set_cell_item(start, GridMap.INVALID_CELL_ITEM);
+	# --- Populate grid
+	for x in range(astar.region.position.x, astar.region.end.x):
+		for y in range(astar.region.position.y, astar.region.end.y):
+			var pos2d := Vector2i(x, y)
+			var pos3d := Vector3i(x, 0, y)
 
+			var is_walkable := game_state.is_free(pos3d) and not game_state.is_enemy(pos3d)
+			astar.set_point_solid(pos2d, not is_walkable)
+
+			if is_walkable:
+				astar.set_point_weight_scale(
+					pos2d,
+					game_state.get_tile_cost(pos3d)
+				)
+
+	# --- Apply same offset to start/end
+	var start_2d := Vector2i(start.x + 11, start.z + 15)
+	var end_2d   := Vector2i(end.x + 11, end.z + 15)
+
+	var path : PackedVector2Array = astar.get_point_path(start_2d, end_2d)
+
+	if path.is_empty():
+		return
+
+	animation_path.clear()
+
+	for p in path:
+		var grid_pos := Vector3(p.x - 11, 0, p.y - 15)
+
+		if showPath:
+			path_arrow.set_cell_item(grid_pos, 0)
+
+		var anim_pos := map.map_to_local(grid_pos)
+		anim_pos.y = 0
+		animation_path.append(anim_pos)
+
+	selected_unit = get_unit(start)
+	path_arrow.set_cell_item(start, GridMap.INVALID_CELL_ITEM)
 
 func reset_all_units() -> void:
 	var units :Array[Vector3i] = units_map.get_used_cells();
