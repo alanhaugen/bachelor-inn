@@ -6,7 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
-[ext_resource type="Texture2D" uid="uid://b33jkq5s683ck" path="res://art/textures/Orb.png" id="7_btxxm"]
+[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="7_btxxm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
 texture = ExtResource("3_v8ire")

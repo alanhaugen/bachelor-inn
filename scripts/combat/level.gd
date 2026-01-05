@@ -490,9 +490,11 @@ func get_unit(pos: Vector3i) -> Character:
 
 func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	path_arrow.clear()
-
+	
+	var region_x : int = 10;
+	var region_y : int = 10;
 	var astar := AStarGrid2D.new()
-	astar.region = Rect2i(0, 0, 40, 40)
+	astar.region = Rect2i(0, 0, region_x, region_y)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -514,8 +516,9 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 				)
 
 	# --- Apply same offset to start/end
-	var start_2d := Vector2i(start.x + 11, start.z + 15)
-	var end_2d   := Vector2i(end.x + 11, end.z + 15)
+	var start_2d := Vector2i(start.x + floor(region_x/2.0), start.z + floor(region_y/2.0))
+	# Offset is half of the region lengt/width
+	var end_2d   := Vector2i(end.x + floor(region_x/2.0), end.z + floor(region_y/2.0))
 
 	var path : PackedVector2Array = astar.get_point_path(start_2d, end_2d)
 
@@ -525,7 +528,7 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	animation_path.clear()
 
 	for p in path:
-		var grid_pos := Vector3(p.x - 11, 0, p.y - 15)
+		var grid_pos := Vector3(p.x - floor(region_x/2.0), 0, p.y - floor(region_y/2.0))
 
 		if showPath:
 			path_arrow.set_cell_item(grid_pos, 0)
