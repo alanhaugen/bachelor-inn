@@ -1,13 +1,14 @@
 extends RefCounted
 class_name MoveGenerator
 
+
 static func generate(unit : Character, state : GameState) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state);
 	return moves;
 
 
 static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
-	var start_pos : Vector3i = unit.grid_position
+	var start_pos : Vector3i = unit.state.grid_position
 	
 	var frontier : Array = [] # acts as priority queue: [pos, cost]
 	var cost_so_far : Dictionary = {}
@@ -27,7 +28,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		var pos : Vector3i = current[0]
 		var current_cost : int = current[1]
 		
-		if current_cost > unit.movement:
+		if current_cost > unit.state.movement:
 			continue
 		
 		if visited.has(pos):
@@ -59,7 +60,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 			var tile_cost : int = state.get_tile_cost(dir)
 			var new_cost : int = current_cost + tile_cost
 			
-			if new_cost > unit.movement:
+			if new_cost > unit.state.movement:
 				continue
 			
 			if not cost_so_far.has(dir) or new_cost < cost_so_far[dir]:

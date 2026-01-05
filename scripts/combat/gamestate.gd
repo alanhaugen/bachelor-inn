@@ -51,14 +51,14 @@ func clone() -> GameState:
 
 func reset_moves() -> void:
 	for unit in units:
-		unit.is_moved = false;
+		unit.state.is_moved = false;
 
 
 func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	var new_state : GameState = clone();
 	
 	var unit : Character = new_state.get_unit(move.start_pos)
-	unit.is_moved = true;
+	unit.state.is_moved = true;
 	
 	move.execute(new_state, simulate_only);
 	
@@ -70,7 +70,7 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 
 func no_units_remaining() -> bool:
 	for unit in units:
-		if unit.is_moved == false and unit.is_enemy == is_current_player_enemy:
+		if unit.state.is_moved == false and unit.state.is_enemy() == is_current_player_enemy:
 			return false;
 	return true;
 
@@ -84,11 +84,11 @@ func get_legal_moves() -> Array[Command]:
 	var moves : Array[Command] = []
 
 	for unit in units:
-		if unit.is_moved:
+		if unit.state.is_moved:
 			continue;
-		if unit.is_alive == false:
+		if unit.state.is_alive == false:
 			continue;
-		if unit.is_enemy != is_current_player_enemy:
+		if unit.state.is_enemy() != is_current_player_enemy:
 			continue;
 		
 		moves += MoveGenerator.generate(unit, self);
@@ -117,7 +117,7 @@ func is_free(pos : Vector3i) -> bool:
 			return false;
 	
 	for u in units:
-		if u.grid_position == pos and u.is_alive:
+		if u.state.grid_position == pos and u.state.is_alive:
 			return false;
 	
 	return true;
@@ -132,7 +132,15 @@ func get_tile_cost(pos : Vector3i) -> int:
 
 func is_enemy(pos : Vector3i) -> bool:
 	for u in units:
-		if u.is_enemy == !is_current_player_enemy and u.grid_position == pos:
+		if u.state.is_enemy() == !is_current_player_enemy and u.state.grid_position == pos:
+			return true;
+	
+	return false;
+
+
+func is_unit(pos : Vector3i) -> bool:
+	for u in units:
+		if u.state.grid_position == pos:
 			return true;
 	
 	return false;
@@ -140,7 +148,8 @@ func is_enemy(pos : Vector3i) -> bool:
 
 func get_unit(pos : Vector3i) -> Character:
 	for u in units:
-		if u.grid_position == pos:
+		u.print_stats();
+		if u.state.grid_position == pos:
 			return u;
 	
 	return null;

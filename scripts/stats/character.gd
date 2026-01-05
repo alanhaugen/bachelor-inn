@@ -1,227 +1,54 @@
-extends Node3D # Change to resource?
+extends Node3D
 class_name Character
-## This class has all the Character stats and visuals
+## This class has all the Character visuals
 ##
-## Use this class to make new units and enemies for the game
+## Use this class to with a new scene for
+## new characters and enemies
 
-const SPRITE = preload("res://art/WIP/CharTest.tscn");
+@export var data : CharacterData
+@export var state : CharacterState
 
-var sprite: Node3D;
-var portrait: Texture2D;
+const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn");
+const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
+const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn");
+const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
+const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn");
 
-@export var data: CharacterData
+#region inferred variables
+var sprite : Node3D;
+var portrait : Texture2D;
 
-#region: --- Unit Stats ---
-## This dictates level progression, skills and compatible weapons
-enum Speciality
-{
-	Generic,
-	## This class has more movement than the other classes
-	## allowing them to get to objectives or outrun enemies.
-	## This could for example be a horse rider in a medieval
-	## setting or a ranger in a fantasy setting
-	Runner,
-	## Most classes usually fall in this category in games
-	## like fire emblem. If we want to use the sanity mechanic
-	## for our game, then these units might have extra resistance
-	## from sanity damage from battles
-	Militia,
-	## The classic healer/utility buffer. Their abilities do not
-	## necessarily have to affect battles, they could improve
-	## movement or conjure terrain.
-	Scholar
-}
-
-enum Personality
-{
-	Normal,
-	Zealot,
-	Devoted,
-	Young,
-	Old,
-	Jester,
-	Therapist,
-	Vindictive,
-	Snob,
-	Crashout,
-	Grump,
-	Determined,
-	Silly,
-	SmartAlec,
-	HeroComplex,
-	Vitriolic,
-	Noble,
-	Selfish,
-	Tired,
-	ExCultist,
-	FactoryWorker,
-	FactoryOwner
-}
-
-var camera: Camera3D;
-var health_bar: HealthBar;
-var level_up_popup: LevelUpPopUp;
-var skill_choose_popup: SkillChoose;
-var health_bar_ally: HealthBar;
-var health_bar_enemy: HealthBar;
-
-@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar.tscn");
-@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
-@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/userinterface/level_up.tscn");
-@onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
-
-@export var is_playable :bool = true; ## Player unit or NPC
-@export var is_enemy :bool = false; ## Friend or foe
-@export var unit_name :String = "Baggins"; ## Unit name
-@export var connections :Array = []; ## Connections to other players (how friendly they are to others)
-@export var speciality :Speciality = Speciality.Militia; ## Unit speciality
-@export var personality :Personality = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
-
-@export var health: int = 4; ## Unit health
-@export var strength: int = 4; ## Damage with weapons
-@export var mind: int = 4; ## Mind reduces sanity loss from combat or other events
-@export var speed: int = 4; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
-#@export var agility: int = 4; ## Agility increases the evasion and hit rate of a unit
-@export var focus: int = 4; ## Focus increases hit rate and crit rate of a unit. It also increases defense against sanity attacks
-
-@export var endurance: int = 4; ## Endurance increases defense against physical and magic attacks. It also increases the health of the unit
-@export var defense: int = 4; ## Lowers damage of weapon attacks
-@export var resistence: int = 4; ## Lowers damage of magic attacks
-@export var luck: int = 4; ## Affects many other skills
-@export var intimidation: int = 4; ## How the unit affects sanity in battle.
-@export var skill: int = 4; ## Chance to hit critical.
-@export var mana: int = 4; ## Amount of magic power
-@export var weapon: Weapon = null; ## Weapon held by unit
+var camera : Camera3D;
+var health_bar : HealthBar;
+var level_up_popup : LevelUpPopUp;
+var skill_choose_popup : SkillChoose;
+var health_bar_ally : HealthBar;
+var health_bar_enemy : HealthBar;
 #endregion
-
-@export var experience : int  = 0 : set = _set_experience;
-@export var skills : Array[Skill];
-
-var max_health: int = health + endurance + floor(strength / 2.0);
-@export var movement: int = 4 + floor(speed / 3); ## Movement range
-@export var current_health: int = max_health;
-@export var current_sanity: int = mind : set = _set_sanity;
-@export var current_mana: int = mana;
-@export var current_level: int = 1;
-
-var grid_position: Vector3i;
-
-var next_level_experience: int = 1;
-
-var is_alive: bool = true;
-
-## Has move been done yet?
-## Only attack commands will then be possible
-var is_moved :bool = false; 
-
-var generic_skills :Array[Skill] = [
-	Skill.new("Spear training", "Enables wielding of Spear type weapons", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Adrenaline", "The first time health is lost each combat, double movement and attack on the next turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Precision	", "Damage does not vary (damage done = ¾ maxdamage + ¼ mindamage)", load("res://art/textures/M_Orb.png"), 0, 1, null)
-]
-
-var runner_skills :Array[Skill] = [
-	Skill.new("Trailblazer", "After moving through negative terrain, the terrain effects are disabled until end of turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Fleet foot", "Unaffected by negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Trapper", "A new action which turns a 2x2 area into negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Archery", "Enables wielding of Bow & Arrow", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Pivot", "Allows you to move again with remaining movement after using an action", load("res://art/textures/M_Orb.png"), 0, 1, null)
-]
-
-var militia_skills :Array[Skill] = [
-	Skill.new("Fighting Cause", "Lose 50% less sanity from battling horrors", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Heavy weapons training", "Can use heavy weapons (big axe, big hammer, big stick)", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Obstructor", "Enemies cannot move out of tiles adjacent to this character", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Enhanced constitution", "Regains 1 health at the start of each turn. Gains additional Endurance", load("res://art/textures/M_Orb.png"), 0, 1, null),
-]
-
-var scholar_skills :Array[Skill] = [
-	Skill.new("Console", "A new ability which restores sanity to an adjacent ally. Half of the sanity restored is lost by this unit", load("res://art/textures/M_Orb.png"), 1, 5, null),
-	Skill.new("Firearms enthusiast", "Enables wielding of firearms", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Pyrochemistry", "Gains 2 improvised explosives for each combat which can be used for a ranged attack", load("res://art/textures/M_Orb.png"), 0, 1, null),
-	Skill.new("Medicine", "A new ability which gives an adjacent ally healing for the next 3 turns. This is removed if the ally enters combat", load("res://art/textures/M_Orb.png"), 0, 1, null)
-]
-
-var all_skills :Array[Array] = [
-	generic_skills,
-	runner_skills,
-	militia_skills,
-	scholar_skills
-];
 
 
 func clone() -> Character:
 	var c := Character.new();
-	
-	c.sprite = sprite;
-	c.portrait = portrait;
-	
-	c.camera = camera;
-	c.health_bar = health_bar;
-	c.level_up_popup = level_up_popup;
-	c.skill_choose_popup = skill_choose_popup;
-	c.health_bar_ally = health_bar_ally;
-	c.health_bar_enemy = health_bar_enemy;
-	
-	c.is_playable = is_playable;
-	c.is_enemy = is_enemy;
-	c.unit_name = unit_name;
-	
-	c.connections = connections;
-	c.speciality = speciality;
-	c.personality = personality;
-	
-	c.health = health;
-	c.strength = strength;
-	c.mind = mind;
-	c.speed = speed;
-	c.focus = focus;
-
-	c.endurance = endurance;
-	c.defense = defense;
-	c.resistence = resistence;
-	c.luck = luck;
-	c.intimidation = intimidation;
-	c.skill = skill;
-	c.mana = mana;
-	
-	c.weapon = weapon;
-
-	#c.experience = experience;
-	c.skills = skills;
-
-	c.max_health = max_health;
-	c.movement = movement; ## Movement range
-	c.current_health = current_health;
-	c.current_sanity = current_sanity;
-	c.current_mana = current_mana;
-	c.current_level = current_level;
-
-	c.grid_position = grid_position;
-
-	c.next_level_experience = next_level_experience;
-
-	c.is_alive = is_alive;
-	
-	c.is_moved = is_moved; 
-	
-	return c
+	c.data = data.duplicate_data();
+	c.state = state.duplicate_data();
+	return c;
 
 
 func _set_sanity(in_sanity: int) -> void:
-	if in_sanity > mind:
-		in_sanity = mind;
+	state.current_sanity = in_sanity;
+	if in_sanity > data.mind:
+		in_sanity = data.mind;
 	#if (Main.battle_log):
 	#	var dir := " loses ";
 	#	if current_sanity < in_sanity:
 	#		dir = " gains ";
 	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
-	current_sanity = in_sanity;
-	if current_sanity < 0 and current_health > 0:
-		is_playable = false;
+	state.current_sanity = in_sanity;
+	if state.current_sanity < 0 and state.current_health > 0:
+		state.faction = CharacterState.Faction.ENEMY;
 	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
-		unit_name = unit_name + "'cthulhu";
+		data.unit_name = data.unit_name + "'cthulhu";
 		health_bar = health_bar_enemy;
 	#	health_bar_ally.hide();
 	#	health_bar_enemy.show();
@@ -231,40 +58,40 @@ func _set_sanity(in_sanity: int) -> void:
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	var new_skill : Skill = null;
-	var skill_lookup :Array[Skill] = generic_skills;
-	if speciality == Speciality.Runner:
-		skill_lookup = runner_skills;
-	if speciality == Speciality.Militia:
-		skill_lookup = militia_skills;
-	if speciality == Speciality.Scholar:
-		skill_lookup = scholar_skills;
-	if skill_lookup.size() != skills.size():
+	var skill_lookup :Array[Skill] = data.generic_skills;
+	if data.speciality == CharacterData.Speciality.Runner:
+		skill_lookup = data.runner_skills;
+	if data.speciality == CharacterData.Speciality.Militia:
+		skill_lookup = data.militia_skills;
+	if data.speciality == CharacterData.Speciality.Scholar:
+		skill_lookup = data.scholar_skills;
+	if skill_lookup.size() != state.skills.size():
 		while new_skill == null or new_skill == ignore_skill:
-			new_skill = skill_lookup[randi_range(0, generic_skills.size() -1)];
+			new_skill = skill_lookup[randi_range(0, data.generic_skills.size() -1)];
 	# If you sent in a skill to ignore, but no other skills were found, send back ignored skill
-	if ignore_skill != null and skill == null:
+	if ignore_skill != null and data.skill == null:
 		return ignore_skill;
 	return new_skill;
 
 
 func _set_experience(in_experience: int) -> void:
-	experience += in_experience;
-	print(unit_name + " gains " + str(in_experience) + " experience points.");
-	if (experience > next_level_experience):
+	data.experience += in_experience;
+	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
+	if (data.experience > data.next_level_experience):
 		print("Level up!");
-		current_level += 1;
-		if (speciality == Speciality.Militia):
-			if (next_level_experience >= 10):
-				health += 1;
-				mind += 1;
-			if (next_level_experience >= 100):
-				health += 1;
-				mind += 1;
-			if (next_level_experience >= 1000):
-				luck += 1;
-				skill += 1;
+		data.current_level += 1;
+		if (data.speciality == CharacterData.Speciality.Militia):
+			if (data.next_level_experience >= 10):
+				data.health += 1;
+				data.mind += 1;
+			if (data.next_level_experience >= 100):
+				data.health += 1;
+				data.mind += 1;
+			if (data.next_level_experience >= 1000):
+				data.luck += 1;
+				data.skill += 1;
 		
-		next_level_experience *= 10;
+		data.next_level_experience *= 10;
 		calibrate_level_popup();
 		level_up_popup.show();
 		Main.level.is_in_menu = true;
@@ -287,19 +114,19 @@ func _set_experience(in_experience: int) -> void:
 
 
 func update_health_bar() -> void:
-	health_bar.health = current_health;
-	health_bar.sanity = current_sanity;
-	health_bar.name_label = unit_name;
+	health_bar.health = state.current_health;
+	health_bar.sanity = state.current_sanity;
+	health_bar.name_label = data.unit_name;
 
 
 func calibrate_level_popup() -> void:
-	level_up_popup.health = health;
-	level_up_popup.focus = focus;
-	level_up_popup.level = current_level;
-	level_up_popup.mind = mind;
-	level_up_popup.movement = movement;
-	level_up_popup.speed = speed;
-	level_up_popup.strength = strength;
+	level_up_popup.health = data.health;
+	level_up_popup.focus = data.focus;
+	level_up_popup.level = state.current_level;
+	level_up_popup.mind = data.mind;
+	level_up_popup.movement = state.movement;
+	level_up_popup.speed = data.speed;
+	level_up_popup.strength = data.strength;
 	#level_up_popup.agility = agility;
 
 
@@ -311,26 +138,32 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
+	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
+	state.movement = 4 + floor(data.speed / 3); ## Movement range
+	state.current_health = state.max_health;
+	state.current_sanity = data.mind;
+	state.current_mana = data.mana;
+	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	skills.append(all_skills[speciality][personality % (all_skills[speciality].size() - 1)]);
+#	state.skills.append(data.all_skills[data.speciality][data.personality % (data.all_skills[data.speciality].size() - 1)]);
 	#abilities.append(abilites[0]);
 	
-	if is_playable:
+	if state.is_playable():
 		health_bar = health_bar_ally;
 	else:
 		health_bar = health_bar_enemy;
-		is_enemy = true;
+		state.faction = CharacterState.Faction.ENEMY;
 	
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
 	add_child(level_up_popup);
 	level_up_popup.hide();
-	level_up_popup.name_label = unit_name;
+	level_up_popup.name_label = data.unit_name;
 	calibrate_level_popup();
 	
 	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate();
 	add_child(skill_choose_popup);
-	skill_choose_popup.text = unit_name + ", " + Speciality.keys()[speciality];
+	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality];
 	skill_choose_popup.hide();
 	
 	sprite = SPRITE.instantiate();
@@ -348,7 +181,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	if is_alive:
+	if state.is_alive:
 		show_ui(); # hack, TODO: removeme
 	
 	if camera:
@@ -367,45 +200,45 @@ func show_ui() -> void:
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	if simulate_only == false:
-		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
-	is_alive = true;
+	state.is_alive = true;
 	#reset();
-	grid_position = pos;
-	is_moved = true;
+	state.grid_position = pos;
+	state.is_moved = true;
 	
 	if simulate_only == false:
 		var grid_code := Main.level.player_code_done;
-		if is_enemy:
+		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
-		Main.level.units_map.set_cell_item(grid_position, grid_code);
+		Main.level.units_map.set_cell_item(state.grid_position, grid_code);
 	#if is_playable:
 	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
-	is_alive = true;
+	state.is_alive = true;
 	# slowly heal sanity
-	if is_playable:
-		current_sanity += 1;
+	if state.is_playable():
+		state.current_sanity += 1;
 	hide_ui();
 	show();
-	is_moved = false;
+	state.is_moved = false;
 #	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die(simulate_only : bool) -> void:
-	if is_alive == false:
+	if state.is_alive == false:
 		push_error("Killing already dead unit");
 	
-	is_alive = false;
+	state.is_alive = false;
 	
 	if simulate_only == false:
 		hide_ui();
 		hide();
-		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
-	grid_position = Vector3(-100, -100, -100);
+	state.grid_position = Vector3(-100, -100, -100);
 
 
 func print_stats() -> void:
@@ -413,32 +246,7 @@ func print_stats() -> void:
 
 
 func save() -> Dictionary:
-	var stats := {
-		"Is Playable": is_playable,
-		"Unit name": unit_name,
-		"Speciality": speciality,
-		"Health": health,
-		"Strength": strength,
-		"Movement": movement,
-		"Mind": mind,
-		"Speed": speed,
-		#"Agility": agility,
-		"Focus": focus,
-		
-		"Endurance": endurance,
-		"Defense": defense,
-		"Resistence": resistence,
-		"Luck": luck,
-		"Intimidation": intimidation,
-		"Skill": skill,
-		"Mana": mana,
-		
-		"Experience": experience,
-		"Next level experience": next_level_experience,
-		"Current level": current_level,
-		"Current health": current_health,
-		"Current mana": current_mana,
-		"Current sanity": current_sanity
+	return {
+		"data": data.save(),
+		"state": state.save()
 	}
-	
-	return stats;

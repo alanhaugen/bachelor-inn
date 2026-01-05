@@ -7,7 +7,7 @@ extends Node
 # TODO:
 # load settings
 
-#region: --- Props ---
+#region Props
 ## Current level running
 var level: Level;
 
@@ -33,7 +33,7 @@ var ui_scale: float = 1.0;#2.4;
 @onready var save: SaveGame = SaveGame.new();
 #endregion
 
-#region: --- Methods ---
+#region Methods
 ## Unloads the current level instance
 func unload_level() -> void:
 	if is_instance_valid(level):

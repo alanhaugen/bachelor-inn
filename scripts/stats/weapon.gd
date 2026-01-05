@@ -1,5 +1,6 @@
-class_name Weapon extends Node
+extends Resource
+class_name Weapon 
 
-var damage_modifier: int = 1;
-var weapon_critical: int = 1;
-var is_melee: bool = false;
+@export var damage_modifier: int = 1;
+@export var weapon_critical: int = 1;
+@export var is_melee: bool = false;

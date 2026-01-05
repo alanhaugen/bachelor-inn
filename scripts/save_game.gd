@@ -15,18 +15,30 @@ func is_savefile_existing() -> bool:
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
-	var first: Character = Character.new();
-	first.unit_name = "Alfred";
-	first.speciality = Character.Speciality.Scholar;
-	first.movement = 3;
-	first.strength = 1;
+	var data1 := CharacterData.new()
+	data1.unit_name = "Alfred"
+	data1.speciality = CharacterData.Speciality.Scholar
+	data1.mind = 6
+	data1.focus = 5
+
+	var state1 := CharacterState.new()
+
+	var char1 := Character.new()
+	char1.data = data1
+	char1.state = state1
 	
-	var second: Character = Character.new();
-	second.unit_name = "Lucy";
-	second.speciality = Character.Speciality.Militia;
-	second.strength = 10;
+	var data2 := CharacterData.new()
+	data2.unit_name = "Lucy"
+	data2.speciality = CharacterData.Speciality.Militia
+	data2.strength = 10
+
+	var state2 := CharacterState.new()
+
+	var char2 := Character.new()
+	char2.data = data2
+	char2.state = state2
 	
-	var units: Array[Dictionary] = [first.save(), second.save()];
+	var units: Array[Dictionary] = [char1.save(), char2.save()];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -81,76 +93,72 @@ func write(_save_slot: int) -> void:
 
 func read(save_slot: int) -> bool:
 	if not FileAccess.file_exists(SAVE_GAME_PATH):
-		return false; # Error! We don't have a save to load.
+		return false
 
-	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.READ);
-	var json_string: String = save_file.get_as_text();
+	var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
+	var json_string := file.get_as_text()
+	file.close()
 
-	# Creates the helper class to interact with JSON.
-	var json: JSON = JSON.new()
+	var json := JSON.new()
+	if json.parse(json_string) != OK:
+		push_error("JSON parse error")
+		return false
 
-	# Check if there is any error while parsing the JSON string, skip in case of failure.
-	var parse_result: Error = json.parse(json_string)
-	if not parse_result == OK:
-		print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())
-		return false;
+	var save : Dictionary = json.data
 
-	# Get the data from the JSON object.
-	var save: Dictionary = json.data;
-	
-	var save_slot_data: Dictionary = save.get_or_add("Slot " + str(save_slot + 1));
-	
-	var level: int = save_slot_data.get_or_add("level");
-	
-	var characters: Array = save_slot_data.get("units");
-	
-	Main.characters.clear();
-	
-	print(characters);
-	
-	for i in range(characters.size()):
-		var new_character: Character = Character.new();
-		new_character.unit_name = characters[i].get("Unit name");
-		new_character.strength = characters[i].get("Strength");
-		new_character.speed = characters[i].get("Speed");
-		new_character.speciality = characters[i].get("Speciality");
-		new_character.skill = characters[i].get("Skill");
-		new_character.resistence = characters[i].get("Resistence");
-		new_character.movement = characters[i].get("Movement");
-		new_character.mind = characters[i].get("Mind");
-		new_character.mana = characters[i].get("Mana");
-		new_character.luck = characters[i].get("Luck");
-		new_character.is_playable = characters[i].get("Is Playable");
-		new_character.intimidation = characters[i].get("Intimidation");
-		new_character.health = characters[i].get("Health");
-		new_character.focus = characters[i].get("Focus");
-		new_character.experience = characters[i].get("Experience");
-		new_character.endurance = characters[i].get("Endurance");
-		new_character.defense = characters[i].get("Defense");
-		new_character.current_sanity = characters[i].get("Current sanity");
-		new_character.current_mana = characters[i].get("Current mana");
-		new_character.current_health = characters[i].get("Current health");
-		#new_character.agility = characters[i].get("Agility");
-		
-		Main.characters.append(new_character);
-	
-	Main.load_level(Main.levels[level]);
-	
-	#var unit: Character = Character.new();
-	#unit.name = "Withburn";
-	#unit.speciality = Character.Speciality.Support;
-	#unit.sprite;
-	
-	#Main.characters.append(unit);
+	var slot_key := "Slot " + str(save_slot + 1)
+	if not save.has(slot_key):
+		return false
 
-	# Firstly, we need to create the object and add it to the tree and set its position.
-	#var new_object = load(node_data["filename"]).instantiate()
-	#get_node(node_data["parent"]).add_child(new_object)
-	#new_object.position = Vector2(node_data["pos_x"], node_data["pos_y"])
+	var slot : Dictionary = save[slot_key]
 
-	# Now we set the remaining variables.
-	#for i in node_data.keys():
-	#	if i == "filename" or i == "parent" or i == "pos_x" or i == "pos_y":
-	#		continue
-	#	new_object.set(i, node_data[i])
-	return true;
+	if not slot.has("level") or not slot.has("units"):
+		return false
+
+	var level : int = slot["level"]
+	var units : Array = slot["units"]
+
+	Main.characters.clear()
+
+	for unit_dict : Dictionary in units:
+		var character := Character.new()
+
+		# --- DATA ---
+		var data := CharacterData.new()
+		var data_dict : Dictionary = unit_dict["data"]
+
+		data.unit_name = data_dict["unit_name"]
+		data.speciality = data_dict["speciality"]
+		data.personality = data_dict["personality"]
+		data.health = data_dict["health"]
+		data.strength = data_dict["strength"]
+		data.mind = data_dict["mind"]
+		data.speed = data_dict["speed"]
+		data.focus = data_dict["focus"]
+		data.endurance = data_dict["endurance"]
+		data.defense = data_dict["defense"]
+		data.resistance = data_dict["resistance"]
+		data.luck = data_dict["luck"]
+		data.mana = data_dict["mana"]
+
+		# --- STATE ---
+		var state := CharacterState.new()
+		var state_dict : Dictionary = unit_dict["state"]
+
+		var gp : Array = state_dict["grid_position"]
+		state.grid_position = Vector3i(gp[0], gp[1], gp[2])
+
+		state.faction = state_dict["faction"]
+		state.experience = state_dict["experience"]
+		state.level = state_dict["level"]
+		state.current_health = state_dict["current_health"]
+		state.current_sanity = state_dict["current_sanity"]
+		state.current_mana = state_dict["current_mana"]
+
+		character.data = data
+		character.state = state
+
+		Main.characters.append(character)
+
+	Main.load_level(Main.levels[level])
+	return true

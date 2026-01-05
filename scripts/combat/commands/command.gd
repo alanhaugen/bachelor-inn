@@ -1,5 +1,5 @@
+extends Resource
 class_name Command
-extends RefCounted
 ## Command pattern
 ##
 ## https://gameprogrammingpatterns.com/command.html
