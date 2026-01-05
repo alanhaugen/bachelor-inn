@@ -225,7 +225,7 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star used to select how the character moves when move + attack
 				state = States.ANIMATING;
 			return;
 		
@@ -286,7 +286,7 @@ func _input(event: InputEvent) -> void:
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
-				a_star(unit_pos, pos);
+				a_star(unit_pos, pos); # a-star used for normal character movement
 				path_arrow.clear();
 			
 			#activeMove.execute();
@@ -503,9 +503,11 @@ func get_unit(pos: Vector3i) -> Character:
 
 func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	path_arrow.clear()
-
+	
+	var region_x : int = 10;
+	var region_y : int = 10;
 	var astar := AStarGrid2D.new()
-	astar.region = Rect2i(0, 0, 40, 40)
+	astar.region = Rect2i(0, 0, region_x, region_y)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
 	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
@@ -527,8 +529,9 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 				)
 
 	# --- Apply same offset to start/end
-	var start_2d := Vector2i(start.x + 11, start.z + 15)
-	var end_2d   := Vector2i(end.x + 11, end.z + 15)
+	var start_2d := Vector2i(start.x + floor(region_x/2.0), start.z + floor(region_y/2.0))
+	# Offset is half of the region lengt/width
+	var end_2d   := Vector2i(end.x + floor(region_x/2.0), end.z + floor(region_y/2.0))
 
 	var path : PackedVector2Array = astar.get_point_path(start_2d, end_2d)
 
@@ -538,7 +541,7 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	animation_path.clear()
 
 	for p in path:
-		var grid_pos := Vector3(p.x - 11, 0, p.y - 15)
+		var grid_pos := Vector3(p.x - floor(region_x/2.0), 0, p.y - floor(region_y/2.0))
 
 		if showPath:
 			path_arrow.set_cell_item(grid_pos, 0)
@@ -573,7 +576,7 @@ func MoveAI() -> void:
 		current_state = current_state.apply_move(move, true);
 	
 	if (moves_stack.is_empty() == false):
-		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for pathfinding AI
 		state = States.ANIMATING;
 
 
@@ -618,7 +621,7 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			a_star(selected_unit.state.grid_position, pos);
+			a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
@@ -703,13 +706,13 @@ func _process(delta: float) -> void:
 				MoveAI();
 			
 			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			var movement_speed := 4.0 # units per second
+			var movement_speed := 80.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta

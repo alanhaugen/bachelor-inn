@@ -162,9 +162,9 @@ shader_parameter/diffuse_tex = ExtResource("10_ca1ey")
 shader_parameter/normal_map = ExtResource("12_w357l")
 shader_parameter/edge_mask = ExtResource("11_6lhpm")
 shader_parameter/edge_strength = 2.125
-shader_parameter/edge_tint = Color(1, 1, 1, 1)
-shader_parameter/normal_tilt = 2.354000111815
-shader_parameter/normal_sensitivity = 0.8800000418
+shader_parameter/edge_tint = Color(0.7202165, 0.73772615, 0.9615523, 1)
+shader_parameter/normal_tilt = 0.0
+shader_parameter/normal_sensitivity = 1.0
 shader_parameter/flip_normal_y = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_0ucq8"]
@@ -211,7 +211,7 @@ process_material = SubResource("ParticleProcessMaterial_jav84")
 draw_pass_1 = SubResource("QuadMesh_khwvq")
 
 [node name="Lamp" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0383062, 6.232548, -0.8650335)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.79651713, 6.232548, -0.8650335)
 shadow_enabled = true
 
 [node name="Orb" type="MeshInstance3D" parent="."]
