@@ -225,7 +225,7 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star used to select where to move when moving and attacking
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star used to select how the character moves when move + attack
 				state = States.ANIMATING;
 			return;
 		
@@ -286,7 +286,7 @@ func _input(event: InputEvent) -> void:
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
-				a_star(unit_pos, pos); # a-star used for normal movement
+				a_star(unit_pos, pos); # a-star used for normal character movement
 				path_arrow.clear();
 			
 			#activeMove.execute();
@@ -562,7 +562,7 @@ func MoveAI() -> void:
 		current_state = current_state.apply_move(move, true);
 	
 	if (moves_stack.is_empty() == false):
-		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for moving AI?
+		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for pathfinding AI
 		state = States.ANIMATING;
 
 
@@ -607,7 +607,7 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			a_star(selected_unit.grid_position, pos); # a_star for drawing arrow?
+			a_star(selected_unit.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).is_enemy:
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
@@ -692,13 +692,13 @@ func _process(delta: float) -> void:
 				MoveAI();
 			
 			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			var movement_speed := 4.0 # units per second
+			var movement_speed := 80.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta
