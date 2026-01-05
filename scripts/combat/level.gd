@@ -322,7 +322,7 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 	if character is Character:
 		var character_script: Character = character;
 		character_script.show_ui();
-		character_script.print_stats();
+		#character_script.print_stats();
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
 			stat_script.icon_texture.texture = character_script.portrait;

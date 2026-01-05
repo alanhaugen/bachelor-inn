@@ -8,48 +8,48 @@ class_name Character
 @export var data : CharacterData
 @export var state : CharacterState
 
-const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn");
-const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
-const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn");
-const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
-const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn");
+const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
+const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
+const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
+const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
+const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
 
 #region inferred variables
-var sprite : Node3D;
-var portrait : Texture2D;
+var sprite : Node3D
+var portrait : Texture2D
 
-var camera : Camera3D;
-var health_bar : HealthBar;
-var level_up_popup : LevelUpPopUp;
-var skill_choose_popup : SkillChoose;
-var health_bar_ally : HealthBar;
-var health_bar_enemy : HealthBar;
+var camera : Camera3D
+var health_bar : HealthBar
+var level_up_popup : LevelUpPopUp
+var skill_choose_popup : SkillChoose
+var health_bar_ally : HealthBar
+var health_bar_enemy : HealthBar
 #endregion
 
 
 func clone() -> Character:
-	var c := Character.new();
-	c.data = data.duplicate_data();
-	c.state = state.duplicate_data();
-	return c;
+	var c := Character.new()
+	c.data = data.duplicate_data()
+	c.state = state.duplicate_data()
+	return c
 
 
-func _set_sanity(in_sanity: int) -> void:
-	state.current_sanity = in_sanity;
+func _on_sanity_changed(in_sanity: int) -> void:
+	#state.current_sanity = in_sanity
 	if in_sanity > data.mind:
-		in_sanity = data.mind;
+		in_sanity = data.mind
 	#if (Main.battle_log):
 	#	var dir := " loses ";
 	#	if current_sanity < in_sanity:
 	#		dir = " gains ";
 	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
-	state.current_sanity = in_sanity;
+	#state.current_sanity = in_sanity
 	if state.current_sanity < 0 and state.current_health > 0:
-		state.faction = CharacterState.Faction.ENEMY;
+		state.faction = CharacterState.Faction.ENEMY
 	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
-		data.unit_name = data.unit_name + "'cthulhu";
-		health_bar = health_bar_enemy;
+		data.unit_name = data.unit_name + "'cthulhu"
+		health_bar = health_bar_enemy
 	#	health_bar_ally.hide();
 	#	health_bar_enemy.show();
 	#if health_bar:
@@ -58,40 +58,40 @@ func _set_sanity(in_sanity: int) -> void:
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	var new_skill : Skill = null;
-	var skill_lookup :Array[Skill] = data.generic_skills;
+	var skill_lookup :Array[Skill] = SkillData.generic_skills;
 	if data.speciality == CharacterData.Speciality.Runner:
-		skill_lookup = data.runner_skills;
+		skill_lookup = SkillData.runner_skills;
 	if data.speciality == CharacterData.Speciality.Militia:
-		skill_lookup = data.militia_skills;
+		skill_lookup = SkillData.militia_skills;
 	if data.speciality == CharacterData.Speciality.Scholar:
-		skill_lookup = data.scholar_skills;
+		skill_lookup = SkillData.scholar_skills;
 	if skill_lookup.size() != state.skills.size():
 		while new_skill == null or new_skill == ignore_skill:
-			new_skill = skill_lookup[randi_range(0, data.generic_skills.size() -1)];
+			new_skill = skill_lookup[randi_range(0, SkillData.generic_skills.size() -1)];
 	# If you sent in a skill to ignore, but no other skills were found, send back ignored skill
-	if ignore_skill != null and data.skill == null:
+	if ignore_skill != null and new_skill == null:
 		return ignore_skill;
 	return new_skill;
 
 
-func _set_experience(in_experience: int) -> void:
-	data.experience += in_experience;
+func _on_experience_changed(in_experience: int) -> void:
+	#data.experience += in_experience;
 	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
-	if (data.experience > data.next_level_experience):
+	if (state.experience > state.next_level_experience):
 		print("Level up!");
-		data.current_level += 1;
+		state.current_level += 1;
 		if (data.speciality == CharacterData.Speciality.Militia):
-			if (data.next_level_experience >= 10):
+			if (state.next_level_experience >= 10):
 				data.health += 1;
 				data.mind += 1;
-			if (data.next_level_experience >= 100):
+			if (state.next_level_experience >= 100):
 				data.health += 1;
 				data.mind += 1;
-			if (data.next_level_experience >= 1000):
+			if (state.next_level_experience >= 1000):
 				data.luck += 1;
 				data.skill += 1;
 		
-		data.next_level_experience *= 10;
+		state.next_level_experience *= 10;
 		calibrate_level_popup();
 		level_up_popup.show();
 		Main.level.is_in_menu = true;
@@ -131,6 +131,10 @@ func calibrate_level_popup() -> void:
 
 
 func _ready() -> void:
+	if state:
+		state.sanity_changed.connect(_on_sanity_changed)
+		state.experience_changed.connect(_on_experience_changed)
+	
 	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
 	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
 	add_child(health_bar_ally);
@@ -146,7 +150,7 @@ func _ready() -> void:
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-#	state.skills.append(data.all_skills[data.speciality][data.personality % (data.all_skills[data.speciality].size() - 1)]);
+	state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
 	#abilities.append(abilites[0]);
 	
 	if state.is_playable():

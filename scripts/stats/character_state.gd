@@ -5,6 +5,12 @@ class_name CharacterState
 enum Faction { PLAYER, ENEMY, NEUTRAL };
 #endregion
 
+#region signals
+signal sanity_changed(new_value: int)
+signal experience_changed(new_value: int)
+signal level_changed(new_level: int)
+#endregion
+
 #region variables
 @export var weapon : Weapon = null; ## Weapon held by unit
 
@@ -15,7 +21,7 @@ enum Faction { PLAYER, ENEMY, NEUTRAL };
 @export var next_level_experience: int = 1;
 @export var is_alive: bool = true;
 @export var is_moved :bool = false;
-@export var experience := 0
+@export var experience := 0 : set = _set_experience
 @export var level := 1
 @export var skills: Array[Skill] = []
 #endregion
@@ -24,7 +30,7 @@ enum Faction { PLAYER, ENEMY, NEUTRAL };
 @export var max_health : int;
 @export var movement : int;
 @export var current_health : int;
-@export var current_sanity : int;
+@export var current_sanity : int : set = _set_sanity;
 @export var current_mana: int;
 @export var current_level: int = 1;
 #endregion
@@ -41,6 +47,22 @@ func is_playable() -> bool:
 
 func duplicate_data() -> CharacterState:
 	return duplicate(true);
+
+
+func _set_sanity(value: int) -> void:
+	current_sanity = clamp(value, 0, 999)
+	sanity_changed.emit(current_sanity)
+
+
+func _set_experience(value: int) -> void:
+	experience = max(value, 0)
+
+	if experience >= next_level_experience:
+		experience -= next_level_experience
+		level += 1
+		level_changed.emit(level)
+
+	experience_changed.emit(experience)
 
 
 func save() -> Dictionary:

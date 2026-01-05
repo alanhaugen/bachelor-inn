@@ -1,9 +1,9 @@
 [gd_scene load_steps=6 format=3 uid="uid://cwb5ihgj4ap4k"]
 
 [ext_resource type="Script" uid="uid://dol0fei43cs7g" path="res://art/WIP/AnimationWorking.gd" id="1_3aqt1"]
-[ext_resource type="Shader" path="res://art/WIP/EdgeHighlightTest.gdshader" id="1_27ljd"]
+[ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="1_27ljd"]
 [ext_resource type="Texture2D" uid="uid://62qni0klik8s" path="res://art/textures/andreas.png" id="2_maikb"]
-[ext_resource type="Resource" path="res://art/WIP/base.tres" id="4_maikb"]
+[ext_resource type="Resource" uid="uid://bdq33ftt7hjjh" path="res://art/WIP/base.tres" id="4_maikb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ei822"]
 render_priority = 0
