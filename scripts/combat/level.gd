@@ -225,7 +225,7 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star used to select where to move when moving and attacking
 				state = States.ANIMATING;
 			return;
 		
@@ -286,7 +286,7 @@ func _input(event: InputEvent) -> void:
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
-				a_star(unit_pos, pos);
+				a_star(unit_pos, pos); # a-star used for normal movement
 				path_arrow.clear();
 			
 			#activeMove.execute();
@@ -562,7 +562,7 @@ func MoveAI() -> void:
 		current_state = current_state.apply_move(move, true);
 	
 	if (moves_stack.is_empty() == false):
-		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for moving AI?
 		state = States.ANIMATING;
 
 
@@ -607,7 +607,7 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			a_star(selected_unit.grid_position, pos);
+			a_star(selected_unit.grid_position, pos); # a_star for drawing arrow?
 			if get_unit(pos) is Character and get_unit(pos).is_enemy:
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
