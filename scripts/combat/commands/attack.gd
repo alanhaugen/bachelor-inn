@@ -69,7 +69,7 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 		#Main.battle_log.text = (victim.unit_name + " dies.\n") + Main.battle_log.text;
 		if aggressor.state.is_playable() and simulate_only == false:
 			#Main.battle_log.text = (aggressor.unit_name + " gains " + str(victim.intimidation) + " experience.\n") + Main.battle_log.text;
-			aggressor.state.experience += victim.data.intimidation;
+			aggressor.state.experience += victim.data.strength;
 		#Main.level.moves_stack.append(Move.new(start_pos, end_pos, grid_code, aggressor));
 	
 	#aggressor.hide_ui();
