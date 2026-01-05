@@ -1,8 +1,9 @@
-[gd_scene load_steps=39 format=3 uid="uid://mc5u6gfquy7q"]
+[gd_scene load_steps=40 format=3 uid="uid://mc5u6gfquy7q"]
 
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_akwul"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_uhntr"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/Wenvi.tres" id="3_qaf04"]
+[ext_resource type="MeshLibrary" uid="uid://dafu2fhhlqvso" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_dsruw"]
 [ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="5_sejd2"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="6_40x11"]
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="7_4aqdv"]
@@ -181,10 +182,11 @@ metadata/_edit_lock_ = true
 environment = ExtResource("3_qaf04")
 
 [node name="Level" type="GridMap" parent="."]
+mesh_library = ExtResource("4_dsruw")
 cell_size = Vector3(2, 1, 2)
 cell_center_y = false
 data = {
-"cells": PackedInt32Array(-131069, 5, 1441805, 0, 65535, 1048604)
+"cells": PackedInt32Array(-131069, 5, 1441805, 0, 65535, 28, 65534, 65535, 30, 65535, 65535, 1441816, 65534, 0, 1441816, 65533, 65535, 1441810, 0, 0, 1441810, 1, 65535, 1441816)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
