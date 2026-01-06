@@ -492,8 +492,8 @@ func get_unit(pos: Vector3i) -> Character:
 func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	path_arrow.clear()
 	
-	var region_x : int = 15;
-	var region_y : int = 15;
+	var region_x : int = 40;
+	var region_y : int = 40;
 	var astar := AStarGrid2D.new()
 	astar.region = Rect2i(0, 0, region_x, region_y)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
@@ -507,7 +507,7 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 			var pos2d := Vector2i(x, y)
 			var pos3d := Vector3i(x, 0, y)
 
-			var is_walkable := game_state.is_free(pos3d) and not game_state.is_unit(pos3d)
+			var is_walkable := movement_map.get_cell_item(pos3d) != GridMap.INVALID_CELL_ITEM;
 			astar.set_point_solid(pos2d, not is_walkable)
 
 			if is_walkable:

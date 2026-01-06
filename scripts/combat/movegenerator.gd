@@ -80,6 +80,10 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	return commands
 
 
+func get_path(unit : Character, target : Vector3i) -> Array[Vector3i]:
+	return Array()
+
+
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	var directions := [
 			Vector3i(pos.x, 0, pos.z - 1),
@@ -89,9 +93,9 @@ static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 		]
 	
 	if end_pos in directions:
-		return true;
+		return true
 	
-	return false;
+	return false
 
 
 static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> Vector3i:
@@ -104,9 +108,9 @@ static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> 
 	
 	for tile in reachable:
 		if tile in directions:
-			return tile;
+			return tile
 	
-	return Vector3i(-1, -1, -1);
+	return Vector3i(-1, -1, -1)
 
 
 static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) -> Array[Vector3i]:
@@ -117,10 +121,10 @@ static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) ->
 			Vector3i(pos.x - 1, 0, pos.z)
 		]
 	
-	var valid : Array[Vector3i] = [];
+	var valid : Array[Vector3i] = []
 	
 	for tile in reachable:
 		if tile in directions:
-			valid.append(tile);
+			valid.append(tile)
 	
-	return valid;
+	return valid
