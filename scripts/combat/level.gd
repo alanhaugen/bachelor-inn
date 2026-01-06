@@ -17,11 +17,11 @@ class_name Level
 
 @onready var camera: Camera3D = $Camera3D;
 @onready var cursor: Sprite3D = $Cursor;
-@onready var map: GridMap = $Map;
-@onready var units_map: GridMap = $Units;
-@onready var movement_map: GridMap = $MovementDots;
+@onready var map: GridMap = $TerrainGrid;
+@onready var units_map: GridMap = $OccupancyOverlay;
+@onready var movement_map: GridMap = $MovementOverlay;
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
-@onready var path_arrow: GridMap = $PathArrow
+@onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
 @onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
 
@@ -347,18 +347,6 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			popup.show();
 
 
-func _exit_tree() -> void:
-	# Wait... is this never called?
-	print("Unloading level, exit tree called.");
-	move_popup.hide();
-	stat_popup_enemy.hide();
-	stat_popup_enemy.hide();
-	
-	# Remove sidebar
-	#for i in range(Main.characters.size()):
-	# etc.
-
-
 func _ready() -> void:
 	cursor.hide();
 	movement_map.clear();
@@ -504,8 +492,8 @@ func get_unit(pos: Vector3i) -> Character:
 func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	path_arrow.clear()
 	
-	var region_x : int = 10;
-	var region_y : int = 10;
+	var region_x : int = 15;
+	var region_y : int = 15;
 	var astar := AStarGrid2D.new()
 	astar.region = Rect2i(0, 0, region_x, region_y)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN

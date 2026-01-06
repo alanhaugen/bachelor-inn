@@ -2,7 +2,16 @@ extends Resource
 class_name CharacterState
 
 #region enums
-enum Faction { PLAYER, ENEMY, NEUTRAL };
+enum Faction { PLAYER, ENEMY, NEUTRAL }
+
+enum SanityState
+{
+	CALM, # clear-minded
+	UNEASY, # doubt
+	DISTORTED, # focus
+	OBSESSED, # fear
+	DISSOCIATED # delusion
+}
 #endregion
 
 #region signals
@@ -63,6 +72,19 @@ func _set_experience(value: int) -> void:
 		level_changed.emit(level)
 
 	experience_changed.emit(experience)
+
+
+func get_sanity_state() -> SanityState:
+	if current_sanity >= 80:
+		return SanityState.CALM
+	elif current_sanity >= 60:
+		return SanityState.UNEASY
+	elif current_sanity >= 40:
+		return SanityState.DISTORTED
+	elif current_sanity >= 20:
+		return SanityState.OBSESSED
+	else:
+		return SanityState.DISSOCIATED
 
 
 func save() -> Dictionary:

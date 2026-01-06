@@ -181,7 +181,7 @@ material = SubResource("StandardMaterial3D_lfcpp")
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_f5yf2")
 
-[node name="Map" type="GridMap" parent="."]
+[node name="TerrainGrid" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh_library = ExtResource("2_8tmoo")
 cell_size = Vector3(2, 1, 2)
@@ -190,7 +190,7 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Units" type="GridMap" parent="."]
+[node name="OccupancyGrid" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 mesh_library = ExtResource("4_8tmoo")
 data = {
@@ -198,14 +198,14 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="MovementDots" type="GridMap" parent="."]
+[node name="MovementOverlay" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("5_8tmoo")
 data = {
 "cells": PackedInt32Array(65532, 65533, 7, 65532, 65534, 1048578, 65532, 65535, 1048578, 65532, 0, 1048578, 65534, 65533, 2, 3, 0, 1048576, 65533, 65534, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 0, 1048576, 1, 65534, 1179649, 1, 65535, 1179649, 1, 0, 1179649)
 }
 
-[node name="PathArrow" type="GridMap" parent="."]
+[node name="PathOverlay" type="GridMap" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("5_8tmoo")
 data = {

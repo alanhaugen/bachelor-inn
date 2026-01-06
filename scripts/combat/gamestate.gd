@@ -148,7 +148,6 @@ func is_unit(pos : Vector3i) -> bool:
 
 func get_unit(pos : Vector3i) -> Character:
 	for u in units:
-		u.print_stats();
 		if u.state.grid_position == pos:
 			return u;
 	
