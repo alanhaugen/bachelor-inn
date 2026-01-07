@@ -42,9 +42,7 @@ var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
-var side_bar_1: Control;
-var side_bar_2: Control;
-var side_bar_3: Control;
+var side_bar_array : Array[SideBar];
 var stat_popup_enemy: Control;
 var completed_moves :Array[Command];
 
@@ -347,6 +345,15 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			
 			popup.show();
 
+func update_side_bar(character: Character, side_bar: SideBar) -> void:
+	if character is Character:
+		var character_script: Character = character;
+		side_bar.icon_texture.texture = character_script.portrait;
+		#side_bar.name_label.text = character_script.unit_name;
+		side_bar.max_health = character_script.state.max_health;
+		side_bar.health = character_script.state.current_health;
+		side_bar.max_sanity = max(side_bar.max_sanity, character_script.state.current_sanity);
+		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
 	cursor.hide();
@@ -398,14 +405,14 @@ func _ready() -> void:
 			
 			var data := CharacterData.new()
 
-			var state := CharacterState.new()
-			state.faction = CharacterState.Faction.ENEMY;
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY;
 
-			var char := Character.new()
-			char.data = data
-			char.state = state
+			var _char := Character.new()
+			_char.data = data
+			_char.state = c_state
 			
-			new_unit = char;
+			new_unit = _char;
 			
 			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 		elif (get_unit_name(pos) == "Chest"):
@@ -452,23 +459,15 @@ func _ready() -> void:
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
 	add_child(stat_popup_enemy)
 	
-	#for i in range(Main.characters.size()):
-	#	var new_side_bar := SIDE_BAR.instantiate();
-	#	new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	#	if i != 0:
-	#		new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
-	#	Main.gui.add_child(new_side_bar);
+	for i in range(Main.characters.size()):
+		var new_side_bar := SIDE_BAR.instantiate();
+		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
+		if i != 0:
+			new_side_bar.position.y += -get_window().size.y/(15/Main.ui_scale)*i;
+		side_bar_array.append(new_side_bar);
+		add_child(new_side_bar);
+		print("made bar");
 	
-	#side_bar_1 = SIDE_BAR.instantiate();
-	#Main.gui.add_child(side_bar_1);
-	#
-	#side_bar_2 = SIDE_BAR.instantiate();
-	#side_bar_2.offset_bottom = -get_window().size.y/15;
-	#Main.gui.add_child(side_bar_2);
-	#
-	#side_bar_3 = SIDE_BAR.instantiate();
-	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
-	#Main.gui.add_child(side_bar_3);
 	
 	game_state = GameState.from_level(self)
 	
@@ -601,7 +600,10 @@ func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show();
 		return;
-	
+		
+	for i in side_bar_array.size():
+		update_side_bar(Main.characters[i], side_bar_array[i]);
+		
 	turn_transition.hide();
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:

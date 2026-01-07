@@ -129,7 +129,7 @@ func get_tile_cost(pos : Vector3i) -> int:
 	for t in terrain:
 		if t.position == pos and t.is_passable:
 			return t.weight;
-	return INF;
+	return int(INF);
 
 
 func is_enemy(pos : Vector3i) -> bool:
