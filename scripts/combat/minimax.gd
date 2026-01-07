@@ -2,7 +2,7 @@ class_name MinimaxAI
 extends RefCounted
 
 
-func minimax(state : GameState, depth : int) -> int:
+func minimax(state : GameState, depth : int) -> float:
 	if depth == 0:
 		return evaluate(state)
 
@@ -13,12 +13,12 @@ func minimax(state : GameState, depth : int) -> int:
 	var enemy_turn := state.is_current_player_enemy
 
 	if enemy_turn:
-		var best := int(-INF)
+		var best := -INF
 		for move : Command in moves:
 			best = max(best, minimax(state.apply_move(move, true), depth - 1))
 		return best
 	else:
-		var best := int(INF)
+		var best := INF
 		for move : Command in moves:
 			best = min(best, minimax(state.apply_move(move, true), depth - 1))
 		return best
@@ -62,7 +62,7 @@ func choose_best_move(state : GameState, depth : int) -> Command:
 	var best_move : Command = null
 	
 	for move in state.get_legal_moves():
-		var score : int = minimax(state.apply_move(move, true), depth - 1)
+		var score : float = minimax(state.apply_move(move, true), depth - 1)
 
 		if score > best_score:
 			best_score = score

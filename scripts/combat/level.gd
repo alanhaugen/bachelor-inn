@@ -231,35 +231,35 @@ func _input(event: InputEvent) -> void:
 				stat_popup_player.hide();
 		
 		if (get_tile_name(pos) == "Water"):
-			return;
+			return
 		
-		var globalPos: Vector3i = map.map_to_local(pos);
-		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z);
+		var globalPos: Vector3i = map.map_to_local(pos)
+		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z)
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
-		cursor.show();
+		cursor.show()
 		
-		var windowPos: Vector2 = Vector2(350,300);
+		var windowPos: Vector2 = Vector2(350,300)
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
-			Tutorial.tutorial_unit_selected();
-			unit_pos = pos;
-			movement_map.clear();
+			Tutorial.tutorial_unit_selected()
+			unit_pos = pos
+			movement_map.clear()
 			if (selected_unit == get_unit(pos)):
-				active_move = Move.new(pos, pos);
-				active_move.is_wait = true;
-				show_move_popup(windowPos);
+				active_move = Move.new(pos, pos)
+				active_move.is_wait = true
+				show_move_popup(windowPos)
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				if selected_unit != null:
-					var character_script: Character = selected_unit;
-					character_script.hide_ui();
-				selected_unit = get_unit(pos);
-				ribbon.show();
-				ribbon.set_skills(selected_unit.state.skills);
+					var character_script: Character = selected_unit
+					character_script.hide_ui()
+				selected_unit = get_unit(pos)
+				ribbon.show()
+				ribbon.set_skills(selected_unit.state.skills)
 				#ribbon.set_abilities(selected_unit.skills);
 				
-				current_moves = MoveGenerator.generate(selected_unit, game_state);
+				current_moves = MoveGenerator.generate(selected_unit, game_state)
 				movement_grid.fill_from_commands(current_moves, game_state)
 				
 				#for command in current_moves:

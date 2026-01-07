@@ -53,15 +53,15 @@ func fill(tiles : Array[GridTile]) -> void:
 func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 	clear()
 	
-	for command in commands:
+	for command : Command in commands:
 		var tile : GridTile
 		var weight := state.get_tile_cost(command.end_pos)
 		
-		if command is Move:
-			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
+		if command is Attack:
+			tile = GridTile.new(command.attack_pos, GridTile.Type.ATTACK, 9999999)
 		
-		elif command is Attack:
-			tile = GridTile.new(command.attack_pos, GridTile.Type.ATTACK, int(INF))
+		elif command is Move:
+			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
 		
 		if tile:
 			set_tile(tile)
