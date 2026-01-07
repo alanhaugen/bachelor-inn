@@ -11,6 +11,8 @@ class_name Level
 
 @export var level_name :String;
 
+var movement_grid : MovementGrid;
+
 @export var camera_speed: float = 5.0;
 @export var mouse_drag_sensitivity: float = 50.0;
 @onready var battle_log: Label = $BattleLog
@@ -112,12 +114,6 @@ var monster_names := [
 	"Echo",
 	"Sec'Mat"
 ]
-
-func touch(pos :Vector3) -> bool:
-	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM && movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
-		movement_map.set_cell_item(pos, move_code);
-		return true;
-	return false;
 
 
 func show_move_popup(window_pos :Vector2) -> void:
@@ -264,12 +260,16 @@ func _input(event: InputEvent) -> void:
 				ribbon.show();
 				ribbon.set_skills(selected_unit.state.skills);
 				#ribbon.set_abilities(selected_unit.skills);
+				
 				current_moves = MoveGenerator.generate(selected_unit, game_state);
-				for command in current_moves:
-					if command is Move:
-						touch(command.end_pos);
-					if command is Attack:
-						movement_map.set_cell_item(command.attack_pos, attack_code);
+				movement_grid.fill_from_commands(current_moves, game_state)
+				
+				#for command in current_moves:
+				#	if command  is Move:
+				#		touch(command.end_pos);
+				#	if command is Attack:
+				#		movement_map.set_cell_item(command.attack_pos, attack_code);
+				
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
@@ -350,9 +350,10 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 
 func _ready() -> void:
 	cursor.hide();
-	movement_map.clear();
 	units_map.hide();
 	path_arrow.clear();
+	
+	movement_grid = MovementGrid.new(movement_map);
 	
 	ribbon = RIBBON.instantiate();
 	add_child(ribbon);
@@ -430,26 +431,26 @@ func _ready() -> void:
 				character_script.hide_ui();
 				new_unit.state.grid_position = pos;
 	
-	move_popup = MOVE_POPUP.instantiate();
-	move_popup.hide();
-	add_child(move_popup);
+	move_popup = MOVE_POPUP.instantiate()
+	move_popup.hide()
+	add_child(move_popup)
 	
-	stat_popup_player = STATS_POPUP.instantiate();
-	stat_popup_player.hide();
-	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_player.position = Vector2(0, -30);
+	stat_popup_player = STATS_POPUP.instantiate()
+	stat_popup_player.hide()
+	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale)
+	stat_popup_player.position = Vector2(0, -30)
 	#stat_popup_player.position = Vector2(-555, 235);
 	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
-	add_child(stat_popup_player);
+	add_child(stat_popup_player)
 	
-	stat_popup_enemy = STATS_POPUP.instantiate();
-	stat_popup_enemy.hide();
-	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30);
+	stat_popup_enemy = STATS_POPUP.instantiate()
+	stat_popup_enemy.hide()
+	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale)
+	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30)
 	#stat_popup_enemy.position = Vector2(250, 235);
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
-	add_child(stat_popup_enemy);
+	add_child(stat_popup_enemy)
 	
 	#for i in range(Main.characters.size()):
 	#	var new_side_bar := SIDE_BAR.instantiate();
@@ -469,9 +470,9 @@ func _ready() -> void:
 	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
 	#Main.gui.add_child(side_bar_3);
 	
-	game_state = GameState.from_level(self);
+	game_state = GameState.from_level(self)
 	
-	turn_transition_animation_player.play();
+	turn_transition_animation_player.play()
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);

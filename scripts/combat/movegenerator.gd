@@ -92,7 +92,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 
 static func build_astar(unit : Character, grid : MovementGrid) -> AStar3D:
 	var astar := AStar3D.new()
-
+	
 	# Add points
 	for pos : Vector3i in grid.tile_to_id.keys():
 		var id : int = grid.tile_to_id[pos]
@@ -108,7 +108,7 @@ static func build_astar(unit : Character, grid : MovementGrid) -> AStar3D:
 				var to_id : int = grid.tile_to_id[neighbor]
 				astar.connect_points(from_id, to_id, true)
 				astar.set_point_weight_scale(to_id, cost)
-
+	
 	return astar
 
 

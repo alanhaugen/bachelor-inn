@@ -2,7 +2,7 @@ extends Node
 class_name MovementGrid
 
 #region State variables
-@onready var movement_overlay : GridMap = %MovementOverlay
+@onready var movement_overlay : GridMap
 var cost_map : Dictionary = {} # Vector3i -> int
 var used_cells : Dictionary = {} # Vector3i -> bool
 var tile_to_id : Dictionary = {}   # Vector3i -> int
@@ -12,6 +12,11 @@ var next_id : int = 0
 
 
 #region methods
+func _init(movement_overlay_ : GridMap) -> void:
+	movement_overlay = movement_overlay_
+	movement_overlay.clear();
+
+
 func is_inside(pos : Vector3i) -> bool:
 	return used_cells.has(pos)
 
@@ -45,6 +50,23 @@ func fill(tiles : Array[GridTile]) -> void:
 		set_tile(tile)
 
 
+func fill_from_commands(commands : Array[Command], state : GameState) -> void:
+	clear()
+	
+	for command in commands:
+		var tile : GridTile
+		var weight := state.get_tile_cost(command.end_pos)
+		
+		if command is Move:
+			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
+		
+		elif command is Attack:
+			tile = GridTile.new(command.attack_pos, GridTile.Type.ATTACK, int(INF))
+		
+		if tile:
+			set_tile(tile)
+
+
 func set_tile(tile : GridTile) -> void:
 	var id := next_id
 	next_id += 1
@@ -55,4 +77,13 @@ func set_tile(tile : GridTile) -> void:
 	cost_map[tile.pos] = tile.weight
 	used_cells[tile.pos] = true
 	movement_overlay.set_cell_item(tile.pos, tile.type)
+
+
+func set_move_tile(pos : Vector3i) -> void:
+	movement_overlay.set_cell_item(pos, GridTile.Type.MOVE)
+
+
+func set_attack_tile(pos : Vector3i) -> void:
+	movement_overlay.set_cell_item(pos, GridTile.Type.ATTACK)
+
 #endregion
