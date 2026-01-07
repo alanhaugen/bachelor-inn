@@ -416,6 +416,7 @@ offset_bottom = 9.0
 text = "100/100"
 
 [node name="Magic_Icon" type="TextureRect" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 tooltip_text = "Mana remaining"
 texture = SubResource("AtlasTexture_b741m")
