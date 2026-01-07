@@ -352,7 +352,7 @@ func update_side_bar(character: Character, side_bar: SideBar) -> void:
 		#side_bar.name_label.text = character_script.unit_name;
 		side_bar.max_health = character_script.state.max_health;
 		side_bar.health = character_script.state.current_health;
-		side_bar.max_sanity = character_script.data.mind;
+		side_bar.max_sanity = max(side_bar.max_sanity, character_script.state.current_sanity);
 		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
@@ -404,14 +404,14 @@ func _ready() -> void:
 			
 			var data := CharacterData.new()
 
-			var state := CharacterState.new()
-			state.faction = CharacterState.Faction.ENEMY;
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY;
 
-			var char := Character.new()
-			char.data = data
-			char.state = state
+			var _char := Character.new()
+			_char.data = data
+			_char.state = c_state
 			
-			new_unit = char;
+			new_unit = _char;
 			
 			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 		elif (get_unit_name(pos) == "Chest"):

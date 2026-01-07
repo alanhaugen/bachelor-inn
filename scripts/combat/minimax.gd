@@ -13,12 +13,12 @@ func minimax(state : GameState, depth : int) -> int:
 	var enemy_turn := state.is_current_player_enemy
 
 	if enemy_turn:
-		var best := -INF
+		var best := int(-INF)
 		for move : Command in moves:
 			best = max(best, minimax(state.apply_move(move, true), depth - 1))
 		return best
 	else:
-		var best := INF
+		var best := int(INF)
 		for move : Command in moves:
 			best = min(best, minimax(state.apply_move(move, true), depth - 1))
 		return best
