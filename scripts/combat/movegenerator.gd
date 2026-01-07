@@ -78,6 +78,8 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 			neighbour = get_valid_neighbour(tile, reachable)
 		commands.append(Attack.new(start_pos, tile, neighbour))
 	
+	commands.append(Wait.new(start_pos))
+	
 	return commands
 
 

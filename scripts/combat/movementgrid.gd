@@ -118,11 +118,9 @@ func build_astar() -> AStar3D:
 	return astar
 
 
-func get_path(unit : Character, target : Vector3i) -> Array[Vector3i]:
+func get_path(start : Vector3i, target : Vector3i) -> Array[Vector3i]:
 	var astar := build_astar()
-	
-	var start : Vector3i = unit.grid_pos
-	
+		
 	var start_id : int = tile_to_id[start]
 	var target_id : int = tile_to_id[target]
 

@@ -120,7 +120,7 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
 	if active_move is Attack:
 		move_popup.attack_button.show();
-	elif (active_move.is_wait):
+	elif (active_move is Wait):
 		move_popup.wait_button.show();
 	else:
 		move_popup.move_button.show();
@@ -246,8 +246,7 @@ func _input(event: InputEvent) -> void:
 			unit_pos = pos
 			movement_map.clear()
 			if (selected_unit == get_unit(pos)):
-				active_move = Move.new(pos, pos)
-				active_move.is_wait = true
+				active_move = Wait.new(pos)
 				show_move_popup(windowPos)
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
@@ -610,7 +609,11 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
+			path_arrow.clear()
+			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
+			for point in points:
+				path_arrow.set_cell_item(pos, 1)
+			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
