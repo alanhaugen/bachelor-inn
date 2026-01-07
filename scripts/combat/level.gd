@@ -507,8 +507,8 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 		for y in range(astar.region.position.y, astar.region.end.y):
 			var pos2d := Vector2i(x, y)
 			var pos3d := Vector3i(x, 0, y)
-
-			var is_walkable := movement_map.get_cell_item(pos3d) != GridMap.INVALID_CELL_ITEM;
+	#This is very wrong
+			var is_walkable := movement_map.get_cell_item(pos3d) == GridMap.INVALID_CELL_ITEM;
 			astar.set_point_solid(pos2d, not is_walkable)
 
 			if is_walkable:
