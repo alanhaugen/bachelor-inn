@@ -9,7 +9,7 @@ extends Resource
 @export var command : Command;
 
 
-func _init(inName : String, inTooltip : String, inIcon : Texture2D, inLevel : int, inMaxLevel : int, inCommand : Command) -> void:
+func _init(inName : String = "", inTooltip : String = "", inIcon : Texture2D = null, inLevel : int = 1, inMaxLevel : int = 1, inCommand : Command = null) -> void:
 	skill_name = inName;
 	tooltip = inTooltip;
 	icon = inIcon;

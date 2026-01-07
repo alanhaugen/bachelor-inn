@@ -612,7 +612,7 @@ func _process(delta: float) -> void:
 			path_arrow.clear()
 			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
 			for point in points:
-				path_arrow.set_cell_item(pos, 1)
+				path_arrow.set_cell_item(point, 0)
 			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
