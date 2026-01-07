@@ -17,9 +17,9 @@ class_name Level
 
 @onready var camera: Camera3D = $Camera3D;
 @onready var cursor: Sprite3D = $Cursor;
-@onready var map: GridMap = $TerrainGrid;
-@onready var units_map: GridMap = $OccupancyOverlay;
-@onready var movement_map: GridMap = $MovementOverlay;
+@onready var map: GridMap = %TerrainGrid;
+@onready var units_map: GridMap = %OccupancyOverlay;
+@onready var movement_map: GridMap = %MovementOverlay;
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
 @onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
@@ -28,7 +28,7 @@ class_name Level
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-@export var minimum_camera_height: float = 1.0;
+@export var minimum_camera_height: float = 3.0;
 @export var maximum_camera_height: float = 15.0;
 
 @export var minimum_camera_x: float = -10.0;
@@ -395,9 +395,6 @@ func _ready() -> void:
 			#new_unit = ENEMY.instantiate();
 			
 			var data := CharacterData.new()
-			data.unit_name = "Lucy"
-			data.speciality = CharacterData.Speciality.Militia
-			data.strength = 10
 
 			var state := CharacterState.new()
 			state.faction = CharacterState.Faction.ENEMY;
@@ -507,7 +504,7 @@ func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 			var pos2d := Vector2i(x, y)
 			var pos3d := Vector3i(x, 0, y)
 
-			var is_walkable := movement_map.get_cell_item(pos3d) != GridMap.INVALID_CELL_ITEM;
+			var is_walkable := movement_map.get_cell_item(pos3d) == GridMap.INVALID_CELL_ITEM;
 			astar.set_point_solid(pos2d, not is_walkable)
 
 			if is_walkable:

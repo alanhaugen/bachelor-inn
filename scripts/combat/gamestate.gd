@@ -113,12 +113,14 @@ func is_inside_map(pos : Vector3i) -> bool:
 
 func is_free(pos : Vector3i) -> bool:
 	for t in terrain:
-		if t.position == pos and t.is_passable == false:
-			return false;
+		if t.is_passable == false:
+			if t.position.x == pos.x and t.position.z == pos.z:
+				return false;
 	
 	for u in units:
-		if u.state.grid_position == pos and u.state.is_alive:
-			return false;
+		if u.state.is_alive:
+			if u.state.grid_position.x == pos.x and u.state.grid_position.z == pos.z:
+				return false;
 	
 	return true;
 

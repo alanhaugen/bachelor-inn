@@ -1,5 +1,7 @@
 extends Resource
 class_name CharacterState
+## CharacterSate is pure state information.
+## No scene or node access should happen here.
 
 #region enums
 enum Faction { PLAYER, ENEMY, NEUTRAL }

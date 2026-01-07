@@ -1,5 +1,7 @@
 extends Resource
 class_name CharacterData
+## CharacterData is pure storage information.
+## No scene or node access should happen here.
 
 #region enums
 ## This dictates level progression, skills and compatible weapons
@@ -58,12 +60,12 @@ enum Personality
 @export var strength := 4
 @export var mind := 4
 @export var speed := 4
-@export var focus := 4
-@export var endurance := 4
+@export var focus := 4 #
+@export var endurance := 4 #
 @export var defense := 4
-@export var resistance := 4
+@export var resistance := 4 #
 @export var luck := 4
-@export var mana := 4
+@export var mana := 4 #
 
 
 func duplicate_data() -> CharacterData:

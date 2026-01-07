@@ -1,7 +1,17 @@
 extends RefCounted
 class_name MoveGenerator
 
+#region constants
+const DIRECTIONS := [
+	Vector3i(1, 0, 0),
+	Vector3i(-1, 0, 0),
+	Vector3i(0, 0, 1),
+	Vector3i(0, 0, -1)
+]
+#endregion
 
+
+#region methods
 static func generate(unit : Character, state : GameState) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state);
 	return moves;
@@ -80,8 +90,41 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	return commands
 
 
-func get_path(unit : Character, target : Vector3i) -> Array[Vector3i]:
-	return Array()
+static func build_astar(unit : Character, grid : MovementGrid) -> AStar3D:
+	var astar := AStar3D.new()
+
+	# Add points
+	for pos : Vector3i in grid.tile_to_id.keys():
+		var id : int = grid.tile_to_id[pos]
+		astar.add_point(id, Vector3(pos))
+
+	# Connect neighbors
+	for pos : Vector3i in grid.cost_map.keys():
+		for dir : Vector3i in DIRECTIONS:
+			var neighbor := pos + dir
+			if grid.is_walkable(neighbor):
+				var cost := grid.get_cost(neighbor)
+				var from_id : int = grid.tile_to_id[pos]
+				var to_id : int = grid.tile_to_id[neighbor]
+				astar.connect_points(from_id, to_id, true)
+				astar.set_point_weight_scale(to_id, cost)
+
+	return astar
+
+
+static func get_path(unit : Character, target : Vector3i, grid : MovementGrid) -> Array[Vector3i]:
+	var astar := build_astar(unit, grid)
+
+	var start : Vector3i = unit.grid_pos
+
+	#var ids := astar.get_id_path(start_id, target_id)
+	var path : Array[Vector3i] = []
+
+	#for id in ids:
+	#	path.append(id_to_tile[id])
+
+	#return astar.get_point_path(start, target)
+	return path
 
 
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
@@ -128,3 +171,4 @@ static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) ->
 			valid.append(tile)
 	
 	return valid
+#endregion

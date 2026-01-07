@@ -8,6 +8,9 @@ class_name Character
 @export var data : CharacterData
 @export var state : CharacterState
 
+@export var sprite : Node3D
+@export var portrait : Texture2D
+
 #region packed scenes
 const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
 const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
@@ -17,9 +20,6 @@ const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
 #endregion
 
 #region inferred variables
-var sprite : Node3D
-var portrait : Texture2D
-
 var camera : Camera3D
 var health_bar : HealthBar
 var level_up_popup : LevelUpPopUp
