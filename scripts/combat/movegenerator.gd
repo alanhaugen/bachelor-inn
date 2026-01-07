@@ -116,14 +116,16 @@ static func get_path(unit : Character, target : Vector3i, grid : MovementGrid) -
 	var astar := build_astar(unit, grid)
 
 	var start : Vector3i = unit.grid_pos
+	
+	var start_id : int = grid.tile_to_id[start]
+	var target_id : int = grid.tile_to_id[target]
 
-	#var ids := astar.get_id_path(start_id, target_id)
+	var ids := astar.get_id_path(start_id, target_id)
 	var path : Array[Vector3i] = []
 
-	#for id in ids:
-	#	path.append(id_to_tile[id])
+	for id in ids:
+		path.append(grid.id_to_tile[id])
 
-	#return astar.get_point_path(start, target)
 	return path
 
 
