@@ -109,7 +109,8 @@ var monster_names := [
 	"Vool-Xir",
 	"Borrowed Faces",
 	"The Unfinished",
-	"Echo"
+	"Echo",
+	"Sec'Mat"
 ]
 
 func touch(pos :Vector3) -> bool:
@@ -492,8 +493,8 @@ func get_unit(pos: Vector3i) -> Character:
 func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
 	path_arrow.clear()
 	
-	var region_x : int = 40;
-	var region_y : int = 40;
+	var region_x : int = 10;
+	var region_y : int = 10;
 	var astar := AStarGrid2D.new()
 	astar.region = Rect2i(0, 0, region_x, region_y)
 	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
