@@ -1,8 +1,17 @@
-extends Node
+extends RefCounted
 class_name MovementGrid
 
+#region constants
+const DIRECTIONS := [
+	Vector3i(1, 0, 0),
+	Vector3i(-1, 0, 0),
+	Vector3i(0, 0, 1),
+	Vector3i(0, 0, -1)
+]
+#endregion
+
 #region State variables
-@onready var movement_overlay : GridMap
+var movement_overlay : GridMap
 var cost_map : Dictionary = {} # Vector3i -> int
 var used_cells : Dictionary = {} # Vector3i -> bool
 var tile_to_id : Dictionary = {}   # Vector3i -> int
@@ -86,4 +95,42 @@ func set_move_tile(pos : Vector3i) -> void:
 func set_attack_tile(pos : Vector3i) -> void:
 	movement_overlay.set_cell_item(pos, GridTile.Type.ATTACK)
 
+
+func build_astar() -> AStar3D:
+	var astar := AStar3D.new()
+	
+	# Add points
+	for pos : Vector3i in tile_to_id.keys():
+		var id : int = tile_to_id[pos]
+		astar.add_point(id, Vector3(pos))
+
+	# Connect neighbors
+	for pos : Vector3i in cost_map.keys():
+		for dir : Vector3i in DIRECTIONS:
+			var neighbor := pos + dir
+			if is_walkable(neighbor):
+				var cost := get_cost(neighbor)
+				var from_id : int = tile_to_id[pos]
+				var to_id : int = tile_to_id[neighbor]
+				astar.connect_points(from_id, to_id, true)
+				astar.set_point_weight_scale(to_id, cost)
+	
+	return astar
+
+
+func get_path(unit : Character, target : Vector3i) -> Array[Vector3i]:
+	var astar := build_astar()
+	
+	var start : Vector3i = unit.grid_pos
+	
+	var start_id : int = tile_to_id[start]
+	var target_id : int = tile_to_id[target]
+
+	var ids := astar.get_id_path(start_id, target_id)
+	var path : Array[Vector3i] = []
+
+	for id in ids:
+		path.append(id_to_tile[id])
+	
+	return path
 #endregion
