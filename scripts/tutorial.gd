@@ -67,6 +67,7 @@ func tutorial_unit_selected() -> void:
 func tutorial_unit_moved() -> void:
 	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
 		tutorial_state.MoveTutorial = true;
+		await get_tree().create_timer(2).timeout # wait a second so the previous dialogue closes
 		Dialogic.start("tutorial4");
 
 

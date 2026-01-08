@@ -26,16 +26,16 @@ func minimax(state : GameState, depth : int) -> float:
 
 func evaluate(state : GameState) -> int:
 	var score := 0
-
+	
 	# Collect player positions
 	var player_positions := []
 	for unit in state.units:
 		if not unit.state.is_enemy():
 			player_positions.append(unit.state.grid_position) # or unit.position if using world pos
-
+	
 	for unit : Character in state.units:
 		var value : int = unit.state.current_health * 10
-
+		
 		if unit.state.is_enemy():
 			score += value
 			if not unit.state.is_moved:
@@ -53,7 +53,7 @@ func evaluate(state : GameState) -> int:
 			score -= value
 			if not unit.state.is_moved:
 				score -= 2
-
+	
 	return score
 
 

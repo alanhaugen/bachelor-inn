@@ -161,7 +161,7 @@ func get_tile_name(pos: Vector3) -> String:
 
 
 # Expanded the function to do some error searching
-func get_unit_name(pos: Vector3) -> String:
+func get_unit_name(pos : Vector3) -> String:
 	var item_id: int = units_map.get_cell_item(pos)
 	if item_id == GridMap.INVALID_CELL_ITEM:
 		return "null"
@@ -169,12 +169,8 @@ func get_unit_name(pos: Vector3) -> String:
 	if item_id >= units_map.mesh_library.get_item_list().size():
 		push_warning("Invalid MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
 		return "null"
-		
-	return units_map.mesh_library.get_item_name(item_id)
 	
-	#if units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
-		#return "null";
-	#return units_map.mesh_library.get_item_name(units_map.get_cell_item(pos));
+	return units_map.mesh_library.get_item_name(item_id)
 
 
 func show_attack_tiles(pos : Vector3i) -> void:
@@ -420,6 +416,8 @@ func _ready() -> void:
 			chest.position = pos * 2;
 			chest.position += Vector3(1, 0, 1);
 			add_child(chest);
+		elif (get_unit_name(pos) == "VictoryTrigger"):
+			pass
 		else:
 			units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 			
@@ -646,6 +644,8 @@ func _process(delta: float) -> void:
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
+			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
+				Dialogic.start(level_name + "LevelVictory")
 			active_move.execute(game_state);
 			CheckVictoryConditions();
 			var code := enemy_code;
