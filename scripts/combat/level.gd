@@ -220,7 +220,7 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star used to select how the character moves when move + attack
+				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
 				state = States.ANIMATING;
 			return;
 		
@@ -284,7 +284,7 @@ func _input(event: InputEvent) -> void:
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
-				a_star(unit_pos, pos); # a-star used for normal character movement
+				create_path(unit_pos, pos); # a-star used for normal character movement
 				path_arrow.clear();
 			
 			#activeMove.execute();
@@ -486,57 +486,17 @@ func get_unit(pos: Vector3i) -> Character:
 	return null;
 
 
-func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
-	path_arrow.clear()
-	
-	var region_x : int = 10;
-	var region_y : int = 10;
-	var astar := AStarGrid2D.new()
-	astar.region = Rect2i(0, 0, region_x, region_y)
-	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
-	astar.update()
-
-	# --- Populate grid
-	for x in range(astar.region.position.x, astar.region.end.x):
-		for y in range(astar.region.position.y, astar.region.end.y):
-			var pos2d := Vector2i(x, y)
-			var pos3d := Vector3i(x, 0, y)
-	#This is very wrong
-			var is_walkable := movement_map.get_cell_item(pos3d) == GridMap.INVALID_CELL_ITEM;
-			astar.set_point_solid(pos2d, not is_walkable)
-
-			if is_walkable:
-				astar.set_point_weight_scale(
-					pos2d,
-					game_state.get_tile_cost(pos3d)
-				)
-
-	# --- Apply same offset to start/end
-	var start_2d := Vector2i(start.x + floor(region_x/2.0), start.z + floor(region_y/2.0))
-	# Offset is half of the region lengt/width
-	var end_2d   := Vector2i(end.x + floor(region_x/2.0), end.z + floor(region_y/2.0))
-
-	var path : PackedVector2Array = astar.get_point_path(start_2d, end_2d)
-
-	if path.is_empty():
-		return
-
+func create_path(start : Vector3i, end : Vector3i) -> void:
 	animation_path.clear()
+	
+	var path := movement_grid.get_path(start, end)
 
 	for p in path:
-		var grid_pos := Vector3(p.x - floor(region_x/2.0), 0, p.y - floor(region_y/2.0))
-
-		if showPath:
-			path_arrow.set_cell_item(grid_pos, 0)
-
-		var anim_pos := map.map_to_local(grid_pos)
+		var anim_pos := map.map_to_local(p)
 		anim_pos.y = 0
 		animation_path.append(anim_pos)
 
 	selected_unit = get_unit(start)
-	path_arrow.set_cell_item(start, GridMap.INVALID_CELL_ITEM)
 
 
 func reset_all_units() -> void:
@@ -559,9 +519,10 @@ func MoveAI() -> void:
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
 		current_state = current_state.apply_move(move, true);
+		movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
 	
 	if (moves_stack.is_empty() == false):
-		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for pathfinding AI
+		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
 
 
@@ -597,7 +558,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
-		turn_transition.show();
+		turn_transition.show()
 		return;
 		
 	for i in side_bar_array.size():
@@ -676,6 +637,7 @@ func _process(delta: float) -> void:
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
 			state = States.PLAYING;
+			movement_map.clear()
 			if (is_player_turn == false):
 				is_animation_just_finished = true;
 				is_player_turn = true;
@@ -698,7 +660,7 @@ func _process(delta: float) -> void:
 				MoveAI();
 			
 			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false); # a-star for enemy animation/movement?
+				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
