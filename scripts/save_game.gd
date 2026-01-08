@@ -20,11 +20,24 @@ func create_new_save_data() -> void:
 	first.speciality = Character.Speciality.Scholar;
 	first.movement = 3;
 	first.strength = 1;
+	first.ensure_weapon_equipped(); #adds weapon based on char speciality
 	
+	print("SAVE CREATED: ", first.unit_name,
+	", weapon = ", first.weapon.weapon_name,
+	", id = ", first.weapon.weapon_id)
+	
+	var w := WeaponRegistry.get_weapon("sword_basic")
+	print("LOOKUP sword_basic: ", w.weapon_name, ", ID: ", w.weapon_id, ", Damage: ", w.damage_modifier)
+		
 	var second: Character = Character.new();
 	second.unit_name = "Lucy";
 	second.speciality = Character.Speciality.Militia;
 	second.strength = 10;
+	second.weapon = WeaponRegistry.get_weapon("sword_basic")
+	
+	print("SAVE CREATED:", second.unit_name,
+	"weapon=", second.weapon.weapon_name,
+	"id=", second.weapon.weapon_id)
 	
 	var units: Array[Dictionary] = [first.save(), second.save()];
 	
@@ -57,7 +70,7 @@ func create_new_save_data() -> void:
 func write(_save_slot: int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	
-	if is_instance_valid(Main.level):
+	if not is_instance_valid(Main.level):
 		push_error("Main level does not exist");
 		return;
 	
@@ -98,13 +111,36 @@ func read(save_slot: int) -> bool:
 	# Get the data from the JSON object.
 	var save: Dictionary = json.data;
 	
-	var save_slot_data: Dictionary = save.get_or_add("Slot " + str(save_slot + 1));
-	
-	var level: int = save_slot_data.get_or_add("level");
-	
-	var characters: Array = save_slot_data.get("units");
+	var slot_key := "Slot " + str(save_slot + 1);
+	if not save.has(slot_key):
+		push_error("Save file missing " + slot_key)
+		return false;
+		
+	var save_slot_data: Dictionary = save[slot_key];
+	var level : int = int(save_slot_data.get("level", 0));
+	var characters : Array = save_slot_data.get("units", []);
+	#var save_slot_data: Dictionary = save.get_or_add("Slot " + str(save_slot + 1));
+	#var level: int = save_slot_data.get_or_add("level");
+	#var characters: Array = save_slot_data.get("units");
 	
 	Main.characters.clear();
+	
+	# Weapons
+	const W_UNARMED: Weapon = preload("res://data/weapons/Unarmed.tres")
+	const W_AXE: Weapon = preload("res://data/weapons/Axe.tres")
+	const W_BOW: Weapon = preload("res://data/weapons/Bow.tres")
+	const W_SCEPTER: Weapon = preload("res://data/weapons/Scepter.tres")
+	const W_SPEAR: Weapon = preload("res://data/weapons/Spear.tres")
+	const W_SWORD: Weapon = preload("res://data/weapons/Sword.tres")
+	
+	var weapon_by_id := {
+		W_UNARMED.weapon_id: W_UNARMED,
+		W_AXE.weapon_id: W_AXE,
+		W_BOW.weapon_id: W_BOW,
+		W_SCEPTER.weapon_id: W_SCEPTER,
+		W_SPEAR.weapon_id: W_SPEAR,
+		W_SWORD.weapon_id: W_SWORD
+	}
 	
 	print(characters);
 	
@@ -118,7 +154,7 @@ func read(save_slot: int) -> bool:
 		new_character.resistence = characters[i].get("Resistence");
 		new_character.movement = characters[i].get("Movement");
 		new_character.mind = characters[i].get("Mind");
-		new_character.mana = characters[i].get("Mana");
+		#new_character.mana = characters[i].get("Mana");
 		new_character.luck = characters[i].get("Luck");
 		new_character.is_playable = characters[i].get("Is Playable");
 		new_character.intimidation = characters[i].get("Intimidation");
@@ -128,10 +164,19 @@ func read(save_slot: int) -> bool:
 		new_character.endurance = characters[i].get("Endurance");
 		new_character.defense = characters[i].get("Defense");
 		new_character.current_sanity = characters[i].get("Current sanity");
-		new_character.current_mana = characters[i].get("Current mana");
+		#new_character.current_mana = characters[i].get("Current mana");
 		new_character.current_health = characters[i].get("Current health");
 		#new_character.agility = characters[i].get("Agility");
 		
+		# default weapon first
+		new_character.ensure_weapon_equipped()
+
+		# override if save had weapon
+		var wep_id := str(new_character.get("Weapon ID"))
+		if wep_id != "":
+			new_character.weapon = WeaponRegistry.get_weapon(wep_id)
+
+				
 		Main.characters.append(new_character);
 	
 	Main.load_level(Main.levels[level]);

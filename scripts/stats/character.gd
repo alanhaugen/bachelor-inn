@@ -70,6 +70,15 @@ var health_bar_enemy: HealthBar;
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/userinterface/level_up.tscn");
 @onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
 
+## dont think we need to pre load every weapon, but keeping this as is for now
+const Weapon_Unarmed: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Axe: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Sword: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Scepter: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Spear: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Bow: Weapon = preload("res://data/weapons/Unarmed.tres");
+
+
 @export var is_playable :bool = true; ## Player unit or NPC
 @export var is_enemy :bool = false; ## Friend or foe
 @export var unit_name :String = "Baggins"; ## Unit name
@@ -90,18 +99,20 @@ var health_bar_enemy: HealthBar;
 @export var luck: int = 4; ## Affects many other skills
 @export var intimidation: int = 4; ## How the unit affects sanity in battle.
 @export var skill: int = 4; ## Chance to hit critical.
-@export var mana: int = 4; ## Amount of magic power
+#@export var mana: int = 4; ## Amount of magic power
 @export var weapon: Weapon = null; ## Weapon held by unit
 #endregion
 
 @export var experience : int  = 0 : set = _set_experience;
 @export var skills : Array[Skill];
 
+## made a func 'update_on_level_up' to update unit stats on level up.
 var max_health: int = health + endurance + floor(strength / 2.0);
+#var max_mana: int = mana + mind - current_sanity; ##placeholder composition
 @export var movement: int = 4 + floor(speed / 3); ## Movement range
 @export var current_health: int = max_health;
 @export var current_sanity: int = mind : set = _set_sanity;
-@export var current_mana: int = mana;
+#@export var current_mana: int = mana;
 @export var current_level: int = 1;
 
 var grid_position: Vector3i;
@@ -166,8 +177,9 @@ func clone() -> Character:
 	c.is_playable = is_playable;
 	c.is_enemy = is_enemy;
 	c.unit_name = unit_name;
-	
-	c.connections = connections;
+	## .duplicate(true) to avoid simulations contaminating real game values
+	## if the value is read-only, no need to set 'true'
+	c.connections = connections.duplicate(true);
 	c.speciality = speciality;
 	c.personality = personality;
 	
@@ -183,18 +195,20 @@ func clone() -> Character:
 	c.luck = luck;
 	c.intimidation = intimidation;
 	c.skill = skill;
-	c.mana = mana;
+	#c.mana = mana;
 	
 	c.weapon = weapon;
 
 	#c.experience = experience;
-	c.skills = skills;
+	## .duplicate(true) to avoid simulations contaminating real game values
+	## if the value is read-only, no need to set 'true'
+	c.skills = skills.duplicate(true);
 
 	c.max_health = max_health;
 	c.movement = movement; ## Movement range
 	c.current_health = current_health;
 	c.current_sanity = current_sanity;
-	c.current_mana = current_mana;
+	#c.current_mana = current_mana;
 	c.current_level = current_level;
 
 	c.grid_position = grid_position;
@@ -410,6 +424,46 @@ func die(simulate_only : bool) -> void:
 
 func print_stats() -> void:
 	print(save());
+	
+
+func update_on_level_up() -> void:
+	update_max_health();
+	update_sanity();
+
+func update_max_health() -> int:
+	return health + endurance + floor(strength / 2.0);
+
+func update_sanity() -> int:
+	return current_sanity + floor(mind/4);
+	
+func get_default_weapon_id() -> String:
+	match speciality:
+		Speciality.Militia:
+			return "sword_basic"
+		Speciality.Runner:
+			return "bow_basic"      # temporarily melee bow if you set max_range=1 for now
+		Speciality.Scholar:
+			return "scepter_basic"
+		_:
+			return "unarmed"
+			
+func ensure_weapon_equipped() -> void:
+	if weapon == null:
+		weapon = WeaponRegistry.get_weapon(get_default_weapon_id())
+
+func get_weapon() -> Weapon:
+	if weapon == null:
+		ensure_weapon_equipped()
+	return weapon
+
+func can_attack() -> bool:
+	return true;
+
+func can_use_weapon(w: Weapon) -> bool:
+	return true;
+	
+func get_max_attack_range() -> int:
+	return get_weapon().max_range;
 
 
 func save() -> Dictionary:
@@ -417,6 +471,7 @@ func save() -> Dictionary:
 		"Is Playable": is_playable,
 		"Unit name": unit_name,
 		"Speciality": speciality,
+		
 		"Health": health,
 		"Strength": strength,
 		"Movement": movement,
@@ -431,14 +486,15 @@ func save() -> Dictionary:
 		"Luck": luck,
 		"Intimidation": intimidation,
 		"Skill": skill,
-		"Mana": mana,
+		#"Mana": mana,
 		
 		"Experience": experience,
 		"Next level experience": next_level_experience,
 		"Current level": current_level,
 		"Current health": current_health,
-		"Current mana": current_mana,
-		"Current sanity": current_sanity
+		#"Current mana": current_mana,
+		"Current sanity": current_sanity,
+		"Weapon ID": get_weapon().weapon_id
 	}
 	
 	return stats;

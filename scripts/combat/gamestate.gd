@@ -18,6 +18,7 @@ static func from_level(level : Level) -> GameState:
 		# Add a unit to the units array
 		if character is Character:
 			state.units.append(character);
+
 		else:
 			# Interactables will be considered terrain, but is in the units_map
 			var id : int = level.units_map.get_cell_item(pos);

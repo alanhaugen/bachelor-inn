@@ -1,41 +1,31 @@
+# ranged_attack.gd
 extends Move
-class_name Attack
-## AttackMove is atomic: movement + attack resolution.
-## Used as a single minimax action.
+class_name RangedAttack
 
-var attack_pos : Vector3i;
+##var start_pos: Vector3i
+##var end_pos: Vector3i	
+var attack_pos: Vector3i
 
-
-func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -> void:
+func _init(inStartPos: Vector3i, inEndPos : Vector3i, inAttackPos: Vector3i) -> void:
 	start_pos = inStartPos;
-	end_pos = inNeighbour;
-	attack_pos = inEndPos;
-
+	end_pos = inEndPos;
+	attack_pos = inAttackPos;
 
 func execute(state : GameState, simulate_only : bool = false) -> void:
-	var aggressor : Character = state.get_unit(start_pos);
-	var victim : Character = state.get_unit(attack_pos);
+	var weapon_damage : int;
+	var weapon_crit : int;
 	
-	var w: Weapon = aggressor.get_weapon();
-	var weapon_damage : int = 0;
-	var weapon_crit : int = 0;
+	var aggressor: Character = state.get_unit(start_pos)
+	var victim: Character = state.get_unit(attack_pos)
 	
-	if w != null:
-		weapon_damage = w.damage_modifier
-		weapon_crit = w.weapon_critical
-		print("Weapon used:", w.weapon_name, " dmg:", weapon_damage, " crit:", weapon_crit)
-	else:
-		print("Weapon used: <null> (unexpected)")
-	
-	#if aggressor.weapon:
-	#	weapon_damage = aggressor.weapon.damage_modifier;
-	#	weapon_crit = aggressor.weapon.weapon_critical;
-	#	print("Weapon used:", aggressor.get_weapon().weapon_name)
-	
-	@warning_ignore("integer_division")
+	if aggressor.weapon:
+		weapon_damage = aggressor.weapon.damage_modifier;
+		weapon_crit = aggressor.weapon.weapon_critical;
+		
+		@warning_ignore("integer_division")
 	var attack_strength :int = max(1, (aggressor.strength + weapon_damage) - victim.defense / 2);
 	
-	aggressor.is_moved = true;
+	##aggressor.is_moved = true;
 	
 	if simulate_only == false:
 		# Miss logic
@@ -84,3 +74,7 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	#aggressor.hide_ui();
 #		if aggressor.is_playable:
 #			aggressor.sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+
+	
+	if aggressor == null or victim == null:
+		return

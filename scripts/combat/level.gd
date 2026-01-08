@@ -329,8 +329,8 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			stat_script.name_label.text = character_script.unit_name;
 			stat_script.max_health = character_script.max_health;
 			stat_script.health = character_script.current_health;
-			stat_script.max_mana = character_script.mana;
-			stat_script.mana = character_script.current_mana;
+			#stat_script.max_mana = character_script.mana;
+			#stat_script.mana = character_script.current_mana;
 			stat_script.max_sanity = character_script.mind;
 			stat_script.sanity = character_script.current_sanity;
 			
