@@ -11,24 +11,26 @@ class_name Level
 
 @export var level_name :String;
 
+var movement_grid : MovementGrid;
+
 @export var camera_speed: float = 5.0;
 @export var mouse_drag_sensitivity: float = 50.0;
 @onready var battle_log: Label = $BattleLog
 
 @onready var camera: Camera3D = $Camera3D;
 @onready var cursor: Sprite3D = $Cursor;
-@onready var map: GridMap = $Map;
-@onready var units_map: GridMap = $Units;
-@onready var movement_map: GridMap = $MovementDots;
+@onready var map: GridMap = %TerrainGrid;
+@onready var units_map: GridMap = %OccupancyOverlay;
+@onready var movement_map: GridMap = %MovementOverlay;
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
-@onready var path_arrow: GridMap = $PathArrow
+@onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
 @onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-@export var minimum_camera_height: float = 1.0;
+@export var minimum_camera_height: float = 3.0;
 @export var maximum_camera_height: float = 15.0;
 
 @export var minimum_camera_x: float = -10.0;
@@ -40,9 +42,7 @@ var selected_unit: Character = null;
 var selected_enemy_unit: Character = null;
 var move_popup: Control;
 var stat_popup_player: Control;
-var side_bar_1: Control;
-var side_bar_2: Control;
-var side_bar_3: Control;
+var side_bar_array : Array[SideBar];
 var stat_popup_enemy: Control;
 var completed_moves :Array[Command];
 
@@ -109,14 +109,9 @@ var monster_names := [
 	"Vool-Xir",
 	"Borrowed Faces",
 	"The Unfinished",
-	"Echo"
+	"Echo",
+	"Sec'Mat"
 ]
-
-func touch(pos :Vector3) -> bool:
-	if (get_tile_name(pos) != "Water" && units_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM && movement_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM):
-		movement_map.set_cell_item(pos, move_code);
-		return true;
-	return false;
 
 
 func show_move_popup(window_pos :Vector2) -> void:
@@ -125,7 +120,7 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
 	if active_move is Attack:
 		move_popup.attack_button.show();
-	elif (active_move.is_wait):
+	elif (active_move is Wait):
 		move_popup.wait_button.show();
 	else:
 		move_popup.move_button.show();
@@ -225,7 +220,8 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				
+				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
 				state = States.ANIMATING;
 			return;
 		
@@ -236,39 +232,42 @@ func _input(event: InputEvent) -> void:
 				stat_popup_player.hide();
 		
 		if (get_tile_name(pos) == "Water"):
-			return;
+			return
 		
-		var globalPos: Vector3i = map.map_to_local(pos);
-		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z);
+		var globalPos: Vector3i = map.map_to_local(pos)
+		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z)
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
-		cursor.show();
+		cursor.show()
 		
-		var windowPos: Vector2 = Vector2(350,300);
+		var windowPos: Vector2 = Vector2(350,300)
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
-			Tutorial.tutorial_unit_selected();
-			unit_pos = pos;
-			movement_map.clear();
+			Tutorial.tutorial_unit_selected()
+			unit_pos = pos
+			movement_map.clear()
 			if (selected_unit == get_unit(pos)):
-				active_move = Move.new(pos, pos);
-				active_move.is_wait = true;
-				show_move_popup(windowPos);
+				active_move = Wait.new(pos)
+				show_move_popup(windowPos)
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				if selected_unit != null:
-					var character_script: Character = selected_unit;
-					character_script.hide_ui();
-				selected_unit = get_unit(pos);
-				ribbon.show();
-				ribbon.set_skills(selected_unit.skills);
+					var character_script: Character = selected_unit
+					character_script.hide_ui()
+				selected_unit = get_unit(pos)
+				ribbon.show()
+				ribbon.set_skills(selected_unit.state.skills)
 				#ribbon.set_abilities(selected_unit.skills);
-				current_moves = MoveGenerator.generate(selected_unit, game_state);
-				for command in current_moves:
-					if command is Move:
-						touch(command.end_pos);
-					if command is Attack:
-						movement_map.set_cell_item(command.attack_pos, attack_code);
+				
+				current_moves = MoveGenerator.generate(selected_unit, game_state)
+				movement_grid.fill_from_commands(current_moves, game_state)
+				
+				#for command in current_moves:
+				#	if command  is Move:
+				#		touch(command.end_pos);
+				#	if command is Attack:
+				#		movement_map.set_cell_item(command.attack_pos, attack_code);
+				
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
@@ -286,7 +285,7 @@ func _input(event: InputEvent) -> void:
 			elif active_move is Move:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
-				a_star(unit_pos, pos);
+				create_path(unit_pos, pos); # a-star used for normal character movement
 				path_arrow.clear();
 			
 			#activeMove.execute();
@@ -322,10 +321,11 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 	if character is Character:
 		var character_script: Character = character;
 		character_script.show_ui();
-		character_script.print_stats();
+		#character_script.print_stats();
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
 			stat_script.icon_texture.texture = character_script.portrait;
+
 			stat_script.name_label.text = character_script.unit_name;
 			stat_script.max_health = character_script.max_health;
 			stat_script.health = character_script.current_health;
@@ -333,37 +333,43 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 			#stat_script.mana = character_script.current_mana;
 			stat_script.max_sanity = character_script.mind;
 			stat_script.sanity = character_script.current_sanity;
+
+			stat_script.name_label.text = character_script.data.unit_name;
+			stat_script.max_health = character_script.state.max_health;
+			stat_script.health = character_script.state.current_health;
+			stat_script.max_mana = character_script.data.mana;
+			stat_script.mana = character_script.state.current_mana;
+			stat_script.max_sanity = character_script.data.mind;
+			stat_script.sanity = character_script.state.current_sanity;
 			
-			stat_script.strength = character_script.strength;
-			stat_script.mind = character_script.mind;
-			stat_script.speed = character_script.speed;
-			stat_script.focus = character_script.focus;
-			stat_script.endurance = character_script.endurance;
+			stat_script.strength = character_script.data.strength;
+			stat_script.mind = character_script.data.mind;
+			stat_script.speed = character_script.data.speed;
+			stat_script.focus = character_script.data.focus;
+			stat_script.endurance = character_script.data.endurance;
 			
-			stat_script.level = "Level: " + str(character_script.current_level);
+			stat_script.level = "Level: " + str(character_script.state.current_level);
 			
-			stat_script._set_type(Character.Speciality.keys()[character_script.speciality] + " " + Character.Personality.keys()[character_script.personality]);
+			stat_script._set_type(CharacterData.Speciality.keys()[character_script.data.speciality] + " " + CharacterData.Personality.keys()[character_script.data.personality]);
 			
 			popup.show();
 
-
-func _exit_tree() -> void:
-	# Wait... is this never called?
-	print("Unloading level, exit tree called.");
-	move_popup.hide();
-	stat_popup_enemy.hide();
-	stat_popup_enemy.hide();
-	
-	# Remove sidebar
-	#for i in range(Main.characters.size()):
-	# etc.
-
+func update_side_bar(character: Character, side_bar: SideBar) -> void:
+	if character is Character:
+		var character_script: Character = character;
+		side_bar.icon_texture.texture = character_script.portrait;
+		#side_bar.name_label.text = character_script.unit_name;
+		side_bar.max_health = character_script.state.max_health;
+		side_bar.health = character_script.state.current_health;
+		side_bar.max_sanity = max(side_bar.max_sanity, character_script.state.current_sanity);
+		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
 	cursor.hide();
-	movement_map.clear();
 	units_map.hide();
 	path_arrow.clear();
+	
+	movement_grid = MovementGrid.new(movement_map);
 	
 	ribbon = RIBBON.instantiate();
 	add_child(ribbon);
@@ -384,7 +390,7 @@ func _ready() -> void:
 	while is_done == false:
 		for i in range(Main.characters.size()):
 			is_done = true;
-			if Main.characters[i].is_alive == false:
+			if Main.characters[i].state.is_alive == false:
 				Main.characters.remove_at(i);
 				is_done = false;
 				break;
@@ -400,14 +406,24 @@ func _ready() -> void:
 				new_unit = Main.characters[characters_placed];
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
-				print("This character exists: " + str(new_unit.unit_name) + " health: " + str(new_unit.current_health));
+				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(new_unit.state.current_health));
 			else:
 				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
 			#new_unit = ENEMY.instantiate();
-			new_unit = Character.new();
-			new_unit.is_playable = false;
-			new_unit.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
+			
+			var data := CharacterData.new()
+
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY;
+
+			var _char := Character.new()
+			_char.data = data
+			_char.state = c_state
+			
+			new_unit = _char;
+			
+			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 		elif (get_unit_name(pos) == "Chest"):
 			var chest: Node = CHEST.instantiate();
 			chest.position = pos * 2;
@@ -429,50 +445,42 @@ func _ready() -> void:
 			if new_unit is Character:
 				var character_script : Character = new_unit;
 				character_script.hide_ui();
-				new_unit.grid_position = pos;
+				new_unit.state.grid_position = pos;
 	
-	move_popup = MOVE_POPUP.instantiate();
-	move_popup.hide();
-	add_child(move_popup);
+	move_popup = MOVE_POPUP.instantiate()
+	move_popup.hide()
+	add_child(move_popup)
 	
-	stat_popup_player = STATS_POPUP.instantiate();
-	stat_popup_player.hide();
-	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_player.position = Vector2(0, -30);
+	stat_popup_player = STATS_POPUP.instantiate()
+	stat_popup_player.hide()
+	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale)
+	stat_popup_player.position = Vector2(0, -30)
 	#stat_popup_player.position = Vector2(-555, 235);
 	#stat_popup_player.set_anchor(SIDE_LEFT, 0);
 	#stat_popup_player.offset_bottom = get_window().size.y/(Main.ui_scale);
-	add_child(stat_popup_player);
+	add_child(stat_popup_player)
 	
-	stat_popup_enemy = STATS_POPUP.instantiate();
-	stat_popup_enemy.hide();
-	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30);
+	stat_popup_enemy = STATS_POPUP.instantiate()
+	stat_popup_enemy.hide()
+	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale)
+	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30)
 	#stat_popup_enemy.position = Vector2(250, 235);
 	#stat_popup_enemy.set_anchor(SIDE_RIGHT, 0);
-	add_child(stat_popup_enemy);
+	add_child(stat_popup_enemy)
 	
-	#for i in range(Main.characters.size()):
-	#	var new_side_bar := SIDE_BAR.instantiate();
-	#	new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
-	#	if i != 0:
-	#		new_side_bar.offset_bottom = -get_window().size.y/(15/Main.ui_scale)*i;
-	#	Main.gui.add_child(new_side_bar);
+	for i in range(Main.characters.size()):
+		var new_side_bar := SIDE_BAR.instantiate();
+		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
+		if i != 0:
+			new_side_bar.position.y += -get_window().size.y/(15/Main.ui_scale)*i;
+		side_bar_array.append(new_side_bar);
+		add_child(new_side_bar);
+		print("made bar");
 	
-	#side_bar_1 = SIDE_BAR.instantiate();
-	#Main.gui.add_child(side_bar_1);
-	#
-	#side_bar_2 = SIDE_BAR.instantiate();
-	#side_bar_2.offset_bottom = -get_window().size.y/15;
-	#Main.gui.add_child(side_bar_2);
-	#
-	#side_bar_3 = SIDE_BAR.instantiate();
-	#side_bar_3.offset_bottom = -get_window().size.y/7.5;
-	#Main.gui.add_child(side_bar_3);
 	
-	game_state = GameState.from_level(self);
+	game_state = GameState.from_level(self)
 	
-	turn_transition_animation_player.play();
+	turn_transition_animation_player.play()
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
@@ -483,59 +491,25 @@ func get_unit(pos: Vector3i) -> Character:
 		if is_instance_valid(characters[i]):
 			if characters[i] is Character:
 				var unit: Character = characters[i];
-				if unit.grid_position == pos:
+				if unit.state.grid_position == pos:
 					return unit;
 	return null;
 
 
-func a_star(start : Vector3i, end : Vector3i, showPath : bool = true) -> void:
-	path_arrow.clear()
-
-	var astar := AStarGrid2D.new()
-	astar.region = Rect2i(0, 0, 40, 40)
-	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	astar.default_estimate_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
-	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
-	astar.update()
-
-	# --- Populate grid
-	for x in range(astar.region.position.x, astar.region.end.x):
-		for y in range(astar.region.position.y, astar.region.end.y):
-			var pos2d := Vector2i(x, y)
-			var pos3d := Vector3i(x, 0, y)
-
-			var is_walkable := game_state.is_free(pos3d) and not game_state.is_enemy(pos3d)
-			astar.set_point_solid(pos2d, not is_walkable)
-
-			if is_walkable:
-				astar.set_point_weight_scale(
-					pos2d,
-					game_state.get_tile_cost(pos3d)
-				)
-
-	# --- Apply same offset to start/end
-	var start_2d := Vector2i(start.x + 11, start.z + 15)
-	var end_2d   := Vector2i(end.x + 11, end.z + 15)
-
-	var path : PackedVector2Array = astar.get_point_path(start_2d, end_2d)
-
-	if path.is_empty():
-		return
-
+func create_path(start : Vector3i, end : Vector3i) -> void:
 	animation_path.clear()
+	path_arrow.clear()
+	movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
+	
+	var path := movement_grid.get_path(start, end)
 
 	for p in path:
-		var grid_pos := Vector3(p.x - 11, 0, p.y - 15)
-
-		if showPath:
-			path_arrow.set_cell_item(grid_pos, 0)
-
-		var anim_pos := map.map_to_local(grid_pos)
+		var anim_pos := map.map_to_local(p)
 		anim_pos.y = 0
 		animation_path.append(anim_pos)
 
 	selected_unit = get_unit(start)
-	path_arrow.set_cell_item(start, GridMap.INVALID_CELL_ITEM)
+
 
 func reset_all_units() -> void:
 	var units :Array[Vector3i] = units_map.get_used_cells();
@@ -559,7 +533,7 @@ func MoveAI() -> void:
 		current_state = current_state.apply_move(move, true);
 	
 	if (moves_stack.is_empty() == false):
-		a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
 
 
@@ -595,17 +569,24 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
-		turn_transition.show();
+		turn_transition.show()
 		return;
-	
+		
+	for i in side_bar_array.size():
+		update_side_bar(Main.characters[i], side_bar_array[i]);
+		
 	turn_transition.hide();
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			a_star(selected_unit.grid_position, pos);
-			if get_unit(pos) is Character and get_unit(pos).is_enemy:
+			path_arrow.clear()
+			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
+			for point in points:
+				path_arrow.set_cell_item(point, 0)
+			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
+			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
 	if camera_mode == CameraStates.FREE:
@@ -667,6 +648,7 @@ func _process(delta: float) -> void:
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
 			state = States.PLAYING;
+			movement_map.clear()
 			if (is_player_turn == false):
 				is_animation_just_finished = true;
 				is_player_turn = true;
@@ -689,13 +671,13 @@ func _process(delta: float) -> void:
 				MoveAI();
 			
 			if (moves_stack.is_empty() == false):
-				a_star(moves_stack.front().start_pos, moves_stack.front().end_pos, false);
+				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			var movement_speed := 4.0 # units per second
+			var movement_speed := 80.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta

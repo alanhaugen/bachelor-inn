@@ -1,13 +1,15 @@
-extends Node3D # Change to resource?
+extends Node3D
 class_name Character
-## This class has all the Character stats and visuals
+## This class has all the Character visuals
 ##
-## Use this class to make new units and enemies for the game
+## Use this class to with a new scene for
+## new characters and enemies
 
-const SPRITE = preload("res://art/WIP/CharTest.tscn");
+@export var data : CharacterData
+@export var state : CharacterState
 
-var sprite: Node3D;
-var portrait: Texture2D;
+@export var sprite : Node3D
+@export var portrait : Texture2D
 
 @export var data: CharacterData
 
@@ -219,24 +221,47 @@ func clone() -> Character:
 	
 	c.is_moved = is_moved; 
 	
+#region packed scenes
+const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
+const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
+const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
+const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
+const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
+#endregion
+
+#region inferred variables
+var camera : Camera3D
+var health_bar : HealthBar
+var level_up_popup : LevelUpPopUp
+var skill_choose_popup : SkillChoose
+var health_bar_ally : HealthBar
+var health_bar_enemy : HealthBar
+#endregion
+
+
+func clone() -> Character:
+	var c := Character.new()
+	c.data = data.duplicate_data()
+	c.state = state.duplicate_data()
 	return c
 
 
-func _set_sanity(in_sanity: int) -> void:
-	if in_sanity > mind:
-		in_sanity = mind;
+func _on_sanity_changed(in_sanity: int) -> void:
+	#state.current_sanity = in_sanity
+	if in_sanity > data.mind:
+		in_sanity = data.mind
 	#if (Main.battle_log):
 	#	var dir := " loses ";
 	#	if current_sanity < in_sanity:
 	#		dir = " gains ";
 	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
-	current_sanity = in_sanity;
-	if current_sanity < 0 and current_health > 0:
-		is_playable = false;
+	#state.current_sanity = in_sanity
+	if state.current_sanity < 0 and state.current_health > 0:
+		state.faction = CharacterState.Faction.ENEMY
 	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
-		unit_name = unit_name + "'cthulhu";
-		health_bar = health_bar_enemy;
+		data.unit_name = data.unit_name + "'cthulhu"
+		health_bar = health_bar_enemy
 	#	health_bar_ally.hide();
 	#	health_bar_enemy.show();
 	#if health_bar:
@@ -245,40 +270,40 @@ func _set_sanity(in_sanity: int) -> void:
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	var new_skill : Skill = null;
-	var skill_lookup :Array[Skill] = generic_skills;
-	if speciality == Speciality.Runner:
-		skill_lookup = runner_skills;
-	if speciality == Speciality.Militia:
-		skill_lookup = militia_skills;
-	if speciality == Speciality.Scholar:
-		skill_lookup = scholar_skills;
-	if skill_lookup.size() != skills.size():
+	var skill_lookup :Array[Skill] = SkillData.generic_skills;
+	if data.speciality == CharacterData.Speciality.Runner:
+		skill_lookup = SkillData.runner_skills;
+	if data.speciality == CharacterData.Speciality.Militia:
+		skill_lookup = SkillData.militia_skills;
+	if data.speciality == CharacterData.Speciality.Scholar:
+		skill_lookup = SkillData.scholar_skills;
+	if skill_lookup.size() != state.skills.size():
 		while new_skill == null or new_skill == ignore_skill:
-			new_skill = skill_lookup[randi_range(0, generic_skills.size() -1)];
+			new_skill = skill_lookup[randi_range(0, SkillData.generic_skills.size() -1)];
 	# If you sent in a skill to ignore, but no other skills were found, send back ignored skill
-	if ignore_skill != null and skill == null:
+	if ignore_skill != null and new_skill == null:
 		return ignore_skill;
 	return new_skill;
 
 
-func _set_experience(in_experience: int) -> void:
-	experience += in_experience;
-	print(unit_name + " gains " + str(in_experience) + " experience points.");
-	if (experience > next_level_experience):
+func _on_experience_changed(in_experience: int) -> void:
+	#data.experience += in_experience;
+	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
+	if (state.experience > state.next_level_experience):
 		print("Level up!");
-		current_level += 1;
-		if (speciality == Speciality.Militia):
-			if (next_level_experience >= 10):
-				health += 1;
-				mind += 1;
-			if (next_level_experience >= 100):
-				health += 1;
-				mind += 1;
-			if (next_level_experience >= 1000):
-				luck += 1;
-				skill += 1;
+		state.current_level += 1;
+		if (data.speciality == CharacterData.Speciality.Militia):
+			if (state.next_level_experience >= 10):
+				data.health += 1;
+				data.mind += 1;
+			if (state.next_level_experience >= 100):
+				data.health += 1;
+				data.mind += 1;
+			if (state.next_level_experience >= 1000):
+				data.luck += 1;
+				data.skill += 1;
 		
-		next_level_experience *= 10;
+		state.next_level_experience *= 10;
 		calibrate_level_popup();
 		level_up_popup.show();
 		Main.level.is_in_menu = true;
@@ -301,23 +326,27 @@ func _set_experience(in_experience: int) -> void:
 
 
 func update_health_bar() -> void:
-	health_bar.health = current_health;
-	health_bar.sanity = current_sanity;
-	health_bar.name_label = unit_name;
+	health_bar.health = state.current_health;
+	health_bar.sanity = state.current_sanity;
+	health_bar.name_label = data.unit_name;
 
 
 func calibrate_level_popup() -> void:
-	level_up_popup.health = health;
-	level_up_popup.focus = focus;
-	level_up_popup.level = current_level;
-	level_up_popup.mind = mind;
-	level_up_popup.movement = movement;
-	level_up_popup.speed = speed;
-	level_up_popup.strength = strength;
+	level_up_popup.health = data.health;
+	level_up_popup.focus = data.focus;
+	level_up_popup.level = state.current_level;
+	level_up_popup.mind = data.mind;
+	level_up_popup.movement = state.movement;
+	level_up_popup.speed = data.speed;
+	level_up_popup.strength = data.strength;
 	#level_up_popup.agility = agility;
 
 
 func _ready() -> void:
+	if state:
+		state.sanity_changed.connect(_on_sanity_changed)
+		state.experience_changed.connect(_on_experience_changed)
+	
 	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
 	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
 	add_child(health_bar_ally);
@@ -325,26 +354,32 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
+	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
+	state.movement = 4 + floor(data.speed / 3.0); ## Movement range
+	state.current_health = state.max_health;
+	state.current_sanity = data.mind;
+	state.current_mana = data.mana;
+	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	skills.append(all_skills[speciality][personality % (all_skills[speciality].size() - 1)]);
+	state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
 	#abilities.append(abilites[0]);
 	
-	if is_playable:
+	if state.is_playable():
 		health_bar = health_bar_ally;
 	else:
 		health_bar = health_bar_enemy;
-		is_enemy = true;
+		state.faction = CharacterState.Faction.ENEMY;
 	
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
 	add_child(level_up_popup);
 	level_up_popup.hide();
-	level_up_popup.name_label = unit_name;
+	level_up_popup.name_label = data.unit_name;
 	calibrate_level_popup();
 	
 	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate();
 	add_child(skill_choose_popup);
-	skill_choose_popup.text = unit_name + ", " + Speciality.keys()[speciality];
+	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality];
 	skill_choose_popup.hide();
 	
 	sprite = SPRITE.instantiate();
@@ -362,7 +397,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	if is_alive:
+	if state.is_alive:
 		show_ui(); # hack, TODO: removeme
 	
 	if camera:
@@ -381,45 +416,45 @@ func show_ui() -> void:
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	if simulate_only == false:
-		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
-	is_alive = true;
+	state.is_alive = true;
 	#reset();
-	grid_position = pos;
-	is_moved = true;
+	state.grid_position = pos;
+	state.is_moved = true;
 	
 	if simulate_only == false:
 		var grid_code := Main.level.player_code_done;
-		if is_enemy:
+		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
-		Main.level.units_map.set_cell_item(grid_position, grid_code);
+		Main.level.units_map.set_cell_item(state.grid_position, grid_code);
 	#if is_playable:
 	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
 
 
 func reset() -> void:
-	is_alive = true;
+	state.is_alive = true;
 	# slowly heal sanity
-	if is_playable:
-		current_sanity += 1;
+	if state.is_playable():
+		state.current_sanity += 1;
 	hide_ui();
 	show();
-	is_moved = false;
+	state.is_moved = false;
 #	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
 
 
 func die(simulate_only : bool) -> void:
-	if is_alive == false:
+	if state.is_alive == false:
 		push_error("Killing already dead unit");
 	
-	is_alive = false;
+	state.is_alive = false;
 	
 	if simulate_only == false:
 		hide_ui();
 		hide();
-		Main.level.units_map.set_cell_item(grid_position, GridMap.INVALID_CELL_ITEM);
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
-	grid_position = Vector3(-100, -100, -100);
+	state.grid_position = Vector3(-100, -100, -100);
 
 
 func print_stats() -> void:
@@ -495,6 +530,8 @@ func save() -> Dictionary:
 		#"Current mana": current_mana,
 		"Current sanity": current_sanity,
 		"Weapon ID": get_weapon().weapon_id
+
+	return {
+		"data": data.save(),
+		"state": state.save()
 	}
-	
-	return stats;

@@ -1,13 +1,19 @@
 [gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://bdq33ftt7hjjh"]
 
-[ext_resource type="Texture2D" uid="uid://cswlkktnj6he3" path="res://art/WIP/AnimTest.png" id="1_8l87o"]
-[ext_resource type="Texture2D" uid="uid://y6m6i6pkh62" path="res://art/WIP/AnimTestMask.png" id="2_7rxsp"]
-[ext_resource type="Texture2D" uid="uid://cmlcka8qtyjmy" path="res://art/WIP/AnimTestNorm.png" id="3_vpccd"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_sexwv"]
+
+[sub_resource type="Resource" id="Resource_y6r3m"]
+metadata/__load_path__ = "res://art/WIP/AnimTest.png"
+
+[sub_resource type="Resource" id="Resource_rtswl"]
+metadata/__load_path__ = "res://art/WIP/AnimTestMask.png"
+
+[sub_resource type="Resource" id="Resource_0o7rf"]
+metadata/__load_path__ = "res://art/WIP/AnimTestNorm.png"
 
 [resource]
 script = ExtResource("4_sexwv")
-diffuse_atlas = ExtResource("1_8l87o")
-normal_atlas = ExtResource("3_vpccd")
-mask_atlas = ExtResource("2_7rxsp")
+diffuse_atlas = SubResource("Resource_y6r3m")
+normal_atlas = SubResource("Resource_0o7rf")
+mask_atlas = SubResource("Resource_rtswl")
 metadata/_custom_type_script = "uid://c876dul20yd5j"

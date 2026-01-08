@@ -1,13 +1,15 @@
 extends RefCounted
 class_name MoveGenerator
 
+
+#region methods
 static func generate(unit : Character, state : GameState) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state);
 	return moves;
 
 
 static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
-	var start_pos : Vector3i = unit.grid_position
+	var start_pos : Vector3i = unit.state.grid_position
 	
 	var frontier : Array = [] # acts as priority queue: [pos, cost]
 	var cost_so_far : Dictionary = {}
@@ -27,7 +29,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		var pos : Vector3i = current[0]
 		var current_cost : int = current[1]
 		
-		if current_cost > unit.movement:
+		if current_cost > unit.state.movement:
 			continue
 		
 		if visited.has(pos):
@@ -59,7 +61,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 			var tile_cost : int = state.get_tile_cost(dir)
 			var new_cost : int = current_cost + tile_cost
 			
-			if new_cost > unit.movement:
+			if new_cost > unit.state.movement:
 				continue
 			
 			if not cost_so_far.has(dir) or new_cost < cost_so_far[dir]:
@@ -78,6 +80,8 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		if neighbour.x != -1:
 			commands.append(Attack.new(start_pos, tile, neighbour))
 	
+	commands.append(Wait.new(start_pos))
+	
 	return commands
 
 
@@ -90,9 +94,9 @@ static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 		]
 	
 	if end_pos in directions:
-		return true;
+		return true
 	
-	return false;
+	return false
 
 
 static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> Vector3i:
@@ -105,9 +109,9 @@ static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> 
 	
 	for tile in reachable:
 		if tile in directions:
-			return tile;
+			return tile
 	
-	return Vector3i(-1, -1, -1);
+	return Vector3i(-1, -1, -1)
 
 
 static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) -> Array[Vector3i]:
@@ -118,10 +122,11 @@ static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) ->
 			Vector3i(pos.x - 1, 0, pos.z)
 		]
 	
-	var valid : Array[Vector3i] = [];
+	var valid : Array[Vector3i] = []
 	
 	for tile in reachable:
 		if tile in directions:
-			valid.append(tile);
+			valid.append(tile)
 	
-	return valid;
+	return valid
+#endregion

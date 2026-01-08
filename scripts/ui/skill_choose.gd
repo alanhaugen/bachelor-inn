@@ -23,10 +23,10 @@ func set_text(in_text : String) -> void:
 
 
 func _on_skill_1_pressed() -> void:
-	unit.skills.append(first_skill);
+	unit.state.skills.append(first_skill);
 	hide();
 
 
 func _on_skill_2_pressed() -> void:
-	unit.skills.append(second_skill);
+	unit.state.skills.append(second_skill);
 	hide();

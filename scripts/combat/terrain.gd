@@ -21,7 +21,9 @@ static func is_tile_passable(t : String) -> bool:
 		t == "Rock" or
 		t == "Chest" or 
 		t == "Mesh5" or 
-		t == "Mesh6"
+		t == "Mesh6" or 
+		t == "Mesh" or 
+		t == "MESH"
 	):
 		return false;
 	return true;
@@ -50,10 +52,6 @@ static func get_weight(t : String) -> int:
 		return 3;
 	elif t == "Leaf_Ground_2_16x16":
 		return 3;
-	elif t == "MESH":
-		return 2;
-	elif t == "Mesh":
-		return 2;
 	elif t == "Mesh2":
 		return 1;
 	elif t == "Mesh3":
