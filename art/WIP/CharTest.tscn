@@ -31,4 +31,4 @@ script = ExtResource("1_3aqt1")
 base_animation = ExtResource("4_maikb")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 28.901043)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.6376438)
