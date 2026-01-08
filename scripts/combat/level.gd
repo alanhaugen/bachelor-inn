@@ -220,6 +220,7 @@ func _input(event: InputEvent) -> void:
 			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
+				
 				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
 				state = States.ANIMATING;
 			return;
@@ -488,6 +489,8 @@ func get_unit(pos: Vector3i) -> Character:
 
 func create_path(start : Vector3i, end : Vector3i) -> void:
 	animation_path.clear()
+	path_arrow.clear()
+	movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
 	
 	var path := movement_grid.get_path(start, end)
 
@@ -519,7 +522,6 @@ func MoveAI() -> void:
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
 		current_state = current_state.apply_move(move, true);
-		movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
 	
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
