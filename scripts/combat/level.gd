@@ -9,19 +9,19 @@ class_name Level
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
 
-@export var level_name :String;
+@export var level_name :String
 
-var movement_grid : MovementGrid;
+var movement_grid : MovementGrid
 
-@export var camera_speed: float = 5.0;
-@export var mouse_drag_sensitivity: float = 50.0;
+@export var camera_speed: float = 5.0
+@export var mouse_drag_sensitivity: float = 50.0
 @onready var battle_log: Label = $BattleLog
 
-@onready var camera: Camera3D = $Camera3D;
-@onready var cursor: Sprite3D = $Cursor;
-@onready var map: GridMap = %TerrainGrid;
-@onready var units_map: GridMap = %OccupancyOverlay;
-@onready var movement_map: GridMap = %MovementOverlay;
+@onready var camera: Camera3D = $Camera3D
+@onready var cursor: Sprite3D = $Cursor
+@onready var map: GridMap = %TerrainGrid
+@onready var units_map: GridMap = %OccupancyOverlay
+@onready var movement_map: GridMap = %MovementOverlay
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
 @onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
@@ -30,16 +30,16 @@ var movement_grid : MovementGrid;
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-@export var minimum_camera_height: float = 3.0;
-@export var maximum_camera_height: float = 15.0;
+@export var minimum_camera_height: float = 3.0
+@export var maximum_camera_height: float = 15.0
 
-@export var minimum_camera_x: float = -10.0;
-@export var maximum_camera_x: float = 10.0;
-@export var minimum_camera_z: float = -10.0;
-@export var maximum_camera_z: float = 10.0;
+@export var minimum_camera_x: float = -10.0
+@export var maximum_camera_x: float = 10.0
+@export var minimum_camera_z: float = -10.0
+@export var maximum_camera_z: float = 10.0
 
-var selected_unit: Character = null;
-var selected_enemy_unit: Character = null;
+var selected_unit: Character = null
+var selected_enemy_unit: Character = null
 var move_popup: Control;
 var stat_popup_player: Control;
 var side_bar_array : Array[SideBar];
