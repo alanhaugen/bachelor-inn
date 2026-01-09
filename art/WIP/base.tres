@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://bdq33ftt7hjjh"]
 
-[ext_resource type="Resource" uid="uid://b8uwqwdl62h0w" path="res://art/WIP/AnimTest.png" id="1_8l87o"]
-[ext_resource type="Resource" uid="uid://c8vqe585myvf4" path="res://art/WIP/AnimTestMask.png" id="2_7rxsp"]
-[ext_resource type="Resource" uid="uid://ckphowsn13m8v" path="res://art/WIP/AnimTestNorm.png" id="3_vpccd"]
+[ext_resource type="Texture2D" uid="uid://b8uwqwdl62h0w" path="res://art/WIP/AnimTest.png" id="1_8l87o"]
+[ext_resource type="Texture2D" uid="uid://c8vqe585myvf4" path="res://art/WIP/AnimTestMask.png" id="2_7rxsp"]
+[ext_resource type="Texture2D" uid="uid://ckphowsn13m8v" path="res://art/WIP/AnimTestNorm.png" id="3_vpccd"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_sexwv"]
 
 [resource]
