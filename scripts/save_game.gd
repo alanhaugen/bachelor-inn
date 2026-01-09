@@ -15,29 +15,29 @@ func is_savefile_existing() -> bool:
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
-	var first: Character = Character.new();
-	first.unit_name = "Alfred";
-	first.speciality = Character.Speciality.Scholar;
-	first.movement = 3;
-	first.strength = 1;
-	first.ensure_weapon_equipped(); #adds weapon based on char speciality
+	#var first: Character = Character.new();
+	#first.unit_name = "Alfred";
+	#first.speciality = Character.Speciality.Scholar;
+	#first.movement = 3;
+	#first.strength = 1;
+	#first.ensure_weapon_equipped(); #adds weapon based on char speciality
 	
-	print("SAVE CREATED: ", first.unit_name,
-	", weapon = ", first.weapon.weapon_name,
-	", id = ", first.weapon.weapon_id)
+	#print("SAVE CREATED: ", first.unit_name,
+	#", weapon = ", first.weapon.weapon_name,
+	#", id = ", first.weapon.weapon_id)
 	
-	var w := WeaponRegistry.get_weapon("sword_basic")
-	print("LOOKUP sword_basic: ", w.weapon_name, ", ID: ", w.weapon_id, ", Damage: ", w.damage_modifier)
+	#var w := WeaponRegistry.get_weapon("sword_basic")
+	#print("LOOKUP sword_basic: ", w.weapon_name, ", ID: ", w.weapon_id, ", Damage: ", w.damage_modifier)
 		
-	var second: Character = Character.new();
-	second.unit_name = "Lucy";
-	second.speciality = Character.Speciality.Militia;
-	second.strength = 10;
-	second.weapon = WeaponRegistry.get_weapon("sword_basic")
-	
-	print("SAVE CREATED:", second.unit_name,
-	"weapon=", second.weapon.weapon_name,
-	"id=", second.weapon.weapon_id)
+	#var second: Character = Character.new();
+	#second.unit_name = "Lucy";
+	#second.speciality = Character.Speciality.Militia;
+	#second.strength = 10;
+	#second.weapon = WeaponRegistry.get_weapon("sword_basic")
+		
+	#print("SAVE CREATED:", second.unit_name,
+	#"weapon=", second.weapon.weapon_name,
+	#"id=", second.weapon.weapon_id)
 	
 	var data1 := CharacterData.new()
 	data1.unit_name = "Alfred"
@@ -50,6 +50,8 @@ func create_new_save_data() -> void:
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
+	char1.init_current_stats_full() ## make loop for these?
+	char1.ensure_weapon_equipped(); ## weapon
 	
 	var data2 := CharacterData.new()
 	data2.unit_name = "Lucy"
@@ -61,6 +63,8 @@ func create_new_save_data() -> void:
 	var char2 := Character.new()
 	char2.data = data2
 	char2.state = state2
+	char2.init_current_stats_full()	
+	char2.ensure_weapon_equipped(); #weapon
 	
 	var units: Array[Dictionary] = [char1.save(), char2.save()];
 	
@@ -127,11 +131,9 @@ func read(save_slot: int) -> bool:
 	if json.parse(json_string) != OK:
 		push_error("JSON parse error")
 		return false
-
-	var save : Dictionary = json.data
-
+	
 	# Get the data from the JSON object.
-	var save: Dictionary = json.data;
+	var save : Dictionary = json.data
 	
 	var slot_key := "Slot " + str(save_slot + 1);
 	if not save.has(slot_key):
@@ -147,61 +149,44 @@ func read(save_slot: int) -> bool:
 	
 	Main.characters.clear();
 	
-	# Weapons
-	const W_UNARMED: Weapon = preload("res://data/weapons/Unarmed.tres")
-	const W_AXE: Weapon = preload("res://data/weapons/Axe.tres")
-	const W_BOW: Weapon = preload("res://data/weapons/Bow.tres")
-	const W_SCEPTER: Weapon = preload("res://data/weapons/Scepter.tres")
-	const W_SPEAR: Weapon = preload("res://data/weapons/Spear.tres")
-	const W_SWORD: Weapon = preload("res://data/weapons/Sword.tres")
-	
-	var weapon_by_id := {
-		W_UNARMED.weapon_id: W_UNARMED,
-		W_AXE.weapon_id: W_AXE,
-		W_BOW.weapon_id: W_BOW,
-		W_SCEPTER.weapon_id: W_SCEPTER,
-		W_SPEAR.weapon_id: W_SPEAR,
-		W_SWORD.weapon_id: W_SWORD
-	}
-	
 	print(characters);
 	
-	for i in range(characters.size()):
-		var new_character: Character = Character.new();
-		new_character.unit_name = characters[i].get("Unit name");
-		new_character.strength = characters[i].get("Strength");
-		new_character.speed = characters[i].get("Speed");
-		new_character.speciality = characters[i].get("Speciality");
-		new_character.skill = characters[i].get("Skill");
-		new_character.resistence = characters[i].get("Resistence");
-		new_character.movement = characters[i].get("Movement");
-		new_character.mind = characters[i].get("Mind");
+	#for i in range(characters.size()):
+		#var new_character: Character = Character.new();
+		#new_character.unit_name = characters[i].get("Unit name");
+		#new_character.strength = characters[i].get("Strength");
+		#new_character.speed = characters[i].get("Speed");
+		#new_character.speciality = characters[i].get("Speciality");
+		#new_character.skill = characters[i].get("Skill");
+		#new_character.resistence = characters[i].get("Resistence");
+		#ew_character.movement = characters[i].get("Movement");
+		#new_character.mind = characters[i].get("Mind");
 		#new_character.mana = characters[i].get("Mana");
-		new_character.luck = characters[i].get("Luck");
-		new_character.is_playable = characters[i].get("Is Playable");
-		new_character.intimidation = characters[i].get("Intimidation");
-		new_character.health = characters[i].get("Health");
-		new_character.focus = characters[i].get("Focus");
-		new_character.experience = characters[i].get("Experience");
-		new_character.endurance = characters[i].get("Endurance");
-		new_character.defense = characters[i].get("Defense");
-		new_character.current_sanity = characters[i].get("Current sanity");
+		#new_character.luck = characters[i].get("Luck");
+		#new_character.is_playable = characters[i].get("Is Playable");
+		#new_character.intimidation = characters[i].get("Intimidation");
+		#new_character.health = characters[i].get("Health");
+		#new_character.focus = characters[i].get("Focus");
+		#new_character.experience = characters[i].get("Experience");
+		#new_character.endurance = characters[i].get("Endurance");
+		#new_character.defense = characters[i].get("Defense");
+		#new_character.current_sanity = characters[i].get("Current sanity");
 		#new_character.current_mana = characters[i].get("Current mana");
-		new_character.current_health = characters[i].get("Current health");
+		#new_character.current_health = characters[i].get("Current health");
 		#new_character.agility = characters[i].get("Agility");
 		
 		# default weapon first
-		new_character.ensure_weapon_equipped()
+		#new_character.ensure_weapon_equipped()
 
 		# override if save had weapon
-		var wep_id := str(new_character.get("Weapon ID"))
-		if wep_id != "":
-			new_character.weapon = WeaponRegistry.get_weapon(wep_id)
+		#var wep_id := str(new_character.get("Weapon ID"))
+		#if wep_id != "":
+			#new_character.weapon = WeaponRegistry.get_weapon(wep_id)
 
 				
-		Main.characters.append(new_character);
+		#Main.characters.append(new_character);
 	
-	Main.load_level(Main.levels[level]);
+	#Main.load_level(Main.levels[level]);
 	
 	#var unit: Character = Character.new();
 	#unit.name = "Withburn";
@@ -209,16 +194,16 @@ func read(save_slot: int) -> bool:
 	#unit.sprite;
 	
 	#Main.characters.append(unit);
-	var slot_key := "Slot " + str(save_slot + 1)
-	if not save.has(slot_key):
-		return false
+	#var slot_key := "Slot " + str(save_slot + 1)
+	#if not save.has(slot_key):
+		#return false
 
 	var slot : Dictionary = save[slot_key]
 
 	if not slot.has("level") or not slot.has("units"):
 		return false
 
-	var level : int = slot["level"]
+	#var level : int = slot["level"]
 	var units : Array = slot["units"]
 
 	Main.characters.clear()
@@ -257,9 +242,31 @@ func read(save_slot: int) -> bool:
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
 		state.current_mana = state_dict["current_mana"]
+		
+		# weapon
+		var wid := ""
+		if state_dict.has("weapon_id"):
+			wid = str(state_dict["weapon_id"])
+		elif state_dict.has("Weapon ID"): # failsafe for old system
+			wid = str(state_dict["Weapon ID"])
+		elif state_dict.has("Weapon_ID"): # failsafe for old system
+			wid = str(state_dict["Weapon_ID"])
+
+		state.weapon_id = wid
+		
+		# default weapon first
+		#new_character.ensure_weapon_equipped()
+
+		# override if save had weapon
+		#var wep_id := str(new_character.get("Weapon ID"))
+		#if wep_id != "":
+			#new_character.weapon = WeaponRegistry.get_weapon(wep_id)
 
 		character.data = data
 		character.state = state
+
+		character.recalc_derived_stats()
+		character.ensure_weapon_equipped()
 
 		Main.characters.append(character)
 

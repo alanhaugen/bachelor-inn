@@ -31,10 +31,10 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	#	weapon_damage = aggressor.weapon.damage_modifier;
 	#	weapon_crit = aggressor.weapon.weapon_critical;
 	#	print("Weapon used:", aggressor.get_weapon().weapon_name)
-
-	if aggressor.state.weapon:
-		weapon_damage = aggressor.state.weapon.damage_modifier;
-		weapon_crit = aggressor.state.weapon.weapon_critical;
+	
+	#if aggressor.state.weapon:
+	#	weapon_damage = aggressor.state.weapon.damage_modifier;
+	#	weapon_crit = aggressor.state.weapon.weapon_critical;
 	
 	@warning_ignore("integer_division")
 	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.data.defense / 2);

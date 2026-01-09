@@ -38,7 +38,3 @@ func in_range(distance: int) -> bool:
 ## might come in handy
 static func manhattan(a: Vector3i, b: Vector3i) -> int:
 	return abs(a.x - b.x) + abs(a.z - b.z);
-
-@export var damage_modifier: int = 1;
-@export var weapon_critical: int = 1;
-@export var is_melee: bool = false;

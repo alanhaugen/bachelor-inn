@@ -11,8 +11,6 @@ class_name Character
 @export var sprite : Node3D
 @export var portrait : Texture2D
 
-@export var data: CharacterData
-
 #region: --- Unit Stats ---
 ## This dictates level progression, skills and compatible weapons
 enum Speciality
@@ -71,6 +69,7 @@ var health_bar_enemy: HealthBar;
 @onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
 @onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/userinterface/level_up.tscn");
 @onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
+@onready var SPRITE: PackedScene = preload("res://art/WIP/CharTest.tscn");
 
 ## dont think we need to pre load every weapon, but keeping this as is for now
 const Weapon_Unarmed: Weapon = preload("res://data/weapons/Unarmed.tres");
@@ -102,10 +101,10 @@ const Weapon_Bow: Weapon = preload("res://data/weapons/Unarmed.tres");
 @export var intimidation: int = 4; ## How the unit affects sanity in battle.
 @export var skill: int = 4; ## Chance to hit critical.
 #@export var mana: int = 4; ## Amount of magic power
-@export var weapon: Weapon = null; ## Weapon held by unit
+#@export var weapon: Weapon = null; ## Weapon held by unit
 #endregion
 
-@export var experience : int  = 0 : set = _set_experience;
+#@export var experience : int  = 0 : set = _set_experience;
 @export var skills : Array[Skill];
 
 ## made a func 'update_on_level_up' to update unit stats on level up.
@@ -113,7 +112,7 @@ var max_health: int = health + endurance + floor(strength / 2.0);
 #var max_mana: int = mana + mind - current_sanity; ##placeholder composition
 @export var movement: int = 4 + floor(speed / 3); ## Movement range
 @export var current_health: int = max_health;
-@export var current_sanity: int = mind : set = _set_sanity;
+#@export var current_sanity: int = mind : set = _set_sanity;
 #@export var current_mana: int = mana;
 @export var current_level: int = 1;
 
@@ -161,82 +160,6 @@ var all_skills :Array[Array] = [
 	militia_skills,
 	scholar_skills
 ];
-
-
-func clone() -> Character:
-	var c := Character.new();
-	
-	c.sprite = sprite;
-	c.portrait = portrait;
-	
-	c.camera = camera;
-	c.health_bar = health_bar;
-	c.level_up_popup = level_up_popup;
-	c.skill_choose_popup = skill_choose_popup;
-	c.health_bar_ally = health_bar_ally;
-	c.health_bar_enemy = health_bar_enemy;
-	
-	c.is_playable = is_playable;
-	c.is_enemy = is_enemy;
-	c.unit_name = unit_name;
-	## .duplicate(true) to avoid simulations contaminating real game values
-	## if the value is read-only, no need to set 'true'
-	c.connections = connections.duplicate(true);
-	c.speciality = speciality;
-	c.personality = personality;
-	
-	c.health = health;
-	c.strength = strength;
-	c.mind = mind;
-	c.speed = speed;
-	c.focus = focus;
-
-	c.endurance = endurance;
-	c.defense = defense;
-	c.resistence = resistence;
-	c.luck = luck;
-	c.intimidation = intimidation;
-	c.skill = skill;
-	#c.mana = mana;
-	
-	c.weapon = weapon;
-
-	#c.experience = experience;
-	## .duplicate(true) to avoid simulations contaminating real game values
-	## if the value is read-only, no need to set 'true'
-	c.skills = skills.duplicate(true);
-
-	c.max_health = max_health;
-	c.movement = movement; ## Movement range
-	c.current_health = current_health;
-	c.current_sanity = current_sanity;
-	#c.current_mana = current_mana;
-	c.current_level = current_level;
-
-	c.grid_position = grid_position;
-
-	c.next_level_experience = next_level_experience;
-
-	c.is_alive = is_alive;
-	
-	c.is_moved = is_moved; 
-	
-#region packed scenes
-const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
-const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
-const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
-const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
-const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
-#endregion
-
-#region inferred variables
-var camera : Camera3D
-var health_bar : HealthBar
-var level_up_popup : LevelUpPopUp
-var skill_choose_popup : SkillChoose
-var health_bar_ally : HealthBar
-var health_bar_enemy : HealthBar
-#endregion
 
 
 func clone() -> Character:
@@ -325,6 +248,25 @@ func _on_experience_changed(in_experience: int) -> void:
 			skill_choose_popup.show();
 
 
+func recalc_derived_stats() -> void:
+	## Derived from data only - safe to call after level up, after data changes, after load etc..
+	state.max_health = data.health + data.endurance + floor(data.strength / 2.0)
+	state.movement = 4 + floor(data.speed / 3.0)
+
+	# Optional: clamp current values so they remain valid
+	state.current_health = clamp(state.current_health, 0, state.max_health)
+	state.current_mana = max(state.current_mana, 0)
+	state.current_sanity = clamp(state.current_sanity, 0, 100)
+
+
+func init_current_stats_full() -> void:
+	## For new units only
+	recalc_derived_stats()
+	state.current_health = state.max_health
+	state.current_sanity = data.mind
+	state.current_mana = data.mana
+	
+	
 func update_health_bar() -> void:
 	health_bar.health = state.current_health;
 	health_bar.sanity = state.current_sanity;
@@ -354,16 +296,26 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
-	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
-	state.movement = 4 + floor(data.speed / 3.0); ## Movement range
-	state.current_health = state.max_health;
-	state.current_sanity = data.mind;
-	state.current_mana = data.mana;
+	recalc_derived_stats();
+	## might not be pretty,, but need something for new units
+	if state.current_health <= 0 and state.current_mana <= 0 and state.current_sanity <= 0:
+		init_current_stats_full()
+
+	#ensure_weapon_equipped()
+	#state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
+	#state.movement = 4 + floor(data.speed / 3.0); ## Movement range
+	#state.current_health = state.max_health;
+	#state.current_sanity = data.mind;
+	#state.current_mana = data.mana;
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
+	#state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
 	#abilities.append(abilites[0]);
+	#func init_starting_skill_once() -> void:
+	if state.skills.is_empty():
+		state.skills.append(SkillData.all_skills[data.speciality][data.personality % 
+			(SkillData.all_skills[data.speciality].size() - 1)])
 	
 	if state.is_playable():
 		health_bar = health_bar_ally;
@@ -463,33 +415,35 @@ func print_stats() -> void:
 
 func update_on_level_up() -> void:
 	update_max_health();
-	update_sanity();
+	#update_sanity();
 
 func update_max_health() -> int:
 	return health + endurance + floor(strength / 2.0);
 
-func update_sanity() -> int:
-	return current_sanity + floor(mind/4);
+#func update_sanity() -> int:
+	#return current_sanity + floor(mind/4);
 	
 func get_default_weapon_id() -> String:
-	match speciality:
-		Speciality.Militia:
-			return "sword_basic"
-		Speciality.Runner:
-			return "bow_basic"      # temporarily melee bow if you set max_range=1 for now
-		Speciality.Scholar:
-			return "scepter_basic"
+	match data.speciality:
+		CharacterData.Speciality.Militia:
+			return "sword_basic";
+		CharacterData.Speciality.Runner:
+			return "bow_basic";      # temporarily melee range for bow 
+		CharacterData.Speciality.Scholar:
+			return "scepter_basic";
 		_:
-			return "unarmed"
+			return "unarmed";
 			
 func ensure_weapon_equipped() -> void:
-	if weapon == null:
-		weapon = WeaponRegistry.get_weapon(get_default_weapon_id())
+	if state == null:
+		return;
+	if state.weapon_id == "" or WeaponRegistry.get_weapon(state.weapon_id) == null:
+		state.weapon_id = get_default_weapon_id();
+		#weapon = WeaponRegistry.get_weapon(get_default_weapon_id())
 
 func get_weapon() -> Weapon:
-	if weapon == null:
-		ensure_weapon_equipped()
-	return weapon
+	ensure_weapon_equipped();
+	return WeaponRegistry.get_weapon(state.weapon_id);
 
 func can_attack() -> bool:
 	return true;
@@ -523,13 +477,14 @@ func save() -> Dictionary:
 		"Skill": skill,
 		#"Mana": mana,
 		
-		"Experience": experience,
+		#"Experience": experience,
 		"Next level experience": next_level_experience,
 		"Current level": current_level,
 		"Current health": current_health,
 		#"Current mana": current_mana,
-		"Current sanity": current_sanity,
+		#"Current sanity": current_sanity,
 		"Weapon ID": get_weapon().weapon_id
+}
 
 	return {
 		"data": data.save(),

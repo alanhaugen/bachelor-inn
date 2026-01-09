@@ -23,7 +23,9 @@ signal level_changed(new_level: int)
 #endregion
 
 #region variables
-@export var weapon : Weapon = null; ## Weapon held by unit
+@export var is_initialized := false; ## Bool to check for new units
+
+@export var weapon_id : String = ""; ## Weapon held by unit
 
 @export var faction : Faction = Faction.PLAYER;
 @export var connections : Array[int] = [];
@@ -99,6 +101,7 @@ func save() -> Dictionary:
 		"level": level,
 		"current_health": current_health,
 		"current_sanity": current_sanity,
-		"current_mana": current_mana
+		"current_mana": current_mana,
+		"weapon_id": weapon_id
 	}
 #endregion
