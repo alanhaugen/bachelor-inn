@@ -24,7 +24,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	
 	while frontier.is_empty() == false:
 		# --- priority queue pop (lowest cost first)
-		frontier.sort_custom(func(a : Array, b : Array) -> int: return a[1] < b[1])
+		frontier.sort_custom(func(a : Array, b : Array) -> bool: return a[1] < b[1])
 		var current : Array = frontier.pop_front();
 		var pos : Vector3i = current[0]
 		var current_cost : int = current[1]
@@ -76,7 +76,9 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		var neighbour := start_pos
 		if not is_neighbour(start_pos, tile):
 			neighbour = get_valid_neighbour(tile, reachable)
-		commands.append(Attack.new(start_pos, tile, neighbour))
+			
+		if neighbour.x != -1:
+			commands.append(Attack.new(start_pos, tile, neighbour))
 	
 	commands.append(Wait.new(start_pos))
 	

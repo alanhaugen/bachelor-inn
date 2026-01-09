@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://dohfndgu385dw"]
+
+[ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_yui36"]
+
+[resource]
+script = ExtResource("1_yui36")
+weapon_id = "unarmed_basic"
+weapon_name = "Unarmed"
+text_tooltip = "The ol' ringers get the job done most of the time."
+damage_modifier = 0
+weapon_critical = 0
+accuracy = 0
+metadata/_custom_type_script = "uid://hhe2ydney01y"

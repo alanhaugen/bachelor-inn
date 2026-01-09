@@ -13,15 +13,28 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -
 
 
 func execute(state : GameState, simulate_only : bool = false) -> void:
-	var weapon_damage : int;
-	var weapon_crit : int;
-	
 	var aggressor : Character = state.get_unit(start_pos);
 	var victim : Character = state.get_unit(attack_pos);
 	
-	if aggressor.state.weapon:
-		weapon_damage = aggressor.state.weapon.damage_modifier;
-		weapon_crit = aggressor.state.weapon.weapon_critical;
+	var w: Weapon = aggressor.get_weapon();
+	var weapon_damage : int = 0;
+	var weapon_crit : int = 0;
+	
+	if w != null:
+		weapon_damage = w.damage_modifier
+		weapon_crit = w.weapon_critical
+		print("Weapon used:", w.weapon_name, " dmg:", weapon_damage, " crit:", weapon_crit)
+	else:
+		print("Weapon used: <null> (unexpected)")
+	
+	#if aggressor.weapon:
+	#	weapon_damage = aggressor.weapon.damage_modifier;
+	#	weapon_crit = aggressor.weapon.weapon_critical;
+	#	print("Weapon used:", aggressor.get_weapon().weapon_name)
+	
+	#if aggressor.state.weapon:
+	#	weapon_damage = aggressor.state.weapon.damage_modifier;
+	#	weapon_crit = aggressor.state.weapon.weapon_critical;
 	
 	@warning_ignore("integer_division")
 	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.data.defense / 2);

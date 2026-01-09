@@ -325,6 +325,15 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
 			stat_script.icon_texture.texture = character_script.portrait;
+
+			stat_script.name_label.text = character_script.unit_name;
+			stat_script.max_health = character_script.max_health;
+			stat_script.health = character_script.current_health;
+			#stat_script.max_mana = character_script.mana;
+			#stat_script.mana = character_script.current_mana;
+			#stat_script.max_sanity = character_script.mind;
+			#stat_script.sanity = character_script.current_sanity;
+
 			stat_script.name_label.text = character_script.data.unit_name;
 			stat_script.max_health = character_script.state.max_health;
 			stat_script.health = character_script.state.current_health;

@@ -1,23 +1,23 @@
-[gd_scene load_steps=46 format=3 uid="uid://byl1oxmtxjlp8"]
+[gd_scene load_steps=46 format=3 uid="uid://djah3auf7nopq"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_83nnx"]
 [ext_resource type="MeshLibrary" uid="uid://d38pmue2k0b7d" path="res://scenes/libraries/GridMapLibrary.tres" id="2_6uwjp"]
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_4htc4"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_vw0c7"]
-[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_6eke7"]
+[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="6_6eke7"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/Wenvi.tres" id="7_5q1wa"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_puj55"]
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="8_hpxmd"]
-[ext_resource type="Texture2D" uid="uid://fs45b1kehfnq" path="res://art/textures/WorkingGround_Tex.png" id="9_hewkd"]
+[ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="9_hewkd"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="10_qcdyl"]
-[ext_resource type="Texture2D" uid="uid://b33jkq5s683ck" path="res://art/textures/Orb.png" id="11_kkkdf"]
-[ext_resource type="Texture2D" uid="uid://c6kbc4515il1j" path="res://art/textures/M_Orb.png" id="12_dp6ms"]
-[ext_resource type="Texture2D" uid="uid://bkek8ogqv3wgc" path="res://art/textures/No_Orb.png" id="13_blw1a"]
+[ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="11_kkkdf"]
+[ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="12_dp6ms"]
+[ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="13_blw1a"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="14_rftrt"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="15_nxbs0"]
-[ext_resource type="Texture2D" uid="uid://c87baja4rh5qf" path="res://art/textures/ParticleTex/Star_Particle.png" id="16_d6qli"]
-[ext_resource type="Texture2D" uid="uid://dgc3pcg0tfg2j" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="17_i02gi"]
-[ext_resource type="Texture2D" uid="uid://dltjt0hh3xp5s" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="18_t8jle"]
+[ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="16_d6qli"]
+[ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="17_i02gi"]
+[ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="18_t8jle"]
 [ext_resource type="PackedScene" uid="uid://cwb5ihgj4ap4k" path="res://art/WIP/CharTest.tscn" id="19_oapd5"]
 
 [sub_resource type="Environment" id="Environment_hm5u0"]
@@ -198,7 +198,7 @@ mesh_library = ExtResource("4_4htc4")
 data = {
 "cells": PackedInt32Array(65533, 65534, 1, 2, 65535, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0)
 }
-metadata/_editor_floor_ = Vector3(0, 0, 0)
+metadata/_editor_floor_ = Vector3(0, -4, 0)
 
 [node name="MovementOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true

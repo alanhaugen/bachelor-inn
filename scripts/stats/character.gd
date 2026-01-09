@@ -16,22 +16,155 @@ class_name Character
 @export var sprite : Node3D
 @export var portrait : Texture2D
 
-#region packed scenes
-const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
-const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
-const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
-const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
-const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
+#region: --- Unit Stats ---
+## This dictates level progression, skills and compatible weapons
+enum Speciality
+{
+	Generic,
+	## This class has more movement than the other classes
+	## allowing them to get to objectives or outrun enemies.
+	## This could for example be a horse rider in a medieval
+	## setting or a ranger in a fantasy setting
+	Runner,
+	## Most classes usually fall in this category in games
+	## like fire emblem. If we want to use the sanity mechanic
+	## for our game, then these units might have extra resistance
+	## from sanity damage from battles
+	Militia,
+	## The classic healer/utility buffer. Their abilities do not
+	## necessarily have to affect battles, they could improve
+	## movement or conjure terrain.
+	Scholar
+}
+
+enum Personality
+{
+	Normal,
+	Zealot,
+	Devoted,
+	Young,
+	Old,
+	Jester,
+	Therapist,
+	Vindictive,
+	Snob,
+	Crashout,
+	Grump,
+	Determined,
+	Silly,
+	SmartAlec,
+	HeroComplex,
+	Vitriolic,
+	Noble,
+	Selfish,
+	Tired,
+	ExCultist,
+	FactoryWorker,
+	FactoryOwner
+}
+
+var camera: Camera3D;
+var health_bar: HealthBar;
+var level_up_popup: LevelUpPopUp;
+var skill_choose_popup: SkillChoose;
+var health_bar_ally: HealthBar;
+var health_bar_enemy: HealthBar;
+
+@onready var HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar.tscn");
+@onready var ENEMY_HEALTH_BAR_SCENE: PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn");
+@onready var LEVEL_UP_POPUP: PackedScene = preload("res://scenes/userinterface/level_up.tscn");
+@onready var SKILL_CHOOSE_POPUP: PackedScene = preload("res://scenes/userinterface/skill_choose.tscn");
+@onready var SPRITE: PackedScene = preload("res://art/WIP/CharTest.tscn");
+
+## dont think we need to pre load every weapon, but keeping this as is for now
+const Weapon_Unarmed: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Axe: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Sword: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Scepter: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Spear: Weapon = preload("res://data/weapons/Unarmed.tres");
+const Weapon_Bow: Weapon = preload("res://data/weapons/Unarmed.tres");
+
+
+@export var is_playable :bool = true; ## Player unit or NPC
+@export var is_enemy :bool = false; ## Friend or foe
+@export var unit_name :String = "Baggins"; ## Unit name
+@export var connections :Array = []; ## Connections to other players (how friendly they are to others)
+@export var speciality :Speciality = Speciality.Militia; ## Unit speciality
+@export var personality :Personality = Personality.Normal; ## Personality type, affects dialogue and loyalty to your commands
+
+@export var health: int = 4; ## Unit health
+@export var strength: int = 4; ## Damage with weapons
+@export var mind: int = 4; ## Mind reduces sanity loss from combat or other events
+@export var speed: int = 4; ## Speed is chance to Avoid = (Speed x 3 + Luck) / 2
+#@export var agility: int = 4; ## Agility increases the evasion and hit rate of a unit
+@export var focus: int = 4; ## Focus increases hit rate and crit rate of a unit. It also increases defense against sanity attacks
+
+@export var endurance: int = 4; ## Endurance increases defense against physical and magic attacks. It also increases the health of the unit
+@export var defense: int = 4; ## Lowers damage of weapon attacks
+@export var resistence: int = 4; ## Lowers damage of magic attacks
+@export var luck: int = 4; ## Affects many other skills
+@export var intimidation: int = 4; ## How the unit affects sanity in battle.
+@export var skill: int = 4; ## Chance to hit critical.
+#@export var mana: int = 4; ## Amount of magic power
+#@export var weapon: Weapon = null; ## Weapon held by unit
 #endregion
 
-#region inferred variables
-var camera : Camera3D
-var health_bar : HealthBar
-var level_up_popup : LevelUpPopUp
-var skill_choose_popup : SkillChoose
-var health_bar_ally : HealthBar
-var health_bar_enemy : HealthBar
-#endregion
+#@export var experience : int  = 0 : set = _set_experience;
+@export var skills : Array[Skill];
+
+## made a func 'update_on_level_up' to update unit stats on level up.
+var max_health: int = health + endurance + floor(strength / 2.0);
+#var max_mana: int = mana + mind - current_sanity; ##placeholder composition
+@export var movement: int = 4 + floor(speed / 3); ## Movement range
+@export var current_health: int = max_health;
+#@export var current_sanity: int = mind : set = _set_sanity;
+#@export var current_mana: int = mana;
+@export var current_level: int = 1;
+
+var grid_position: Vector3i;
+
+var next_level_experience: int = 1;
+
+var is_alive: bool = true;
+
+## Has move been done yet?
+## Only attack commands will then be possible
+var is_moved :bool = false; 
+
+var generic_skills :Array[Skill] = [
+	Skill.new("Spear training", "Enables wielding of Spear type weapons", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Adrenaline", "The first time health is lost each combat, double movement and attack on the next turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Precision	", "Damage does not vary (damage done = ¾ maxdamage + ¼ mindamage)", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
+
+var runner_skills :Array[Skill] = [
+	Skill.new("Trailblazer", "After moving through negative terrain, the terrain effects are disabled until end of turn", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Fleet foot", "Unaffected by negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Trapper", "A new action which turns a 2x2 area into negative terrain", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Archery", "Enables wielding of Bow & Arrow", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Pivot", "Allows you to move again with remaining movement after using an action", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
+
+var militia_skills :Array[Skill] = [
+	Skill.new("Fighting Cause", "Lose 50% less sanity from battling horrors", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Heavy weapons training", "Can use heavy weapons (big axe, big hammer, big stick)", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Obstructor", "Enemies cannot move out of tiles adjacent to this character", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Enhanced constitution", "Regains 1 health at the start of each turn. Gains additional Endurance", load("res://art/textures/M_Orb.png"), 0, 1, null),
+]
+
+var scholar_skills :Array[Skill] = [
+	Skill.new("Console", "A new ability which restores sanity to an adjacent ally. Half of the sanity restored is lost by this unit", load("res://art/textures/M_Orb.png"), 1, 5, null),
+	Skill.new("Firearms enthusiast", "Enables wielding of firearms", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Pyrochemistry", "Gains 2 improvised explosives for each combat which can be used for a ranged attack", load("res://art/textures/M_Orb.png"), 0, 1, null),
+	Skill.new("Medicine", "A new ability which gives an adjacent ally healing for the next 3 turns. This is removed if the ally enters combat", load("res://art/textures/M_Orb.png"), 0, 1, null)
+]
+
+var all_skills :Array[Array] = [
+	generic_skills,
+	runner_skills,
+	militia_skills,
+	scholar_skills
+];
 
 
 func clone() -> Character:
@@ -120,6 +253,25 @@ func _on_experience_changed(in_experience: int) -> void:
 			skill_choose_popup.show();
 
 
+func recalc_derived_stats() -> void:
+	## Derived from data only - safe to call after level up, after data changes, after load etc..
+	state.max_health = data.health + data.endurance + floor(data.strength / 2.0)
+	state.movement = 4 + floor(data.speed / 3.0)
+
+	# Optional: clamp current values so they remain valid
+	state.current_health = clamp(state.current_health, 0, state.max_health)
+	state.current_mana = max(state.current_mana, 0)
+	state.current_sanity = clamp(state.current_sanity, 0, 100)
+
+
+func init_current_stats_full() -> void:
+	## For new units only
+	recalc_derived_stats()
+	state.current_health = state.max_health
+	state.current_sanity = data.mind
+	state.current_mana = data.mana
+	
+	
 func update_health_bar() -> void:
 	health_bar.health = state.current_health;
 	health_bar.sanity = state.current_sanity;
@@ -149,16 +301,26 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
-	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
-	state.movement = 4 + floor(data.speed / 3.0); ## Movement range
-	state.current_health = state.max_health;
-	state.current_sanity = data.mind;
-	state.current_mana = data.mana;
+	recalc_derived_stats();
+	## might not be pretty,, but need something for new units
+	if state.current_health <= 0 and state.current_mana <= 0 and state.current_sanity <= 0:
+		init_current_stats_full()
+
+	#ensure_weapon_equipped()
+	#state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
+	#state.movement = 4 + floor(data.speed / 3.0); ## Movement range
+	#state.current_health = state.max_health;
+	#state.current_sanity = data.mind;
+	#state.current_mana = data.mana;
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
+	#state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
 	#abilities.append(abilites[0]);
+	#func init_starting_skill_once() -> void:
+	if state.skills.is_empty():
+		state.skills.append(SkillData.all_skills[data.speciality][data.personality % 
+			(SkillData.all_skills[data.speciality].size() - 1)])
 	
 	if state.is_playable():
 		health_bar = health_bar_ally;
@@ -254,9 +416,81 @@ func die(simulate_only : bool) -> void:
 
 func print_stats() -> void:
 	print(save());
+	
+
+func update_on_level_up() -> void:
+	update_max_health();
+	#update_sanity();
+
+func update_max_health() -> int:
+	return health + endurance + floor(strength / 2.0);
+
+#func update_sanity() -> int:
+	#return current_sanity + floor(mind/4);
+	
+func get_default_weapon_id() -> String:
+	match data.speciality:
+		CharacterData.Speciality.Militia:
+			return "sword_basic";
+		CharacterData.Speciality.Runner:
+			return "bow_basic";      # temporarily melee range for bow 
+		CharacterData.Speciality.Scholar:
+			return "scepter_basic";
+		_:
+			return "unarmed";
+			
+func ensure_weapon_equipped() -> void:
+	if state == null:
+		return;
+	if state.weapon_id == "" or WeaponRegistry.get_weapon(state.weapon_id) == null:
+		state.weapon_id = get_default_weapon_id();
+		#weapon = WeaponRegistry.get_weapon(get_default_weapon_id())
+
+func get_weapon() -> Weapon:
+	ensure_weapon_equipped();
+	return WeaponRegistry.get_weapon(state.weapon_id);
+
+func can_attack() -> bool:
+	return true;
+
+func can_use_weapon(w: Weapon) -> bool:
+	return true;
+	
+func get_max_attack_range() -> int:
+	return get_weapon().max_range;
 
 
 func save() -> Dictionary:
+	var stats := {
+		"Is Playable": is_playable,
+		"Unit name": unit_name,
+		"Speciality": speciality,
+		
+		"Health": health,
+		"Strength": strength,
+		"Movement": movement,
+		"Mind": mind,
+		"Speed": speed,
+		#"Agility": agility,
+		"Focus": focus,
+		
+		"Endurance": endurance,
+		"Defense": defense,
+		"Resistence": resistence,
+		"Luck": luck,
+		"Intimidation": intimidation,
+		"Skill": skill,
+		#"Mana": mana,
+		
+		#"Experience": experience,
+		"Next level experience": next_level_experience,
+		"Current level": current_level,
+		"Current health": current_health,
+		#"Current mana": current_mana,
+		#"Current sanity": current_sanity,
+		"Weapon ID": get_weapon().weapon_id
+}
+
 	return {
 		"data": data.save(),
 		"state": state.save()
