@@ -49,6 +49,15 @@ func evaluate(state : GameState) -> int:
 					closest_dist = dist
 			# Inverse distance: closer = higher score
 			score += max(0, 10 - closest_dist)  # tweak 10 to adjust weight
+			
+			var dist_score := 50 - closest_dist * 5
+			score += dist_score
+
+			if unit.state.is_moved:
+				score += 5
+
+			if closest_dist <= unit.state.movement:
+				score += 40
 		else:
 			score -= value
 			if not unit.state.is_moved:
