@@ -34,6 +34,7 @@ directories/dch_directory={
 }
 directories/dtl_directory={
 "firstLevel": "res://dialogue/firstLevel.dtl",
+"firstLevelVictory": "res://dialogue/firstLevelVictory.dtl",
 "tutorial1": "res://dialogue/tutorial1.dtl",
 "tutorial2": "res://dialogue/tutorial2.dtl",
 "tutorial3": "res://dialogue/tutorial3.dtl",

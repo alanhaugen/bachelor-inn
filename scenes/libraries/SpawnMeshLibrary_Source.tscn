@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxbpa037g1fft"]
+[gd_scene load_steps=9 format=3 uid="uid://bxbpa037g1fft"]
 
 [ext_resource type="ArrayMesh" uid="uid://dsmaodb30jw47" path="res://art/meshes/chest_bottom.res" id="1_yyuer"]
 
@@ -15,6 +15,12 @@ albedo_color = Color(0.7647059, 0.7137255, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_l8vot"]
 material = SubResource("StandardMaterial3D_yyuer")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l8vot"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_eeivc"]
+material = SubResource("StandardMaterial3D_l8vot")
 
 [node name="Scene Root" type="Node3D"]
 
@@ -36,3 +42,8 @@ mesh = ExtResource("1_yyuer")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 transparency = 0.4
 mesh = SubResource("BoxMesh_l8vot")
+
+[node name="VictoryTrigger" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_eeivc")

@@ -5,9 +5,14 @@ class_name Character
 ## Use this class to with a new scene for
 ## new characters and enemies
 
+@export_category("Animations")
+@export var base_animation : SpriteAnim
+
+@export_category("Model")
 @export var data : CharacterData
 @export var state : CharacterState
 
+@export_category("UI")
 @export var sprite : Node3D
 @export var portrait : Texture2D
 
