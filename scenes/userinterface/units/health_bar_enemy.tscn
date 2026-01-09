@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/ui/health_bar.gd" id="1_01hod"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_3su62"]
-[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/userinterface/progress_bar_silver.tres" id="3_3su62"]
+[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/userinterface/world/progress_bar_silver.tres" id="3_3su62"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23qt1"]
 bg_color = Color(0, 0.54563475, 0.82764375, 1)

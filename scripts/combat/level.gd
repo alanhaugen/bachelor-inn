@@ -48,11 +48,11 @@ var completed_moves :Array[Command];
 
 var characters: Array[Character];
 
-const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
-const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
+const STATS_POPUP = preload("res://scenes/userinterface/units/pop_up.tscn")
+const MOVE_POPUP = preload("res://scenes/userinterface/units/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
-const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
-const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
+const SIDE_BAR = preload("res://scenes/userinterface/units/sidebar.tscn")
+const RIBBON: PackedScene = preload("res://scenes/userinterface/world/ribbon.tscn");
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;

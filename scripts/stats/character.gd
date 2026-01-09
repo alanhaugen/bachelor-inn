@@ -17,10 +17,10 @@ class_name Character
 @export var portrait : Texture2D
 
 #region packed scenes
-const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
-const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
-const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
-const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
+const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/units/health_bar.tscn")
+const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/units/health_bar_enemy.tscn")
+const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/units/level_up.tscn")
+const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/units/skill_choose.tscn")
 const SPRITE : PackedScene = preload("res://art/WIP/CharTest.tscn")
 #endregion
 

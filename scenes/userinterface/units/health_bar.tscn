@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bavrkht7e8y52" path="res://scripts/ui/health_bar.gd" id="1_qi2ti"]
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_4rf34"]
-[ext_resource type="StyleBox" uid="uid://je1nnj4ceyqm" path="res://scenes/userinterface/progress_bar.tres" id="3_8ymem"]
-[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/userinterface/progress_bar_silver.tres" id="4_x4hh8"]
+[ext_resource type="StyleBox" uid="uid://je1nnj4ceyqm" path="res://scenes/userinterface/units/progress_bar.tres" id="3_8ymem"]
+[ext_resource type="StyleBox" uid="uid://dfhuorw00ew3y" path="res://scenes/userinterface/world/progress_bar_silver.tres" id="4_x4hh8"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_23qt1"]
 bg_color = Color(1, 0.2024239, 0.32685488, 1)
