@@ -93,6 +93,15 @@ enabled=PackedStringArray("res://addons/dialogic/plugin.cfg", "res://addons/gltf
 
 theme/custom_font="uid://bltfi0bh6lptu"
 
+[importer_defaults]
+
+zincles.gltf2meshlib={
+"generate_collision_shape_by_mesh": true,
+"generate_preview": true,
+"model_offset": Vector3(0, 0, 0),
+"sort_by_name": true
+}
+
 [input]
 
 selected={
