@@ -34,7 +34,7 @@ var movement_grid : MovementGrid
 @export var maximum_camera_height: float = 15.0
 
 @export var minimum_camera_x: float = -10.0
-@export var maximum_camera_x: float = 10.0
+@export var maximum_camera_x: float = 100.0
 @export var minimum_camera_z: float = -10.0
 @export var maximum_camera_z: float = 10.0
 
