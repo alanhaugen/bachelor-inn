@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=28 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
@@ -6,7 +6,8 @@
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
-[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="7_btxxm"]
+[ext_resource type="Texture2D" uid="uid://b33jkq5s683ck" path="res://art/textures/Orb.png" id="7_btxxm"]
+[ext_resource type="AudioStream" uid="uid://vuqtugxaq7oo" path="res://audio/fantasy-rpg-exploration-v2-461303.mp3" id="8_jpndq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
 texture = ExtResource("3_v8ire")
@@ -303,6 +304,11 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_5vttb")
 text = "Quit"
 
 [node name="World" type="Node3D" parent="."]
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World"]
+stream = ExtResource("8_jpndq")
+autoplay = true
+parameters/looping = true
 
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap1" to="." method="_on_load_map_1_pressed"]

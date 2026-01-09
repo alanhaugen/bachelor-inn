@@ -6,15 +6,19 @@ class_name Character
 ## new characters and enemies
 
 @export_category("Animations")
-@export var base_animation : SpriteAnim
+@export var idle_animation : SpriteAnim
+@export var run_left_animation : SpriteAnim
+@export var run_up_animation : SpriteAnim
+@export var run_down_animation : SpriteAnim
+
+@export_category("UI")
+@export var portrait : Texture2D
 
 @export_category("Model")
 @export var data : CharacterData
 @export var state : CharacterState
 
-@export_category("UI")
-@export var sprite : Node3D
-@export var portrait : Texture2D
+var sprite : Node3D
 
 #region packed scenes
 const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
