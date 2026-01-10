@@ -8,6 +8,7 @@ extends Control
 @onready var movement_stat: Label = %MovementStat;
 @onready var mind_stat: Label = %MindStat;
 @onready var speed_stat: Label = %SpeedStat;
+@onready var endurance_stat: Label = %EnduranceStat;
 @onready var focus_stat: Label = %FocusStat;
 
 var name_label: String = "" : set = _set_name;
@@ -17,6 +18,7 @@ var strength: int = 0 : set = _set_strength;
 var movement: int = 0 : set = _set_movement;
 var mind: int = 0 : set = _set_mind;
 var speed: int = 0 : set = _set_speed;
+var endurance: int = 0 : set = _set_endurance;
 var focus: int = 0 : set = _set_focus;
 
 
@@ -75,6 +77,15 @@ func _set_speed(new_speed: int) -> void:
 	if speed_diff > 0:
 		diff = " ⬆ +" + str(speed_diff);
 	speed_stat.text = "⚡ Speed: " + str(new_speed) + diff;
+
+
+func _set_endurance(new_endurance: int) -> void:
+	var endurance_diff := new_endurance - endurance;
+	endurance = new_endurance;
+	var diff := "";
+	if endurance_diff > 0:
+		diff = " ⬆ +" + str(endurance_diff);
+	endurance_stat.text = "🌟 Endurance: " + str(new_endurance) + diff;
 
 
 func _set_focus(new_focus: int) -> void:

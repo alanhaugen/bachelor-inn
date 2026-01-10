@@ -377,16 +377,6 @@ func _ready() -> void:
 	
 	var characters_placed := 0;
 	
-	# Remove dead characters from character list
-	var is_done := false;
-	while is_done == false:
-		for i in range(Main.characters.size()):
-			is_done = true;
-			if Main.characters[i].state.is_alive == false:
-				Main.characters.remove_at(i);
-				is_done = false;
-				break;
-	
 	print("Loading new level, number of playable characters: " + str(Main.characters.size()));
 	
 	for i in units.size():
@@ -396,9 +386,13 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
+				new_unit.state.is_moved = false;
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
-				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(new_unit.state.current_health));
+				var health := str(new_unit.state.current_health)
+				if health == "0":
+					health = "fresh unit"
+				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health));
 			else:
 				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
@@ -566,7 +560,7 @@ func _process(delta: float) -> void:
 		turn_transition.show()
 		return;
 		
-	for i in side_bar_array.size():
+	for i in Main.characters.size():
 		update_side_bar(Main.characters[i], side_bar_array[i]);
 		
 	turn_transition.hide();

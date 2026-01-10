@@ -138,7 +138,7 @@ func calibrate_level_popup() -> void:
 	level_up_popup.movement = state.movement;
 	level_up_popup.speed = data.speed;
 	level_up_popup.strength = data.strength;
-	#level_up_popup.agility = agility;
+	level_up_popup.endurance = data.endurance;
 
 
 func _ready() -> void:
@@ -243,12 +243,11 @@ func reset() -> void:
 
 
 func die(simulate_only : bool) -> void:
-	if state.is_alive == false:
-		push_error("Killing already dead unit");
-	
 	state.is_alive = false;
 	
 	if simulate_only == false:
+		if state.is_playable():
+			Main.characters.erase(self)
 		hide_ui();
 		hide();
 		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
