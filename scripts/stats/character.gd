@@ -243,16 +243,14 @@ func reset() -> void:
 
 
 func die(simulate_only : bool) -> void:
-	state.is_alive = false;
+	state.is_alive = false
 	
 	if simulate_only == false:
 		if state.is_playable():
 			Main.characters.erase(self)
-		hide_ui();
-		hide();
-		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
-	
-	state.grid_position = Vector3(-100, -100, -100);
+		Main.level.game_state.units.erase(self)
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
+		queue_free()
 
 
 func print_stats() -> void:
