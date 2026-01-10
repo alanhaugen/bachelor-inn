@@ -22,6 +22,7 @@ var current_animation : SpriteAnim = null
 
 var frame_index : int = 0
 var frame_timer : float = 0.0
+var stop_anim : bool = true
 
 var my_material : ShaderMaterial = null
 
@@ -49,11 +50,16 @@ var health_bar_enemy : HealthBar
 func play(anim : SpriteAnim) -> void:
 	if anim == null:
 		return
+	
+	stop_anim = false
+	
+	if current_animation == anim:
+		return
 
 	current_animation = anim;
 	frame_index = 0
 	frame_timer = 0.0
-
+	
 	if my_material == null:
 		var mat := sprite.material_override as ShaderMaterial
 		if mat == null:
@@ -72,8 +78,8 @@ func play(anim : SpriteAnim) -> void:
 	my_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
 
 
-func play_clip(_anim :String) -> void:
-	pass;
+func pause_anim() -> void:
+	stop_anim = true
 
 
 func clone() -> Character:
@@ -222,6 +228,7 @@ func _ready() -> void:
 	sprite.scale = Vector3(4,4,4)
 	
 	play(run_down_animation)
+	stop_anim = true
 	
 	camera = get_viewport().get_camera_3d()
 	update_health_bar()
@@ -240,12 +247,14 @@ func _process(delta: float) -> void:
 	
 	if current_animation == null:
 		return
-
+	
 	frame_timer += delta
 	
 	if frame_timer >= 1.0 / current_animation.fps:
 		frame_timer = 0.0
 		frame_index = (frame_index + 1) % (current_animation.frame_columns * current_animation.frame_rows)
+		if stop_anim:
+			frame_index = 0
 		sprite.material_override.set_shader_parameter("frame_index", frame_index)
 
 

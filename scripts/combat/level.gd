@@ -649,6 +649,7 @@ func _process(delta: float) -> void:
 			units_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			units_map.set_cell_item(active_move.end_pos, code);
 			selected_unit.move_to(active_move.end_pos);
+			selected_unit.pause_anim()
 			selected_unit = null;
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
@@ -663,7 +664,7 @@ func _process(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			var movement_speed := 80.0 # units per second
+			var movement_speed := 10.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta
