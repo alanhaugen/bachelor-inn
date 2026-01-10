@@ -1,0 +1,11 @@
+[gd_scene load_steps=5 format=3 uid="uid://uwkg1mydmaxl"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_vlk3e"]
+[ext_resource type="Resource" uid="uid://3cd4cr5lmyf6" path="res://art/Animations/Enemies/Bird_Moving_L.tres" id="2_2k662"]
+[ext_resource type="Resource" uid="uid://dksa5tevjcrv3" path="res://art/Animations/Enemies/Bird_Moving_U.tres" id="3_1o3ex"]
+[ext_resource type="Resource" uid="uid://b711yumqmi5qb" path="res://art/Animations/Enemies/Bird_Moving_D.tres" id="4_nb2gx"]
+
+[node name="Character" instance=ExtResource("1_vlk3e")]
+run_left_animation = ExtResource("2_2k662")
+run_up_animation = ExtResource("3_1o3ex")
+run_down_animation = ExtResource("4_nb2gx")
