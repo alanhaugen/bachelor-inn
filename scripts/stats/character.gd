@@ -1,4 +1,4 @@
-extends Node3D
+extends Sprite3D
 class_name Character
 ## This class has all the Character visuals
 ##
@@ -18,7 +18,7 @@ class_name Character
 @export var data : CharacterData
 @export var state : CharacterState
 
-var sprite : Node3D
+var current_animation : SpriteAnim = idle_animation
 
 #region packed scenes
 const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
