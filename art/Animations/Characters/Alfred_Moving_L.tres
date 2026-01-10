@@ -1,7 +1,25 @@
-[gd_resource type="Resource" script_class="SpriteAnim" load_steps=2 format=3 uid="uid://du1thdha7r8q8"]
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=8 format=3 uid="uid://du1thdha7r8q8"]
 
+[ext_resource type="Texture2D" uid="uid://cyypk0qavkmjw" path="res://art/textures/Characters&Enemies/Animation_Alfred.png" id="1_k57m1"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_lw8vb"]
+[ext_resource type="Texture2D" uid="uid://b0pcemtg24k5r" path="res://art/textures/Characters&Enemies/Animation_Alfred_Mask4.png" id="2_84vm8"]
+[ext_resource type="Texture2D" uid="uid://dxyqevc2y4cii" path="res://art/textures/Characters&Enemies/Animation_Alfred_Normals.png" id="3_2j46h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1gvkw"]
+atlas = ExtResource("1_k57m1")
+region = Rect2(64, 96, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0b0xq"]
+atlas = ExtResource("2_84vm8")
+region = Rect2(64, 96, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03f5a"]
+atlas = ExtResource("3_2j46h")
+region = Rect2(64, 96, 162, 32)
 
 [resource]
 script = ExtResource("1_lw8vb")
+diffuse_atlas = SubResource("AtlasTexture_1gvkw")
+normal_atlas = SubResource("AtlasTexture_03f5a")
+mask_atlas = SubResource("AtlasTexture_0b0xq")
 metadata/_custom_type_script = "uid://c876dul20yd5j"
