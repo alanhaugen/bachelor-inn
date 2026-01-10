@@ -290,7 +290,7 @@ func calibrate_level_popup() -> void:
 	level_up_popup.movement = state.movement;
 	level_up_popup.speed = data.speed;
 	level_up_popup.strength = data.strength;
-	#level_up_popup.agility = agility;
+	level_up_popup.endurance = data.endurance;
 
 
 func _ready() -> void:
@@ -306,7 +306,7 @@ func _ready() -> void:
 	health_bar_enemy.hide();
 	
 	recalc_derived_stats();
-	## might not be pretty,, but need something for new units
+	# might not be pretty,, but need something for new units
 	if state.current_health <= 0 and state.current_mana <= 0 and state.current_sanity <= 0:
 		init_current_stats_full()
 
@@ -320,6 +320,16 @@ func _ready() -> void:
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
 	#state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
+	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
+	state.max_sanity = data.mind
+	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
+	state.current_health = state.max_health
+	state.current_sanity = state.max_sanity
+	state.current_mana = data.mana
+	
+	#if personality == Personality.Zealot:
+	#	skills.append(generic_skills[0]);
+	state.skills.append(get_random_unaquired_skill());
 	#abilities.append(abilites[0]);
 	#func init_starting_skill_once() -> void:
 	if state.skills.is_empty():
@@ -405,17 +415,14 @@ func reset() -> void:
 
 
 func die(simulate_only : bool) -> void:
-	if state.is_alive == false:
-		push_error("Killing already dead unit");
-	
-	state.is_alive = false;
+	state.is_alive = false
 	
 	if simulate_only == false:
-		hide_ui();
-		hide();
-		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
-	
-	state.grid_position = Vector3(-100, -100, -100);
+		if state.is_playable():
+			Main.characters.erase(self)
+		Main.level.game_state.units.erase(self)
+		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
+		queue_free()
 
 
 func print_stats() -> void:

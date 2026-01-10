@@ -38,7 +38,7 @@ func play(anim : SpriteAnim) -> void:
 	mat.set_shader_parameter("frame_rows", current_animation.frame_rows)
 
 
-func play_clip(anim :String) -> void:
+func play_clip(_anim :String) -> void:
 	pass;
 
 
