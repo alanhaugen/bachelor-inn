@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=8 format=3 uid="uid://cdrlwkgmox11n"]
+
+[ext_resource type="Texture2D" uid="uid://cyypk0qavkmjw" path="res://art/textures/Characters&Enemies/Animation_Alfred.png" id="1_o31ro"]
+[ext_resource type="Texture2D" uid="uid://b0pcemtg24k5r" path="res://art/textures/Characters&Enemies/Animation_Alfred_Mask4.png" id="2_7ehur"]
+[ext_resource type="Texture2D" uid="uid://dxyqevc2y4cii" path="res://art/textures/Characters&Enemies/Animation_Alfred_Normals.png" id="3_vr7x4"]
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_ojml4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1gvkw"]
+atlas = ExtResource("1_o31ro")
+region = Rect2(64, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0b0xq"]
+atlas = ExtResource("2_7ehur")
+region = Rect2(64, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_03f5a"]
+atlas = ExtResource("3_vr7x4")
+region = Rect2(64, 0, 162, 32)
+
+[resource]
+script = ExtResource("4_ojml4")
+diffuse_atlas = SubResource("AtlasTexture_1gvkw")
+normal_atlas = SubResource("AtlasTexture_03f5a")
+mask_atlas = SubResource("AtlasTexture_0b0xq")
+metadata/_custom_type_script = "uid://c876dul20yd5j"
