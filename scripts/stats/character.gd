@@ -279,8 +279,8 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.units_map.set_cell_item(state.grid_position, grid_code);
-	if state.is_playable():
-		my_material.set_shader_parameter("grey_tint", true)
+		if state.is_playable():
+			my_material.set_shader_parameter("grey_tint", true)
 
 
 func reset() -> void:
