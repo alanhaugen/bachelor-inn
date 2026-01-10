@@ -1,4 +1,4 @@
-extends Sprite3D
+extends Node3D
 class_name Character
 ## This class has all the Character visuals
 ##
@@ -8,6 +8,7 @@ class_name Character
 @export_category("Animations")
 @export var idle_animation : SpriteAnim
 @export var run_left_animation : SpriteAnim
+@export var run_right_animation : SpriteAnim
 @export var run_up_animation : SpriteAnim
 @export var run_down_animation : SpriteAnim
 
@@ -23,6 +24,8 @@ var current_animation : SpriteAnim = null
 
 var frame_index : int = 0
 var frame_timer : float = 0.0
+
+@onready var sprite : Sprite3D = $Sprite
 #endregion
 
 #region packed scenes
@@ -51,7 +54,7 @@ func play(anim : SpriteAnim) -> void:
 	frame_index = 0
 	frame_timer = 0.0
 
-	var mat := material_override as ShaderMaterial
+	var mat := sprite.material_override as ShaderMaterial
 	if mat == null:
 		push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
 		return
@@ -210,9 +213,9 @@ func _ready() -> void:
 	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
 	skill_choose_popup.hide()
 	
-	translate(Vector3(0,1.0,0.6))
-	rotate(Vector3(1,0,0), deg_to_rad(-60))
-	scale = Vector3(4,4,4)
+	sprite.translate(Vector3(0.3,1.0,-0.1))
+	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
+	sprite.scale = Vector3(4,4,4)
 	
 	play(idle_animation)
 	
@@ -228,7 +231,7 @@ func _process(delta: float) -> void:
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(3 * 7, 0);
+		health_bar.position = screen_position_2d - Vector2(3 * 15, 0);
 		health_bar.position.y += 70; # move down a little 
 	
 	if current_animation == null:
@@ -239,7 +242,7 @@ func _process(delta: float) -> void:
 	if frame_timer >= 1.0 / current_animation.fps:
 		frame_timer = 0.0
 		frame_index = (frame_index + 1) % (current_animation.frame_columns * current_animation.frame_rows)
-		material_override.set_shader_parameter("frame_index", frame_index)
+		sprite.material_override.set_shader_parameter("frame_index", frame_index)
 
 
 func hide_ui() -> void:

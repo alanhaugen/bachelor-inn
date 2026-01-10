@@ -53,7 +53,7 @@ const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
-const PLAYER: PackedScene = preload("res://scenes/grid_items/player.tscn");
+const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;

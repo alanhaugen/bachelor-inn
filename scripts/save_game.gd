@@ -2,7 +2,7 @@ extends Resource
 class_name SaveGame
 
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
-const PLAYER: PackedScene = preload("res://scenes/grid_items/player.tscn");
+const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 
 ## Use this to detect old player save files and update them 
 @export var version := 1;

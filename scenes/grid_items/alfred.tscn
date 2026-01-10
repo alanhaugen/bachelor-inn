@@ -1,0 +1,23 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4eecr8t83su5"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_br8hb"]
+[ext_resource type="Resource" uid="uid://b5tfb3fssigcy" path="res://art/Animations/Characters/Alfred/Alfred_Moving_D.tres" id="2_mfx1k"]
+[ext_resource type="Resource" uid="uid://du1thdha7r8q8" path="res://art/Animations/Characters/Alfred/Alfred_Moving_L.tres" id="3_d2cp7"]
+[ext_resource type="Resource" uid="uid://crj6fyqc42yx1" path="res://art/Animations/Characters/Alfred/Alfred_Moving_R.tres" id="4_gar4r"]
+[ext_resource type="Resource" uid="uid://80eyissy4tnr" path="res://art/Animations/Characters/Alfred/Alfred_Moving_U.tres" id="5_o3dv1"]
+[ext_resource type="Texture2D" uid="uid://bq5u0hpkxv7lw" path="res://art/Animations/Characters/Alfred/Textures/D_BaseColor.png" id="6_mfx1k"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2cp7"]
+atlas = ExtResource("6_mfx1k")
+region = Rect2(0, 0, 22, 16.25)
+
+[node name="Character" instance=ExtResource("1_br8hb")]
+idle_animation = ExtResource("2_mfx1k")
+run_left_animation = ExtResource("3_d2cp7")
+run_right_animation = ExtResource("4_gar4r")
+run_up_animation = ExtResource("5_o3dv1")
+run_down_animation = ExtResource("2_mfx1k")
+portrait = SubResource("AtlasTexture_d2cp7")
+
+[node name="Sprite" parent="." index="0"]
+no_depth_test = true
