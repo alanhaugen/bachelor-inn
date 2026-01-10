@@ -100,6 +100,8 @@ func _on_experience_changed(in_experience: int) -> void:
 				data.luck += 1;
 				data.skill += 1;
 		
+		calc_derived_stats()
+		
 		state.next_level_experience *= 10;
 		calibrate_level_popup();
 		level_up_popup.show();
@@ -138,6 +140,17 @@ func calibrate_level_popup() -> void:
 	level_up_popup.endurance = data.endurance;
 
 
+func calc_derived_stats() -> void:
+	state.defense = 4 + data.endurance
+	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
+	state.max_sanity = state.resistance
+	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
+	state.current_health = state.max_health
+	state.current_sanity = state.max_sanity
+	state.stability = data.focus - floor(data.endurance / 2.0)
+
+
 func _ready() -> void:
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
@@ -150,14 +163,7 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
-	state.defense = 4 + data.endurance
-	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
-	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
-	state.max_sanity = state.resistance
-	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
-	state.current_health = state.max_health
-	state.current_sanity = state.max_sanity
-	state.stability = data.focus - floor(data.endurance / 2.0)
+	calc_derived_stats()
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
