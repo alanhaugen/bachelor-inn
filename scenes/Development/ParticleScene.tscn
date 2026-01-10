@@ -42,7 +42,7 @@ point_count = 3
 curve = SubResource("Curve_ca1ey")
 
 [sub_resource type="Curve" id="Curve_w357l"]
-_data = [Vector2(0, 0.48399496), 0.0, 1.4373235, 0, 0, Vector2(0.38535035, 0.7836109), -0.046665642, -0.046665642, 0, 0, Vector2(1, 0), -2.1040566, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 1.4373235, 0, 0, Vector2(0.24950495, 0.6687592), -0.046665642, -0.046665642, 0, 0, Vector2(1, 0), -0.075481676, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="CurveTexture" id="CurveTexture_w357l"]
@@ -52,24 +52,23 @@ curve = SubResource("Curve_w357l")
 emission_shape = 3
 emission_box_extents = Vector3(1.745, 1.195, 1.87)
 gravity = Vector3(0, 0, 0)
-tangential_accel_min = -3.9700022
-tangential_accel_max = -0.5700022
-damping_min = 0.568
-damping_max = 13.636001
+linear_accel_min = -2.2351742e-06
+linear_accel_max = 8.0999975
+damping_min = 6.0930004
+damping_max = 14.373001
 scale_min = 0.0
 scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_w357l")
 color_ramp = ExtResource("4_q0lo1")
 alpha_curve = SubResource("CurveTexture_ca1ey")
 hue_variation_curve = SubResource("CurveTexture_6lhpm")
+turbulence_enabled = true
 turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y13he"]
-transparency = 2
-alpha_scissor_threshold = 0.5
-alpha_antialiasing_mode = 0
+transparency = 1
 cull_mode = 2
 shading_mode = 0
 vertex_color_use_as_albedo = true
@@ -181,7 +180,7 @@ shader_parameter/Panini = 0.0
 shader_parameter/Chromatic_Peripheral = 0.0
 shader_parameter/Chromatic_Aberrations = 0.0
 shader_parameter/Chromatic_Darkening = 0.9
-shader_parameter/Blur_Amount = -2.2999999746679602
+shader_parameter/Blur_Amount = -2.29999997466796
 shader_parameter/Blur_Centered = 0.20000000298024
 shader_parameter/Bloom_Starts = 0.80000001192093
 shader_parameter/Bloom_Halation = 0.42999999038864
@@ -195,7 +194,7 @@ shader_parameter/Shadows_Saturation = 1.0
 shader_parameter/Highlights_Split = 0.7
 shader_parameter/Mid_Color_Temp = 0.0
 shader_parameter/Mid_Green_Tint = 0.0
-shader_parameter/Mid_Brightness = 1.2499999888239999
+shader_parameter/Mid_Brightness = 1.249999988824
 shader_parameter/Mid_Contrast = 1.0
 shader_parameter/Mid_Saturation = 1.0
 shader_parameter/High_Color_Temp = 0.0
