@@ -210,7 +210,7 @@ func _ready() -> void:
 	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
 	skill_choose_popup.hide()
 	
-	translate(Vector3(0,1.0,-0.6))
+	translate(Vector3(0,1.0,0.6))
 	rotate(Vector3(1,0,0), deg_to_rad(-60))
 	scale = Vector3(4,4,4)
 	
