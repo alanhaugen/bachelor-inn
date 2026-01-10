@@ -8,7 +8,6 @@ extends Control
 @onready var movement_stat: Label = %MovementStat;
 @onready var mind_stat: Label = %MindStat;
 @onready var speed_stat: Label = %SpeedStat;
-@onready var agility_stat: Label = %AgilityStat;
 @onready var focus_stat: Label = %FocusStat;
 
 var name_label: String = "" : set = _set_name;
@@ -18,7 +17,6 @@ var strength: int = 0 : set = _set_strength;
 var movement: int = 0 : set = _set_movement;
 var mind: int = 0 : set = _set_mind;
 var speed: int = 0 : set = _set_speed;
-var agility: int = 0 : set = _set_agility;
 var focus: int = 0 : set = _set_focus;
 
 
@@ -31,7 +29,7 @@ func _set_name(new_name: String) -> void:
 
 
 func _set_level(new_level: int) -> void:
-	level_number.text = "Level " + str(new_level);
+	level_number.text = "🏆 Level " + str(new_level);
 
 
 func _set_health(new_health: int) -> void:
@@ -40,7 +38,7 @@ func _set_health(new_health: int) -> void:
 	var diff := "";
 	if health_diff > 0:
 		diff = " ⬆ +" + str(health_diff);
-	health_stat.text = "Health: " + str(new_health) + diff;
+	health_stat.text = "🫀 Health: " + str(new_health) + diff;
 
 
 func _set_strength(new_strength: int) -> void:
@@ -49,7 +47,7 @@ func _set_strength(new_strength: int) -> void:
 	var diff := "";
 	if strength_diff > 0:
 		diff = " ⬆ +" + str(strength_diff);
-	strength_stat.text = "Strength: " + str(new_strength) + diff;
+	strength_stat.text = "💪 Strength: " + str(new_strength) + diff;
 
 
 func _set_movement(new_movement: int) -> void:
@@ -58,7 +56,7 @@ func _set_movement(new_movement: int) -> void:
 	var diff := "";
 	if movement_diff > 0:
 		diff = " ⬆ +" + str(movement_diff);
-	movement_stat.text = "Movement: " + str(new_movement) + diff;
+	movement_stat.text = "🏃 Movement: " + str(new_movement) + diff;
 
 
 func _set_mind(new_mind: int) -> void:
@@ -67,7 +65,7 @@ func _set_mind(new_mind: int) -> void:
 	var diff := "";
 	if mind_diff > 0:
 		diff = " ⬆ +" + str(mind_diff);
-	mind_stat.text = "Mind: " + str(new_mind) + diff;
+	mind_stat.text = "🧠 Mind: " + str(new_mind) + diff;
 
 
 func _set_speed(new_speed: int) -> void:
@@ -76,16 +74,7 @@ func _set_speed(new_speed: int) -> void:
 	var diff := "";
 	if speed_diff > 0:
 		diff = " ⬆ +" + str(speed_diff);
-	speed_stat.text = "Speed: " + str(new_speed) + diff;
-
-
-func _set_agility(new_agility: int) -> void:
-	var agility_diff := new_agility - agility;
-	agility = new_agility;
-	var diff := "";
-	if agility_diff > 0:
-		diff = " ⬆ +" + str(agility_diff);
-	agility_stat.text = "Agility: " + str(new_agility) + diff;
+	speed_stat.text = "⚡ Speed: " + str(new_speed) + diff;
 
 
 func _set_focus(new_focus: int) -> void:
@@ -94,7 +83,7 @@ func _set_focus(new_focus: int) -> void:
 	var diff := "";
 	if focus_diff > 0:
 		diff = " ⬆ +" + str(focus_diff);
-	focus_stat.text = "Focus: " + str(new_focus) + diff;
+	focus_stat.text = "🔎 Focus: " + str(new_focus) + diff;
 
 
 func _on_button_pressed() -> void:

@@ -11,12 +11,12 @@
 [node name="LevelUp" type="Control"]
 layout_mode = 3
 anchor_left = 0.5
-anchor_top = 0.453
+anchor_top = 0.418
 anchor_right = 0.646
 anchor_bottom = 0.96800005
-offset_top = 30.455994
+offset_top = 21.135986
 offset_right = -168.19202
-offset_bottom = -303.26404
+offset_bottom = -335.26404
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_r8t7i")
@@ -32,9 +32,9 @@ layout_mode = 2
 [node name="Button" type="Button" parent="VBoxContainer/Control"]
 layout_mode = 0
 offset_left = 23.0
-offset_top = 264.0
+offset_top = 304.0
 offset_right = 132.0
-offset_bottom = 294.0
+offset_bottom = 334.0
 theme = ExtResource("3_kd365")
 text = "CLOSE"
 
@@ -49,7 +49,7 @@ anchor_bottom = 0.5
 offset_left = -31.0
 offset_top = -31.0
 offset_right = 150.0
-offset_bottom = 304.0
+offset_bottom = 346.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_jpe5o")
@@ -142,7 +142,7 @@ layout_mode = 0
 offset_left = -17.0
 offset_top = 33.0
 offset_right = 132.0
-offset_bottom = 245.0
+offset_bottom = 281.0
 texture = ExtResource("5_4mlli")
 region_rect = Rect2(192, 1, 32, 30)
 patch_margin_left = 10
@@ -187,6 +187,7 @@ text = "Speed 3"
 
 [node name="AgilityStat" type="Label" parent="VBoxContainer/Control/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 theme_override_styles/normal = ExtResource("6_qq5ux")
