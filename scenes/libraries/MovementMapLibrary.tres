@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=14 format=3 uid="uid://dan04754q5nkc"]
 
-[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="2_skouf"]
+[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_skouf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7052x"]
 transparency = 1
@@ -31,6 +31,7 @@ no_depth_test = true
 albedo_texture = ExtResource("2_skouf")
 uv1_scale = Vector3(0.125, 0.125, 0.125)
 uv1_offset = Vector3(0.25, 0, 0)
+texture_filter = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ye145"]
 material = SubResource("StandardMaterial3D_surpk")
