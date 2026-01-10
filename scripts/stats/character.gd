@@ -154,14 +154,15 @@ func _ready() -> void:
 	health_bar_enemy.hide();
 	
 	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
-	state.movement = 4 + floor(data.speed / 3.0); ## Movement range
-	state.current_health = state.max_health;
-	state.current_sanity = data.mind;
-	state.current_mana = data.mana;
+	state.max_sanity = data.mind
+	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
+	state.current_health = state.max_health
+	state.current_sanity = state.max_sanity
+	state.current_mana = data.mana
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
+	state.skills.append(get_random_unaquired_skill());
 	#abilities.append(abilites[0]);
 	
 	if state.is_playable():

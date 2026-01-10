@@ -124,7 +124,7 @@ offset_right = 67.0
 offset_bottom = 18.0
 tooltip_text = "Mind"
 mouse_filter = 0
-text = "Mnd"
+text = "MND"
 horizontal_alignment = 1
 
 [node name="SPD" type="Label" parent="VBoxContainer/Control"]
@@ -311,15 +311,14 @@ patch_margin_right = 11
 patch_margin_bottom = 11
 
 [node name="Icon" type="NinePatchRect" parent="VBoxContainer/Control"]
-visible = false
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
-offset_top = -121.0
+offset_top = -111.0
 offset_right = 38.0
-offset_bottom = -88.0
+offset_bottom = -78.0
 grow_vertical = 0
 texture = ExtResource("1_k3ym5")
 region_rect = Rect2(128, 0, 32, 32)

@@ -39,6 +39,7 @@ signal level_changed(new_level: int)
 
 #region inferred vars calculated from CharacterData on spawn
 @export var max_health : int;
+@export var max_sanity : int;
 @export var movement : int;
 @export var current_health : int;
 @export var current_sanity : int : set = _set_sanity;
@@ -61,7 +62,7 @@ func duplicate_data() -> CharacterState:
 
 
 func _set_sanity(value: int) -> void:
-	current_sanity = clamp(value, 0, 999)
+	current_sanity = clamp(value, 0, max_sanity)
 	sanity_changed.emit(current_sanity)
 
 
