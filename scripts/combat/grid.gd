@@ -1,3 +1,4 @@
+extends RefCounted
 class_name Grid
 
 #func is_walkable(pos: Vector3i) -> bool:

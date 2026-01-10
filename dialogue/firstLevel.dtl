@@ -1,7 +1,7 @@
 do Event.set_objective_find_object("Orb")
 do Tutorial.tutorial_lock_camera()
 [background arg="res://art/textures/bg.png" fade="0.0"]
-Whipers of hope
+Whispers of hope
 [wait time="0.7"]
 [background fade="0.0"]
 character (Orb): Find me and I shall grant salvation

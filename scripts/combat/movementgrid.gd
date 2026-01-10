@@ -1,4 +1,4 @@
-extends RefCounted
+extends Grid
 class_name MovementGrid
 
 #region constants
