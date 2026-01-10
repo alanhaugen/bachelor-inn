@@ -80,13 +80,15 @@ func _set_experience(value: int) -> void:
 
 
 func get_sanity_state() -> SanityState:
-	if current_sanity >= 80:
+	var sanity := (float(current_sanity) / max_sanity) * 100.0
+	
+	if sanity >= 80:
 		return SanityState.CALM
-	elif current_sanity >= 60:
+	elif sanity >= 60:
 		return SanityState.UNEASY
-	elif current_sanity >= 40:
+	elif sanity >= 40:
 		return SanityState.DISTORTED
-	elif current_sanity >= 20:
+	elif sanity >= 20:
 		return SanityState.OBSESSED
 	else:
 		return SanityState.DISSOCIATED

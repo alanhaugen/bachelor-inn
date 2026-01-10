@@ -145,10 +145,10 @@ func calc_derived_stats() -> void:
 	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
 	state.max_sanity = state.resistance
-	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
+	state.movement = 4 + floor(data.speed / 3.0)
 	state.current_health = state.max_health
 	state.current_sanity = state.max_sanity
-	state.stability = data.focus - floor(data.endurance / 2.0)
+	state.stability = data.focus - floor(data.mind / 2.0)
 
 
 func _ready() -> void:
