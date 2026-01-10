@@ -2,8 +2,8 @@ extends Node3D
 class_name Character
 ## This class has all the Character visuals
 ##
-## Use this class to with a new scene for
-## new characters and enemies
+## Use this script with a new scene for
+## new characters / enemies
 
 @export_category("Animations")
 @export var idle_animation : SpriteAnim
@@ -46,23 +46,15 @@ func clone() -> Character:
 
 
 func _on_sanity_changed(_in_sanity : int) -> void:
-	#state.current_sanity = in_sanity
-	#if (Main.battle_log):
-	#	var dir := " loses ";
-	#	if current_sanity < in_sanity:
-	#		dir = " gains ";
-	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
-	#state.current_sanity = in_sanity
 	if state.current_sanity <= 0 and state.current_health >= 0:
 		state.faction = CharacterState.Faction.ENEMY
-	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
-	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		data.unit_name = data.unit_name + "'cthulhu"
 		health_bar = health_bar_enemy
-		health_bar_ally.hide();
-		health_bar_enemy.show();
+		health_bar_ally.hide()
+		health_bar_enemy.show()
+		Main.characters.erase(self)
 	if health_bar:
-		update_health_bar();
+		update_health_bar()
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -144,11 +136,11 @@ func calc_derived_stats() -> void:
 	state.defense = 4 + data.endurance
 	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
-	state.max_sanity = state.resistance
+	state.max_sanity = state.resistance + data.mind
 	state.movement = 4 + floor(data.speed / 3.0)
 	state.current_health = state.max_health
 	state.current_sanity = state.max_sanity
-	state.stability = data.focus - floor(data.mind / 2.0)
+	state.stability = max(1, data.focus - data.mind)
 
 
 func _ready() -> void:
@@ -182,28 +174,28 @@ func _ready() -> void:
 	level_up_popup.name_label = data.unit_name;
 	calibrate_level_popup();
 	
-	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate();
-	add_child(skill_choose_popup);
-	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality];
-	skill_choose_popup.hide();
+	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate()
+	add_child(skill_choose_popup)
+	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
+	skill_choose_popup.hide()
 	
-	sprite = SPRITE.instantiate();
+	sprite = SPRITE.instantiate()
 	
-	sprite.translate(Vector3(0,0.8,-0.4));
-	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60));
-	sprite.scale = Vector3(4,4,4);
+	sprite.translate(Vector3(0,0.8,-0.4))
+	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
+	sprite.scale = Vector3(4,4,4)
 	
-	camera = get_viewport().get_camera_3d();
-	update_health_bar();
+	camera = get_viewport().get_camera_3d()
+	update_health_bar()
 	
-	add_child(sprite);
+	add_child(sprite)
 
 
 func _process(_delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
 	if state.is_alive:
-		show_ui(); # hack, TODO: removeme
+		show_ui() # hack, TODO: removeme
 	
 	if camera:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
@@ -212,11 +204,11 @@ func _process(_delta: float) -> void:
 
 
 func hide_ui() -> void:
-	health_bar.hide();
+	health_bar.hide()
 
 
 func show_ui() -> void:
-	health_bar.show();
+	health_bar.show()
 
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
@@ -224,7 +216,6 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
 	state.is_alive = true;
-	#reset();
 	state.grid_position = pos;
 	state.is_moved = true;
 	
