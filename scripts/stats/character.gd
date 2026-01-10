@@ -279,8 +279,8 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.units_map.set_cell_item(state.grid_position, grid_code);
-	#if is_playable:
-	#	sprite.modulate = Color(0.338, 0.338, 0.338, 1.0);
+	if state.is_playable():
+		my_material.set_shader_parameter("grey_tint", true)
 
 
 func reset() -> void:
@@ -291,7 +291,7 @@ func reset() -> void:
 	hide_ui();
 	show();
 	state.is_moved = false;
-#	sprite.modulate = Color(1.0, 1.0, 1.0, 1.0);
+	my_material.set_shader_parameter("grey_tint", false)
 
 
 func die(simulate_only : bool) -> void:

@@ -9,6 +9,7 @@ uniform sampler2D mask_atlas: source_color, filter_nearest;
 uniform int frame_index = 0;
 uniform int frame_columns = 6;
 uniform int frame_rows = 1;
+uniform bool grey_tint = false;
 
 group_uniforms Settings;
 uniform float edge_strength = 1.0;
@@ -46,6 +47,12 @@ void fragment() {
 
     vec4 d = texture(diffuse_atlas, uv);
     if (d.a < 0.5) discard;
+	
+	if (grey_tint)
+	{
+		vec3 grey_color = vec3(0.338, 0.338, 0.338);
+		d.rgb *= grey_color;
+	}
 
     ALBEDO = d.rgb;
 }
