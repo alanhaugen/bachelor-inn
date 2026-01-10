@@ -324,20 +324,18 @@ func update_stat(character: Character, popup: StatPopUp) -> void:
 		#character_script.print_stats();
 		if popup is StatPopUp:
 			var stat_script: StatPopUp = popup;
-			stat_script.icon_texture.texture = character_script.portrait;
-			stat_script.name_label.text = character_script.data.unit_name;
-			stat_script.max_health = character_script.state.max_health;
-			stat_script.health = character_script.state.current_health;
-			stat_script.max_mana = character_script.data.mana;
-			stat_script.mana = character_script.state.current_mana;
-			stat_script.max_sanity = character_script.data.mind;
-			stat_script.sanity = character_script.state.current_sanity;
+			stat_script.icon_texture.texture = character_script.portrait
+			stat_script.name_label.text = character_script.data.unit_name
+			stat_script.max_health = character_script.state.max_health
+			stat_script.health = character_script.state.current_health
+			stat_script.max_sanity = character_script.state.max_sanity
+			stat_script.sanity = character_script.state.current_sanity
 			
-			stat_script.strength = character_script.data.strength;
-			stat_script.mind = character_script.data.mind;
-			stat_script.speed = character_script.data.speed;
-			stat_script.focus = character_script.data.focus;
-			stat_script.endurance = character_script.data.endurance;
+			stat_script.strength = character_script.data.strength
+			stat_script.mind = character_script.data.mind
+			stat_script.speed = character_script.data.speed
+			stat_script.focus = character_script.data.focus
+			stat_script.endurance = character_script.data.endurance
 			
 			stat_script.level = "Level: " + str(character_script.state.current_level);
 			

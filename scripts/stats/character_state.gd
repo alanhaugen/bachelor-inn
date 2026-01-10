@@ -38,13 +38,15 @@ signal level_changed(new_level: int)
 #endregion
 
 #region inferred vars calculated from CharacterData on spawn
-@export var max_health : int;
-@export var max_sanity : int;
-@export var movement : int;
-@export var current_health : int;
-@export var current_sanity : int : set = _set_sanity;
-@export var current_mana: int;
-@export var current_level: int = 1;
+@export var max_health : int
+@export var max_sanity : int
+@export var movement : int
+@export var current_health : int
+@export var current_sanity : int : set = _set_sanity
+@export var current_level : int = 1
+@export var stability : int
+@export var defense : int
+@export var resistance : int
 #endregion
 
 
@@ -99,7 +101,6 @@ func save() -> Dictionary:
 		"experience": experience,
 		"level": level,
 		"current_health": current_health,
-		"current_sanity": current_sanity,
-		"current_mana": current_mana
+		"current_sanity": current_sanity
 	}
 #endregion

@@ -130,16 +130,11 @@ func read(save_slot: int) -> bool:
 		data.unit_name = data_dict["unit_name"]
 		data.speciality = data_dict["speciality"]
 		data.personality = data_dict["personality"]
-		data.health = data_dict["health"]
 		data.strength = data_dict["strength"]
 		data.mind = data_dict["mind"]
 		data.speed = data_dict["speed"]
 		data.focus = data_dict["focus"]
 		data.endurance = data_dict["endurance"]
-		data.defense = data_dict["defense"]
-		data.resistance = data_dict["resistance"]
-		data.luck = data_dict["luck"]
-		data.mana = data_dict["mana"]
 
 		# --- STATE ---
 		var state := CharacterState.new()
@@ -153,7 +148,6 @@ func read(save_slot: int) -> bool:
 		state.level = state_dict["level"]
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
-		state.current_mana = state_dict["current_mana"]
 
 		character.data = data
 		character.state = state

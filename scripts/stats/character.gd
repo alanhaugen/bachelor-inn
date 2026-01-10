@@ -45,26 +45,24 @@ func clone() -> Character:
 	return c
 
 
-func _on_sanity_changed(in_sanity: int) -> void:
+func _on_sanity_changed(_in_sanity : int) -> void:
 	#state.current_sanity = in_sanity
-	if in_sanity > data.mind:
-		in_sanity = data.mind
 	#if (Main.battle_log):
 	#	var dir := " loses ";
 	#	if current_sanity < in_sanity:
 	#		dir = " gains ";
 	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
 	#state.current_sanity = in_sanity
-	if state.current_sanity < 0 and state.current_health > 0:
+	if state.current_sanity <= 0 and state.current_health >= 0:
 		state.faction = CharacterState.Faction.ENEMY
 	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		data.unit_name = data.unit_name + "'cthulhu"
 		health_bar = health_bar_enemy
-	#	health_bar_ally.hide();
-	#	health_bar_enemy.show();
-	#if health_bar:
-	#	update_health_bar();
+		health_bar_ally.hide();
+		health_bar_enemy.show();
+	if health_bar:
+		update_health_bar();
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -131,7 +129,6 @@ func update_health_bar() -> void:
 
 
 func calibrate_level_popup() -> void:
-	level_up_popup.health = data.health;
 	level_up_popup.focus = data.focus;
 	level_up_popup.level = state.current_level;
 	level_up_popup.mind = data.mind;
@@ -153,12 +150,14 @@ func _ready() -> void:
 	health_bar_ally.hide();
 	health_bar_enemy.hide();
 	
-	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
-	state.max_sanity = data.mind
+	state.defense = 4 + data.endurance
+	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
+	state.max_sanity = state.resistance
 	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
 	state.current_health = state.max_health
 	state.current_sanity = state.max_sanity
-	state.current_mana = data.mana
+	state.stability = data.focus - floor(data.endurance / 2.0)
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
