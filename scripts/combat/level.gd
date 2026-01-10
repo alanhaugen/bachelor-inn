@@ -53,6 +53,7 @@ const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
+const PLAYER: PackedScene = preload("res://scenes/grid_items/player.tscn");
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -394,18 +395,15 @@ func _ready() -> void:
 			else:
 				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
-			#new_unit = ENEMY.instantiate();
+			new_unit = PLAYER.instantiate()
 			
 			var data := CharacterData.new()
 
 			var c_state := CharacterState.new()
 			c_state.faction = CharacterState.Faction.ENEMY;
 
-			var _char := Character.new()
-			_char.data = data
-			_char.state = c_state
-			
-			new_unit = _char;
+			new_unit.data = data
+			new_unit.state = c_state
 			
 			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 		elif (get_unit_name(pos) == "Chest"):

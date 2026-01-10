@@ -18,7 +18,12 @@ class_name Character
 @export var data : CharacterData
 @export var state : CharacterState
 
-var current_animation : SpriteAnim = idle_animation
+#region animation state
+var current_animation : SpriteAnim = null
+
+var frame_index : int = 0
+var frame_timer : float = 0.0
+#endregion
 
 #region packed scenes
 const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
@@ -36,6 +41,32 @@ var skill_choose_popup : SkillChoose
 var health_bar_ally : HealthBar
 var health_bar_enemy : HealthBar
 #endregion
+
+
+func play(anim : SpriteAnim) -> void:
+	if anim == null:
+		return
+
+	current_animation = anim;
+	frame_index = 0
+	frame_timer = 0.0
+
+	var mat := material_override as ShaderMaterial
+	if mat == null:
+		push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
+		return
+
+	mat.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
+	mat.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
+	mat.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
+
+	mat.set_shader_parameter("frame_index", 0)
+	mat.set_shader_parameter("frame_columns", current_animation.frame_columns)
+	mat.set_shader_parameter("frame_rows", current_animation.frame_rows)
+
+
+func play_clip(_anim :String) -> void:
+	pass;
 
 
 func clone() -> Character:
@@ -179,19 +210,17 @@ func _ready() -> void:
 	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
 	skill_choose_popup.hide()
 	
-	sprite = SPRITE.instantiate()
+	translate(Vector3(0,1.0,-0.6))
+	rotate(Vector3(1,0,0), deg_to_rad(-60))
+	scale = Vector3(4,4,4)
 	
-	sprite.translate(Vector3(0,0.8,-0.4))
-	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
-	sprite.scale = Vector3(4,4,4)
+	play(idle_animation)
 	
 	camera = get_viewport().get_camera_3d()
 	update_health_bar()
-	
-	add_child(sprite)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
 	if state.is_alive:
@@ -201,6 +230,16 @@ func _process(_delta: float) -> void:
 		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
 		health_bar.position = screen_position_2d - Vector2(3 * 7, 0);
 		health_bar.position.y += 70; # move down a little 
+	
+	if current_animation == null:
+		return
+
+	frame_timer += delta
+	
+	if frame_timer >= 1.0 / current_animation.fps:
+		frame_timer = 0.0
+		frame_index = (frame_index + 1) % (current_animation.frame_columns * current_animation.frame_rows)
+		material_override.set_shader_parameter("frame_index", frame_index)
 
 
 func hide_ui() -> void:

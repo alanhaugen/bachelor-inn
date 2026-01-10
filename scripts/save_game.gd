@@ -2,6 +2,7 @@ extends Resource
 class_name SaveGame
 
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
+const PLAYER: PackedScene = preload("res://scenes/grid_items/player.tscn");
 
 ## Use this to detect old player save files and update them 
 @export var version := 1;
@@ -121,7 +122,7 @@ func read(save_slot: int) -> bool:
 	Main.characters.clear()
 
 	for unit_dict : Dictionary in units:
-		var character := Character.new()
+		var character := PLAYER.instantiate();
 
 		# --- DATA ---
 		var data := CharacterData.new()
