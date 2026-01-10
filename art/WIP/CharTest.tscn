@@ -25,6 +25,7 @@ light_energy = 10.7
 omni_range = 34.36
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
 material_override = SubResource("ShaderMaterial_ei822")
 texture = ExtResource("2_maikb")
 script = ExtResource("1_3aqt1")

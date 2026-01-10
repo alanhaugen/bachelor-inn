@@ -365,9 +365,10 @@ func update_side_bar(character: Character, side_bar: SideBar) -> void:
 		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
-	cursor.hide();
-	units_map.hide();
-	path_arrow.clear();
+	cursor.hide()
+	movement_map.clear()
+	units_map.hide()
+	path_arrow.clear()
 	
 	movement_grid = MovementGrid.new(movement_map);
 	

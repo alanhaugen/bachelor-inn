@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://wo1fe0qm5jjk"]
+[gd_scene load_steps=7 format=3 uid="uid://wo1fe0qm5jjk"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/character.gd" id="1_dg0vw"]
-[ext_resource type="Resource" uid="uid://bdq33ftt7hjjh" path="res://art/WIP/base.tres" id="2_1qt5x"]
 [ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="2_lrf8u"]
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="3_1qt5x"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="4_31n1s"]
@@ -16,6 +15,5 @@ metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [node name="Character" type="Node3D"]
 script = ExtResource("1_dg0vw")
-base_animation = ExtResource("2_1qt5x")
 data = SubResource("Resource_ia0r2")
 state = SubResource("Resource_x6yfg")

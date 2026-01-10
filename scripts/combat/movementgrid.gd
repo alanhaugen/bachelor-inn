@@ -102,18 +102,17 @@ func build_astar() -> AStar3D:
 	# Add points
 	for pos : Vector3i in tile_to_id.keys():
 		var id : int = tile_to_id[pos]
-		astar.add_point(id, Vector3(pos))
+		var cost := get_cost(pos)
+		astar.add_point(id, Vector3(pos), cost)
 
 	# Connect neighbors
 	for pos : Vector3i in cost_map.keys():
 		for dir : Vector3i in DIRECTIONS:
 			var neighbor := pos + dir
 			if is_walkable(neighbor):
-				var cost := get_cost(neighbor)
 				var from_id : int = tile_to_id[pos]
 				var to_id : int = tile_to_id[neighbor]
-				astar.connect_points(from_id, to_id, true)
-				astar.set_point_weight_scale(to_id, cost)
+				astar.connect_points(from_id, to_id, false)
 	
 	return astar
 

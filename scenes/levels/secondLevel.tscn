@@ -1,11 +1,11 @@
-[gd_scene load_steps=46 format=3 uid="uid://djah3auf7nopq"]
+[gd_scene load_steps=46 format=3 uid="uid://byl1oxmtxjlp8"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_83nnx"]
 [ext_resource type="MeshLibrary" uid="uid://d38pmue2k0b7d" path="res://scenes/libraries/GridMapLibrary.tres" id="2_6uwjp"]
 [ext_resource type="MeshLibrary" uid="uid://qbhle1o2885q" path="res://scenes/libraries/SpawnMeshLibrary.tres" id="4_4htc4"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="5_vw0c7"]
 [ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="6_6eke7"]
-[ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/Wenvi.tres" id="7_5q1wa"]
+[ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="7_5q1wa"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_puj55"]
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="8_hpxmd"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="9_hewkd"]
@@ -198,7 +198,7 @@ mesh_library = ExtResource("4_4htc4")
 data = {
 "cells": PackedInt32Array(65533, 65534, 1, 2, 65535, 1, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0)
 }
-metadata/_editor_floor_ = Vector3(0, -4, 0)
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="MovementOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
