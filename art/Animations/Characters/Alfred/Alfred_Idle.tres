@@ -1,9 +1,15 @@
-[gd_resource type="Resource" script_class="SpriteAnim" load_steps=2 format=3 uid="uid://dg1jj5qvf04uy"]
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://dg1jj5qvf04uy"]
 
+[ext_resource type="Texture2D" uid="uid://bgj2u36gkqfj" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred.png" id="1_nibih"]
+[ext_resource type="Texture2D" uid="uid://b8vt3136v8jph" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Mask4.png" id="2_isxp1"]
+[ext_resource type="Texture2D" uid="uid://bhlhu7kwh0gr5" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Normals.png" id="3_lrpdd"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_idi75"]
 
 [resource]
 script = ExtResource("4_idi75")
+diffuse_atlas = ExtResource("1_nibih")
+normal_atlas = ExtResource("3_lrpdd")
+mask_atlas = ExtResource("2_isxp1")
 frame_columns = 1
 fps = 1.0
 metadata/_custom_type_script = "uid://c876dul20yd5j"

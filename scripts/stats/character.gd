@@ -6,9 +6,7 @@ class_name Character
 ## new characters / enemies
 
 @export_category("Animations")
-@export var idle_animation : SpriteAnim
 @export var run_left_animation : SpriteAnim
-@export var run_right_animation : SpriteAnim
 @export var run_up_animation : SpriteAnim
 @export var run_down_animation : SpriteAnim
 
@@ -24,6 +22,8 @@ var current_animation : SpriteAnim = null
 
 var frame_index : int = 0
 var frame_timer : float = 0.0
+
+var my_material : ShaderMaterial = null
 
 @onready var sprite : Sprite3D = $Sprite
 #endregion
@@ -54,18 +54,22 @@ func play(anim : SpriteAnim) -> void:
 	frame_index = 0
 	frame_timer = 0.0
 
-	var mat := sprite.material_override as ShaderMaterial
-	if mat == null:
-		push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
-		return
+	if my_material == null:
+		var mat := sprite.material_override as ShaderMaterial
+		if mat == null:
+			push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
+			return
+		
+		my_material = mat.duplicate(true)
+		sprite.material_override = my_material
+	
+	my_material.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
+	my_material.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
+	my_material.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
 
-	mat.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
-	mat.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
-	mat.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
-
-	mat.set_shader_parameter("frame_index", 0)
-	mat.set_shader_parameter("frame_columns", current_animation.frame_columns)
-	mat.set_shader_parameter("frame_rows", current_animation.frame_rows)
+	my_material.set_shader_parameter("frame_index", 0)
+	my_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
+	my_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
 
 
 func play_clip(_anim :String) -> void:
@@ -217,7 +221,7 @@ func _ready() -> void:
 	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
 	sprite.scale = Vector3(4,4,4)
 	
-	play(idle_animation)
+	play(run_down_animation)
 	
 	camera = get_viewport().get_camera_3d()
 	update_health_bar()

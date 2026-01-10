@@ -1,0 +1,28 @@
+[gd_scene load_steps=8 format=3 uid="uid://dlep77mvjc7yx"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_y8lir"]
+[ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="2_77egv"]
+[ext_resource type="Texture2D" uid="uid://62qni0klik8s" path="res://art/textures/andreas.png" id="3_em6gy"]
+[ext_resource type="Resource" uid="uid://b5tfb3fssigcy" path="res://art/Animations/Characters/Alfred/Alfred_Moving_D.tres" id="4_7m2yx"]
+[ext_resource type="Resource" uid="uid://du1thdha7r8q8" path="res://art/Animations/Characters/Alfred/Alfred_Moving_L.tres" id="5_em6gy"]
+[ext_resource type="Resource" uid="uid://80eyissy4tnr" path="res://art/Animations/Characters/Alfred/Alfred_Moving_U.tres" id="6_4l60c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4l60c"]
+render_priority = 0
+shader = ExtResource("2_77egv")
+shader_parameter/frame_index = 0
+shader_parameter/frame_columns = 6
+shader_parameter/frame_rows = 1
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_tint = Color(1, 1, 1, 1)
+shader_parameter/normal_tilt = 0.82000003895
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[node name="Character" instance=ExtResource("1_y8lir")]
+material_override = SubResource("ShaderMaterial_4l60c")
+texture = ExtResource("3_em6gy")
+idle_animation = ExtResource("4_7m2yx")
+run_left_animation = ExtResource("5_em6gy")
+run_up_animation = ExtResource("6_4l60c")
+run_down_animation = ExtResource("4_7m2yx")

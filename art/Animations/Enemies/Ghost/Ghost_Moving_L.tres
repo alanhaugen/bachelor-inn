@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://b86jeecevuihs"]
+
+[ext_resource type="Texture2D" uid="uid://cohsxryak3b6j" path="res://art/Animations/Enemies/Ghost/Texture/L_ghostwalkcycleanim_basecolour.png" id="1_i6ggx"]
+[ext_resource type="Texture2D" uid="uid://cbhvanyk8sws7" path="res://art/Animations/Enemies/Ghost/Texture/L_ghostwalkcycleanim_mask4.png" id="2_5ratb"]
+[ext_resource type="Texture2D" uid="uid://d3b1aoy1mcdml" path="res://art/Animations/Enemies/Ghost/Texture/L_ghostwalkcycleanim_normal.png" id="3_8mgtu"]
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_2wfvf"]
+
+[resource]
+script = ExtResource("4_2wfvf")
+diffuse_atlas = ExtResource("1_i6ggx")
+normal_atlas = ExtResource("3_8mgtu")
+mask_atlas = ExtResource("2_5ratb")
+metadata/_custom_type_script = "uid://c876dul20yd5j"
