@@ -37,22 +37,23 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	#	weapon_crit = aggressor.state.weapon.weapon_critical;
 	
 	@warning_ignore("integer_division")
-	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.data.defense / 2);
+	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.state.defense / 2);
 	
 	aggressor.state.is_moved = true;
 	
 	if simulate_only == false:
 		# Miss logic
 		@warning_ignore("integer_division")
-		if (randi_range(0,100) < (victim.data.speed * 3 + victim.data.luck) / 2):
+		if (randi_range(0,100) < (victim.data.speed * 3 + victim.data.focus) / 2):
 			Main.battle_log.text = ("Miss\n") + Main.battle_log.text;
 			print ("Miss");
 			attack_strength = 0;
+			# TODO: double attack if difference in speed between an enemy is high enough
 			return;
 		
 		# Critical logic
 		@warning_ignore("integer_division")
-		if (randi_range(0,100) < (aggressor.data.luck / 2) + weapon_crit):
+		if (randi_range(0,100) < (aggressor.data.focus / 2) + weapon_crit):
 			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
 			print("Critical hit!");
 			attack_strength *= 2;
@@ -69,12 +70,12 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 		# Do not go insane on victory
 		if victim.state.current_health > 0:
 			@warning_ignore("integer_division")
-			aggressor.state.current_sanity -= victim.data.strength / aggressor.data.mind;
+			aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
 			#Main.level.update_stat(aggressor, Main.level.stat_popup_player);
 			#Main.level.update_stat(victim, Main.level.stat_popup_enemy);
 	else:
 		@warning_ignore("integer_division")
-		victim.state.current_sanity -= aggressor.data.strength / victim.data.mind;
+		victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
 		#Main.level.update_stat(aggressor, Main.level.stat_popup_enemy);
 		#Main.level.update_stat(victim, Main.level.stat_popup_player);
 	if victim.state.current_health <= 0:

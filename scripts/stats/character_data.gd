@@ -56,16 +56,11 @@ enum Personality
 @export var speciality : Speciality = Speciality.Generic
 @export var personality : Personality = Personality.Normal
 
-@export var health := 4
 @export var strength := 4
 @export var mind := 4
 @export var speed := 4
-@export var focus := 4 #
-@export var endurance := 4 #
-@export var defense := 4
-@export var resistance := 4 #
-@export var luck := 4
-@export var mana := 4 #
+@export var focus := 4
+@export var endurance := 4
 
 
 func duplicate_data() -> CharacterData:
@@ -77,14 +72,9 @@ func save() -> Dictionary:
 		"unit_name": unit_name,
 		"speciality": speciality,
 		"personality": personality,
-		"health": health,
 		"strength": strength,
 		"mind": mind,
 		"speed": speed,
 		"focus": focus,
-		"endurance": endurance,
-		"defense": defense,
-		"resistance": resistance,
-		"luck": luck,
-		"mana": mana
+		"endurance": endurance
 	}

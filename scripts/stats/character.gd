@@ -178,26 +178,24 @@ func clone() -> Character:
 	return c
 
 
-func _on_sanity_changed(in_sanity: int) -> void:
+func _on_sanity_changed(_in_sanity : int) -> void:
 	#state.current_sanity = in_sanity
-	if in_sanity > data.mind:
-		in_sanity = data.mind
 	#if (Main.battle_log):
 	#	var dir := " loses ";
 	#	if current_sanity < in_sanity:
 	#		dir = " gains ";
 	#	Main.battle_log.text = unit_name + dir + str(abs(current_sanity - in_sanity)) + " sanity\n" + Main.battle_log.text;
 	#state.current_sanity = in_sanity
-	if state.current_sanity < 0 and state.current_health > 0:
+	if state.current_sanity <= 0 and state.current_health >= 0:
 		state.faction = CharacterState.Faction.ENEMY
 	#	Main.level.units_map.set_cell_item(grid_position, Main.level.enemy_code);
 	#	Main.battle_log.text = unit_name +" has gone insane!\n" + Main.battle_log.text;
 		data.unit_name = data.unit_name + "'cthulhu"
 		health_bar = health_bar_enemy
-	#	health_bar_ally.hide();
-	#	health_bar_enemy.show();
-	#if health_bar:
-	#	update_health_bar();
+		health_bar_ally.hide();
+		health_bar_enemy.show();
+	if health_bar:
+		update_health_bar();
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -259,12 +257,17 @@ func _on_experience_changed(in_experience: int) -> void:
 
 func recalc_derived_stats() -> void:
 	## Derived from data only - safe to call after level up, after data changes, after load etc..
-	state.max_health = data.health + data.endurance + floor(data.strength / 2.0)
-	state.movement = 4 + floor(data.speed / 3.0)
+	state.defense = 4 + data.endurance
+	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
+	state.max_sanity = state.resistance
+	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
+	state.current_health = state.max_health
+	state.current_sanity = state.max_sanity
+	state.stability = data.focus - floor(data.endurance / 2.0)
 
 	# Optional: clamp current values so they remain valid
 	state.current_health = clamp(state.current_health, 0, state.max_health)
-	state.current_mana = max(state.current_mana, 0)
 	state.current_sanity = clamp(state.current_sanity, 0, 100)
 
 
@@ -273,7 +276,6 @@ func init_current_stats_full() -> void:
 	recalc_derived_stats()
 	state.current_health = state.max_health
 	state.current_sanity = data.mind
-	state.current_mana = data.mana
 	
 	
 func update_health_bar() -> void:
@@ -283,7 +285,6 @@ func update_health_bar() -> void:
 
 
 func calibrate_level_popup() -> void:
-	level_up_popup.health = data.health;
 	level_up_popup.focus = data.focus;
 	level_up_popup.level = state.current_level;
 	level_up_popup.mind = data.mind;
@@ -320,12 +321,6 @@ func _ready() -> void:
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
 	#state.skills.append(SkillData.all_skills[data.speciality][data.personality % (SkillData.all_skills[data.speciality].size() - 1)]);
-	state.max_health = data.health + data.endurance + floor(data.strength / 2.0);
-	state.max_sanity = data.mind
-	state.movement = 4 + floor(data.speed / 3.0) ## Movement range
-	state.current_health = state.max_health
-	state.current_sanity = state.max_sanity
-	state.current_mana = data.mana
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
