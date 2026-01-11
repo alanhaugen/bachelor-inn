@@ -27,42 +27,54 @@ func minimax(state : GameState, depth : int) -> float:
 func evaluate(state : GameState) -> int:
 	var score := 0
 	
-	# Collect player positions
+	# Collect all player units and their positions
+	var player_units := []
 	var player_positions := []
 	for unit in state.units:
 		if not unit.state.is_enemy():
-			player_positions.append(unit.state.grid_position) # or unit.position if using world pos
+			player_units.append(unit)
+			player_positions.append(unit.state.grid_position)
 	
 	for unit : Character in state.units:
-		var value : int = unit.state.current_health * 10
-		
+		var unit_value := unit.state.current_health * 10
+
 		if unit.state.is_enemy():
-			score += value
-			if not unit.state.is_moved:
-				score += 2 # mobility bonus
+			# Basic value
+			score += unit_value
 			
-			# Proximity bonus: closer to player is better
+			# Mobility bonus
+			if not unit.state.is_moved:
+				score += 5
+			
+			# Find closest player
 			var closest_dist := INF
-			for player_pos : Vector3i in player_positions:
-				var dist : int = abs(player_pos.x - unit.state.grid_position.x) + abs(player_pos.z - unit.state.grid_position.z)
+			var closest_player : Character = null
+			for player : Character in player_units:
+				var dist : int = abs(player.state.grid_position.x - unit.state.grid_position.x) + abs(player.state.grid_position.z - unit.state.grid_position.z)
 				if dist < closest_dist:
 					closest_dist = dist
-			# Inverse distance: closer = higher score
-			score += max(0, 10 - closest_dist)  # tweak 10 to adjust weight
+					closest_player = player
 			
-			var dist_score := 50 - closest_dist * 5
-			score += dist_score
-
-			if unit.state.is_moved:
-				score += 5
-
+			# Distance incentive: closer to player = better
+			score += max(0, 10 - closest_dist)
+			
+			# Big bonus for being able to attack next turn
 			if closest_dist <= unit.state.movement:
-				score += 40
+				score += 100  # strong incentive to attack
+				
+				# Bonus for finishing off low-health target
+				if closest_player:
+					score += max(0, 20 - closest_player.state.current_health)
+			
+			# Slight penalty for moving away from closest player
+			score -= closest_dist * 2
+
 		else:
-			score -= value
+			# Player units reduce total score
+			score -= unit_value
 			if not unit.state.is_moved:
 				score -= 2
-	
+
 	return score
 
 
