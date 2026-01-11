@@ -1,0 +1,67 @@
+[gd_scene load_steps=13 format=3 uid="uid://y5tpvolqaujo"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7j5gw"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5jcol"]
+material = SubResource("StandardMaterial3D_7j5gw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bq7qd"]
+albedo_color = Color(0, 0, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_itnb8"]
+material = SubResource("StandardMaterial3D_bq7qd")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_205ci"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ilfx0"]
+material = SubResource("StandardMaterial3D_205ci")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_66js1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_h0yor"]
+material = SubResource("StandardMaterial3D_66js1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_46v0j"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_n2vc2"]
+material = SubResource("StandardMaterial3D_46v0j")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tt4eu"]
+albedo_color = Color(0.42352942, 0.49019608, 0.5019608, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qw6pg"]
+material = SubResource("StandardMaterial3D_tt4eu")
+
+[node name="Scene Root" type="Node3D"]
+
+[node name="Victory" type="MeshInstance3D" parent="."]
+transparency = 0.4
+mesh = SubResource("BoxMesh_5jcol")
+
+[node name="Trigger1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_itnb8")
+
+[node name="Trigger2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_ilfx0")
+
+[node name="Trigger3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_h0yor")
+
+[node name="Trigger4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_n2vc2")
+
+[node name="Trigger5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+transparency = 0.4
+mesh = SubResource("BoxMesh_qw6pg")

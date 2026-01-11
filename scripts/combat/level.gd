@@ -22,6 +22,7 @@ var movement_grid : MovementGrid
 @onready var map: GridMap = %TerrainGrid
 @onready var units_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
+@onready var trigger_map: GridMap = %TriggerOverlay
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
 @onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
@@ -356,6 +357,7 @@ func update_side_bar(character: Character, side_bar: SideBar) -> void:
 
 func _ready() -> void:
 	cursor.hide()
+	trigger_map.hide()
 	movement_map.clear()
 	units_map.hide()
 	path_arrow.clear()
