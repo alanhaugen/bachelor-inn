@@ -243,6 +243,15 @@ turbulence_influence_max = 0.18800001
 
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_yuxmn")
+level_name = null
+camera_speed = null
+mouse_drag_sensitivity = null
+minimum_camera_height = null
+maximum_camera_height = null
+minimum_camera_x = null
+maximum_camera_x = null
+minimum_camera_z = null
+maximum_camera_z = null
 
 [node name="TerrainGrid" type="GridMap" parent="."]
 unique_name_in_owner = true

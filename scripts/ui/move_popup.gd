@@ -14,7 +14,7 @@ func _ready() -> void:
 
 func HidePopup() -> void:
 	map.is_in_menu = false;
-	map.path_arrow.clear();
+	map.path_map.clear();
 	move_button.hide();
 	attack_button.hide();
 	wait_button.hide();
@@ -38,8 +38,8 @@ func _on_attack_button_pressed() -> void:
 
 func _on_wait_button_pressed() -> void:
 	map.active_move.execute(map.game_state);
-	map.units_map.set_cell_item(map.active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-	map.units_map.set_cell_item(map.active_move.end_pos, map.player_code_done);
+	map.occupancy_map.set_cell_item(map.active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+	map.occupancy_map.set_cell_item(map.active_move.end_pos, map.player_code_done);
 	HidePopup()
 
 
