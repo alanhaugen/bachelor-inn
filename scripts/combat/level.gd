@@ -11,6 +11,11 @@ class_name Level
 
 @export var level_name :String
 
+var terrain_grid : Grid
+var path_grid : Grid
+var occupancy_grid : Grid
+var trigger_grid : Grid
+var fog_grid : Grid
 var movement_grid : MovementGrid
 
 @export var camera_speed: float = 5.0
@@ -19,12 +24,12 @@ var movement_grid : MovementGrid
 
 @onready var camera: Camera3D = $Camera3D
 @onready var cursor: Sprite3D = $Cursor
-@onready var map: GridMap = %TerrainGrid
-@onready var units_map: GridMap = %OccupancyOverlay
+@onready var terrain_map: GridMap = %TerrainGrid
+@onready var occupancy_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
 @onready var trigger_map: GridMap = %TriggerOverlay
-#@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
-@onready var path_arrow: GridMap = $PathOverlay
+@onready var path_map: GridMap = $PathOverlay
+@onready var fog_map: GridMap = $FogOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
 @onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
 
@@ -150,40 +155,40 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
 	if intersection != null:
 		# Convert world position to grid coordinates
-		var grid_pos: Vector3i = map.local_to_map(map.to_local(intersection));
+		var grid_pos: Vector3i = terrain_map.local_to_map(terrain_map.to_local(intersection));
 		return grid_pos;
 	
 	return Vector3i();
 
 
 func get_tile_name(pos: Vector3) -> String:
-	if map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+	if terrain_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return "null";
-	return map.mesh_library.get_item_name(map.get_cell_item(pos));
+	return terrain_map.mesh_library.get_item_name(terrain_map.get_cell_item(pos));
 
 
 # Expanded the function to do some error searching
 func get_unit_name(pos : Vector3) -> String:
-	var item_id: int = units_map.get_cell_item(pos)
+	var item_id: int = occupancy_map.get_cell_item(pos)
 	if item_id == GridMap.INVALID_CELL_ITEM:
 		return "null"
 		
-	if item_id >= units_map.mesh_library.get_item_list().size():
+	if item_id >= occupancy_map.mesh_library.get_item_list().size():
 		push_warning("Invalid MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
 		return "null"
 	
-	return units_map.mesh_library.get_item_name(item_id)
+	return occupancy_map.mesh_library.get_item_name(item_id)
 
 
 func show_attack_tiles(pos : Vector3i) -> void:
-	path_arrow.clear();
+	path_map.clear();
 	var reachable : Array[Vector3i] = [];
 	
 	for move : Move in current_moves:
 		reachable.append(move.end_pos);
 	
 	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
-		path_arrow.set_cell_item(tile, 0);
+		path_map.set_cell_item(tile, 0);
 
 
 func _input(event: InputEvent) -> void:
@@ -219,7 +224,7 @@ func _input(event: InputEvent) -> void:
 		pos.y = 0;
 		
 		if state == States.CHOOSING_ATTACK:
-			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
 				moves_stack.append(active_move);
 				
@@ -236,7 +241,7 @@ func _input(event: InputEvent) -> void:
 		if (get_tile_name(pos) == "Water"):
 			return
 		
-		var globalPos: Vector3i = map.map_to_local(pos)
+		var globalPos: Vector3i = terrain_map.map_to_local(pos)
 		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z)
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
@@ -288,7 +293,7 @@ func _input(event: InputEvent) -> void:
 				moves_stack.append(active_move);
 				state = States.ANIMATING;
 				create_path(unit_pos, pos); # a-star used for normal character movement
-				path_arrow.clear();
+				path_map.clear();
 			
 			#activeMove.execute();
 			
@@ -298,7 +303,7 @@ func _input(event: InputEvent) -> void:
 			#isUnitSelected = false;
 		else:
 			movement_map.clear();
-			path_arrow.clear();
+			path_map.clear();
 			
 			if selected_unit is Character:
 				var character_script: Character = selected_unit;
@@ -359,10 +364,16 @@ func _ready() -> void:
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
-	units_map.hide()
-	path_arrow.clear()
+	occupancy_map.hide()
+	path_map.clear()
+	fog_map.clear()
 	
-	movement_grid = MovementGrid.new(movement_map);
+	terrain_grid = Grid.new(terrain_map)
+	occupancy_grid = Grid.new(movement_map)
+	trigger_grid = Grid.new(movement_map)
+	movement_grid = MovementGrid.new(movement_map)
+	path_grid = Grid.new(movement_map)
+	fog_grid = Grid.new(fog_map)
 	
 	ribbon = RIBBON.instantiate();
 	add_child(ribbon);
@@ -374,7 +385,7 @@ func _ready() -> void:
 	
 	Main.battle_log = battle_log;
 	
-	var units :Array[Vector3i] = units_map.get_used_cells();
+	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	
 	var characters_placed := 0;
 	
@@ -395,7 +406,7 @@ func _ready() -> void:
 					health = "fresh unit"
 				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health));
 			else:
-				units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
+				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
 			new_unit = PLAYER.instantiate()
 			
@@ -416,7 +427,7 @@ func _ready() -> void:
 		elif (get_unit_name(pos) == "VictoryTrigger"):
 			pass
 		else:
-			units_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
+			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 			
 		if (new_unit != null):
 			#unitArray.append(newUnit);
@@ -484,13 +495,13 @@ func get_unit(pos: Vector3i) -> Character:
 
 func create_path(start : Vector3i, end : Vector3i) -> void:
 	animation_path.clear()
-	path_arrow.clear()
+	path_map.clear()
 	movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
 	
 	var path := movement_grid.get_path(start, end)
 
 	for p in path:
-		var anim_pos := map.map_to_local(p)
+		var anim_pos := terrain_map.map_to_local(p)
 		anim_pos.y = 0
 		animation_path.append(anim_pos)
 
@@ -498,11 +509,11 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 
 
 func reset_all_units() -> void:
-	var units :Array[Vector3i] = units_map.get_used_cells();
+	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (units_map.get_cell_item(pos) == player_code_done):
-			units_map.set_cell_item(pos, player_code);
+		if (occupancy_map.get_cell_item(pos) == player_code_done):
+			occupancy_map.set_cell_item(pos, player_code);
 		var character: Character = get_unit(pos);
 		if character is Character:
 			var character_script: Character = character;
@@ -524,15 +535,15 @@ func MoveAI() -> void:
 
 
 func CheckVictoryConditions() -> void:
-	var units :Array[Vector3i] = units_map.get_used_cells();
+	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
 	var numberOfEnemyUnits  :int = 0;
 	
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (units_map.get_cell_item(pos) == player_code || units_map.get_cell_item(pos) == player_code_done):
+		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			numberOfPlayerUnits += 1;
-		elif (units_map.get_cell_item(pos) == enemy_code):
+		elif (occupancy_map.get_cell_item(pos) == enemy_code):
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
@@ -567,10 +578,10 @@ func _process(delta: float) -> void:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			path_arrow.clear()
+			path_map.clear()
 			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
 			for point in points:
-				path_arrow.set_cell_item(point, 0)
+				path_map.set_cell_item(point, 0)
 			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
@@ -618,10 +629,10 @@ func _process(delta: float) -> void:
 			player_label.show();
 		if (is_player_turn):
 			is_player_turn = false;
-			var units :Array[Vector3i] = units_map.get_used_cells();
+			var units :Array[Vector3i] = occupancy_map.get_used_cells();
 			for i in units.size():
 				var pos :Vector3i = units[i];
-				if (units_map.get_cell_item(pos) == player_code):
+				if (occupancy_map.get_cell_item(pos) == player_code):
 					is_player_turn = true;
 			if (is_player_turn == false):
 				turn_transition_animation_player.play();
@@ -648,8 +659,8 @@ func _process(delta: float) -> void:
 			var code := enemy_code;
 			if is_player_turn:
 				code = player_code_done;
-			units_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-			units_map.set_cell_item(active_move.end_pos, code);
+			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+			occupancy_map.set_cell_item(active_move.end_pos, code);
 			selected_unit.move_to(active_move.end_pos);
 			selected_unit.pause_anim()
 			selected_unit = null;

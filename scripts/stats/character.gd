@@ -267,7 +267,7 @@ func show_ui() -> void:
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	if simulate_only == false:
-		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
+		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
 	state.is_alive = true;
 	state.grid_position = pos;
@@ -277,7 +277,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		var grid_code := Main.level.player_code_done;
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
-		Main.level.units_map.set_cell_item(state.grid_position, grid_code);
+		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
 		if state.is_playable():
 			my_material.set_shader_parameter("grey_tint", true)
 

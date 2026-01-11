@@ -11,7 +11,7 @@ var is_current_player_enemy := true;
 static func from_level(level : Level) -> GameState:
 	var state : GameState = GameState.new();
 	
-	var level_units :Array[Vector3i] = level.units_map.get_used_cells();
+	var level_units :Array[Vector3i] = level.occupancy_map.get_used_cells();
 	for i in range(level_units.size()):
 		var pos : Vector3i = level_units[i];
 		var character : Character = level.get_unit(pos);
@@ -24,11 +24,11 @@ static func from_level(level : Level) -> GameState:
 			var type : String = level.units_map.mesh_library.get_item_name(id);
 			state.terrain.append(Terrain.new(pos, type));
 	
-	var level_terrain :Array[Vector3i] = level.map.get_used_cells();
+	var level_terrain :Array[Vector3i] = level.terrain_map.get_used_cells();
 	for i in range(level_terrain.size()):
 		var pos : Vector3i = level_terrain[i];
-		var id : int = level.map.get_cell_item(pos);
-		var type : String = level.map.mesh_library.get_item_name(id);
+		var id : int = level.terrain_map.get_cell_item(pos);
+		var type : String = level.terrain_map.mesh_library.get_item_name(id);
 		state.terrain.append(Terrain.new(pos, type));
 	
 	state.is_current_player_enemy = (level.is_player_turn == false);

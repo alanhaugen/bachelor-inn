@@ -11,7 +11,6 @@ const DIRECTIONS := [
 #endregion
 
 #region State variables
-var movement_overlay : GridMap
 var cost_map : Dictionary = {} # Vector3i -> int
 var used_cells : Dictionary = {} # Vector3i -> bool
 var tile_to_id : Dictionary = {}   # Vector3i -> int
@@ -21,9 +20,9 @@ var next_id : int = 0
 
 
 #region methods
-func _init(movement_overlay_ : GridMap) -> void:
-	movement_overlay = movement_overlay_
-	movement_overlay.clear();
+func _init(movement_overlay : GridMap) -> void:
+	grid_map = movement_overlay
+	grid_map.clear();
 
 
 func is_inside(pos : Vector3i) -> bool:
@@ -33,7 +32,7 @@ func is_inside(pos : Vector3i) -> bool:
 func is_walkable(pos : Vector3i) -> bool:
 	if not is_inside(pos):
 		return false
-	return movement_overlay.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM
+	return grid_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM
 
 
 func get_cost(pos : Vector3i) -> int:
@@ -45,7 +44,7 @@ func is_blocked(pos : Vector3i) -> bool:
 
 
 func clear() -> void:
-	movement_overlay.clear()
+	grid_map.clear()
 	cost_map.clear()
 	used_cells.clear()
 	id_to_tile.clear()
@@ -85,15 +84,15 @@ func set_tile(tile : GridTile) -> void:
 	
 	cost_map[tile.pos] = tile.weight
 	used_cells[tile.pos] = true
-	movement_overlay.set_cell_item(tile.pos, tile.type)
+	grid_map.set_cell_item(tile.pos, tile.type)
 
 
 func set_move_tile(pos : Vector3i) -> void:
-	movement_overlay.set_cell_item(pos, GridTile.Type.MOVE)
+	grid_map.set_cell_item(pos, GridTile.Type.MOVE)
 
 
 func set_attack_tile(pos : Vector3i) -> void:
-	movement_overlay.set_cell_item(pos, GridTile.Type.ATTACK)
+	grid_map.set_cell_item(pos, GridTile.Type.ATTACK)
 
 
 func build_astar() -> AStar3D:
