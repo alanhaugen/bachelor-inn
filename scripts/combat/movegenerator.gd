@@ -22,6 +22,11 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	frontier.append([start_pos, 0])
 	cost_so_far[start_pos] = 0
 	
+	var movement_range : int = unit.state.movement
+	
+	if unit.state.is_moved:
+		movement_range = 0
+	
 	while frontier.is_empty() == false:
 		# --- priority queue pop (lowest cost first)
 		frontier.sort_custom(func(a : Array, b : Array) -> int: return a[1] < b[1])
@@ -29,7 +34,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 		var pos : Vector3i = current[0]
 		var current_cost : int = current[1]
 		
-		if current_cost > unit.state.movement:
+		if current_cost > movement_range:
 			continue
 		
 		if visited.has(pos):
@@ -69,14 +74,16 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 				frontier.append([dir, new_cost])
 	
 	# --- build commands
-	for tile : Vector3i in reachable:
-		commands.append(Move.new(start_pos, tile))
+	if unit.state.is_moved == false:
+		for tile : Vector3i in reachable:
+			commands.append(Move.new(start_pos, tile))
 	
-	for tile : Vector3i in attacks:
-		var neighbour := start_pos
-		if not is_neighbour(start_pos, tile):
-			neighbour = get_valid_neighbour(tile, reachable)
-		commands.append(Attack.new(start_pos, tile, neighbour))
+	if unit.state.is_ability_used == false:
+		for tile : Vector3i in attacks:
+			var neighbour := start_pos
+			if not is_neighbour(start_pos, tile):
+				neighbour = get_valid_neighbour(tile, reachable)
+			commands.append(Attack.new(start_pos, tile, neighbour))
 	
 	commands.append(Wait.new(start_pos))
 	

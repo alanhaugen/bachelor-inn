@@ -32,6 +32,7 @@ signal level_changed(new_level: int)
 @export var next_level_experience: int = 1;
 @export var is_alive: bool = true;
 @export var is_moved :bool = false;
+@export var is_ability_used :bool = false;
 @export var experience := 0 : set = _set_experience
 @export var level := 1
 @export var skills: Array[Skill] = []

@@ -274,7 +274,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	state.is_moved = true;
 	
 	if simulate_only == false:
-		var grid_code := Main.level.player_code_done;
+		var grid_code := Main.level.player_code;
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
@@ -287,6 +287,7 @@ func reset() -> void:
 	# slowly heal sanity
 	if state.is_playable():
 		state.current_sanity += 1;
+		state.is_ability_used = false
 	hide_ui();
 	show();
 	state.is_moved = false;
@@ -300,7 +301,7 @@ func die(simulate_only : bool) -> void:
 		if state.is_playable():
 			Main.characters.erase(self)
 		Main.level.game_state.units.erase(self)
-		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
+		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
 		queue_free()
 
 

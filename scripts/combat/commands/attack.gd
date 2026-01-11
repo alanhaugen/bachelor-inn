@@ -19,6 +19,9 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	var aggressor : Character = state.get_unit(start_pos);
 	var victim : Character = state.get_unit(attack_pos);
 	
+	if aggressor.state.is_playable():
+		aggressor.state.is_ability_used = true
+	
 	if aggressor.state.weapon:
 		weapon_damage = aggressor.state.weapon.damage_modifier;
 		weapon_crit = aggressor.state.weapon.weapon_critical;
