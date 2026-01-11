@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://dksa5tevjcrv3"]
+
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_5sy8w"]
+[ext_resource type="Texture2D" uid="uid://oe0up5ah46id" path="res://art/Animations/Enemies/Bird/Textures/U_birdwalkcycleanim_basecolour.png" id="1_mpfnm"]
+[ext_resource type="Texture2D" uid="uid://o5ea8cvnhihs" path="res://art/Animations/Enemies/Bird/Textures/U_birdwalkcycleanim_mask4.png" id="2_ck2ap"]
+[ext_resource type="Texture2D" uid="uid://cwm817yagirl1" path="res://art/Animations/Enemies/Bird/Textures/U_birdwalkcycleanim_normal.png" id="3_2gyv2"]
+
+[resource]
+script = ExtResource("1_5sy8w")
+diffuse_atlas = ExtResource("1_mpfnm")
+normal_atlas = ExtResource("3_2gyv2")
+mask_atlas = ExtResource("2_ck2ap")
+metadata/_custom_type_script = "uid://c876dul20yd5j"

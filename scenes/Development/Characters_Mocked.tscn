@@ -1,0 +1,97 @@
+[gd_scene load_steps=15 format=3 uid="uid://ds7aqfhe6tsl1"]
+
+[ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="1_wccbi"]
+[ext_resource type="Texture2D" uid="uid://bgj2u36gkqfj" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred.png" id="2_jitx2"]
+[ext_resource type="Texture2D" uid="uid://b8vt3136v8jph" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Mask4.png" id="3_uwx4l"]
+[ext_resource type="Texture2D" uid="uid://bhlhu7kwh0gr5" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Normals.png" id="4_3x26p"]
+[ext_resource type="Texture2D" uid="uid://6fvma6gce7rg" path="res://art/textures/ParticleTex/Shadow.png" id="5_876xo"]
+[ext_resource type="Texture2D" uid="uid://bsth2fscgg3pj" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_basecolour.png" id="6_f0q3l"]
+[ext_resource type="Texture2D" uid="uid://b3wwusx532va6" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_mask4.png" id="7_lp80c"]
+[ext_resource type="Texture2D" uid="uid://bqphw3tqq54ia" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_normal.png" id="8_6uca1"]
+[ext_resource type="Texture2D" uid="uid://d3rmov2pcy31s" path="res://art/Animations/Enemies/Bird/Textures/D_Idle_birdwalkcycleanim_basecolour.png" id="9_b28ho"]
+[ext_resource type="Texture2D" uid="uid://c731vcyjq2eln" path="res://art/Animations/Enemies/Bird/Textures/D_Idle_birdwalkcycleanim_mask4.png" id="10_8vpci"]
+[ext_resource type="Texture2D" uid="uid://cpsjjxjq33agg" path="res://art/Animations/Enemies/Bird/Textures/D_Idle_birdwalkcycleanim_normal.png" id="11_keka5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n037y"]
+render_priority = 0
+shader = ExtResource("1_wccbi")
+shader_parameter/diffuse_tex = ExtResource("2_jitx2")
+shader_parameter/normal_map = ExtResource("4_3x26p")
+shader_parameter/edge_mask = ExtResource("3_uwx4l")
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_tint = Color(1.4687854, 0.67581093, 0.7721007, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i1qrp"]
+render_priority = 0
+shader = ExtResource("1_wccbi")
+shader_parameter/diffuse_tex = ExtResource("6_f0q3l")
+shader_parameter/normal_map = ExtResource("8_6uca1")
+shader_parameter/edge_mask = ExtResource("7_lp80c")
+shader_parameter/edge_strength = 3.115
+shader_parameter/edge_tint = Color(1.4687854, 0.67581093, 0.7721007, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chybx"]
+render_priority = 0
+shader = ExtResource("1_wccbi")
+shader_parameter/diffuse_tex = ExtResource("9_b28ho")
+shader_parameter/normal_map = ExtResource("11_keka5")
+shader_parameter/edge_mask = ExtResource("10_8vpci")
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_tint = Color(1, 0.4509804, 0.5176471, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[node name="Node3D" type="Node3D"]
+
+[node name="Alfred" type="Node3D" parent="."]
+transform = Transform3D(5.465, 0, 0, 0, 5.465, 0, 0, 0, 5.465, -1.2870721, 0, 0)
+
+[node name="Character" type="Sprite3D" parent="Alfred"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.003604412, 0.16470823, 0)
+material_override = SubResource("ShaderMaterial_n037y")
+texture = ExtResource("2_jitx2")
+
+[node name="Shadow" type="Sprite3D" parent="Alfred"]
+transform = Transform3D(1.8619149, 0, 0, 0, -2.32115e-08, -1, 0, 0.53101724, -4.3711385e-08, 0, 0.0062717497, 0.00058393925)
+pixel_size = 0.001
+texture = ExtResource("5_876xo")
+
+[node name="Ghost" type="Node3D" parent="."]
+transform = Transform3D(5.465, 0, 0, 0, 5.465, 0, 0, 0, 5.465, 1.2953475, 0, 0)
+
+[node name="Character" type="Sprite3D" parent="Ghost"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04706204, 0.16470823, 0)
+material_override = SubResource("ShaderMaterial_i1qrp")
+texture = ExtResource("2_jitx2")
+
+[node name="Shadow" type="Sprite3D" parent="Ghost"]
+transform = Transform3D(1.486477, 0, 0, 0, -1.917941e-08, -1.0943745, 0, 0.43877375, -4.7836632e-08, -0.08663125, 0.0062717497, 0.00058393925)
+pixel_size = 0.001
+texture = ExtResource("5_876xo")
+
+[node name="Bird" type="Node3D" parent="."]
+transform = Transform3D(5.465, 0, 0, 0, 5.465, 0, 0, 0, 5.465, 3.244283, 0, 0)
+
+[node name="Character" type="Sprite3D" parent="Bird"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04706204, 0.16520074, 0)
+material_override = SubResource("ShaderMaterial_chybx")
+texture = ExtResource("2_jitx2")
+
+[node name="Shadow" type="Sprite3D" parent="Bird"]
+transform = Transform3D(1.344381, 0, 0, 0, -2.1847837e-08, -1, 0, 0.4998203, -4.3711385e-08, -0.057207048, 0.0062717497, 0.00058393925)
+pixel_size = 0.001
+texture = ExtResource("5_876xo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.45270583, -0.72990024, 0.51215535, 0.2433056, 0.65370625, 0.7165686, -0.8578227, -0.19978453, 0.4735254, 14.462366, 10.839102, 9.702106)
+light_color = Color(1, 0.78084016, 0.60053676, 1)
+light_energy = 0.304
+light_indirect_energy = 2.894
+sky_mode = 1
