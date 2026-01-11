@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="LevelOrder" load_steps=2 format=3 uid="uid://bsojfooc724fi"]
+
+[ext_resource type="Script" uid="uid://cxpf6awrsq5lp" path="res://scripts/level_order.gd" id="1_tnguu"]
+
+[resource]
+script = ExtResource("1_tnguu")
+levels = Array[String](["first", "second", "third"])
+metadata/_custom_type_script = "uid://cxpf6awrsq5lp"

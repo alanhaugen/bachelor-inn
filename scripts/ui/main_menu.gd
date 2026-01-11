@@ -10,13 +10,13 @@ extends Node3D
 @onready var levelButton: Button = $UI/VBoxContainer/LevelSelect/LoadMap0;
 
 ## Names of levels in the order they will be played
-@export var levels: Array[String];
+@export var levels_order: LevelOrder
 
 #region: --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
 	Main.world = world;
-	Main.levels = levels;
+	Main.levels = levels_order.levels;
 	
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	
