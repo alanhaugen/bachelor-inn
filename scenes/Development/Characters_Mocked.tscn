@@ -91,6 +91,7 @@ texture = ExtResource("5_876xo")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.45270583, -0.72990024, 0.51215535, 0.2433056, 0.65370625, 0.7165686, -0.8578227, -0.19978453, 0.4735254, 14.462366, 10.839102, 9.702106)
+visible = false
 light_color = Color(1, 0.78084016, 0.60053676, 1)
 light_energy = 0.304
 light_indirect_energy = 2.894

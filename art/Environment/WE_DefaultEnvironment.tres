@@ -1,4 +1,4 @@
-[gd_resource type="Environment" load_steps=0 format=3 uid="uid://dupp65trea8t0"]
+[gd_resource type="Environment" format=3 uid="uid://dupp65trea8t0"]
 
 [resource]
 background_mode = 1
@@ -8,24 +8,26 @@ ambient_light_color = Color(0.5729883, 0.5729883, 0.5729883, 1)
 ambient_light_energy = 0.17
 tonemap_mode = 3
 ssao_enabled = true
-ssao_radius = 2.15
+ssao_radius = 1.89
+ssao_power = 1.9792615
+ssao_sharpness = 0.0
 glow_enabled = true
-glow_levels/1 = 2.94
 glow_levels/3 = 0.0
-glow_levels/5 = 0.0
 glow_normalized = true
-glow_intensity = 0.0
+glow_intensity = 8.0
 glow_strength = 0.5
-glow_bloom = 0.19
+glow_bloom = 0.3
 glow_blend_mode = 0
-glow_hdr_threshold = 0.69
+glow_hdr_threshold = 0.52
 fog_enabled = true
 fog_light_color = Color(0, 0, 0, 1)
-fog_light_energy = 0.8
+fog_light_energy = 0.0
 fog_sun_scatter = 0.01
-fog_density = 0.0296
+fog_density = 0.0
 fog_height = -0.2
 fog_height_density = 2.5615
 fog_depth_curve = 0.59460396
 fog_depth_begin = 45.5
 fog_depth_end = 98.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0
