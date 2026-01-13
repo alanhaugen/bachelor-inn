@@ -361,6 +361,10 @@ func update_side_bar(character: Character, side_bar: SideBar) -> void:
 		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
+	Main.camera_controller.camera.make_current()
+	camera.clear_current()
+	camera = Main.camera_controller.camera
+	
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
