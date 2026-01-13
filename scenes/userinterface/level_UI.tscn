@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bq1l1b16txwtp"]
+[gd_scene load_steps=8 format=3 uid="uid://bq1l1b16txwtp"]
 
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/userinterface/health_bar.tscn" id="1_u2joq"]
 [ext_resource type="PackedScene" uid="uid://c7ihgs3168ojs" path="res://scenes/userinterface/sidebar.tscn" id="2_b5cm8"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/userinterface/move_popup.tscn" id="5_3v1x8"]
 [ext_resource type="PackedScene" uid="uid://dglwehopt2m4y" path="res://scenes/userinterface/health_bar_enemy.tscn" id="6_u6dcv"]
 [ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="7_b5cm8"]
-[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="8_0bx5w"]
 
 [node name="LevelUi" type="Control"]
 layout_mode = 3
@@ -38,8 +37,8 @@ offset_bottom = 261.11002
 
 [node name="GUI_POPUP" parent="Character" instance=ExtResource("4_f576u")]
 layout_mode = 1
-offset_top = 320.885
-offset_bottom = 320.885
+offset_top = 579.0
+offset_bottom = 579.0
 
 [node name="MovePopup" parent="Character" instance=ExtResource("5_3v1x8")]
 layout_mode = 1
@@ -82,15 +81,3 @@ grow_horizontal = 1
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-
-[node name="TurnTransition" parent="Interface" instance=ExtResource("8_0bx5w")]
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 953.77
-offset_top = 304.695
-offset_right = 953.77
-offset_bottom = 304.695
-grow_horizontal = 1
-grow_vertical = 1
