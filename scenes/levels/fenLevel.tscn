@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene load_steps=4 format=3 uid="uid://kkgvyut22uqr"]
 
-[ext_resource type="PackedScene" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
+[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
+[ext_resource type="PackedScene" uid="uid://bq1l1b16txwtp" path="res://scenes/userinterface/level_UI.tscn" id="2_65gsn"]
 
 [sub_resource type="FogMaterial" id="FogMaterial_2ubu0"]
 density = 8.0
@@ -10,8 +11,14 @@ edge_fade = 0.42870885
 
 [node name="Map3d" instance=ExtResource("1_xwjaq")]
 level_name = "first fen edition"
+camera_speed = 5.0
+mouse_drag_sensitivity = 50.0
 minimum_camera_height = 10.0
 maximum_camera_height = 30.0
+minimum_camera_x = -10.0
+maximum_camera_x = 100.0
+minimum_camera_z = -10.0
+maximum_camera_z = 10.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {
@@ -59,3 +66,5 @@ material = SubResource("FogMaterial_2ubu0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.91118, 6.2290134, -0.8623657)
 size = Vector3(4.32428, 14.72998, 23.24768)
 material = SubResource("FogMaterial_2ubu0")
+
+[node name="LevelUi" parent="." index="16" instance=ExtResource("2_65gsn")]

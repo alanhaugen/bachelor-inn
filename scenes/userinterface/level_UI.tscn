@@ -22,28 +22,61 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="HealthBar" parent="Character" instance=ExtResource("1_u2joq")]
-layout_mode = 0
-
 [node name="GUI_POPUP2" parent="Character" instance=ExtResource("2_b5cm8")]
 layout_mode = 0
-offset_top = 0.0
-offset_bottom = 0.0
+offset_left = 166.195
+offset_top = 253.145
+offset_right = 166.195
+offset_bottom = 253.145
+
+[node name="HealthBar" parent="Character" instance=ExtResource("1_u2joq")]
+layout_mode = 0
+offset_left = 267.475
+offset_top = 257.11
+offset_right = 299.475
+offset_bottom = 261.11002
 
 [node name="GUI_POPUP" parent="Character" instance=ExtResource("4_f576u")]
 layout_mode = 1
+offset_top = 320.885
+offset_bottom = 320.885
 
 [node name="MovePopup" parent="Character" instance=ExtResource("5_3v1x8")]
 layout_mode = 1
+offset_left = 156.585
+offset_top = 296.63
+offset_right = 156.585
+offset_bottom = 296.63
 
 [node name="HealthBar2" parent="Character" instance=ExtResource("6_u6dcv")]
 layout_mode = 0
+offset_left = 510.82
+offset_top = 360.525
+offset_right = 542.81995
+offset_bottom = 364.52502
 
 [node name="Ribbon" parent="Character" instance=ExtResource("7_b5cm8")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 302.375
+offset_top = 145.71
+offset_right = 302.375
+offset_bottom = 145.71
+grow_vertical = 1
+pivot_offset = Vector2(599.03, 448.54)
 
 [node name="SkillChoose" parent="Character" instance=ExtResource("3_0bx5w")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 181.485
+offset_top = 0.0
+offset_right = 181.485
+offset_bottom = 0.0
+grow_horizontal = 1
 
 [node name="Interface" type="Control" parent="."]
 anchors_preset = 0
@@ -51,4 +84,13 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="TurnTransition" parent="Interface" instance=ExtResource("8_0bx5w")]
-layout_mode = 1
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 953.77
+offset_top = 304.695
+offset_right = 953.77
+offset_bottom = 304.695
+grow_horizontal = 1
+grow_vertical = 1

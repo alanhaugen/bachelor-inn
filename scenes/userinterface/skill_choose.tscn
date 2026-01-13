@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c13naitq2e06n" path="res://scripts/ui/skill_choose.gd" id="1_4h7er"]
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_nkx81"]
 [ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/userinterface/button_theme.tres" id="3_nkx81"]
-[ext_resource type="Texture2D" uid="uid://b33jkq5s683ck" path="res://art/textures/Orb.png" id="4_uc41p"]
+[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="4_uc41p"]
 
 [node name="SkillChoose" type="Control"]
 layout_mode = 3
