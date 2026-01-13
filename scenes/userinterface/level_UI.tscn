@@ -1,0 +1,54 @@
+[gd_scene load_steps=9 format=3 uid="uid://bq1l1b16txwtp"]
+
+[ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/userinterface/health_bar.tscn" id="1_u2joq"]
+[ext_resource type="PackedScene" uid="uid://c7ihgs3168ojs" path="res://scenes/userinterface/sidebar.tscn" id="2_b5cm8"]
+[ext_resource type="PackedScene" uid="uid://qp38bshnyq3h" path="res://scenes/userinterface/skill_choose.tscn" id="3_0bx5w"]
+[ext_resource type="PackedScene" uid="uid://crtk4ey1dcsr4" path="res://scenes/userinterface/pop_up.tscn" id="4_f576u"]
+[ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/userinterface/move_popup.tscn" id="5_3v1x8"]
+[ext_resource type="PackedScene" uid="uid://dglwehopt2m4y" path="res://scenes/userinterface/health_bar_enemy.tscn" id="6_u6dcv"]
+[ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="7_b5cm8"]
+[ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="8_0bx5w"]
+
+[node name="LevelUi" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Character" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="HealthBar" parent="Character" instance=ExtResource("1_u2joq")]
+layout_mode = 0
+
+[node name="GUI_POPUP2" parent="Character" instance=ExtResource("2_b5cm8")]
+layout_mode = 0
+offset_top = 0.0
+offset_bottom = 0.0
+
+[node name="GUI_POPUP" parent="Character" instance=ExtResource("4_f576u")]
+layout_mode = 1
+
+[node name="MovePopup" parent="Character" instance=ExtResource("5_3v1x8")]
+layout_mode = 1
+
+[node name="HealthBar2" parent="Character" instance=ExtResource("6_u6dcv")]
+layout_mode = 0
+
+[node name="Ribbon" parent="Character" instance=ExtResource("7_b5cm8")]
+layout_mode = 1
+
+[node name="SkillChoose" parent="Character" instance=ExtResource("3_0bx5w")]
+layout_mode = 1
+
+[node name="Interface" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="TurnTransition" parent="Interface" instance=ExtResource("8_0bx5w")]
+layout_mode = 1
