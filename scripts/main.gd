@@ -29,6 +29,9 @@ var battle_log: Label;
 ## Global UI Scale
 var ui_scale: float = 1.0;#2.4;
 
+## Interface to operate camera
+var camera_controller: CameraController;
+
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 #endregion

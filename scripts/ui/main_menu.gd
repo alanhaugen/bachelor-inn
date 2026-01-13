@@ -12,11 +12,14 @@ extends Node3D
 ## Names of levels in the order they will be played
 @export var levels_order: LevelOrder
 
+@onready var camera_controller: CameraController = $World/CameraScene
+
 #region: --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
 	Main.world = world;
 	Main.levels = levels_order.levels;
+	Main.camera_controller = camera_controller;
 	
 	$UI/VBoxContainer/LevelSelect.visible = false;
 	

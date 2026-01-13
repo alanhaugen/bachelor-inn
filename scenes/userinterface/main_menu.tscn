@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=30 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
@@ -9,6 +9,7 @@
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="7_btxxm"]
 [ext_resource type="AudioStream" uid="uid://vuqtugxaq7oo" path="res://audio/fantasy-rpg-exploration-v2-461303.mp3" id="8_jpndq"]
+[ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
 texture = ExtResource("3_v8ire")
@@ -310,6 +311,8 @@ text = "Quit"
 stream = ExtResource("8_jpndq")
 autoplay = true
 parameters/looping = true
+
+[node name="CameraScene" parent="World" instance=ExtResource("10_0a1r8")]
 
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap1" to="." method="_on_load_map_1_pressed"]
