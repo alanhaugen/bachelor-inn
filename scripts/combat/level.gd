@@ -380,6 +380,7 @@ func _ready() -> void:
 	camera.clear_current()
 	camera = Main.camera_controller.camera
 	camera_controller = Main.camera_controller
+	camera_controller.setup_minmax_positions(minimum_camera_x, maximum_camera_x, minimum_camera_z, maximum_camera_z)
 	camera_controller.springarm_length_maximum = maximum_camera_height
 	camera_controller.springarm_length_minimum = minimum_camera_height
 	
@@ -628,15 +629,7 @@ func _process(delta: float) -> void:
 		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		#camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		
-		#clamp camera positions
-		if camera.position.x > maximum_camera_x:
-			camera.position.x = maximum_camera_x
-		if camera.position.x < minimum_camera_x:
-			camera.position.x = minimum_camera_x
-		if camera.position.z < minimum_camera_z:
-			camera.position.z = minimum_camera_z
-		if camera.position.z > maximum_camera_z:
-			camera.position.z = maximum_camera_z
+
 		
 		
 		if(tutorial_camera_moved == true):

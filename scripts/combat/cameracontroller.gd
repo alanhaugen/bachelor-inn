@@ -16,10 +16,10 @@ class_name CameraController extends Node3D
 ## convers 80% of the remaining distance every second
 var _lerp_weight : float;
 
-var _camera_max_x : float;
-var _camera_min_x : float;
-var _camera_max_z : float;
-var _camera_min_z : float;
+var _pivot_max_x : float;
+var _pivot_min_x : float;
+var _pivot_max_z : float;
+var _pivot_min_z : float;
 
 enum CameraStates {
 	FREE, ## player controlled
@@ -58,10 +58,10 @@ func _process(delta: float) -> void:
 
 #region Setup functions
 func setup_minmax_positions(minimum_x: float, maximum_x: float, minimum_z: float, maximum_z: float) -> void:
-	_camera_min_x = minimum_x
-	_camera_max_x = maximum_x
-	_camera_min_z = minimum_z
-	_camera_max_z = maximum_z
+	_pivot_min_x = minimum_x
+	_pivot_max_x = maximum_x
+	_pivot_min_z = minimum_z
+	_pivot_max_z = maximum_z
 
 #endregion
 
@@ -91,19 +91,44 @@ func project_ray_normal(screen_point: Vector2) -> Vector3:
 ## Set the target location
 func set_pivot_target_transform(target_transform:Transform3D) -> void:
 	_pivot_target_transform = target_transform
+	_clamp_pivot_target_translation()
 
 func add_pivot_target_translate(added_translate: Vector3) -> void:
 	_pivot_target_transform.origin += added_translate
+	_clamp_pivot_target_translation()
 
 func set_pivot_transform(target_transform:Transform3D) -> void:
 	_pivot_target_transform = target_transform
 	pivot.transform = target_transform
+	_clamp_pivot_translation()
 
 func add_pivot_translate(added_translate: Vector3) -> void:
 	_pivot_target_transform.origin += added_translate
 	pivot.transform.origin += added_translate
+	_clamp_pivot_translation()
+
+func _clamp_pivot_target_translation() -> void:
+	if _pivot_target_transform.origin.x > _pivot_max_x:
+		_pivot_target_transform.origin.x = _pivot_max_x
+	if _pivot_target_transform.origin.x < _pivot_min_x:
+		_pivot_target_transform.origin.x = _pivot_min_x
+	if _pivot_target_transform.origin.z < _pivot_min_z:
+		_pivot_target_transform.origin.z = _pivot_min_z
+	if _pivot_target_transform.origin.z > _pivot_max_z:
+		_pivot_target_transform.origin.z = _pivot_max_z
+
+func _clamp_pivot_translation() -> void:
+	if pivot.transform.origin.x > _pivot_max_x:
+		pivot.transform.origin.x = _pivot_max_x
+	if pivot.transform.origin.x < _pivot_min_x:
+		pivot.transform.origin.x = _pivot_min_x
+	if pivot.transform.origin.z < _pivot_min_z:
+		pivot.transform.origin.z = _pivot_min_z
+	if pivot.transform.origin.z > _pivot_max_z:
+		pivot.transform.origin.z = _pivot_max_z
 
 func _process_pivot(dt: float) -> void:
+	
 	var weight: float = 1 - pow(_lerp_weight, dt)
 	#pivot.transform
 	pivot.transform.origin = pivot.transform.origin.lerp(
