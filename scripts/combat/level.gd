@@ -169,6 +169,8 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	
 	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
 		path_map.set_cell_item(tile, 0);
+		
+	
 
 
 func _input(event: InputEvent) -> void:
@@ -265,6 +267,7 @@ func _ready() -> void:
 	occupancy_map.hide()
 	path_map.clear()
 	fog_map.clear()
+	level_UI.hide();
 	
 	terrain_grid = Grid.new(terrain_map)
 	occupancy_grid = Grid.new(movement_map)
