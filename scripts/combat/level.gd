@@ -626,7 +626,10 @@ func _process(delta: float) -> void:
 			tutorial_camera_moved = true
 			_screen_movement.y += camera_speed * delta
 		
-		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		#camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		camera_controller.add_pivot_target_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		
+		
 		#camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		
 

@@ -101,11 +101,13 @@ func set_pivot_transform(target_transform:Transform3D) -> void:
 	_pivot_target_transform = target_transform
 	pivot.transform = target_transform
 	_clamp_pivot_translation()
+	_clamp_pivot_target_translation()
 
 func add_pivot_translate(added_translate: Vector3) -> void:
 	_pivot_target_transform.origin += added_translate
 	pivot.transform.origin += added_translate
 	_clamp_pivot_translation()
+	_clamp_pivot_target_translation()
 
 func _clamp_pivot_target_translation() -> void:
 	if _pivot_target_transform.origin.x > _pivot_max_x:
