@@ -146,29 +146,39 @@ func _process_pivot(dt: float) -> void:
 #region Springarm functions
 func set_springarm_length(new_length: float) -> void:
 	springarm.transform.origin.z = new_length
+	_springarm_target_length = new_length
+	_clamp_springarm_length()
+	_clamp_springarm_target_length()
 
 func add_springarm_length(new_length: float) -> void:
 	springarm.transform.origin.z += new_length
+	_springarm_target_length = new_length
+	_clamp_springarm_length()
+	_clamp_springarm_target_length()
 
 func set_springarm_target_length(new_target_lenght: float) -> void:
 	_springarm_target_length = new_target_lenght
+	_clamp_springarm_target_length()
 
 func add_springarm_target_length(new_target_lenght: float) -> void:
 	_springarm_target_length += new_target_lenght
+	_clamp_springarm_target_length()
 
-## private
-func _process_springarm(dt: float) -> void:
-	# clamp springarm length
-	
+func _clamp_springarm_length() -> void:
 	if(springarm.transform.origin.z < springarm_length_minimum):
 		springarm.transform.origin.z = springarm_length_minimum
 	if(springarm.transform.origin.z > springarm_length_maximum):
 		springarm.transform.origin.z = springarm_length_maximum
-		
+
+func _clamp_springarm_target_length() -> void:
 	if(_springarm_target_length < springarm_length_minimum):
 		_springarm_target_length = springarm_length_minimum
 	if(_springarm_target_length > springarm_length_maximum):
 		_springarm_target_length = springarm_length_maximum
+
+## private
+func _process_springarm(dt: float) -> void:
+	# clamp springarm length
 	
 	
 	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
