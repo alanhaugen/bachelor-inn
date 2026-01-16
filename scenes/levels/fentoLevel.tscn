@@ -4,8 +4,14 @@
 
 [node name="Map3d" instance=ExtResource("1_bwofp")]
 level_name = "first fen edition"
+camera_speed = 5.0
+mouse_drag_sensitivity = 50.0
 minimum_camera_height = 10.0
 maximum_camera_height = 30.0
+minimum_camera_x = -10.0
+maximum_camera_x = 100.0
+minimum_camera_z = -10.0
+maximum_camera_z = 10.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {

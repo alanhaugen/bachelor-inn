@@ -5,7 +5,7 @@
 class_name CameraController extends Node3D
 
 #region Components
-@onready var springarm : SpringArm3D = %SpringArm
+@onready var springarm : Node3D = %Springarm
 @onready var camera : Camera3D = %Camera
 @onready var pivot : Node3D = %Pivot
 #endregion
@@ -29,11 +29,13 @@ enum CameraStates {
 var camera_mode : CameraStates = CameraStates.FREE;
 
 #region Springarm Length
-var _target_springarm_length : float;
+var _springarm_target_length : float;
+var springarm_length_maximum : float
+var springarm_length_minimum : float
 #endregion
 
 #region Pivot
-var _target_pivot_transform : Transform3D
+var _pivot_target_transform : Transform3D
 #endregion
 
 
@@ -41,9 +43,11 @@ var _target_pivot_transform : Transform3D
 
 
 func _ready() -> void:
-	_target_springarm_length = springarm.get_length()
-	_lerp_weight = 0.5
-	set_target_pivot_transform(pivot.transform)
+	springarm_length_maximum = springarm.transform.origin.z
+	springarm_length_minimum = springarm.transform.origin.z
+	set_springarm_target_length(springarm.transform.origin.z)
+	_lerp_weight = 0.05
+	set_pivot_target_transform(pivot.transform)
 
 func _process(delta: float) -> void:
 	_process_springarm(delta)
@@ -58,8 +62,6 @@ func setup_minmax_positions(minimum_x: float, maximum_x: float, minimum_z: float
 	_camera_max_x = maximum_x
 	_camera_min_z = minimum_z
 	_camera_max_z = maximum_z
-
-
 
 #endregion
 
@@ -83,39 +85,69 @@ func project_ray_origin(screen_point: Vector2) -> Vector3:
 ## object intersection or picking.
 func project_ray_normal(screen_point: Vector2) -> Vector3:
 	return camera.project_ray_normal(screen_point)
+#endregion
 
+#region Pivot functions
 ## Set the target location
-func set_target_pivot_transform(target_transform:Transform3D) -> void:
-	_target_pivot_transform = target_transform
+func set_pivot_target_transform(target_transform:Transform3D) -> void:
+	_pivot_target_transform = target_transform
+
+func add_pivot_target_translate(added_translate: Vector3) -> void:
+	_pivot_target_transform.origin += added_translate
+
+func set_pivot_transform(target_transform:Transform3D) -> void:
+	_pivot_target_transform = target_transform
+	pivot.transform = target_transform
+
+func add_pivot_translate(added_translate: Vector3) -> void:
+	_pivot_target_transform.origin += added_translate
+	pivot.transform.origin += added_translate
 
 func _process_pivot(dt: float) -> void:
 	var weight: float = 1 - pow(_lerp_weight, dt)
 	#pivot.transform
 	pivot.transform.origin = pivot.transform.origin.lerp(
-			_target_pivot_transform.origin,
+			_pivot_target_transform.origin,
 			weight
 	)
-	
 	pivot.transform.basis = pivot.transform.basis.slerp(
-			_target_pivot_transform.basis,
+			_pivot_target_transform.basis,
 			weight
 	)
 #endregion
 
 #region Springarm functions
-func set_springarm_length_immediate(new_length: float) -> void:
-	springarm.set_length(new_length)
+func set_springarm_length(new_length: float) -> void:
+	springarm.transform.origin.z = new_length
 
-func set_springarm_length_lerp(new_target_lenght: float) -> void:
-	_target_springarm_length = new_target_lenght
+func add_springarm_length(new_length: float) -> void:
+	springarm.transform.origin.z += new_length
+
+func set_springarm_target_length(new_target_lenght: float) -> void:
+	_springarm_target_length = new_target_lenght
+
+func add_springarm_target_length(new_target_lenght: float) -> void:
+	_springarm_target_length += new_target_lenght
 
 ## private
 func _process_springarm(dt: float) -> void:
-	var current_length: float = springarm.get_length()
+	# clamp springarm length
+	
+	if(springarm.transform.origin.z < springarm_length_minimum):
+		springarm.transform.origin.z = springarm_length_minimum
+	if(springarm.transform.origin.z > springarm_length_maximum):
+		springarm.transform.origin.z = springarm_length_maximum
+		
+	if(_springarm_target_length < springarm_length_minimum):
+		_springarm_target_length = springarm_length_minimum
+	if(_springarm_target_length > springarm_length_maximum):
+		_springarm_target_length = springarm_length_maximum
+	
+	
 	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
 	# Using lerp with delta-time
 	var weight: float = 1 - pow(_lerp_weight, dt)
-	lerpf(current_length, _target_springarm_length, weight)
+	springarm.transform.origin = springarm.transform.origin.lerp(Vector3(0, 0, _springarm_target_length), weight)
 #endregion
 
 ## Set inverse of percentage of remaining distance covered by LERP per second.

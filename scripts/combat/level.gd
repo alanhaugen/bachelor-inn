@@ -155,8 +155,8 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
-	var ray_origin: Vector3 = camera.project_ray_origin(mouse_pos)
-	var ray_direction: Vector3 = camera.project_ray_normal(mouse_pos)
+	var ray_origin: Vector3 = camera_controller.project_ray_origin(mouse_pos)
+	var ray_direction: Vector3 = camera_controller.project_ray_normal(mouse_pos)
 	
 	# Cast ray and get intersection point
 	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
@@ -380,6 +380,8 @@ func _ready() -> void:
 	camera.clear_current()
 	camera = Main.camera_controller.camera
 	camera_controller = Main.camera_controller
+	camera_controller.springarm_length_maximum = maximum_camera_height
+	camera_controller.springarm_length_minimum = minimum_camera_height
 	
 	cursor.hide()
 	trigger_map.hide()
@@ -579,7 +581,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	#	target_transform.basis,
 	#	1.0 - exp(-camera_speed * delta)
 	#)
-	camera_controller.set_target_pivot_transform(target_transform);
+	camera_controller.set_pivot_target_transform(target_transform);
 
 
 func _process(delta: float) -> void:
@@ -623,7 +625,8 @@ func _process(delta: float) -> void:
 			tutorial_camera_moved = true
 			_screen_movement.y += camera_speed * delta
 		
-		camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		#camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		
 		#clamp camera positions
 		if camera.position.x > maximum_camera_x:
@@ -642,12 +645,14 @@ func _process(delta: float) -> void:
 			pass;
 	_screen_movement = Vector2.ZERO
 	
-	#if camera.global_position.y > minimum_camera_height:
-	#	if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-	#		camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
-	#if camera.global_position.y < maximum_camera_height:
-	#	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-	#		camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+	if camera.global_position.y > minimum_camera_height:
+		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
+			#camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
+			camera_controller.add_springarm_target_length(-camera_speed * 20 * delta)
+	if camera.global_position.y < maximum_camera_height:
+		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+			#camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+			camera_controller.add_springarm_target_length(camera_speed * 20 * delta)
 	
 	if (is_in_menu):
 		return;
