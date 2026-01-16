@@ -101,7 +101,6 @@ enum CameraStates {
 	RETURN }; ## interpolating back to saved position
 var camera_mode : CameraStates = CameraStates.FREE;
 var saved_transform : Transform3D;
-var camera_pos : Transform3D;
 var camera_controller : CameraController
 #endregion
 
@@ -605,37 +604,24 @@ func _process(delta: float) -> void:
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
-	if camera_mode == CameraStates.FREE:
-		saved_transform = global_transform;
-	
-	if camera_mode == CameraStates.RETURN:
-		camera_pos = saved_transform;
-	
-	#interpolate_to(camera_pos, delta);
-	camera_controller.set_target_pivot_transform(camera_pos)
-	
 	if lock_camera == false:
 		var tutorial_camera_moved : bool = false;
-		if camera.position.x < maximum_camera_x:
-			if Input.is_action_pressed("pan_right"):
-				#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-				tutorial_camera_moved = true;
-				_screen_movement.x += camera_speed * delta
-		if camera.position.x > minimum_camera_x:
-			if Input.is_action_pressed("pan_left"):
-				#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-				tutorial_camera_moved = true;
-				_screen_movement.x -= camera_speed * delta
-		if camera.position.z > minimum_camera_z:
-			if Input.is_action_pressed("pan_up"):
-				#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-				tutorial_camera_moved = true;
-				_screen_movement.y -= camera_speed * delta
-		if camera.position.z < maximum_camera_z:
-			if Input.is_action_pressed("pan_down"):
-				#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
-				tutorial_camera_moved = true
-				_screen_movement.y += camera_speed * delta
+		if Input.is_action_pressed("pan_right"):
+			#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.x += camera_speed * delta
+		if Input.is_action_pressed("pan_left"):
+			#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.x -= camera_speed * delta
+		if Input.is_action_pressed("pan_up"):
+			#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.y -= camera_speed * delta
+		if Input.is_action_pressed("pan_down"):
+			#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+			tutorial_camera_moved = true
+			_screen_movement.y += camera_speed * delta
 		
 		camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		
@@ -656,12 +642,12 @@ func _process(delta: float) -> void:
 			pass;
 	_screen_movement = Vector2.ZERO
 	
-	if camera.global_position.y > minimum_camera_height:
-		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
-	if camera.global_position.y < maximum_camera_height:
-		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-			camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+	#if camera.global_position.y > minimum_camera_height:
+	#	if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
+	#		camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
+	#if camera.global_position.y < maximum_camera_height:
+	#	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+	#		camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
 	
 	if (is_in_menu):
 		return;

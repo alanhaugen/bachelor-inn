@@ -7,6 +7,7 @@ class_name CameraController extends Node3D
 #region Components
 @onready var springarm : SpringArm3D = %SpringArm
 @onready var camera : Camera3D = %Camera
+@onready var pivot : Node3D = %Pivot
 #endregion
 
 #region Variables
@@ -42,6 +43,7 @@ var _target_pivot_transform : Transform3D
 func _ready() -> void:
 	_target_springarm_length = springarm.get_length()
 	_lerp_weight = 0.5
+	set_target_pivot_transform(pivot.transform)
 
 func _process(delta: float) -> void:
 	_process_springarm(delta)
@@ -68,11 +70,17 @@ func make_current() -> void:
 func clear_current() -> void:
 	camera.clear_current()
 
-## Returns a 3D position in world space, that is the result of projecting a point on the Viewport rectangle by the inverse camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+## Returns a 3D position in world space, that is the result of projecting 
+## a point on the Viewport rectangle by the inverse camera projection. 
+## This is useful for casting rays in the form of (origin, normal) for 
+## object intersection or picking.
 func project_ray_origin(screen_point: Vector2) -> Vector3:
 	return camera.project_ray_origin(screen_point)
 
-## Returns a normal vector in world space, that is the result of projecting a point on the Viewport rectangle by the inverse camera projection. This is useful for casting rays in the form of (origin, normal) for object intersection or picking.
+## Returns a normal vector in world space, that is the result of projecting 
+## a point on the Viewport rectangle by the inverse camera projection. 
+## This is useful for casting rays in the form of (origin, normal) for 
+## object intersection or picking.
 func project_ray_normal(screen_point: Vector2) -> Vector3:
 	return camera.project_ray_normal(screen_point)
 
@@ -81,15 +89,16 @@ func set_target_pivot_transform(target_transform:Transform3D) -> void:
 	_target_pivot_transform = target_transform
 
 func _process_pivot(dt: float) -> void:
-	var weight: float = 1 - pow(_lerp_weight, dt) 
-	global_transform.origin = global_transform.origin.lerp(
-		_target_pivot_transform.origin,
-		weight
+	var weight: float = 1 - pow(_lerp_weight, dt)
+	#pivot.transform
+	pivot.transform.origin = pivot.transform.origin.lerp(
+			_target_pivot_transform.origin,
+			weight
 	)
 	
-	global_transform.basis = global_transform.basis.slerp(
-		_target_pivot_transform.basis,
-		weight
+	pivot.transform.basis = pivot.transform.basis.slerp(
+			_target_pivot_transform.basis,
+			weight
 	)
 #endregion
 
