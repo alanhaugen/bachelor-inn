@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://bq1l1b16txwtp"]
 
-[ext_resource type="Script" uid="uid://7c464688yx88" path="res://scenes/userinterface/level_ui.gd" id="1_0bx5w"]
+[ext_resource type="Script" uid="uid://7c464688yx88" path="res://scripts/ui/level_ui.gd" id="1_0bx5w"]
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/userinterface/health_bar.tscn" id="1_u2joq"]
 [ext_resource type="PackedScene" uid="uid://c7ihgs3168ojs" path="res://scenes/userinterface/sidebar.tscn" id="2_b5cm8"]
 [ext_resource type="PackedScene" uid="uid://qp38bshnyq3h" path="res://scenes/userinterface/skill_choose.tscn" id="3_0bx5w"]
@@ -60,14 +60,10 @@ offset_bottom = 296.63
 
 [node name="Ribbon" parent="Character" instance=ExtResource("7_b5cm8")]
 layout_mode = 0
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
 offset_left = 302.375
 offset_top = 145.71
 offset_right = 302.375
 offset_bottom = 145.71
-grow_vertical = 1
 pivot_offset = Vector2(599.03, 448.54)
 
 [node name="SkillChoose" parent="Character" instance=ExtResource("3_0bx5w")]
