@@ -635,7 +635,7 @@ func _process(delta: float) -> void:
 			if Input.is_action_pressed("pan_down"):
 				#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
 				tutorial_camera_moved = true
-				_screen_movement.x += camera_speed * delta
+				_screen_movement.y += camera_speed * delta
 		
 		camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
 		
