@@ -5,16 +5,12 @@
 [node name="CameraScene" type="Node3D"]
 script = ExtResource("1_wiudl")
 
-[node name="SpringArm" type="SpringArm3D" parent="."]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0)
-collision_mask = 0
-spring_length = 15.0
-
 [node name="Pivot" type="Node3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0)
 
 [node name="Springarm" type="Node3D" parent="Pivot"]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
 
 [node name="Camera" type="Camera3D" parent="Pivot/Springarm"]

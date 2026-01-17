@@ -22,7 +22,7 @@ var movement_grid : MovementGrid
 @export var mouse_drag_sensitivity: float = 50.0
 @onready var battle_log: Label = $BattleLog
 
-@onready var camera: Camera3D = $Camera3D
+
 @onready var cursor: Sprite3D = $Cursor
 @onready var terrain_map: GridMap = %TerrainGrid
 @onready var occupancy_map: GridMap = %OccupancyOverlay
@@ -64,7 +64,10 @@ const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 
+#region Mouse Camera Movement
 var is_dragging :bool = false;
+var _screen_movement : Vector2 = Vector2(0, 0)
+#endregion
 
 enum States {
 	PLAYING,
@@ -88,6 +91,9 @@ var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
 var move_code: int = 1;
+
+#region Camera
+@onready var camera: Camera3D = $Camera3D
 enum CameraStates {
 	FREE, ## player controlled
 	FOCUS_UNIT, ## interpolating to a unit
@@ -95,7 +101,8 @@ enum CameraStates {
 	RETURN }; ## interpolating back to saved position
 var camera_mode : CameraStates = CameraStates.FREE;
 var saved_transform : Transform3D;
-var camera_pos : Transform3D;
+var camera_controller : CameraController
+#endregion
 
 var monster_names := [
 	"Xathog-Ruun",
@@ -148,8 +155,8 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
-	var ray_origin: Vector3 = camera.project_ray_origin(mouse_pos)
-	var ray_direction: Vector3 = camera.project_ray_normal(mouse_pos)
+	var ray_origin: Vector3 = camera_controller.project_ray_origin(mouse_pos)
+	var ray_direction: Vector3 = camera_controller.project_ray_normal(mouse_pos)
 	
 	# Cast ray and get intersection point
 	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
@@ -197,13 +204,18 @@ func _input(event: InputEvent) -> void:
 	if is_in_menu:
 		return;
 	
-	if event is InputEventMouseMotion and is_dragging:
-		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
-		Tutorial.tutorial_camera_moved();
-	
+	var checkMouseDragging:bool = event is InputEventMouseMotion and is_dragging;
+	var checkScreenDragging:bool = false
+	#if statement is to fix a runtime bug
 	if event is InputEventScreenDrag and event.index >= 1:
-		camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
+		checkScreenDragging = true
+	
+	if checkMouseDragging or checkScreenDragging:
+		#camera lock check is done at screen drag handling elsewhere
+		#camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
 		Tutorial.tutorial_camera_moved();
+		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
+		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
 	
 	if event is InputEventMouseButton:
 		# Ignore mouse up events
@@ -211,11 +223,14 @@ func _input(event: InputEvent) -> void:
 			if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
 				Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
 				is_dragging = true;
-		if (event.pressed == false):
+		if event.pressed == false:
 			is_dragging = false;
 			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE;
 			return;
-		if (event.button_index != MOUSE_BUTTON_LEFT):
+		
+		if is_dragging != false and event.button_index == MOUSE_BUTTON_RIGHT: 
+			return;
+		if event.button_index != MOUSE_BUTTON_LEFT:
 			return;
 		
 		# Get the tile clicked on
@@ -364,6 +379,10 @@ func _ready() -> void:
 	Main.camera_controller.camera.make_current()
 	camera.clear_current()
 	camera = Main.camera_controller.camera
+	camera_controller = Main.camera_controller
+	camera_controller.setup_minmax_positions(minimum_camera_x, maximum_camera_x, minimum_camera_z, maximum_camera_z)
+	camera_controller.springarm_length_maximum = maximum_camera_height
+	camera_controller.springarm_length_minimum = minimum_camera_height
 	
 	cursor.hide()
 	trigger_map.hide()
@@ -554,15 +573,16 @@ func CheckVictoryConditions() -> void:
 
 
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
-	global_transform.origin = global_transform.origin.lerp(
-		target_transform.origin,
-		1.0 - exp(-camera_speed * delta)
-	)
-	
-	global_transform.basis = global_transform.basis.slerp(
-		target_transform.basis,
-		1.0 - exp(-camera_speed * delta)
-	)
+	#global_transform.origin = global_transform.origin.lerp(
+	#	target_transform.origin,
+	#	1.0 - exp(-camera_speed * delta)
+	#)
+	#
+	#global_transform.basis = global_transform.basis.slerp(
+	#	target_transform.basis,
+	#	1.0 - exp(-camera_speed * delta)
+	#)
+	camera_controller.set_pivot_target_transform(target_transform);
 
 
 func _process(delta: float) -> void:
@@ -587,37 +607,48 @@ func _process(delta: float) -> void:
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
 	
-	if camera_mode == CameraStates.FREE:
-		saved_transform = global_transform;
-	
-	if camera_mode == CameraStates.RETURN:
-		camera_pos = saved_transform;
-	
-	interpolate_to(camera_pos, delta);
-	
 	if lock_camera == false:
-		if camera.position.x < maximum_camera_x:
-			if Input.is_action_pressed("pan_right"):
-				camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-				Tutorial.tutorial_camera_moved();
-		if camera.position.x > minimum_camera_x:
-			if Input.is_action_pressed("pan_left"):
-				camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-		if camera.position.z > minimum_camera_z:
-			if Input.is_action_pressed("pan_up"):
-				camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-		if camera.position.z < maximum_camera_z:
-			if Input.is_action_pressed("pan_down"):
-				camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+		var tutorial_camera_moved : bool = false;
+		if Input.is_action_pressed("pan_right"):
+			#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.x += camera_speed * delta
+		if Input.is_action_pressed("pan_left"):
+			#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.x -= camera_speed * delta
+		if Input.is_action_pressed("pan_up"):
+			#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+			tutorial_camera_moved = true;
+			_screen_movement.y -= camera_speed * delta
+		if Input.is_action_pressed("pan_down"):
+			#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+			tutorial_camera_moved = true
+			_screen_movement.y += camera_speed * delta
+		
+		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		#camera_controller.add_pivot_target_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		
+		
+		#camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		
+
+		
+		
+		if(tutorial_camera_moved == true):
+			Tutorial.tutorial_camera_moved();
 		if Input.is_action_pressed("selected"):
 			pass;
+	_screen_movement = Vector2.ZERO
 	
 	if camera.global_position.y > minimum_camera_height:
 		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
+			#camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
+			camera_controller.add_springarm_target_length(-camera_speed * 20 * delta)
 	if camera.global_position.y < maximum_camera_height:
 		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-			camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+			#camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+			camera_controller.add_springarm_target_length(camera_speed * 20 * delta)
 	
 	if (is_in_menu):
 		return;

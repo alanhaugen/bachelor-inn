@@ -1,11 +1,17 @@
 [gd_scene load_steps=2 format=3 uid="uid://d3gk55cxd3b0s"]
 
-[ext_resource type="PackedScene" path="res://scenes/levels/LevelTemplate.tscn" id="1_bwofp"]
+[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_bwofp"]
 
 [node name="Map3d" instance=ExtResource("1_bwofp")]
 level_name = "first fen edition"
+camera_speed = 5.0
+mouse_drag_sensitivity = 50.0
 minimum_camera_height = 10.0
 maximum_camera_height = 30.0
+minimum_camera_x = -10.0
+maximum_camera_x = 100.0
+minimum_camera_z = -10.0
+maximum_camera_z = 10.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {
