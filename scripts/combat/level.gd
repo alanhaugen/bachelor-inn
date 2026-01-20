@@ -49,7 +49,7 @@ var characters: Array[Character];
 const STATS_POPUP = preload("res://scenes/ui/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/ui/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
-const SIDE_BAR = preload("res://scenes/UI/side_bar.tscn")
+const SIDE_BAR = preload("res://scenes/UI/sidebar.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
