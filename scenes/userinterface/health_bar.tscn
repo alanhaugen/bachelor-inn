@@ -59,6 +59,7 @@ theme_override_constants/outline_size = 3
 theme_override_styles/background = ExtResource("3_8ymem")
 theme_override_styles/fill = SubResource("StyleBoxFlat_23qt1")
 value = 80.0
+show_percentage = false
 
 [node name="SanityBar" type="ProgressBar" parent="VBoxContainer/VBoxContainer2"]
 unique_name_in_owner = true
@@ -71,3 +72,4 @@ theme_override_constants/outline_size = 3
 theme_override_styles/background = ExtResource("4_x4hh8")
 theme_override_styles/fill = SubResource("StyleBoxFlat_j8d75")
 value = 80.0
+show_percentage = false
