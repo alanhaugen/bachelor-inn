@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=29 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
@@ -7,8 +7,7 @@
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
-[ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="7_btxxm"]
-[ext_resource type="AudioStream" uid="uid://vuqtugxaq7oo" path="res://audio/fantasy-rpg-exploration-v2-461303.mp3" id="8_jpndq"]
+[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="7_btxxm"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ds07i"]
@@ -308,9 +307,7 @@ text = "Quit"
 [node name="World" type="Node3D" parent="."]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World"]
-stream = ExtResource("8_jpndq")
 autoplay = true
-parameters/looping = true
 
 [node name="CameraScene" parent="World" instance=ExtResource("10_0a1r8")]
 

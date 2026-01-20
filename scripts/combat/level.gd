@@ -247,11 +247,12 @@ func _input(event: InputEvent) -> void:
 				state = States.ANIMATING;
 			return;
 		
+		#hide enemy stat display after deselecting them
 		if (selected_enemy_unit != null):
 			selected_enemy_unit.hide_ui();
 			stat_popup_enemy.hide();
-			if selected_unit == null:
-				stat_popup_player.hide();
+			#if selected_unit == null:
+			#	stat_popup_player.hide();
 		
 		if (get_tile_name(pos) == "Water"):
 			return
@@ -329,7 +330,7 @@ func _input(event: InputEvent) -> void:
 			ribbon.hide();
 		
 		if (get_unit_name(pos) == CharacterStates.Enemy):
-			
+			##select enemy unit for player attack
 			selected_enemy_unit = get_unit(pos);
 			update_stat(selected_enemy_unit, stat_popup_enemy);
 		
@@ -544,6 +545,7 @@ func MoveAI() -> void:
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
+	
 	if current_state.has_enemy_moves():
 		var move : Command = ai.choose_best_move(current_state, 2);
 		moves_stack.append(move);
@@ -552,6 +554,7 @@ func MoveAI() -> void:
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
+		##camera_controller.focus_camera(selected_unit)
 
 
 func CheckVictoryConditions() -> void:
@@ -683,6 +686,7 @@ func _process(delta: float) -> void:
 				is_player_turn = true;
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
+			
 			active_move = moves_stack.pop_front();
 			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
 				Dialogic.start(level_name + "LevelVictory")
@@ -709,6 +713,7 @@ func _process(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
+			
 			var movement_speed := 10.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
