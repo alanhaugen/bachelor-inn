@@ -14,7 +14,7 @@ class_name CameraController extends Node3D
 ## Inverse of percentage of remaining distance covered by LERP per second.
 ## A weight of 0.1 covers 90% of the remaining distance every second, and a weight of 0.2
 ## convers 80% of the remaining distance every second
-@export var _lerp_weight : float;
+@export_range(0, 1, 0.0001, "exp") var _lerp_weight : float = 0.0015;
 var _focused_unit : Node3D
 
 enum CameraStates {
@@ -46,16 +46,38 @@ func _ready() -> void:
 	springarm_length_maximum = springarm.transform.origin.z
 	springarm_length_minimum = springarm.transform.origin.z
 	set_springarm_target_length(springarm.transform.origin.z)
-	_lerp_weight = 0.05
 	set_pivot_target_transform(pivot.transform)
 	_focused_unit = self
 
+#region _process
 func _process(delta: float) -> void:
+	if(camera_mode == CameraStates.FOCUS_UNIT):
+		_process_focus_unit()
 	_process_springarm(delta)
 	_process_pivot(delta)
 
+func _process_pivot(dt: float) -> void:
+	var weight: float = 1 - pow(_lerp_weight, dt)
+	#pivot.transform
+	pivot.transform.origin = pivot.transform.origin.lerp(
+			_pivot_target_transform.origin,
+			weight
+	)
+	pivot.transform.basis = pivot.transform.basis.slerp(
+			_pivot_target_transform.basis,
+			weight
+	)
 
-	
+func _process_springarm(dt: float) -> void:
+	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
+	# Using lerp with delta-time
+	var weight: float = 1 - pow(_lerp_weight, dt)
+	springarm.transform.origin = springarm.transform.origin.lerp(Vector3(0, 0, _springarm_target_length), weight)
+
+func _process_focus_unit() -> void:
+	if(_focused_unit == null):
+		return
+	set_pivot_target_translate(_focused_unit.transform.origin)
 
 #region Setup functions
 func setup_minmax_positions(minimum_x: float, maximum_x: float, minimum_z: float, maximum_z: float) -> void:
@@ -94,6 +116,10 @@ func set_pivot_target_transform(target_transform:Transform3D) -> void:
 	_pivot_target_transform = target_transform
 	_clamp_pivot_target_translation()
 
+func set_pivot_target_translate(target_translate: Vector3) -> void:
+	_pivot_target_transform.origin = target_translate
+	_clamp_pivot_target_translation()
+
 func add_pivot_target_translate(added_translate: Vector3) -> void:
 	_pivot_target_transform.origin += added_translate
 	_clamp_pivot_target_translation()
@@ -130,18 +156,7 @@ func _clamp_pivot_translation() -> void:
 	if pivot.transform.origin.z > _pivot_max_z:
 		pivot.transform.origin.z = _pivot_max_z
 
-func _process_pivot(dt: float) -> void:
-	
-	var weight: float = 1 - pow(_lerp_weight, dt)
-	#pivot.transform
-	pivot.transform.origin = pivot.transform.origin.lerp(
-			_pivot_target_transform.origin,
-			weight
-	)
-	pivot.transform.basis = pivot.transform.basis.slerp(
-			_pivot_target_transform.basis,
-			weight
-	)
+
 #endregion
 
 #region Springarm functions
@@ -178,14 +193,6 @@ func _clamp_springarm_target_length() -> void:
 		_springarm_target_length = springarm_length_maximum
 
 ## private
-func _process_springarm(dt: float) -> void:
-	# clamp springarm length
-	
-	
-	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
-	# Using lerp with delta-time
-	var weight: float = 1 - pow(_lerp_weight, dt)
-	springarm.transform.origin = springarm.transform.origin.lerp(Vector3(0, 0, _springarm_target_length), weight)
 #endregion
 
 ## Set inverse of percentage of remaining distance covered by LERP per second.
