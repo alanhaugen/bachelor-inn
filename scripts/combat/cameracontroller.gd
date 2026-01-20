@@ -14,28 +14,28 @@ class_name CameraController extends Node3D
 ## Inverse of percentage of remaining distance covered by LERP per second.
 ## A weight of 0.1 covers 90% of the remaining distance every second, and a weight of 0.2
 ## convers 80% of the remaining distance every second
-var _lerp_weight : float;
-
-var _pivot_max_x : float;
-var _pivot_min_x : float;
-var _pivot_max_z : float;
-var _pivot_min_z : float;
+@export var _lerp_weight : float;
+var _focused_unit : Node3D
 
 enum CameraStates {
 	FREE, ## player controlled
 	FOCUS_UNIT, ## interpolating to a unit
-	TRACK_MOVE, ## following a moving unit
-	RETURN }; ## interpolating back to saved position
+	LOCKED, ## Camera will not recieve new positions, but will interpolate to existing targets
+}
 var camera_mode : CameraStates = CameraStates.FREE;
 
 #region Springarm Length
-var _springarm_target_length : float;
-var springarm_length_maximum : float
-var springarm_length_minimum : float
+@export var _springarm_target_length : float;
+@export var springarm_length_maximum : float
+@export var springarm_length_minimum : float
 #endregion
 
 #region Pivot
 var _pivot_target_transform : Transform3D
+@export var _pivot_max_x : float;
+@export var _pivot_min_x : float;
+@export var _pivot_max_z : float;
+@export var _pivot_min_z : float;
 #endregion
 
 
@@ -48,6 +48,7 @@ func _ready() -> void:
 	set_springarm_target_length(springarm.transform.origin.z)
 	_lerp_weight = 0.05
 	set_pivot_target_transform(pivot.transform)
+	_focused_unit = self
 
 func _process(delta: float) -> void:
 	_process_springarm(delta)
@@ -197,3 +198,19 @@ func set_lerp_weight(new_weight_decimal_form: float) -> void:
 	elif new_weight_decimal_form > 1:
 		new_weight_decimal_form = 1
 	_lerp_weight = new_weight_decimal_form
+
+## makes camera focus a unit and interpolate it
+## returns false if Node3D does not exist
+## otherwise returns true and changes camera mode
+func focus_camera(unit: Node3D) -> bool:
+	if(unit == null):
+		return false
+	_focused_unit = unit
+	camera_mode = CameraStates.FOCUS_UNIT
+	return true
+
+func free_camera() -> void:
+	camera_mode = CameraStates.FREE
+
+func lock_camera() -> void:
+	camera_mode = CameraStates.LOCKED
