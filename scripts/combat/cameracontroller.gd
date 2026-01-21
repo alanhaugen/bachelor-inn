@@ -78,6 +78,7 @@ func _process_focus_unit(_dt: float) -> void:
 	if(_focused_unit == null):
 		return
 	set_pivot_target_translate(_focused_unit.transform.origin)
+#endregion
 
 #region Setup functions
 func setup_minmax_positions(minimum_x: float, maximum_x: float, minimum_z: float, maximum_z: float) -> void:
@@ -113,24 +114,34 @@ func project_ray_normal(screen_point: Vector2) -> Vector3:
 #region Pivot functions
 ## Set the target location
 func set_pivot_target_transform(target_transform:Transform3D) -> void:
+	if(camera_mode == CameraStates.LOCKED):
+		return
 	_pivot_target_transform = target_transform
 	_clamp_pivot_target_translation()
 
 func set_pivot_target_translate(target_translate: Vector3) -> void:
+	if(camera_mode == CameraStates.LOCKED):
+		return
 	_pivot_target_transform.origin = target_translate
 	_clamp_pivot_target_translation()
 
 func add_pivot_target_translate(added_translate: Vector3) -> void:
+	if(camera_mode == CameraStates.LOCKED):
+		return
 	_pivot_target_transform.origin += added_translate
 	_clamp_pivot_target_translation()
 
 func set_pivot_transform(target_transform:Transform3D) -> void:
+	if(camera_mode != CameraStates.FREE):
+		return
 	_pivot_target_transform = target_transform
 	pivot.transform = target_transform
 	_clamp_pivot_translation()
 	_clamp_pivot_target_translation()
 
 func add_pivot_translate(added_translate: Vector3) -> void:
+	if(camera_mode != CameraStates.FREE):
+		return
 	_pivot_target_transform.origin += added_translate
 	pivot.transform.origin += added_translate
 	_clamp_pivot_translation()
@@ -161,22 +172,30 @@ func _clamp_pivot_translation() -> void:
 
 #region Springarm functions
 func set_springarm_length(new_length: float) -> void:
+	if(camera_mode != CameraStates.FREE):
+		return
 	springarm.transform.origin.z = new_length
 	_springarm_target_length = new_length
 	_clamp_springarm_length()
 	_clamp_springarm_target_length()
 
 func add_springarm_length(new_length: float) -> void:
+	if(camera_mode != CameraStates.FREE):
+		return
 	springarm.transform.origin.z += new_length
 	_springarm_target_length = new_length
 	_clamp_springarm_length()
 	_clamp_springarm_target_length()
 
 func set_springarm_target_length(new_target_lenght: float) -> void:
+	if(camera_mode == CameraStates.LOCKED):
+		return
 	_springarm_target_length = new_target_lenght
 	_clamp_springarm_target_length()
 
 func add_springarm_target_length(new_target_lenght: float) -> void:
+	if(camera_mode == CameraStates.LOCKED):
+		return
 	_springarm_target_length += new_target_lenght
 	_clamp_springarm_target_length()
 
