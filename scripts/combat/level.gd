@@ -213,7 +213,6 @@ func _input(event: InputEvent) -> void:
 	if checkMouseDragging or checkScreenDragging:
 		#camera lock check is done at screen drag handling elsewhere
 		#camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
-		Tutorial.tutorial_camera_moved();
 		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
 		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
 	
@@ -554,7 +553,9 @@ func MoveAI() -> void:
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
-		##camera_controller.focus_camera(selected_unit)
+		camera_controller.focus_camera(selected_unit)
+	else:
+		camera_controller.free_camera()
 
 
 func CheckVictoryConditions() -> void:
@@ -591,6 +592,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
+		_screen_movement = Vector2.ZERO
 		return;
 		
 	for i in Main.characters.size():
@@ -614,19 +616,15 @@ func _process(delta: float) -> void:
 		var tutorial_camera_moved : bool = false;
 		if Input.is_action_pressed("pan_right"):
 			#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-			tutorial_camera_moved = true;
 			_screen_movement.x += camera_speed * delta
 		if Input.is_action_pressed("pan_left"):
 			#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-			tutorial_camera_moved = true;
 			_screen_movement.x -= camera_speed * delta
 		if Input.is_action_pressed("pan_up"):
 			#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-			tutorial_camera_moved = true;
 			_screen_movement.y -= camera_speed * delta
 		if Input.is_action_pressed("pan_down"):
 			#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
-			tutorial_camera_moved = true
 			_screen_movement.y += camera_speed * delta
 		
 		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
@@ -638,7 +636,7 @@ func _process(delta: float) -> void:
 
 		
 		
-		if(tutorial_camera_moved == true):
+		if(_screen_movement != Vector2.ZERO):
 			Tutorial.tutorial_camera_moved();
 		if Input.is_action_pressed("selected"):
 			pass;
@@ -684,9 +682,9 @@ func _process(delta: float) -> void:
 			if (is_player_turn == false):
 				is_animation_just_finished = true;
 				is_player_turn = true;
+				#camera_controller.free_camera()
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
-			
 			active_move = moves_stack.pop_front();
 			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
 				Dialogic.start(level_name + "LevelVictory")
@@ -704,12 +702,14 @@ func _process(delta: float) -> void:
 			Tutorial.tutorial_unit_moved();
 			
 			if is_player_turn == false:
-				MoveAI();
+				MoveAI(); # called after an enemy is done moving
 			
 			if (moves_stack.is_empty() == false):
+				#called after any enemy except the final enemy is done moving
 				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
+				#called after any enemy except the final enemy is done moving
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
@@ -718,10 +718,13 @@ func _process(delta: float) -> void:
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta
-
+			
+			#if the unit is very close to their next footstep in animation
 			if dir.length() <= step:
 				selected_unit.position = target
 				animation_path.pop_front()
+			#if the unit is more than a footstep away from the animation target
+			#position: move closer and move back to the if statement above
 			else:
 				selected_unit.position += dir.normalized() * step
 				#camera.position.x = selected_unit.position.x;# + 4.5;
@@ -738,4 +741,7 @@ func _process(delta: float) -> void:
 					selected_unit.play(selected_unit.run_left_animation)
 					selected_unit.sprite.flip_h = false
 			
+			#if(animation_path.is_empty()):
+			#	if(!is_player_turn):
+			#		camera_controller.free_camera()
 			#animated_unit.position.x = animationPath

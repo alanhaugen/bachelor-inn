@@ -52,7 +52,7 @@ func _ready() -> void:
 #region _process
 func _process(delta: float) -> void:
 	if(camera_mode == CameraStates.FOCUS_UNIT):
-		_process_focus_unit()
+		_process_focus_unit(delta)
 	_process_springarm(delta)
 	_process_pivot(delta)
 
@@ -74,7 +74,7 @@ func _process_springarm(dt: float) -> void:
 	var weight: float = 1 - pow(_lerp_weight, dt)
 	springarm.transform.origin = springarm.transform.origin.lerp(Vector3(0, 0, _springarm_target_length), weight)
 
-func _process_focus_unit() -> void:
+func _process_focus_unit(_dt: float) -> void:
 	if(_focused_unit == null):
 		return
 	set_pivot_target_translate(_focused_unit.transform.origin)
