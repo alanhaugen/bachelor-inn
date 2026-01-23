@@ -7,6 +7,7 @@ class_name Character
 
 @export_category("Animations")
 @export var run_left_animation : SpriteAnim
+@export var run_right_animation : SpriteAnim
 @export var run_up_animation : SpriteAnim
 @export var run_down_animation : SpriteAnim
 
@@ -246,13 +247,13 @@ func _ready() -> void:
 	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
 	skill_choose_popup.hide()
 	
-	sprite.translate(Vector3(0.3,1.0,-0.1))
-	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
-	sprite.scale = Vector3(4,4,4)
+	#sprite.translate(Vector3(0.3,1.0,-0.1))
+	#sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
+	#sprite.scale = Vector3(4,4,4)
 		
-	outline.translate(Vector3(0.3,1.0,-0.1))
-	outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
-	outline.scale = Vector3(4,4,4)
+	#outline.translate(Vector3(0.3,1.0,-0.1))
+	#outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
+	#outline.scale = Vector3(4,4,4)
 	play(run_down_animation)
 	stop_anim = true
 	

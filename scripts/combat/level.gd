@@ -655,8 +655,6 @@ func _process(delta: float) -> void:
 				elif (dir.z < 0):
 					selected_unit.play(selected_unit.run_up_animation)
 				elif (dir.x > 0):
-					selected_unit.play(selected_unit.run_left_animation)
-					selected_unit.sprite.flip_h = true
+					selected_unit.play(selected_unit.run_right_animation)
 				elif (dir.x < 0):
 					selected_unit.play(selected_unit.run_left_animation)
-					selected_unit.sprite.flip_h = false
