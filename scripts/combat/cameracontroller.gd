@@ -31,8 +31,8 @@ var freeze_camera_mode : bool = false
 
 #region Springarm Length
 @export var _springarm_target_length : float;
-@export var springarm_length_maximum : float
-@export var springarm_length_minimum : float
+@export_range(0, 20, 0.1, "or_greater") var springarm_length_maximum : float = 3
+@export_range(0, 20, 0.1, "or_greater") var springarm_length_minimum : float = 15
 #endregion
 
 #region Pivot
@@ -41,12 +41,15 @@ var _pivot_target_transform : Transform3D
 @export var _pivot_min_x : float;
 @export var _pivot_max_z : float;
 @export var _pivot_min_z : float;
-@export var camera_speed: float = 5.0
+@export var camera_speed: float = 15.0
 #endregion
 
 #region input variables
 var _screen_movement : Vector2 = Vector2(0, 0)
 @export var mouse_drag_sensitivity: float = 50.0
+var _zoom_factor : float = 0
+@export var mouse_scroll_sensitivity: float = 1
+@export var keyboard_zoom_factor: float = 1
 #endregion
 
 #endregion
@@ -64,11 +67,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if _camera_mode == CameraStates.FREE:
 		_input_dragging(event)
+		_input_zoom(event)
 
 
 func _input_dragging(event: InputEvent) -> void:
-	_screen_movement = Vector2.ZERO
-	
 	#this statement may cause a bug on phones.
 	#Figure out how to enable input mapping for phones
 	if Input.is_action_just_released("enable_dragging"):
@@ -86,6 +88,27 @@ func _input_dragging(event: InputEvent) -> void:
 	if checkMouseDragging or checkScreenDragging:
 		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
 		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
+
+func _input_zoom(event: InputEvent) -> void:
+	if not (event is InputEventMouseButton):
+		return
+		
+	var zoomDirection : float = 0
+	if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+		zoomDirection = -1
+	elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+		zoomDirection = 1
+	else:
+		return
+		
+	var zoomStrength : float = event.factor
+	
+	## To fix system dependent bug with InputEventMouseButton.factor
+	if zoomStrength == 0:
+		zoomStrength = 1
+		
+	_zoom_factor += zoomStrength*zoomDirection*mouse_scroll_sensitivity
+
 #endregion
 
 
@@ -110,7 +133,14 @@ func _process_pivot(delta: float) -> void:
 			_pivot_target_transform.basis,
 			weight
 	)
-
+	
+	##removed lines used to experiment with tactical view
+	#var springarmPercent : float = (springarm.transform.origin.z - springarm_length_minimum)/(springarm_length_maximum - springarm_length_minimum)
+	#var targetAngleMax : float = -90
+	#var targetAngleMin : float = -30
+	#var targetAngleDifference : float = targetAngleMax - targetAngleMin
+	#var targetAngle :float = targetAngleMin + targetAngleDifference*springarmPercent
+	#pivot.transform.basis = Basis.from_euler(Vector3(deg_to_rad(targetAngle), 0, 0))
 
 func _process_springarm(delta: float) -> void:
 	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
@@ -151,12 +181,13 @@ func _process_input_pivot(delta: float) -> void:
 func _process_input_springarm(delta: float) -> void:
 	#TODO refactor the springarm input so that the distance scrolled in a second
 	#affects the zoom
-	if springarm.transform.origin.z > springarm_length_minimum:
-		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			add_springarm_target_length(-camera_speed * 20 * delta)
-	if springarm.transform.origin.z < springarm_length_maximum:
-		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-			add_springarm_target_length(camera_speed * 20 * delta)
+	
+	if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
+		_zoom_factor += -keyboard_zoom_factor * 20 * delta
+	if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+		_zoom_factor += keyboard_zoom_factor * 20 * delta
+	add_springarm_target_length(_zoom_factor)
+	_zoom_factor = 0
 #endregion
 #endregion
 

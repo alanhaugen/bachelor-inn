@@ -18,8 +18,6 @@ var trigger_grid : Grid
 var fog_grid : Grid
 var movement_grid : MovementGrid
 
-@export var camera_speed: float = 5.0
-@export var mouse_drag_sensitivity: float = 50.0
 @onready var battle_log: Label = $BattleLog
 
 
@@ -346,7 +344,6 @@ func _ready() -> void:
 	camera_controller.springarm_length_maximum = maximum_camera_height
 	camera_controller.springarm_length_minimum = minimum_camera_height
 	camera_controller.free_camera()
-	camera_controller.camera_speed = camera_speed
 	
 	cursor.hide()
 	trigger_map.hide()
