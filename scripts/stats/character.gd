@@ -25,8 +25,10 @@ var frame_timer : float = 0.0
 var stop_anim : bool = true
 
 var my_material : ShaderMaterial = null
+var my_outline_material : ShaderMaterial = null
 
 @onready var sprite : Sprite3D = $Sprite
+@onready var outline : Sprite3D = $Outline
 #endregion
 
 #region packed scenes
@@ -60,14 +62,25 @@ func play(anim : SpriteAnim) -> void:
 	frame_timer = 0.0
 	
 	if my_material == null:
-		var mat := sprite.material_override as ShaderMaterial
-		if mat == null:
-			push_error("Sprite3DAnimator requires a ShaderMaterial on material_override.")
+		var main_mat := sprite.material_override as ShaderMaterial
+		var outline_mat := outline.material_override as ShaderMaterial
+		if main_mat == null:
+			push_error("Sprite requires a ShaderMaterial on material_override.")
 			return
+		if outline_mat == null:
+			push_error("Outline requires a ShaderMaterial on material_override.")
+			return
+			
+		print("Sprite material:", sprite.material_override) 
+		print("Outline material:", outline.material_override)
 		
-		my_material = mat.duplicate(true)
+		my_material = main_mat.duplicate(true)
+		my_outline_material = outline_mat.duplicate(true)
+		
 		sprite.material_override = my_material
+		outline.material_override = my_outline_material
 	
+	#main animation material stuff
 	my_material.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
 	my_material.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
 	my_material.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
@@ -75,6 +88,17 @@ func play(anim : SpriteAnim) -> void:
 	my_material.set_shader_parameter("frame_index", 0)
 	my_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
 	my_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
+	
+	# Outlines behind meshes
+	my_outline_material.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
+	
+	my_outline_material.set_shader_parameter("frame_index", 0)
+	my_outline_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
+	my_outline_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
+	#debug:::
+	print("Outline shader params:")
+	for p: Dictionary in my_outline_material.shader.get_shader_uniform_list():
+		print(" - ", p["name"])
 
 
 func pause_anim() -> void:
@@ -225,7 +249,10 @@ func _ready() -> void:
 	sprite.translate(Vector3(0.3,1.0,-0.1))
 	sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
 	sprite.scale = Vector3(4,4,4)
-	
+		
+	outline.translate(Vector3(0.3,1.0,-0.1))
+	outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
+	outline.scale = Vector3(4,4,4)
 	play(run_down_animation)
 	stop_anim = true
 	
