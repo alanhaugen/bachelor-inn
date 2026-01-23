@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnagni7ikbg16"]
+[gd_scene load_steps=4 format=3 uid="uid://cnagni7ikbg16"]
 
 [ext_resource type="Script" uid="uid://bf4ljwcdlbq45" path="res://scripts/combat/cameracontroller.gd" id="1_wiudl"]
+[ext_resource type="Shader" uid="uid://dbapk0dtj85oy" path="res://art/WIP/Materials and Shaders/ColorCorrection_Mini.tres" id="2_ebp8v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xfa4h"]
+shader = ExtResource("2_ebp8v")
+shader_parameter/Main_Color_Temp = 4500.0
+shader_parameter/Main_Green_Tint = 0.0
+shader_parameter/Main_Brightness = 1.20000001788144
+shader_parameter/Main_Contrast = 1.0
+shader_parameter/Main_Saturation = 1.0
+shader_parameter/Vignette = 1.01999997720096
+shader_parameter/Color_Filter = Color(1, 0.8901961, 0.8509804, 1)
 
 [node name="CameraScene" type="Node3D"]
 script = ExtResource("1_wiudl")
@@ -18,9 +29,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 15)
 unique_name_in_owner = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Pivot/Springarm/Camera"]
-visible = false
+process_mode = 4
+layer = -10
 
 [node name="ColorRect" type="ColorRect" parent="Pivot/Springarm/Camera/CanvasLayer"]
-visible = false
-offset_right = 40.0
-offset_bottom = 40.0
+material = SubResource("ShaderMaterial_xfa4h")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

@@ -10,6 +10,7 @@ class_name Character
 @export var run_right_animation : SpriteAnim
 @export var run_up_animation : SpriteAnim
 @export var run_down_animation : SpriteAnim
+@export var idle_animation : SpriteAnim
 
 @export_category("UI")
 @export var portrait : Texture2D
@@ -103,7 +104,7 @@ func play(anim : SpriteAnim) -> void:
 
 
 func pause_anim() -> void:
-	stop_anim = true
+	play(idle_animation)
 
 
 func clone() -> Character:
@@ -306,8 +307,8 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
-		if state.is_playable():
-			my_material.set_shader_parameter("grey_tint", true)
+		#if state.is_playable():
+			#my_material.set_shader_parameter("grey_tint", true)
 
 
 func reset() -> void:
@@ -319,7 +320,7 @@ func reset() -> void:
 	hide_ui();
 	show();
 	state.is_moved = false;
-	my_material.set_shader_parameter("grey_tint", false)
+	#my_material.set_shader_parameter("grey_tint", false)
 
 
 func die(simulate_only : bool) -> void:

@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dc66ohslb3g1g"]
+[gd_scene load_steps=7 format=3 uid="uid://dc66ohslb3g1g"]
 
 [ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_vqdjr"]
+[ext_resource type="Resource" uid="uid://dg1jj5qvf04uy" path="res://art/Animations/Characters/Alfred/Alfred_Idle.tres" id="2_ip4qc"]
 [ext_resource type="Resource" uid="uid://crj6fyqc42yx1" path="res://art/Animations/Characters/Alfred/Alfred_Moving_R.tres" id="3_f6m7y"]
 [ext_resource type="Resource" uid="uid://du1thdha7r8q8" path="res://art/Animations/Characters/Alfred/Alfred_Moving_L.tres" id="3_lwqpk"]
 [ext_resource type="Resource" uid="uid://80eyissy4tnr" path="res://art/Animations/Characters/Alfred/Alfred_Moving_U.tres" id="4_pb1gj"]
@@ -11,3 +12,4 @@ run_left_animation = ExtResource("3_lwqpk")
 run_right_animation = ExtResource("3_f6m7y")
 run_up_animation = ExtResource("4_pb1gj")
 run_down_animation = ExtResource("5_y3wjc")
+idle_animation = ExtResource("2_ip4qc")
