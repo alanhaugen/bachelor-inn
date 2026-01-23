@@ -310,6 +310,15 @@ text = "Quit"
 autoplay = true
 
 [node name="CameraScene" parent="World" instance=ExtResource("10_0a1r8")]
+_lerp_weight = null
+_springarm_target_length = null
+springarm_length_maximum = null
+springarm_length_minimum = null
+_pivot_max_x = null
+_pivot_min_x = null
+_pivot_max_z = null
+_pivot_min_z = null
+mouse_drag_sensitivity = null
 
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/VBoxContainer/LevelSelect/LoadMap1" to="." method="_on_load_map_1_pressed"]

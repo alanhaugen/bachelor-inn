@@ -21,8 +21,13 @@ enum CameraStates {
 	FREE, ## player controlled
 	FOCUS_UNIT, ## interpolating to a unit
 	LOCKED, ## Camera will not recieve new positions, but will interpolate to existing targets
+	NOT_IN_LEVEL,
 }
-var camera_mode : CameraStates = CameraStates.FREE;
+var _camera_mode : CameraStates = CameraStates.NOT_IN_LEVEL;
+var _unlock_camera_mode : CameraStates = _camera_mode
+## Freeze camera mode, so the camera mode can not be changed
+## used by the Tutorial
+var freeze_camera_mode : bool = false
 
 #region Springarm Length
 @export var _springarm_target_length : float;
@@ -36,8 +41,13 @@ var _pivot_target_transform : Transform3D
 @export var _pivot_min_x : float;
 @export var _pivot_max_z : float;
 @export var _pivot_min_z : float;
+@export var camera_speed: float = 5.0
 #endregion
 
+#region input variables
+var _screen_movement : Vector2 = Vector2(0, 0)
+@export var mouse_drag_sensitivity: float = 50.0
+#endregion
 
 #endregion
 
@@ -49,15 +59,48 @@ func _ready() -> void:
 	set_pivot_target_transform(pivot.transform)
 	_focused_unit = self
 
+
+#region input
+func _input(event: InputEvent) -> void:
+	if _camera_mode == CameraStates.FREE:
+		_input_dragging(event)
+
+
+func _input_dragging(event: InputEvent) -> void:
+	#this statement may cause a bug on phones.
+	#Figure out how to enable input mapping for phones
+	_screen_movement = Vector2.ZERO
+	if Input.is_action_just_released("enable_dragging"):
+		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE
+	if !Input.is_action_pressed("enable_dragging"):
+		return
+	Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
+	
+	var checkMouseDragging:bool = event is InputEventMouseMotion
+	var checkScreenDragging:bool = false
+	#if statement is to fix a runtime bug
+	if event is InputEventScreenDrag and event.index >= 1:
+		checkScreenDragging = true
+	
+	if checkMouseDragging or checkScreenDragging:
+		#camera lock check is done at screen drag handling elsewhere
+		#camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
+		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
+		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
+#endregion
+
 #region _process
 func _process(delta: float) -> void:
-	if(camera_mode == CameraStates.FOCUS_UNIT):
+	if(_camera_mode == CameraStates.FOCUS_UNIT):
 		_process_focus_unit(delta)
+	if(_camera_mode == CameraStates.FREE):
+		_process_input_pivot(delta)
+		_process_input_springarm(delta)
 	_process_springarm(delta)
 	_process_pivot(delta)
 
-func _process_pivot(dt: float) -> void:
-	var weight: float = 1 - pow(_lerp_weight, dt)
+func _process_pivot(delta: float) -> void:
+	var weight: float = 1 - pow(_lerp_weight, delta)
 	#pivot.transform
 	pivot.transform.origin = pivot.transform.origin.lerp(
 			_pivot_target_transform.origin,
@@ -68,16 +111,56 @@ func _process_pivot(dt: float) -> void:
 			weight
 	)
 
-func _process_springarm(dt: float) -> void:
+func _process_springarm(delta: float) -> void:
 	# source: https://www.construct.net/en/blogs/ashleys-blog-2/using-lerp-delta-time-924
 	# Using lerp with delta-time
-	var weight: float = 1 - pow(_lerp_weight, dt)
+	var weight: float = 1 - pow(_lerp_weight, delta)
 	springarm.transform.origin = springarm.transform.origin.lerp(Vector3(0, 0, _springarm_target_length), weight)
 
 func _process_focus_unit(_dt: float) -> void:
 	if(_focused_unit == null):
 		return
 	set_pivot_target_translate(_focused_unit.transform.origin)
+
+#region _process_input
+func _process_input_pivot(delta: float) -> void:
+	if _camera_mode == CameraStates.LOCKED:
+		return
+		
+	var tutorial_camera_moved : bool = false;
+	if Input.is_action_pressed("pan_right"):
+		#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
+		_screen_movement.x += camera_speed * delta
+	if Input.is_action_pressed("pan_left"):
+		#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
+		_screen_movement.x -= camera_speed * delta
+	if Input.is_action_pressed("pan_up"):
+		#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
+		_screen_movement.y -= camera_speed * delta
+	if Input.is_action_pressed("pan_down"):
+		#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
+		_screen_movement.y += camera_speed * delta
+		
+	add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
+		
+	if(_screen_movement != Vector2.ZERO):
+		Tutorial.tutorial_camera_moved();
+	if Input.is_action_pressed("selected"):
+		pass;
+	_screen_movement = Vector2.ZERO
+
+func _process_input_springarm(delta: float) -> void:
+	#TODO refactor the springarm input so that the distance scrolled in a second
+	#affects the zoom
+	if springarm.transform.origin.z > springarm_length_minimum:
+		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
+			#camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
+			add_springarm_target_length(-camera_speed * 20 * delta)
+	if springarm.transform.origin.z < springarm_length_maximum:
+		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
+			#camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
+			add_springarm_target_length(camera_speed * 20 * delta)
+#endregion
 #endregion
 
 #region Setup functions
@@ -114,25 +197,25 @@ func project_ray_normal(screen_point: Vector2) -> Vector3:
 #region Pivot functions
 ## Set the target location
 func set_pivot_target_transform(target_transform:Transform3D) -> void:
-	if(camera_mode == CameraStates.LOCKED):
+	if(_camera_mode == CameraStates.LOCKED):
 		return
 	_pivot_target_transform = target_transform
 	_clamp_pivot_target_translation()
 
 func set_pivot_target_translate(target_translate: Vector3) -> void:
-	if(camera_mode == CameraStates.LOCKED):
+	if(_camera_mode == CameraStates.LOCKED):
 		return
 	_pivot_target_transform.origin = target_translate
 	_clamp_pivot_target_translation()
 
 func add_pivot_target_translate(added_translate: Vector3) -> void:
-	if(camera_mode == CameraStates.LOCKED):
+	if(_camera_mode == CameraStates.LOCKED):
 		return
 	_pivot_target_transform.origin += added_translate
 	_clamp_pivot_target_translation()
 
 func set_pivot_transform(target_transform:Transform3D) -> void:
-	if(camera_mode != CameraStates.FREE):
+	if(_camera_mode != CameraStates.FREE):
 		return
 	_pivot_target_transform = target_transform
 	pivot.transform = target_transform
@@ -140,7 +223,7 @@ func set_pivot_transform(target_transform:Transform3D) -> void:
 	_clamp_pivot_target_translation()
 
 func add_pivot_translate(added_translate: Vector3) -> void:
-	if(camera_mode != CameraStates.FREE):
+	if(_camera_mode != CameraStates.FREE):
 		return
 	_pivot_target_transform.origin += added_translate
 	pivot.transform.origin += added_translate
@@ -172,7 +255,7 @@ func _clamp_pivot_translation() -> void:
 
 #region Springarm functions
 func set_springarm_length(new_length: float) -> void:
-	if(camera_mode != CameraStates.FREE):
+	if(_camera_mode != CameraStates.FREE):
 		return
 	springarm.transform.origin.z = new_length
 	_springarm_target_length = new_length
@@ -180,7 +263,7 @@ func set_springarm_length(new_length: float) -> void:
 	_clamp_springarm_target_length()
 
 func add_springarm_length(new_length: float) -> void:
-	if(camera_mode != CameraStates.FREE):
+	if(_camera_mode != CameraStates.FREE):
 		return
 	springarm.transform.origin.z += new_length
 	_springarm_target_length = new_length
@@ -188,13 +271,13 @@ func add_springarm_length(new_length: float) -> void:
 	_clamp_springarm_target_length()
 
 func set_springarm_target_length(new_target_lenght: float) -> void:
-	if(camera_mode == CameraStates.LOCKED):
+	if(_camera_mode == CameraStates.LOCKED):
 		return
 	_springarm_target_length = new_target_lenght
 	_clamp_springarm_target_length()
 
 func add_springarm_target_length(new_target_lenght: float) -> void:
-	if(camera_mode == CameraStates.LOCKED):
+	if(_camera_mode == CameraStates.LOCKED):
 		return
 	_springarm_target_length += new_target_lenght
 	_clamp_springarm_target_length()
@@ -225,18 +308,36 @@ func set_lerp_weight(new_weight_decimal_form: float) -> void:
 		new_weight_decimal_form = 1
 	_lerp_weight = new_weight_decimal_form
 
+#region Camera modes
 ## makes camera focus a unit and interpolate it
 ## returns false if Node3D does not exist
 ## otherwise returns true and changes camera mode
 func focus_camera(unit: Node3D) -> bool:
+	if freeze_camera_mode:
+		return false
 	if(unit == null):
 		return false
 	_focused_unit = unit
-	camera_mode = CameraStates.FOCUS_UNIT
+	_camera_mode = CameraStates.FOCUS_UNIT
 	return true
 
 func free_camera() -> void:
-	camera_mode = CameraStates.FREE
+	if freeze_camera_mode:
+		return
+	_camera_mode = CameraStates.FREE
 
 func lock_camera() -> void:
-	camera_mode = CameraStates.LOCKED
+	if freeze_camera_mode:
+		return
+	if _camera_mode != CameraStates.LOCKED:
+		_unlock_camera_mode = _camera_mode
+	_camera_mode = CameraStates.LOCKED
+
+## if camera_moce is LOCKED, return the camera to the previous non-LOCKED value
+func unlock_camera() -> void:
+	if freeze_camera_mode:
+		return
+	if _camera_mode != CameraStates.LOCKED:
+		return
+	_camera_mode = _unlock_camera_mode
+#endregion

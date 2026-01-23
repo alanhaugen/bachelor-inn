@@ -20,13 +20,15 @@ func tutorial_wait_for_signal() -> void:
 ## Lock the camera so it can't be moved with
 ## the mouse, WASD or the arrow keys
 func tutorial_lock_camera() -> void:
-	Main.level.lock_camera = true;
+	Main.camera_controller.lock_camera()
+	Main.camera_controller.freeze_camera_mode = true
 
 
 ## Unlock the camera so it can be moved with
 ## the mouse, WASD or the arrow keys
 func tutorial_unlock_camera() -> void:
-	Main.level.lock_camera = false;
+	Main.camera_controller.unlock_camera()
+	Main.camera_controller.freeze_camera_mode = false
 
 
 ## Make it so the buttons in the game do nothing

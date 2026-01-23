@@ -64,11 +64,6 @@ const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 
-#region Mouse Camera Movement
-var is_dragging :bool = false;
-var _screen_movement : Vector2 = Vector2(0, 0)
-#endregion
-
 enum States {
 	PLAYING,
 	ANIMATING,
@@ -77,7 +72,6 @@ var state :int = States.PLAYING;
 var game_state : GameState;
 
 var is_in_menu: bool = false;
-var lock_camera: bool = false;
 var active_move: Command;
 var moves_stack: Array;
 
@@ -93,14 +87,6 @@ var attack_code: int = 0;
 var move_code: int = 1;
 
 #region Camera
-@onready var camera: Camera3D = $Camera3D
-enum CameraStates {
-	FREE, ## player controlled
-	FOCUS_UNIT, ## interpolating to a unit
-	TRACK_MOVE, ## following a moving unit
-	RETURN }; ## interpolating back to saved position
-var camera_mode : CameraStates = CameraStates.FREE;
-var saved_transform : Transform3D;
 var camera_controller : CameraController
 #endregion
 
@@ -204,34 +190,14 @@ func _input(event: InputEvent) -> void:
 	if is_in_menu:
 		return;
 	
-	var checkMouseDragging:bool = event is InputEventMouseMotion and is_dragging;
-	var checkScreenDragging:bool = false
-	#if statement is to fix a runtime bug
-	if event is InputEventScreenDrag and event.index >= 1:
-		checkScreenDragging = true
-	
-	if checkMouseDragging or checkScreenDragging:
-		#camera lock check is done at screen drag handling elsewhere
-		#camera.global_translate(Vector3(-event.relative.x,0,-event.relative.y) / mouse_drag_sensitivity);
-		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
-		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
-	
 	if event is InputEventMouseButton:
-		# Ignore mouse up events
-		if lock_camera == false:
-			if event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-				Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED;
-				is_dragging = true;
-		if event.pressed == false:
-			is_dragging = false;
-			Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE;
-			return;
-		
-		if is_dragging != false and event.button_index == MOUSE_BUTTON_RIGHT: 
-			return;
+		if Input.is_action_pressed("enable_dragging"):
+			return
 		if event.button_index != MOUSE_BUTTON_LEFT:
 			return;
-		
+		if event.pressed == false:
+			return;
+			
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
@@ -290,8 +256,6 @@ func _input(event: InputEvent) -> void:
 				#	if command is Attack:
 				#		movement_map.set_cell_item(command.attack_pos, attack_code);
 				
-				#camera.position.x = selected_unit.position.x;# + 4.5;
-				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
@@ -376,13 +340,13 @@ func update_side_bar(character: Character, side_bar: SideBar) -> void:
 		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
-	Main.camera_controller.camera.make_current()
-	camera.clear_current()
-	camera = Main.camera_controller.camera
 	camera_controller = Main.camera_controller
+	camera_controller.make_current()
 	camera_controller.setup_minmax_positions(minimum_camera_x, maximum_camera_x, minimum_camera_z, maximum_camera_z)
 	camera_controller.springarm_length_maximum = maximum_camera_height
 	camera_controller.springarm_length_minimum = minimum_camera_height
+	camera_controller.free_camera()
+	camera_controller.camera_speed = camera_speed
 	
 	cursor.hide()
 	trigger_map.hide()
@@ -592,13 +556,14 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
-		_screen_movement = Vector2.ZERO
+		camera_controller.lock_camera()
 		return;
 		
 	for i in Main.characters.size():
 		update_side_bar(Main.characters[i], side_bar_array[i]);
 		
 	turn_transition.hide();
+	camera_controller.unlock_camera()
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:
 		var pos :Vector3i = get_grid_cell_from_mouse();
@@ -611,45 +576,6 @@ func _process(delta: float) -> void:
 			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
 			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
 				update_stat(get_unit(pos), stat_popup_enemy);
-	
-	if lock_camera == false:
-		var tutorial_camera_moved : bool = false;
-		if Input.is_action_pressed("pan_right"):
-			#camera.global_translate(Vector3(1,0,0) * camera_speed * delta);
-			_screen_movement.x += camera_speed * delta
-		if Input.is_action_pressed("pan_left"):
-			#camera.global_translate(Vector3(-1,0,0) * camera_speed * delta);
-			_screen_movement.x -= camera_speed * delta
-		if Input.is_action_pressed("pan_up"):
-			#camera.global_translate(Vector3(0,0,-1) * camera_speed * delta);
-			_screen_movement.y -= camera_speed * delta
-		if Input.is_action_pressed("pan_down"):
-			#camera.global_translate(Vector3(0,0,1) * camera_speed * delta);
-			_screen_movement.y += camera_speed * delta
-		
-		camera_controller.add_pivot_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
-		#camera_controller.add_pivot_target_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
-		
-		
-		#camera.global_translate(Vector3(_screen_movement.x, 0, _screen_movement.y))
-		
-
-		
-		
-		if(_screen_movement != Vector2.ZERO):
-			Tutorial.tutorial_camera_moved();
-		if Input.is_action_pressed("selected"):
-			pass;
-	_screen_movement = Vector2.ZERO
-	
-	if camera.global_position.y > minimum_camera_height:
-		if Input.is_action_just_released("zoom_in") or Input.is_action_pressed("zoom_in"):
-			#camera.global_position -= camera.global_transform.basis.z * camera_speed * 20 * delta;
-			camera_controller.add_springarm_target_length(-camera_speed * 20 * delta)
-	if camera.global_position.y < maximum_camera_height:
-		if Input.is_action_just_released("zoom_out") or Input.is_action_pressed("zoom_out"):
-			#camera.global_position += camera.global_transform.basis.z * camera_speed * 20 * delta;
-			camera_controller.add_springarm_target_length(camera_speed * 20 * delta)
 	
 	if (is_in_menu):
 		return;
@@ -682,7 +608,6 @@ func _process(delta: float) -> void:
 			if (is_player_turn == false):
 				is_animation_just_finished = true;
 				is_player_turn = true;
-				#camera_controller.free_camera()
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
@@ -727,8 +652,6 @@ func _process(delta: float) -> void:
 			#position: move closer and move back to the if statement above
 			else:
 				selected_unit.position += dir.normalized() * step
-				#camera.position.x = selected_unit.position.x;# + 4.5;
-				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				
 				if (dir.z > 0):
 					selected_unit.play(selected_unit.run_down_animation)
@@ -740,8 +663,3 @@ func _process(delta: float) -> void:
 				elif (dir.x < 0):
 					selected_unit.play(selected_unit.run_left_animation)
 					selected_unit.sprite.flip_h = false
-			
-			#if(animation_path.is_empty()):
-			#	if(!is_player_turn):
-			#		camera_controller.free_camera()
-			#animated_unit.position.x = animationPath
