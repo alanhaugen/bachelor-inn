@@ -30,17 +30,19 @@ shader_parameter/outline_color = Color(1, 1, 1, 1)
 [node name="Character" type="Node3D"]
 script = ExtResource("1_dg0vw")
 
-[node name="Sprite" type="Sprite3D" parent="."]
+[node name="Height" type="Node3D" parent="."]
+
+[node name="Sprite" type="Sprite3D" parent="Height"]
 transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0.3, 1.2617838, -0.53662795)
 material_override = SubResource("ShaderMaterial_8sm5s")
 texture = ExtResource("3_8sm5s")
 
-[node name="Outline" type="Sprite3D" parent="."]
+[node name="Outline" type="Sprite3D" parent="Height"]
 transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0.3, 1.2617838, -0.53662795)
 material_override = SubResource("ShaderMaterial_lrf8u")
 texture = ExtResource("3_8sm5s")
 
-[node name="Shadow" type="Sprite3D" parent="."]
+[node name="Shadow" type="Sprite3D" parent="Height"]
 transform = Transform3D(10.268, 0, 0, 0, -2.3468644e-07, -4, 0, 5.369, -1.7484555e-07, 0.23657668, 0.6621771, 0.025605679)
 pixel_size = 0.001
 texture = ExtResource("5_1qt5x")
