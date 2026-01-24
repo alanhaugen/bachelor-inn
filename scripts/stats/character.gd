@@ -29,8 +29,8 @@ var stop_anim : bool = true
 var my_material : ShaderMaterial = null
 var my_outline_material : ShaderMaterial = null
 
-@onready var sprite : Sprite3D = $Sprite
-@onready var outline : Sprite3D = $Outline
+@onready var sprite : Sprite3D = $Height/Sprite
+@onready var outline : Sprite3D = $Height/Outline
 #endregion
 
 #region packed scenes
