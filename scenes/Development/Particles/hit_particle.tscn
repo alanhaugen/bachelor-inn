@@ -1,0 +1,56 @@
+[gd_scene load_steps=9 format=3 uid="uid://ddvscfqfihmwr"]
+
+[ext_resource type="Texture2D" uid="uid://clnr1acrtaarr" path="res://art/textures/ParticleTex/hitFX.png" id="1_d8685"]
+[ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="2_drpyy"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w357l"]
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ucq8"]
+transparency = 1
+albedo_texture = ExtResource("1_d8685")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_hokb8"]
+material = SubResource("StandardMaterial3D_0ucq8")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wkorp"]
+gravity = Vector3(0, 0, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8onu1"]
+transparency = 1
+albedo_texture = ExtResource("2_drpyy")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_ft1en"]
+material = SubResource("StandardMaterial3D_8onu1")
+
+[node name="HitFX" type="Node3D"]
+
+[node name="Hit" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.57487434, 2.4927733, 0)
+emitting = false
+amount = 1
+lifetime = 0.28
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_w357l")
+draw_pass_1 = SubResource("QuadMesh_hokb8")
+
+[node name="Hit2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4927733, 0)
+emitting = false
+amount = 1
+lifetime = 0.28
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_wkorp")
+draw_pass_1 = SubResource("QuadMesh_ft1en")

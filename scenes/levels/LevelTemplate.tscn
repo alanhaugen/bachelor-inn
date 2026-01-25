@@ -267,40 +267,41 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="OccupancyOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh_library = ExtResource("3_cx077")
 cell_size = Vector3(2, 1, 2)
 data = {
 "cells": PackedInt32Array(65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65535, 0, 0, 65529, 65533, 1441793, 65529, 65534, 1441793)
 }
-metadata/_editor_floor_ = Vector3(0, 1, 0)
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="TriggerOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("4_cx077")
 cell_size = Vector3(2, 1, 2)
+metadata/_editor_floor_ = Vector3(0, 1, 0)
 
 [node name="MovementOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 data = {
-"cells": PackedInt32Array(65532, 65534, 1048578, 1, 0, 1179649)
+"cells": PackedInt32Array(1, 0, 1179649)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="PathOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="FogOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)

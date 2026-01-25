@@ -1,5 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://ds7aqfhe6tsl1"]
+[gd_scene load_steps=16 format=3 uid="uid://ds7aqfhe6tsl1"]
 
+[ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="1_jitx2"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="1_wccbi"]
 [ext_resource type="Texture2D" uid="uid://bgj2u36gkqfj" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred.png" id="2_jitx2"]
 [ext_resource type="Texture2D" uid="uid://b8vt3136v8jph" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Mask4.png" id="3_uwx4l"]
@@ -14,10 +15,16 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n037y"]
 render_priority = 0
-shader = ExtResource("1_wccbi")
-shader_parameter/diffuse_tex = ExtResource("2_jitx2")
-shader_parameter/normal_map = ExtResource("4_3x26p")
-shader_parameter/edge_mask = ExtResource("3_uwx4l")
+shader = ExtResource("1_jitx2")
+shader_parameter/diffuse_atlas = ExtResource("2_jitx2")
+shader_parameter/normal_atlas = ExtResource("4_3x26p")
+shader_parameter/mask_atlas = ExtResource("3_uwx4l")
+shader_parameter/frame_index = 1
+shader_parameter/frame_columns = 1
+shader_parameter/frame_rows = 1
+shader_parameter/grey_tint = false
+shader_parameter/hit_effect = false
+shader_parameter/hit_effect_color = Color(1, 0, 0.003921569, 1)
 shader_parameter/edge_strength = 1.0
 shader_parameter/edge_tint = Color(1.4687854, 0.67581093, 0.7721007, 1)
 shader_parameter/normal_tilt = 4.0
@@ -91,7 +98,6 @@ texture = ExtResource("5_876xo")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.45270583, -0.72990024, 0.51215535, 0.2433056, 0.65370625, 0.7165686, -0.8578227, -0.19978453, 0.4735254, 14.462366, 10.839102, 9.702106)
-visible = false
 light_color = Color(1, 0.78084016, 0.60053676, 1)
 light_energy = 0.304
 light_indirect_energy = 2.894

@@ -7,10 +7,10 @@
 shader = ExtResource("2_ebp8v")
 shader_parameter/Main_Color_Temp = 4138.0
 shader_parameter/Main_Green_Tint = 1.4901199989481029e-06
-shader_parameter/Main_Brightness = 1.30000001937156
+shader_parameter/Main_Brightness = 1.0000000149012
 shader_parameter/Main_Contrast = 1.0
 shader_parameter/Main_Saturation = 1.0000000149012
-shader_parameter/Vignette = 2.0
+shader_parameter/Vignette = 1.28999997116592
 shader_parameter/Color_Filter = Color(1, 0.8901961, 0.8509804, 1)
 
 [node name="CameraScene" type="Node3D"]

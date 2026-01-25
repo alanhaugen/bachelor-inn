@@ -1,11 +1,11 @@
-[gd_scene load_steps=47 format=3 uid="uid://mc5u6gfquy7q"]
+[gd_scene load_steps=43 format=3 uid="uid://mc5u6gfquy7q"]
 
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_akwul"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_uhntr"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="3_qaf04"]
-[ext_resource type="MeshLibrary" uid="uid://dafu2fhhlqvso" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_dsruw"]
+[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_dsruw"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="4_q0lo1"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="5_dsruw"]
+[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="5_dsruw"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="6_40x11"]
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="7_4aqdv"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="8_q0lo1"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="12_w357l"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="13_y13he"]
 [ext_resource type="Shader" uid="uid://b5ptog53u0l54" path="res://art/WIP/Materials and Shaders/ScreenEffects_Ultimate.tres" id="14_dsruw"]
+[ext_resource type="PackedScene" uid="uid://ddvscfqfihmwr" path="res://scenes/Development/Particles/hit_particle.tscn" id="16_6lhpm"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q0lo1"]
 render_priority = 0
@@ -212,29 +213,6 @@ shader_parameter/Vignette = 0.35999999195328
 shader_parameter/Film_Grain = 0.0
 shader_parameter/Filter_Strenght = 0.0
 
-[sub_resource type="Curve" id="Curve_6lhpm"]
-_data = [Vector2(0, 0.8311688), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.6446284, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_d1qpj"]
-curve = SubResource("Curve_6lhpm")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0ucq8"]
-emission_shape = 1
-emission_sphere_radius = 0.3
-gravity = Vector3(0, 0, 0)
-scale_curve = SubResource("CurveTexture_d1qpj")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_er3k5"]
-transparency = 2
-alpha_scissor_threshold = 0.5
-alpha_antialiasing_mode = 0
-texture_filter = 0
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_hokb8"]
-material = SubResource("StandardMaterial3D_er3k5")
-
 [node name="ParticleScene" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
@@ -250,7 +228,7 @@ mesh_library = ExtResource("4_dsruw")
 cell_size = Vector3(2, 1, 2)
 cell_center_y = false
 data = {
-"cells": PackedInt32Array(-131069, 5, 1441805, 5, 1, 5, 0, 65535, 41)
+"cells": PackedInt32Array(-131069, 5, 1441805)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
@@ -327,12 +305,4 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FireParticle" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0025184, 0, -1.0120733)
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="FireParticle"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0322858, 0)
-amount = 3
-lifetime = 1.25
-process_material = SubResource("ParticleProcessMaterial_0ucq8")
-draw_pass_1 = SubResource("QuadMesh_hokb8")
+[node name="HitFX" parent="." instance=ExtResource("16_6lhpm")]
