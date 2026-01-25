@@ -1,15 +1,29 @@
 extends RefCounted
 class_name Grid
 
-var grid_map : GridMap
+var grid : GridMap
 
 
-func _init(grid_map_ : GridMap) -> void:
-	grid_map = grid_map_
+func _init(grid_map : GridMap) -> void:
+	grid = grid_map
+
+
+func cell_to_world(pos: Vector3i) -> Vector3:
+	return grid.to_global(grid.map_to_local(pos))
+
+
+func is_walkable(pos: Vector3i, from_pos: Vector3i = pos) -> bool:
+	if not grid.get_used_cells().has(pos):
+		return false
+	if grid.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return false
+	if from_pos != pos and abs(pos.y - from_pos.y) > 1:
+		return false
+	return true
 
 
 func is_inside(pos : Vector3i) -> bool:
-	return grid_map.get_used_cells().has(pos)
+	return grid.get_used_cells().has(pos)
 
 
 func is_valid(pos : Vector3i) -> bool:
@@ -17,4 +31,4 @@ func is_valid(pos : Vector3i) -> bool:
 
 
 func clear() -> void:
-	grid_map.clear()
+	grid.clear()

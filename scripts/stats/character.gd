@@ -310,7 +310,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
 		#if state.is_playable():
 			#my_material.set_shader_parameter("grey_tint", true)
-		
+
 
 func reset() -> void:
 	state.is_alive = true;
