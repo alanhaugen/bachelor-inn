@@ -83,6 +83,8 @@ audio/channel_defaults={
 
 [display]
 
+window/size/viewport_width=480
+window/size/viewport_height=275
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 

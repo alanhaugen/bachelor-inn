@@ -98,9 +98,9 @@ func play(anim : SpriteAnim) -> void:
 	my_outline_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
 	my_outline_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
 	#debug:::
-	print("Outline shader params:")
-	for p: Dictionary in my_outline_material.shader.get_shader_uniform_list():
-		print(" - ", p["name"])
+	#print("Outline shader params:")
+	#for p: Dictionary in my_outline_material.shader.get_shader_uniform_list():
+		#print(" - ", p["name"])
 
 
 func pause_anim() -> void:
@@ -252,7 +252,7 @@ func _ready() -> void:
 	#sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
 	#sprite.scale = Vector3(4,4,4)
 		
-	#outline.translate(Vector3(0.3,1.0,-0.1))
+	#outline.translatsprite.translatee(Vector3(0.3,1.0,-0.1))
 	#outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
 	#outline.scale = Vector3(4,4,4)
 	play(run_down_animation)
@@ -309,7 +309,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
 		#if state.is_playable():
 			#my_material.set_shader_parameter("grey_tint", true)
-
+		
 
 func reset() -> void:
 	state.is_alive = true;

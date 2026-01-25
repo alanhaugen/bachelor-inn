@@ -136,6 +136,11 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 		return result.position
 	return Vector3();
 
+#fens kinda wonky grid to world transform that might be crap
+
+func grid_to_world(pos: Vector3i) -> Vector3:
+	var world:= terrain_map.map_to_local(pos)
+	return world
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
@@ -220,8 +225,9 @@ func _input(event: InputEvent) -> void:
 		if (get_tile_name(pos) == "Water"):
 			return
 		
-		var globalPos: Vector3i = terrain_map.map_to_local(pos)
-		cursor.position = Vector3(globalPos.x, cursor.position.y, globalPos.z)
+		var world_pos := grid_to_world(pos)
+		cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
+
 		#map.set_cell(pos, 1);
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show()
@@ -405,8 +411,8 @@ func _ready() -> void:
 			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
 		elif (get_unit_name(pos) == "Chest"):
 			var chest: Node = CHEST.instantiate();
-			chest.position = pos * 2;
-			chest.position += Vector3(1, 0, 1);
+			chest.position = grid_to_world(pos)
+
 			add_child(chest);
 		elif (get_unit_name(pos) == "VictoryTrigger"):
 			pass
@@ -415,8 +421,8 @@ func _ready() -> void:
 			
 		if (new_unit != null):
 			#unitArray.append(newUnit);
-			new_unit.position = pos * 2;
-			new_unit.position += Vector3(1, 0, 1);
+			new_unit.position = grid_to_world(pos)
+
 			#newUnit = 2;
 			if new_unit.get_parent():
 				new_unit.reparent(Main.world, false);
@@ -482,9 +488,9 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	var path := movement_grid.get_path(start, end)
 
 	for p in path:
-		var anim_pos := terrain_map.map_to_local(p)
-		anim_pos.y = 0
+		var anim_pos := grid_to_world(p)
 		animation_path.append(anim_pos)
+
 
 	selected_unit = get_unit(start)
 

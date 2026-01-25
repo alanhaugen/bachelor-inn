@@ -12,6 +12,10 @@ edge_fade = 0.42870885
 level_name = "first fen edition"
 minimum_camera_height = 10.0
 maximum_camera_height = 30.0
+minimum_camera_x = -10.0
+maximum_camera_x = 100.0
+minimum_camera_z = -10.0
+maximum_camera_z = 10.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {
@@ -32,18 +36,25 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="MovementOverlay" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.475, 0)
 data = {
 "cells": PackedInt32Array(1, 65535, 1179649, 1, 0, 1179649)
 }
 
 [node name="PathOverlay" parent="." index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
 data = {
-"cells": PackedInt32Array(1, 65533, 1179649)
+"cells": PackedInt32Array(1, 65533, 1179649, 1, 2, 2, 0, 2, 2)
 }
 
 [node name="Camera3D" parent="." index="6"]
 transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, -2.8392298, 15.881016, 9.044029)
 fov = 35.0
+
+[node name="Cursor" parent="." index="7"]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.5490399, -1.017)
+visible = true
+no_depth_test = false
 
 [node name="DirectionalLight3D" parent="Lights" index="3"]
 light_color = Color(0.7162962, 0.7162962, 0.7162962, 1)
