@@ -13,16 +13,13 @@ const DIRECTIONS := [
 #region State variables
 var cost_map : Dictionary = {} # Vector3i -> int
 var used_cells : Dictionary = {} # Vector3i -> bool
-var tile_to_id : Dictionary = {}   # Vector3i -> int
-var id_to_tile : Dictionary = {}   # int -> Vector3i
-var next_id : int = 0
 #endregion
 
 
 #region methods
 func _init(movement_overlay : GridMap) -> void:
-	grid_map = movement_overlay
-	grid_map.clear();
+	grid = movement_overlay
+	grid.clear();
 
 
 func get_cost(pos : Vector3i) -> int:
@@ -34,11 +31,9 @@ func is_blocked(pos : Vector3i) -> bool:
 
 
 func clear() -> void:
-	grid_map.clear()
+	grid.clear()
 	cost_map.clear()
 	used_cells.clear()
-	id_to_tile.clear()
-	next_id = 0
 
 
 func fill(tiles : Array[GridTile]) -> void:
@@ -66,57 +61,69 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 
 
 func set_tile(tile : GridTile) -> void:
-	var id := next_id
-	next_id += 1
-	
-	tile_to_id[tile.pos] = id
-	id_to_tile[id] = tile.pos
-	
 	cost_map[tile.pos] = tile.weight
 	used_cells[tile.pos] = true
-	grid_map.set_cell_item(tile.pos, tile.type)
+	grid.set_cell_item(tile.pos, tile.type)
 
 
 func set_move_tile(pos : Vector3i) -> void:
-	grid_map.set_cell_item(pos, GridTile.Type.MOVE)
+	grid.set_cell_item(pos, GridTile.Type.MOVE)
 
 
 func set_attack_tile(pos : Vector3i) -> void:
-	grid_map.set_cell_item(pos, GridTile.Type.ATTACK)
+	grid.set_cell_item(pos, GridTile.Type.ATTACK)
 
 
-func build_astar() -> AStar3D:
-	var astar := AStar3D.new()
-	
-	# Add points
-	for pos : Vector3i in tile_to_id.keys():
-		var id : int = tile_to_id[pos]
-		var cost := get_cost(pos)
-		astar.add_point(id, Vector3(pos), cost)
-
-	# Connect neighbors
-	for pos : Vector3i in cost_map.keys():
-		for dir : Vector3i in DIRECTIONS:
-			var neighbor := pos + dir
-			if is_walkable(neighbor):
-				var from_id : int = tile_to_id[pos]
-				var to_id : int = tile_to_id[neighbor]
-				astar.connect_points(from_id, to_id, false)
-	
-	return astar
+# Heuristic: Manhattan distance for grid
+func heuristic(a: Vector3i, b: Vector3i) -> float:
+	return abs(a.x - b.x) + abs(a.y - b.y) + abs(a.z - b.z)
 
 
-func get_path(start : Vector3i, target : Vector3i) -> Array[Vector3i]:
-	var astar := build_astar()
-		
-	var start_id : int = tile_to_id[start]
-	var target_id : int = tile_to_id[target]
+# Reconstruct path from came_from dictionary
+func reconstruct_path(came_from: Dictionary, current: Vector3i) -> Array[Vector3i]:
+	var total_path:Array[Vector3i] = [current]
+	while came_from.has(current):
+		current = came_from[current]
+		total_path.insert(0, current)
+	return total_path
 
-	var ids := astar.get_id_path(start_id, target_id)
-	var path : Array[Vector3i] = []
 
-	for id in ids:
-		path.append(id_to_tile[id])
-	
-	return path
+func get_path(start : Vector3i, goal : Vector3i) -> Array[Vector3i]:
+	var open_set := [start]
+	var came_from := {}
+	var g_score := {start: 0.0}
+	var f_score := {start: heuristic(start, goal)}
+
+	while open_set.size() > 0:
+		# Find the node in open_set with the lowest f_score
+		var current: Vector3i = open_set[0]
+		var lowest_f: float = f_score.get(current, INF)
+		for node: Vector3i in open_set:
+			if f_score.get(node, INF) < lowest_f:
+				current = node
+				lowest_f = f_score[node]
+
+		# Check if we reached the goal
+		if current == goal:
+			return reconstruct_path(came_from, current)
+
+		open_set.erase(current)
+
+		# Check neighbors
+		for dir: Vector3i in DIRECTIONS:
+			var neighbor := current + dir
+			if not is_walkable(neighbor, current):
+				continue
+
+			var tentative_g: float = g_score[current] + get_cost(neighbor)
+
+			if not g_score.has(neighbor) or tentative_g < g_score[neighbor]:
+				came_from[neighbor] = current
+				g_score[neighbor] = tentative_g
+				f_score[neighbor] = tentative_g + heuristic(neighbor, goal)
+				if not open_set.has(neighbor):
+					open_set.append(neighbor)
+
+	# No path found
+	return []
 #endregion
