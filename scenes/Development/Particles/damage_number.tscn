@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://difk7b1po2utl"]
+
+[ext_resource type="Script" uid="uid://ebqjlgvbu1l3" path="res://scenes/Development/Particles/damage_number.gd" id="1_twp5i"]
+
+[node name="damageNumber" type="Node3D"]
+script = ExtResource("1_twp5i")
+
+[node name="Label3D" type="Label3D" parent="."]
+billboard = 1
+outline_modulate = Color(0, 0, 0, 0)
+text = "99"
+font_size = 96
+outline_size = 0

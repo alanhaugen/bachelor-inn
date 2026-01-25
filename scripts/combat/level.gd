@@ -9,6 +9,8 @@ class_name Level
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
 
+@onready var combat_vfx : CombatVFXController = $CombatVFXController
+
 @export var level_name :String
 
 var terrain_grid : Grid
@@ -637,7 +639,12 @@ func _process(delta: float) -> void:
 			active_move = moves_stack.pop_front();
 			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
 				Dialogic.start(level_name + "LevelVictory")
+				
 			active_move.execute(game_state);
+			
+			if active_move is Attack: 
+				combat_vfx.play_attack(active_move.result)
+			
 			CheckVictoryConditions();
 			var code := enemy_code;
 			if is_player_turn:

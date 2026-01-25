@@ -1,0 +1,10 @@
+[gd_scene load_steps=4 format=3 uid="uid://cxrc33gqig64w"]
+
+[ext_resource type="Script" uid="uid://cqwbigxpocqh5" path="res://scripts/Development Particles/combat_vfx_controller.gd" id="1_dx83h"]
+[ext_resource type="PackedScene" uid="uid://difk7b1po2utl" path="res://scenes/Development/Particles/damage_number.tscn" id="2_uwjaq"]
+[ext_resource type="PackedScene" uid="uid://ddvscfqfihmwr" path="res://scenes/Development/Particles/hit_particle.tscn" id="3_a2f85"]
+
+[node name="CombatVFXController" type="Node3D"]
+script = ExtResource("1_dx83h")
+damage_number_scene = ExtResource("2_uwjaq")
+hit_particles_scene = ExtResource("3_a2f85")

@@ -13,7 +13,7 @@ uniform int frame_rows = 1;
 group_uniforms Effects;
 uniform bool grey_tint = false;
 
-uniform bool hit_effect = false;
+uniform float hit_effect = 0.0;
 uniform vec3 hit_effect_color : source_color = vec3(1.0,1.0,1.0);
 
 group_uniforms Settings;
@@ -58,8 +58,8 @@ void fragment() {
 		vec3 grey_color = vec3(0.338, 0.338, 0.338);
 		d.rgb *= grey_color;
 	}
-	if (hit_effect){
-		d.rgb *= vec3(hit_effect_color);
+	if (hit_effect > 0.0){
+		d.rgb = mix(d.rgb, d.rgb * hit_effect_color, hit_effect);
 	}
 
     ALBEDO = d.rgb;

@@ -323,6 +323,22 @@ func reset() -> void:
 	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)
 
+func flash_hit(crit : bool) -> void:
+	if my_material == null:
+		return
+
+	var color := Vector3(1.0, 1.0, 1.0)
+	var strength := 1.0
+
+	if crit:
+		color = Vector3(1.0, 0.3, 0.3)
+		strength = 1.0
+
+	my_material.set_shader_parameter("hit_effect_color", color)
+	my_material.set_shader_parameter("hit_effect", strength)
+
+	var tween := create_tween()
+	tween.tween_property(my_material,"shader_parameter/hit_effect",0.0,0.15)
 
 func die(simulate_only : bool) -> void:
 	state.is_alive = false
