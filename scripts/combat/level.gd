@@ -143,18 +143,38 @@ func grid_to_world(pos: Vector3i) -> Vector3:
 	return world
 
 func get_grid_cell_from_mouse() -> Vector3i:
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position();
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var ray_origin: Vector3 = camera_controller.project_ray_origin(mouse_pos)
-	var ray_direction: Vector3 = camera_controller.project_ray_normal(mouse_pos)
-	
-	# Cast ray and get intersection point
-	var intersection: Vector3 = raycast_to_gridmap(ray_origin, ray_direction)
-	if intersection != null:
-		# Convert world position to grid coordinates
-		var grid_pos: Vector3i = terrain_map.local_to_map(terrain_map.to_local(intersection));
-		return grid_pos;
-	
-	return Vector3i();
+	var ray_dir: Vector3 = camera_controller.project_ray_normal(mouse_pos).normalized()
+
+	var max_distance: float = 100.0
+	var step: float = 0.1
+	var distance: float = 0.0
+
+	var cell_size: Vector3 = terrain_map.cell_size
+	var best_cell: Vector3i
+	var is_best_cell := false
+
+	while distance < max_distance:
+		var check_pos: Vector3 = ray_origin + ray_dir * distance
+
+		# Convert world position to GridMap cell coordinates
+		var x: int = int(floor(check_pos.x / cell_size.x))
+		var y: int = int(floor(check_pos.y / cell_size.y))
+		var z: int = int(floor(check_pos.z / cell_size.z))
+		var candidate: Vector3i = Vector3i(x, y, z)
+
+		if terrain_map.get_used_cells().has(candidate):
+			best_cell = candidate
+			is_best_cell = true
+			break
+
+		distance += step
+
+	if is_best_cell != false:
+		return best_cell
+
+	return Vector3i()  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
@@ -204,7 +224,6 @@ func _input(event: InputEvent) -> void:
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
-		pos.y = 0;
 		
 		if state == States.CHOOSING_ATTACK:
 			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
@@ -491,7 +510,6 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 		var anim_pos := grid_to_world(p)
 		animation_path.append(anim_pos)
 
-
 	selected_unit = get_unit(start)
 
 
@@ -570,7 +588,6 @@ func _process(delta: float) -> void:
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:
 		var pos :Vector3i = get_grid_cell_from_mouse();
-		pos.y = 0;
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			path_map.clear()
 			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)

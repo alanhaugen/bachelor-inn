@@ -2,7 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
-[ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
+[ext_resource type="Shader" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]

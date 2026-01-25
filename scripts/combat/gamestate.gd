@@ -111,15 +111,32 @@ func is_inside_map(pos : Vector3i) -> bool:
 	return false;
 
 
+func get_tiles_at_xz(x: int, z: int) -> Array[Vector3i]:
+	var result: Array[Vector3i] = []
+	
+	# 'terrain' is assumed to be an array of tile objects or Vector3i positions
+	# Each tile must have a position: Vector3i
+	for tile in terrain:
+		if tile.position.x == x and tile.position.z == z:
+			result.append(tile.position)
+	
+	# Sort by Y ascending (lowest first) to make it easy to pick topmost later
+	result.sort_custom(func(a: Vector3i, b: Vector3i) -> int:
+		return a.y < b.y
+	)
+	
+	return result
+
+
 func is_free(pos : Vector3i) -> bool:
 	for t in terrain:
 		if t.is_passable == false:
-			if t.position.x == pos.x and t.position.z == pos.z:
+			if t.position == pos:
 				return false;
 	
 	for u in units:
 		if u.state.is_alive:
-			if u.state.grid_position.x == pos.x and u.state.grid_position.z == pos.z:
+			if u.state.grid_position == pos:
 				return false;
 	
 	return true;

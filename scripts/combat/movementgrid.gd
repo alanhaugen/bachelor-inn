@@ -1,15 +1,6 @@
 extends Grid
 class_name MovementGrid
 
-#region constants
-const DIRECTIONS := [
-	Vector3i(1, 0, 0),
-	Vector3i(-1, 0, 0),
-	Vector3i(0, 0, 1),
-	Vector3i(0, 0, -1)
-]
-#endregion
-
 #region State variables
 var cost_map : Dictionary = {} # Vector3i -> int
 var used_cells : Dictionary = {} # Vector3i -> bool
@@ -88,6 +79,32 @@ func reconstruct_path(came_from: Dictionary, current: Vector3i) -> Array[Vector3
 	return total_path
 
 
+func get_walkable_neighbors(current: Vector3i) -> Array[Vector3i]:
+	var neighbors: Array[Vector3i] = []
+	for dx: int in [-1,0,1]:
+		for dy: int in [-1,0,1]:
+			for dz: int in [-1,0,1]:
+				if dx == 0 and dy == 0 and dz == 0:
+					continue
+				
+				var neighbor: Vector3i = current + Vector3i(dx, dy, dz)
+				
+				# Only allow moves that are:
+				# 1. horizontal (dx or dz only)
+				# 2. vertical (dy only)
+				# 3. vertical + horizontal of 1 tile (climbing up)
+				var h_move: int = abs(dx) + abs(dz)
+				var v_move: int = abs(dy)
+				if h_move > 1 or v_move > 1:
+					continue
+				if h_move == 0 and v_move == 0:
+					continue
+				
+				if is_walkable(neighbor, current):
+					neighbors.append(neighbor)
+	return neighbors
+
+
 func get_path(start : Vector3i, goal : Vector3i) -> Array[Vector3i]:
 	var open_set := [start]
 	var came_from := {}
@@ -110,8 +127,7 @@ func get_path(start : Vector3i, goal : Vector3i) -> Array[Vector3i]:
 		open_set.erase(current)
 
 		# Check neighbors
-		for dir: Vector3i in DIRECTIONS:
-			var neighbor := current + dir
+		for neighbor: Vector3i in get_walkable_neighbors(current):
 			if not is_walkable(neighbor, current):
 				continue
 
