@@ -13,13 +13,14 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")
-shader_parameter/colA = Color(0.47656846, 1.8049032e-07, 0.22045138, 1)
-shader_parameter/colB = Color(0.62352943, 0.24705882, 0.6117647, 1)
-shader_parameter/colC = Color(0.4627451, 0.25882354, 0.5411765, 1)
-shader_parameter/pixelation = 24.72
+shader_parameter/colA = Color(0, 0, 0, 1)
+shader_parameter/colB = Color(0.99999994, 0.028122317, 0.6299224, 1)
+shader_parameter/colC = Color(4.813075e-07, 0.52515864, 0.071510054, 1)
+shader_parameter/pixelation = 80.2
 shader_parameter/pixelated = true
-shader_parameter/offsety = 0.61
-shader_parameter/offsetx = 0.835
+shader_parameter/offsety = 0.705
+shader_parameter/offsetx = 0.03
+shader_parameter/speed = 0.5
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4hx67"]
 texture = ExtResource("3_v8ire")
@@ -190,7 +191,7 @@ offset_right = 42.569824
 offset_bottom = -38.88504
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(3, 3)
+scale = Vector2(3.47, 3.47)
 size_flags_horizontal = 6
 
 [node name="Background" type="ColorRect" parent="UI"]
@@ -214,21 +215,20 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
-custom_minimum_size = Vector2(6.78, 163.395)
-layout_mode = 0
-offset_left = -309.19
-offset_top = -143.37166
-offset_right = -88.85669
-offset_bottom = 20.023346
+custom_minimum_size = Vector2(6.66, 163.395)
+layout_mode = 1
+offset_left = -276.82132
+offset_top = -133.46254
+offset_right = -56.488007
+offset_bottom = 29.932495
 texture = ExtResource("8_d233l")
-stretch_mode = 5
 
 [node name="Selector" type="HBoxContainer" parent="UI/MainMenu"]
 layout_mode = 0
-offset_left = -310.52335
-offset_top = 156.96167
-offset_right = 147.47665
-offset_bottom = 200.96167
+offset_left = -265.29395
+offset_top = 121.5807
+offset_right = 192.70605
+offset_bottom = 165.58072
 
 [node name="StartGameButton" type="Button" parent="UI/MainMenu/Selector"]
 custom_minimum_size = Vector2(32, 32)
@@ -267,16 +267,24 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_5vttb")
 text = "Quit"
 
 [node name="LevelSelect" type="Control" parent="UI"]
+visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="LevelSelectVBOX" type="VBoxContainer" parent="UI/LevelSelect"]
-layout_mode = 0
-offset_left = -224.57002
-offset_top = -14.11499
-offset_right = 233.42998
-offset_bottom = 182.88501
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.5418
+offset_top = -96.978386
+offset_right = 210.4582
+offset_bottom = 100.021614
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="LoadMap0" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
 custom_minimum_size = Vector2(32, 32)
