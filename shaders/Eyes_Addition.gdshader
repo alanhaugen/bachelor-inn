@@ -95,5 +95,5 @@ void fragment() {
 	
 	vec2 uv = v.nearest_vec;
 	float mask = eyelid_shape(uv, local, eye_size) * pupil(uv, pupil_size);
-	COLOR = vec4(seg_rand,0 ,0 , 1.0);
+	COLOR = vec4(mask * eye_color,0 ,0 , 1.0);
 }
