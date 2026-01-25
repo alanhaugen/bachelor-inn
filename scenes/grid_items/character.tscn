@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://dv1u0vifov2kh" path="res://shaders/Stencilp2.gdshader" id="2_lrf8u"]
 [ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="2_nbvrd"]
 [ext_resource type="Texture2D" uid="uid://62qni0klik8s" path="res://art/textures/andreas.png" id="3_8sm5s"]
-[ext_resource type="Texture2D" uid="uid://w1fx0useif7b" path="res://art/textures/ParticleTex/Shadow.png" id="5_1qt5x"]
+[ext_resource type="Texture2D" uid="uid://6fvma6gce7rg" path="res://art/textures/ParticleTex/Shadow.png" id="5_1qt5x"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8sm5s"]
 render_priority = 0
@@ -27,7 +27,7 @@ shader_parameter/frame_columns = 6
 shader_parameter/frame_rows = 1
 shader_parameter/outline_color = Color(1, 1, 1, 1)
 
-[node name="Character" type="Node3D"]
+[node name="Character2" type="Node3D"]
 script = ExtResource("1_dg0vw")
 
 [node name="Sprite" type="Sprite3D" parent="."]

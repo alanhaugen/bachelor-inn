@@ -7,7 +7,7 @@ extends Node3D
 @onready var gui: Control = $UI;
 
 ## Level buttons
-@onready var levelButton: Button = $UI/VBoxContainer/LevelSelect/LoadMap0;
+@onready var levelButton: Button = $UI/LevelSelect/LevelSelectVBOX/LoadMap0;
 
 ## Names of levels in the order they will be played
 @export var levels_order: LevelOrder
@@ -21,7 +21,7 @@ func _ready() -> void:
 	Main.levels = levels_order.levels;
 	Main.camera_controller = camera_controller;
 	
-	$UI/VBoxContainer/LevelSelect.visible = false;
+	$UI/LevelSelect.visible = false;
 	
 	print(OS.get_data_dir());
 	
@@ -41,22 +41,22 @@ func _ready() -> void:
 #region: --- Signals ---
 func _on_load_map_0_pressed() -> void:
 	$UI/Background.visible = false;
-	$UI/VBoxContainer/LevelSelect.visible = false;
+	$UI/LevelSelect.visible = false;
 	Main.save.read(0);
 func _on_load_map_1_pressed() -> void:
 	$UI/Background.visible = false;
-	$UI/VBoxContainer/LevelSelect.visible = false;
+	$UI/LevelSelect.visible = false;
 	Main.save.read(1);
 func _on_load_map_2_pressed() -> void:
 	$UI/Background.visible = false;
-	$UI/VBoxContainer/LevelSelect.visible = false;
+	$UI/LevelSelect.visible = false;
 	Main.save.read(2);
 func _on_start_game_button_pressed() -> void:
-	$UI/VBoxContainer/LevelSelect.visible = true;
-	$UI/VBoxContainer/MainMenu.visible = false;
+	$UI/LevelSelect.visible = true;
+	$UI/MainMenu.visible = false;
 func _on_back_button_pressed() -> void:
-	$UI/VBoxContainer/LevelSelect.visible = false;
-	$UI/VBoxContainer/MainMenu.visible = true;
+	$UI/LevelSelect.visible = false;
+	$UI/MainMenu.visible = true;
 func _on_quit_button_pressed() -> void:
 	get_tree().quit();
 #endregion

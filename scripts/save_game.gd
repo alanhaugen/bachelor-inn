@@ -2,7 +2,15 @@ extends Resource
 class_name SaveGame
 
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
-const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
+
+
+const ALFRED: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
+const LUCY: PackedScene = preload("res://scenes/grid_items/Char_Lucy.tscn");
+
+const CHARACTER_SCENES := {
+	"Alfred" : ALFRED,
+	"Lucy" : LUCY
+}
 
 ## Use this to detect old player save files and update them 
 @export var version := 1;
@@ -27,7 +35,8 @@ func create_new_save_data() -> void:
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
-	
+	char1.scene_id = "Alfred"
+	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
 	var data2 := CharacterData.new()
 	data2.unit_name = "Lucy"
 	data2.speciality = CharacterData.Speciality.Militia
@@ -38,8 +47,12 @@ func create_new_save_data() -> void:
 	var char2 := Character.new()
 	char2.data = data2
 	char2.state = state2
-	
-	var units: Array[Dictionary] = [char1.save(), char2.save()];
+	char2.scene_id = "Lucy"
+	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	var units := [
+		char1.save(), 
+		char2.save()
+	];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -60,10 +73,9 @@ func create_new_save_data() -> void:
 		},
 	}
 	
-	var json_string: String = JSON.stringify(saves);
-	
-	save_file.store_string(json_string);
-	
+	#is the VAR necessary?????
+	#var json_string: String = JSON.stringify(saves);
+	save_file.store_string(JSON.stringify(saves));
 	save_file.close();
 
 
@@ -84,11 +96,8 @@ func write(_save_slot: int) -> void:
 		# Call the node's save function.
 		var move_data: String = move.call("save")
 
-		# JSON provides a static method to serialized JSON string.
-		var json_string: String = JSON.stringify(move_data);
-
 		# Store the save dictionary as a new line in the save file.
-		save_file.store_line(json_string);
+		save_file.store_line(JSON.stringify(move_data));
 	save_file.close();
 
 
@@ -122,7 +131,10 @@ func read(save_slot: int) -> bool:
 	Main.characters.clear()
 
 	for unit_dict : Dictionary in units:
-		var character := PLAYER.instantiate();
+		
+		var scene_id : String = unit_dict.get("scene")
+		var packed_scene : PackedScene = CHARACTER_SCENES.get(scene_id)
+		var character := packed_scene.instantiate();
 
 		# --- DATA ---
 		var data := CharacterData.new()

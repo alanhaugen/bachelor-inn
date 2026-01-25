@@ -1,0 +1,17 @@
+[gd_scene load_steps=8 format=3 uid="uid://18v4frr576yx"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_yyrg3"]
+[ext_resource type="Resource" uid="uid://c28usyvygwoon" path="res://art/Animations/Characters/Lucy/Lucy_Moving_L.tres" id="2_8n4yx"]
+[ext_resource type="Resource" uid="uid://dpukbl3rh8fwv" path="res://art/Animations/Characters/Lucy/Lucy_Moving_R.tres" id="3_q036t"]
+[ext_resource type="Resource" uid="uid://cfmnuaxxcga7p" path="res://art/Animations/Characters/Lucy/Lucy_Moving_U.tres" id="4_tulk5"]
+[ext_resource type="Resource" uid="uid://druylhudbfyv" path="res://art/Animations/Characters/Lucy/Lucy_moving_D.tres" id="5_uwj3m"]
+[ext_resource type="Resource" uid="uid://cx03dpln0b65p" path="res://art/Animations/Characters/Lucy/Lucy_Idle.tres" id="6_dr8et"]
+[ext_resource type="Texture2D" uid="uid://dniub5gwqivsr" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_basecolour.png" id="7_elvro"]
+
+[node name="Character" instance=ExtResource("1_yyrg3")]
+run_left_animation = ExtResource("2_8n4yx")
+run_right_animation = ExtResource("3_q036t")
+run_up_animation = ExtResource("4_tulk5")
+run_down_animation = ExtResource("5_uwj3m")
+idle_animation = ExtResource("6_dr8et")
+portrait = ExtResource("7_elvro")

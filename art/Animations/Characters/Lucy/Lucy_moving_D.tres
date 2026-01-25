@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://druylhudbfyv"]
+
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_4gkl6"]
+[ext_resource type="Texture2D" uid="uid://vsb7ts0dwpb3" path="res://art/Animations/Characters/Lucy/Tex/D_Anim_lucywalk_basecolour.png" id="1_l27ld"]
+[ext_resource type="Texture2D" uid="uid://dbqxbnhcgb3eq" path="res://art/Animations/Characters/Lucy/Tex/D_Anim_lucywalk_mask4.png" id="2_rlchk"]
+[ext_resource type="Texture2D" uid="uid://d165mivdkg0qg" path="res://art/Animations/Characters/Lucy/Tex/D_Anim_lucywalk_normal.png" id="3_7w0f4"]
+
+[resource]
+script = ExtResource("1_4gkl6")
+diffuse_atlas = ExtResource("1_l27ld")
+normal_atlas = ExtResource("3_7w0f4")
+mask_atlas = ExtResource("2_rlchk")
+metadata/_custom_type_script = "uid://c876dul20yd5j"
