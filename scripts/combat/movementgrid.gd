@@ -25,16 +25,6 @@ func _init(movement_overlay : GridMap) -> void:
 	grid_map.clear();
 
 
-func is_inside(pos : Vector3i) -> bool:
-	return used_cells.has(pos)
-
-
-func is_walkable(pos : Vector3i) -> bool:
-	if not is_inside(pos):
-		return false
-	return grid_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM
-
-
 func get_cost(pos : Vector3i) -> int:
 	return cost_map.get(pos, 1)
 
