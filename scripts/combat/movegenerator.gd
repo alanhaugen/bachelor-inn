@@ -51,42 +51,46 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 			var candidates := state.get_tiles_at_xz(neighbor_xz.x, neighbor_xz.z)
 			if candidates.is_empty():
 				continue
-			
-			# --- pick topmost walkable tile
-			var top_walkable : Vector3i = Vector3i() # placeholder
-			var found_walkable := false
 
+			var best_walkable : Vector3i = Vector3i()
+			var has_walkable := false
+
+			# --- PASS 1: collect enemies (topmost)
+			var top_enemy : Vector3i = Vector3i()
+			var has_enemy := false
+
+			for t: Vector3i in candidates:
+				if state.is_enemy(t):
+					if not has_enemy or t.y > top_enemy.y:
+						top_enemy = t
+						has_enemy = true
+
+			if has_enemy:
+				if not attacks.has(top_enemy):
+					attacks.append(top_enemy)
+
+			# --- PASS 2: find topmost WALKABLE tile
 			for t: Vector3i in candidates:
 				if state.is_free(t):
-					top_walkable = t
-					found_walkable = true
-					break
+					if not has_walkable or t.y > best_walkable.y:
+						best_walkable = t
+						has_walkable = true
 
-			if not found_walkable:
-				continue # no walkable tile
+			if not has_walkable:
+				continue
 
-			for t: Vector3i in candidates:
-				if state.is_free(t) and t.y > top_walkable.y:
-					top_walkable = t
+			var neighbor := best_walkable
 
-			var neighbor : Vector3i = top_walkable
-			
-			# --- enemies
-			if state.is_enemy(neighbor):
-				if not attacks.has(neighbor):
-					attacks.append(neighbor)
-				# do not continue — allow pathfinding around enemies
-			
-			# --- vertical movement restriction
+			# --- vertical step limit
 			if abs(neighbor.y - pos.y) > 1:
 				continue
-			
+
 			var tile_cost : int = state.get_tile_cost(neighbor)
 			var new_cost : int = current_cost + tile_cost
-			
+
 			if new_cost > movement_range:
 				continue
-			
+
 			if not cost_so_far.has(neighbor) or new_cost < cost_so_far[neighbor]:
 				cost_so_far[neighbor] = new_cost
 				frontier.append([neighbor, new_cost])
