@@ -3,25 +3,3 @@
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_bg0v3"]
 
 [node name="Map3d" instance=ExtResource("1_bg0v3")]
-
-[node name="OccupancyOverlay" parent="." index="1"]
-data = {
-"cells": PackedInt32Array(65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65529, 65533, 1441793, 65529, 65534, 1441793, 65535, 0, 0, 65534, 0, 0, 65533, 0, 0)
-}
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="TriggerOverlay" parent="." index="2"]
-data = {
-"cells": PackedInt32Array(65568, 65535, 0, 65568, 0, 0, 65569, 0, 0, 65570, 0, 0, 65570, 65535, 0, 65570, 65534, 0, 65569, 65534, 0, 65568, 65534, 0)
-}
-metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="MovementOverlay" parent="." index="3"]
-data = {
-"cells": PackedInt32Array(1, 65535, 1179649, 1, 0, 1179649)
-}
-
-[node name="PathOverlay" parent="." index="4"]
-data = {
-"cells": PackedInt32Array(1, 65533, 1179649)
-}

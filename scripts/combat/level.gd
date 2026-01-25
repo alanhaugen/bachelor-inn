@@ -17,6 +17,7 @@ var occupancy_grid : Grid
 var trigger_grid : Grid
 var fog_grid : Grid
 var movement_grid : MovementGrid
+var movement_weights_grid : Grid
 
 @onready var battle_log: Label = $BattleLog
 
@@ -25,6 +26,7 @@ var movement_grid : MovementGrid
 @onready var terrain_map: GridMap = %TerrainGrid
 @onready var occupancy_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
+@onready var movement_weights_map: GridMap = %MovementWeightsGrid
 @onready var trigger_map: GridMap = %TriggerOverlay
 @onready var path_map: GridMap = $PathOverlay
 @onready var fog_map: GridMap = $FogOverlay
@@ -151,7 +153,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	var step: float = 0.1
 	var distance: float = 0.0
 
-	var cell_size: Vector3 = terrain_map.cell_size
+	var cell_size: Vector3 = movement_weights_map.cell_size
 	var best_cell: Vector3i
 	var is_best_cell := false
 
@@ -164,7 +166,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 		var z: int = int(floor(check_pos.z / cell_size.z))
 		var candidate: Vector3i = Vector3i(x, y, z)
 
-		if terrain_map.get_used_cells().has(candidate):
+		if movement_weights_map.get_used_cells().has(candidate):
 			best_cell = candidate
 			is_best_cell = true
 			break
@@ -373,6 +375,7 @@ func _ready() -> void:
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
+	movement_weights_map.hide()
 	occupancy_map.hide()
 	path_map.clear()
 	fog_map.clear()
@@ -381,6 +384,7 @@ func _ready() -> void:
 	occupancy_grid = Grid.new(movement_map)
 	trigger_grid = Grid.new(movement_map)
 	movement_grid = MovementGrid.new(movement_map)
+	movement_weights_grid = Grid.new(movement_weights_map)
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	

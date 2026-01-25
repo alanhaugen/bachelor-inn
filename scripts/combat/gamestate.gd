@@ -24,11 +24,11 @@ static func from_level(level : Level) -> GameState:
 			var type : String = level.units_map.mesh_library.get_item_name(id);
 			state.terrain.append(Terrain.new(pos, type));
 	
-	var level_terrain :Array[Vector3i] = level.terrain_map.get_used_cells();
+	var level_terrain :Array[Vector3i] = level.movement_weights_map.get_used_cells();
 	for i in range(level_terrain.size()):
 		var pos : Vector3i = level_terrain[i];
-		var id : int = level.terrain_map.get_cell_item(pos);
-		var type : String = level.terrain_map.mesh_library.get_item_name(id);
+		var id : int = level.movement_weights_map.get_cell_item(pos);
+		var type : String = level.movement_weights_map.mesh_library.get_item_name(id);
 		state.terrain.append(Terrain.new(pos, type));
 	
 	state.is_current_player_enemy = (level.is_player_turn == false);
