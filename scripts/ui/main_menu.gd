@@ -14,7 +14,7 @@ extends Node3D
 
 @onready var camera_controller: CameraController = $World/CameraScene
 
-#region: --- Processing ---
+#region --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
 	Main.world = world;
@@ -38,7 +38,7 @@ func _ready() -> void:
 	levelButton.grab_focus();
 #endregion
 
-#region: --- Signals ---
+#region --- Signals ---
 func _on_load_map_0_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
