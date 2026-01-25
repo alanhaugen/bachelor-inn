@@ -244,8 +244,6 @@ turbulence_influence_max = 0.18800001
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_yuxmn")
 level_name = null
-camera_speed = null
-mouse_drag_sensitivity = null
 minimum_camera_height = null
 maximum_camera_height = null
 minimum_camera_x = null
@@ -279,7 +277,7 @@ mesh_library = ExtResource("4_cx077")
 
 [node name="MovementOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
 mesh_library = ExtResource("4_dypiu")
 data = {
 "cells": PackedInt32Array(65532, 65534, 1048578, 1, 0, 1179649)
@@ -288,7 +286,7 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="PathOverlay" type="GridMap" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.315, 0)
 mesh_library = ExtResource("4_dypiu")
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
