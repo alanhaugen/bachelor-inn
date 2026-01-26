@@ -1,13 +1,15 @@
-[gd_scene load_steps=31 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=34 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
-[ext_resource type="Shader" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
+[ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
+[ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
 [ext_resource type="Texture2D" uid="uid://orevhtcy5gdj" path="res://art/textures/NobleNightsLogo_basecolour.png" id="8_d233l"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
 
@@ -18,9 +20,13 @@ shader_parameter/colB = Color(0.99999994, 0.028122317, 0.6299224, 1)
 shader_parameter/colC = Color(4.813075e-07, 0.52515864, 0.071510054, 1)
 shader_parameter/pixelation = 80.2
 shader_parameter/pixelated = true
-shader_parameter/offsety = 0.705
-shader_parameter/offsetx = 0.03
+shader_parameter/offsety = 0.85
+shader_parameter/offsetx = 0.49
 shader_parameter/speed = 0.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fj817"]
+atlas = ExtResource("5_gkqwp")
+region = Rect2(0, 43, 32, 18)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4hx67"]
 texture = ExtResource("3_v8ire")
@@ -191,7 +197,7 @@ offset_right = 42.569824
 offset_bottom = -38.88504
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(3.47, 3.47)
+scale = Vector2(4, 4)
 size_flags_horizontal = 6
 
 [node name="Background" type="ColorRect" parent="UI"]
@@ -202,10 +208,10 @@ anchor_left = -8.005
 anchor_top = -3.834
 anchor_right = 8.012
 anchor_bottom = 5.1910005
-offset_left = 0.008514404
-offset_top = -0.011779785
-offset_right = -0.0018310547
-offset_bottom = -0.011505127
+offset_left = -3.6939697
+offset_top = 0.83114624
+offset_right = -3.7043152
+offset_bottom = 0.8314209
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -217,18 +223,31 @@ offset_bottom = 40.0
 [node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
 custom_minimum_size = Vector2(6.66, 163.395)
 layout_mode = 1
-offset_left = -276.82132
-offset_top = -133.46254
-offset_right = -56.488007
-offset_bottom = 29.932495
+offset_left = -109.67435
+offset_top = -120.78242
+offset_right = 110.658966
+offset_bottom = 42.612617
 texture = ExtResource("8_d233l")
+
+[node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu"]
+layout_mode = 0
+offset_left = -237.8925
+offset_top = 116.22125
+offset_right = 236.8575
+offset_bottom = 149.30481
+texture = SubResource("AtlasTexture_fj817")
+region_rect = Rect2(0, 0, 32, 18)
+patch_margin_left = 8
+patch_margin_top = 7
+patch_margin_right = 8
+patch_margin_bottom = 4
 
 [node name="Selector" type="HBoxContainer" parent="UI/MainMenu"]
 layout_mode = 0
-offset_left = -265.29395
-offset_top = 121.5807
-offset_right = 192.70605
-offset_bottom = 165.58072
+offset_left = -231.3925
+offset_top = 101.47125
+offset_right = 229.8575
+offset_bottom = 145.47127
 
 [node name="StartGameButton" type="Button" parent="UI/MainMenu/Selector"]
 custom_minimum_size = Vector2(32, 32)
@@ -237,6 +256,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_4hx67")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_snox8")
 theme_override_styles/hover = SubResource("StyleBoxTexture_vus0j")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Start Game"
 
 [node name="OptionsButton" type="Button" parent="UI/MainMenu/Selector"]
@@ -246,6 +266,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_4y25g")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_iy0in")
 theme_override_styles/hover = SubResource("StyleBoxTexture_jcc73")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "											Options"
 
 [node name="CreditsButton" type="Button" parent="UI/MainMenu/Selector"]
@@ -255,6 +276,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_6srpe")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_8o0t5")
 theme_override_styles/hover = SubResource("StyleBoxTexture_6cb08")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Credits"
 
 [node name="QuitButton" type="Button" parent="UI/MainMenu/Selector"]
@@ -264,10 +286,10 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_0ui2e")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_negop")
 theme_override_styles/hover = SubResource("StyleBoxTexture_5vttb")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Quit"
 
 [node name="LevelSelect" type="Control" parent="UI"]
-visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -296,6 +318,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = ExtResource("4_wb0q5")
 theme_override_styles/pressed = ExtResource("5_q85j6")
 theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 1"
 
 [node name="LoadMap1" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
@@ -308,6 +331,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_ds07i")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_nsnfg")
 theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 2"
 
 [node name="LoadMap2" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
@@ -320,6 +344,7 @@ theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_74hbn")
 theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 3"
 
 [node name="BackButton" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
@@ -332,6 +357,7 @@ theme_override_font_sizes/font_size = 42
 theme_override_styles/normal = SubResource("StyleBoxTexture_wxwbn")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_beadd")
 theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
+theme_override_styles/focus = ExtResource("7_fj817")
 text = "Back"
 
 [node name="World" type="Node3D" parent="."]

@@ -1,0 +1,7 @@
+[style name="CustomDialogicStyle"]
+do Event.set_objective_find_object()
+do Tutorial.tutorial_lock_camera()
+WipGroup13: Hello we are group 13, we are making this game!
+WipGroup13: Here is grass. Its grassy. The rock is a bit rocky. The shaders are throwing shade on everything.
+WipGroup13: SAMPLE TEXT
+do Tutorial.tutorial_unlock_menus()

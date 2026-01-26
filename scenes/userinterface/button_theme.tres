@@ -1,10 +1,12 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://l5nt8aeex4yj"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://l5nt8aeex4yj"]
 
+[ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="1_d1cq5"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="1_t4leb"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="2_ffw56"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="3_5j0g0"]
 
 [resource]
+Button/styles/focus = ExtResource("1_d1cq5")
 Button/styles/hover = ExtResource("1_t4leb")
 Button/styles/normal = ExtResource("2_ffw56")
 Button/styles/pressed = ExtResource("3_5j0g0")

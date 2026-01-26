@@ -1,69 +1,46 @@
-[gd_resource type="Resource" script_class="DialogicStyle" load_steps=21 format=3 uid="uid://ce8uw6ujqd648"]
+[gd_resource type="Resource" script_class="DialogicStyle" load_steps=12 format=3 uid="uid://ce8uw6ujqd648"]
 
-[ext_resource type="PackedScene" uid="uid://cqpb3ie51rwl5" path="res://addons/dialogic/Modules/DefaultLayoutParts/Base_Default/default_layout_base.tscn" id="1_v21vq"]
-[ext_resource type="Script" uid="uid://bwg6yncmh2cml" path="res://addons/dialogic/Resources/dialogic_style_layer.gd" id="2_tidpi"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_FullBackground/full_background_layer.tscn" id="3_v7jrb"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Portraits/vn_portrait_layer.tscn" id="4_h2eru"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Input/full_advance_input_layer.tscn" id="5_lmgyd"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Textbox/vn_textbox_layer.tscn" id="6_r73n0"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_Glossary/glossary_popup_layer.tscn" id="7_2wop5"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_VN_Choices/vn_choice_layer.tscn" id="8_2jmig"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_TextInput/text_input_layer.tscn" id="9_wiw3p"]
-[ext_resource type="PackedScene" path="res://addons/dialogic/Modules/DefaultLayoutParts/Layer_History/history_layer.tscn" id="10_sthgs"]
-[ext_resource type="Script" uid="uid://dv08k6ljua6fm" path="res://addons/dialogic/Resources/dialogic_style.gd" id="11_8s6h2"]
+[ext_resource type="Resource" uid="uid://dd2fmncvea87f" path="res://dialogue/CustomDialogicStyle.tres" id="1_ikf5s"]
+[ext_resource type="Script" uid="uid://bwg6yncmh2cml" path="res://addons/dialogic/Resources/dialogic_style_layer.gd" id="2_fcktc"]
+[ext_resource type="Script" uid="uid://dv08k6ljua6fm" path="res://addons/dialogic/Resources/dialogic_style.gd" id="3_ll8xj"]
 
-[sub_resource type="Resource" id="Resource_jd28x"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("1_v21vq")
+[sub_resource type="Resource" id="Resource_ur5h3"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_mr7gy"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("3_v7jrb")
+[sub_resource type="Resource" id="Resource_q7x5m"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_dgcyp"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("4_h2eru")
+[sub_resource type="Resource" id="Resource_w72qn"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_6augd"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("5_lmgyd")
+[sub_resource type="Resource" id="Resource_dpq1f"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_l5ci4"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("6_r73n0")
-overrides = {
-"box_animation_new_text": "1"
-}
+[sub_resource type="Resource" id="Resource_2hk7u"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_vislk"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("7_2wop5")
+[sub_resource type="Resource" id="Resource_v21vq"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_ftnsd"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("8_2jmig")
+[sub_resource type="Resource" id="Resource_tidpi"]
+script = ExtResource("2_fcktc")
 
-[sub_resource type="Resource" id="Resource_jfhqp"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("9_wiw3p")
-
-[sub_resource type="Resource" id="Resource_ootc8"]
-script = ExtResource("2_tidpi")
-scene = ExtResource("10_sthgs")
+[sub_resource type="Resource" id="Resource_v7jrb"]
+script = ExtResource("2_fcktc")
 
 [resource]
-script = ExtResource("11_8s6h2")
+script = ExtResource("3_ll8xj")
 name = "style"
-layer_list = Array[String](["10", "11", "12", "13", "14", "15", "16", "17"])
+inherits = ExtResource("1_ikf5s")
+layer_list = Array[String](["10", "11", "12", "13", "14", "15", "16"])
 layer_info = {
-"": SubResource("Resource_jd28x"),
-"10": SubResource("Resource_mr7gy"),
-"11": SubResource("Resource_dgcyp"),
-"12": SubResource("Resource_6augd"),
-"13": SubResource("Resource_l5ci4"),
-"14": SubResource("Resource_vislk"),
-"15": SubResource("Resource_ftnsd"),
-"16": SubResource("Resource_jfhqp"),
-"17": SubResource("Resource_ootc8")
+"": SubResource("Resource_ur5h3"),
+"10": SubResource("Resource_q7x5m"),
+"11": SubResource("Resource_w72qn"),
+"12": SubResource("Resource_dpq1f"),
+"13": SubResource("Resource_2hk7u"),
+"14": SubResource("Resource_v21vq"),
+"15": SubResource("Resource_tidpi"),
+"16": SubResource("Resource_v7jrb")
 }
-metadata/_latest_layer = ""
+metadata/_latest_layer = "12"
