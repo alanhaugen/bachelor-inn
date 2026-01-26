@@ -701,7 +701,7 @@ func _process(delta: float) -> void:
 		# Process animation
 		else:
 			
-			var movement_speed := 10.0 # units per second
+			var movement_speed := 8.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta

@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://dsy2qmg676jgg" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_U.tres" id="4_qga0n"]
 [ext_resource type="Resource" uid="uid://mja1e5kbm158" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_D.tres" id="5_qfpck"]
 [ext_resource type="Resource" uid="uid://dh0o0w7a3n2nd" path="res://art/Animations/Enemies/Ghost/Ghost_Idle.tres" id="6_f02yr"]
-[ext_resource type="Texture2D" uid="uid://bsth2fscgg3pj" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_basecolour.png" id="7_rp7ve"]
+[ext_resource type="Texture2D" uid="uid://bic1o0who0eyu" path="res://art/textures/Ghost_portrait.png" id="7_iu64w"]
 [ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="8_cwx50"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="9_iu64w"]
 
@@ -26,12 +26,12 @@ shader_parameter/normal_sensitivity = 1.0
 shader_parameter/flip_normal_y = true
 
 [node name="Ghost_Enemy" instance=ExtResource("1_w78pb")]
-run_left_animation = ExtResource("2_cwx50")
-run_right_animation = ExtResource("3_og36s")
+run_left_animation = ExtResource("3_og36s")
+run_right_animation = ExtResource("2_cwx50")
 run_up_animation = ExtResource("4_qga0n")
 run_down_animation = ExtResource("5_qfpck")
 idle_animation = ExtResource("6_f02yr")
-portrait = ExtResource("7_rp7ve")
+portrait = ExtResource("7_iu64w")
 
 [node name="Sprite" parent="." index="0"]
 transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.9779439, -0.53662795)

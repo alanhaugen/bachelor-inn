@@ -9,5 +9,5 @@ script = ExtResource("1_twp5i")
 billboard = 1
 outline_modulate = Color(0, 0, 0, 0)
 text = "99"
-font_size = 96
+font_size = 200
 outline_size = 0
