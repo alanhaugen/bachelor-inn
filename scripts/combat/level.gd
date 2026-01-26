@@ -62,6 +62,8 @@ const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
+const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
+const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -432,8 +434,34 @@ func _ready() -> void:
 
 			new_unit.data = data
 			new_unit.state = c_state
-			
+
 			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
+		elif (get_unit_name(pos) == "EnemyBird"):
+			new_unit = BIRD_ENEMY.instantiate()
+			
+			var data := CharacterData.new()
+
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY;
+
+			new_unit.data = data
+			new_unit.state = c_state
+
+			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
+
+		elif (get_unit_name(pos) == "EnemyGhost"):
+			new_unit = GHOST_ENEMY.instantiate()
+			
+			var data := CharacterData.new()
+
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY;
+
+			new_unit.data = data
+			new_unit.state = c_state
+
+			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
+			
 		elif (get_unit_name(pos) == "Chest"):
 			var chest: Node = CHEST.instantiate();
 			chest.position = grid_to_world(pos)
@@ -558,7 +586,7 @@ func CheckVictoryConditions() -> void:
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			numberOfPlayerUnits += 1;
-		elif (occupancy_map.get_cell_item(pos) == enemy_code):
+		elif (occupancy_map.get_cell_item(pos) >= enemy_code):
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):

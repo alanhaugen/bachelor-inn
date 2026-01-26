@@ -1,0 +1,47 @@
+[gd_scene load_steps=11 format=3 uid="uid://crgdpyhxu1t8u"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_w78pb"]
+[ext_resource type="Resource" uid="uid://b86jeecevuihs" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_L.tres" id="2_cwx50"]
+[ext_resource type="Resource" uid="uid://c8iujvqbkjvis" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_R.tres" id="3_og36s"]
+[ext_resource type="Resource" uid="uid://dsy2qmg676jgg" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_U.tres" id="4_qga0n"]
+[ext_resource type="Resource" uid="uid://mja1e5kbm158" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_D.tres" id="5_qfpck"]
+[ext_resource type="Resource" uid="uid://dh0o0w7a3n2nd" path="res://art/Animations/Enemies/Ghost/Ghost_Idle.tres" id="6_f02yr"]
+[ext_resource type="Texture2D" uid="uid://bsth2fscgg3pj" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_basecolour.png" id="7_rp7ve"]
+[ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="8_cwx50"]
+[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="9_iu64w"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_og36s"]
+render_priority = 0
+shader = ExtResource("8_cwx50")
+shader_parameter/frame_index = 0
+shader_parameter/frame_columns = 6
+shader_parameter/frame_rows = 1
+shader_parameter/grey_tint = false
+shader_parameter/hit_effect = 0.0
+shader_parameter/hit_effect_color = Color(1, 1, 1, 1)
+shader_parameter/edge_strength = 3.0
+shader_parameter/edge_tint = Color(1.469, 0.676, 0.772, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[node name="Ghost_Enemy" instance=ExtResource("1_w78pb")]
+run_left_animation = ExtResource("2_cwx50")
+run_right_animation = ExtResource("3_og36s")
+run_up_animation = ExtResource("4_qga0n")
+run_down_animation = ExtResource("5_qfpck")
+idle_animation = ExtResource("6_f02yr")
+portrait = ExtResource("7_rp7ve")
+
+[node name="Sprite" parent="." index="0"]
+transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.9779439, -0.53662795)
+material_override = SubResource("ShaderMaterial_og36s")
+script = ExtResource("9_iu64w")
+
+[node name="Outline" parent="." index="1"]
+transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.9779439, -0.53662795)
+script = ExtResource("9_iu64w")
+
+[node name="Shadow" parent="." index="2"]
+transform = Transform3D(10.268, 0, 0, 0, -2.3468644e-07, -4, 0, 5.369, -1.7484555e-07, 0, 0.07548618, -0.24753797)
+transparency = 0.45
