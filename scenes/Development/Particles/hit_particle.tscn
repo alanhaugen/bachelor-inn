@@ -1,20 +1,23 @@
 [gd_scene load_steps=10 format=3 uid="uid://ddvscfqfihmwr"]
 
-[ext_resource type="Texture2D" uid="uid://clnr1acrtaarr" path="res://art/textures/ParticleTex/hitFX.png" id="1_d8685"]
 [ext_resource type="Script" uid="uid://cdje4jdvfxffu" path="res://scenes/Development/Particles/hit_particle.gd" id="1_drpyy"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="2_drpyy"]
+[ext_resource type="Texture2D" uid="uid://dx86ee3nqgy8l" path="res://art/textures/ParticleTex/LightShaft_Particle.png" id="2_ubdyk"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_w357l"]
+particle_flag_align_y = true
+inherit_velocity_ratio = -0.02
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 5.0
 gravity = Vector3(0, 0, 0)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0ucq8"]
 transparency = 1
-albedo_texture = ExtResource("1_d8685")
-billboard_mode = 3
+albedo_texture = ExtResource("2_ubdyk")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
 billboard_keep_scale = true
-particles_anim_h_frames = 1
-particles_anim_v_frames = 1
-particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_hokb8"]
 material = SubResource("StandardMaterial3D_0ucq8")
@@ -25,6 +28,8 @@ gravity = Vector3(0, 0, 0)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8onu1"]
 transparency = 1
 albedo_texture = ExtResource("2_drpyy")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1
@@ -38,17 +43,18 @@ material = SubResource("StandardMaterial3D_8onu1")
 script = ExtResource("1_drpyy")
 
 [node name="Hit" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.57487434, 2.4927733, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.846848, 2.4927733, 0)
 emitting = false
-amount = 1
-lifetime = 0.28
+amount = 4
+lifetime = 0.13
 one_shot = true
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_w357l")
 draw_pass_1 = SubResource("QuadMesh_hokb8")
 
 [node name="Hit2" type="GPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4927733, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.37690908, 2.4927733, 0)
+visible = false
 emitting = false
 amount = 1
 lifetime = 0.28

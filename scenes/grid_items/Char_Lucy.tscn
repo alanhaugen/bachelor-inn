@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://cfmnuaxxcga7p" path="res://art/Animations/Characters/Lucy/Lucy_Moving_U.tres" id="4_tulk5"]
 [ext_resource type="Resource" uid="uid://druylhudbfyv" path="res://art/Animations/Characters/Lucy/Lucy_moving_D.tres" id="5_uwj3m"]
 [ext_resource type="Resource" uid="uid://cx03dpln0b65p" path="res://art/Animations/Characters/Lucy/Lucy_Idle.tres" id="6_dr8et"]
-[ext_resource type="Texture2D" uid="uid://dniub5gwqivsr" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_basecolour.png" id="7_elvro"]
+[ext_resource type="Texture2D" uid="uid://bb65nig7oniqc" path="res://art/textures/Lucy_portrait.png" id="7_8n4yx"]
 
 [node name="Character" instance=ExtResource("1_yyrg3")]
 run_left_animation = ExtResource("2_8n4yx")
@@ -14,4 +14,4 @@ run_right_animation = ExtResource("3_q036t")
 run_up_animation = ExtResource("4_tulk5")
 run_down_animation = ExtResource("5_uwj3m")
 idle_animation = ExtResource("6_dr8et")
-portrait = ExtResource("7_elvro")
+portrait = ExtResource("7_8n4yx")

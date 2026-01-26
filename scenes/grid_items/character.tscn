@@ -14,10 +14,10 @@ shader_parameter/frame_columns = 6
 shader_parameter/frame_rows = 1
 shader_parameter/grey_tint = false
 shader_parameter/hit_effect = 0.0
-shader_parameter/hit_effect_color = Color(1, 1, 1, 1)
+shader_parameter/hit_effect_color = Color(1, 0, 0, 1)
 shader_parameter/edge_strength = 1.0
-shader_parameter/edge_tint = Color(1, 1, 1, 1)
-shader_parameter/normal_tilt = 0.82000003895
+shader_parameter/edge_tint = Color(1, 0.7915513, 0.7512913, 1)
+shader_parameter/normal_tilt = 4.0
 shader_parameter/normal_sensitivity = 1.0
 shader_parameter/flip_normal_y = true
 
