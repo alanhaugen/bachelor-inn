@@ -384,7 +384,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	if simulate_only == false:
 		Main.level.units_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
 	
-	state.is_alive = true;
+	state.is_alive = true; ## Needed? Will ressurect any dead unit moved.
 	#reset();
 	state.grid_position = pos;
 	state.is_moved = true;

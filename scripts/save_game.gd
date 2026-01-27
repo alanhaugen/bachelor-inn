@@ -41,10 +41,10 @@ func create_new_save_data() -> void:
 	
 	var data1 := CharacterData.new()
 	data1.unit_name = "Alfred"
-	data1.speciality = CharacterData.Speciality.Scholar
+	data1.speciality = CharacterData.Speciality.Runner
 	data1.mind = 6
 	data1.focus = 5
-	data1.speed = 15
+	data1.speed = 7
 
 	var state1 := CharacterState.new()
 
@@ -58,7 +58,6 @@ func create_new_save_data() -> void:
 	data2.unit_name = "Lucy"
 	data2.speciality = CharacterData.Speciality.Militia
 	data2.strength = 10
-	data2.speed = 15
 
 	var state2 := CharacterState.new()
 

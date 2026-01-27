@@ -1,13 +1,12 @@
 extends Control
 
 @onready var map: Node;
-@onready var move_button: Button = $VBoxContainer/MoveButton
-@onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
 @onready var ability_button: Button = $VBoxContainer/AbilityButton
+@onready var attack_button: Button = $VBoxContainer/AttackButton
 
-signal move_pressed
+signal ability_pressed
 signal attack_pressed
 signal wait_pressed
 signal cancel_pressed
@@ -21,29 +20,19 @@ func _ready() -> void:
 func HidePopup() -> void:
 	map.is_in_menu = false;
 	#map.path_arrow.clear(); ## should be handeled in map, not here
-	move_button.hide();
-	attack_button.hide();
 	ability_button.hide();
+	attack_button.hide();
 	wait_button.hide();
+	cancel_button.hide();
 	hide();
 
 
-func _on_move_button_pressed() -> void:
-	emit_signal("move_pressed")
-	## commenting out stuff so we can handle map and movement stuff outside the UI
-	#map.moves_stack.append(map.active_move);
-	#map.state = map.States.ANIMATING;
+func _on_ability_button_pressed() -> void:
+	emit_signal("ability_pressed")
 	HidePopup();
-
-
+	
 func _on_attack_button_pressed() -> void:
-	#if map.active_move.aggressor.weapon == null or map.active_move.aggressor.weapon.is_melee:
-	#	map.moves_stack.append(map.active_move.neighbour_move);
 	emit_signal("attack_pressed")
-	## commenting out stuff so we can handle map and movement stuff outside the UI
-	#map.moves_stack.append(map.active_move);
-	#map.a_star(map.moves_stack.front().start_pos, map.moves_stack.front().end_pos, false);
-	#map.state = map.States.ANIMATING;
 	HidePopup();
 
 

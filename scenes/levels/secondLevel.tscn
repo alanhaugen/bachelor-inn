@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://byl1oxmtxjlp8"]
+[gd_scene load_steps=46 format=3 uid="uid://djah3auf7nopq"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_83nnx"]
 [ext_resource type="MeshLibrary" uid="uid://d38pmue2k0b7d" path="res://scenes/libraries/GridMapLibrary.tres" id="2_6uwjp"]
@@ -214,6 +214,7 @@ mesh_library = ExtResource("5_vw0c7")
 data = {
 "cells": PackedInt32Array(65532, 65533, 1, 65532, 65534, 1, 65532, 65535, 1048578, 65532, 0, 1048578, 65534, 65533, 2, 65535, 65533, 2, 0, 65533, 2, 3, 0, 1048576, 65533, 65534, 1, 2, 65535, 2, 65533, 0, 0, 65534, 0, 0, 65534, 65535, 0, 65535, 65535, 1048576, 65535, 65534, 0, 65535, 0, 1048576, 1, 65534, 1179649, 1, 65533, 1179649, 1, 65535, 1179649, 1, 0, 1179649, 65531, 65534, 1, 65531, 65533, 1, 65530, 65534, 1, 65530, 65533, 1, 65530, 65532, 1, 65531, 65532, 1, 65532, 65532, 1)
 }
+metadata/_editor_floor_ = Vector3(0, -4, 0)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1.250098, 8.331, 1.6200476)

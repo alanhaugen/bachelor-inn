@@ -22,6 +22,7 @@ var movement_grid : MovementGrid
 @onready var map: GridMap = %TerrainGrid
 @onready var units_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
+@onready var selected_attack_target_pos: Vector3i = Vector3i() # enemy tile clicked
 #@onready var collidable_terrain_layer: GridMap = $CollidableTerrainLayer
 @onready var path_arrow: GridMap = $PathOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
@@ -38,23 +39,33 @@ var movement_grid : MovementGrid
 @export var minimum_camera_z: float = -10.0
 @export var maximum_camera_z: float = 10.0
 
+var planned_destination: Vector3i = Vector3i.ZERO;
+var has_planned_destination: bool = false;
+var planned_has_attack_from_desti: bool = false;
+var planned_attack_target: Vector3i = Vector3i.ZERO
+var is_choosing_attack_target: bool = false
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var move_popup: Control;
+var unit_popup: Control;
 var stat_popup_player: Control;
-var side_bar_array : Array[SideBar];
+var side_bar_array : Array[SideBar] = [];
 var stat_popup_enemy: Control;
-var completed_moves :Array[Command];
+var completed_moves :Array[Command] = [];
+var attack_mode_active := false
+var popup_options: Array[Command] = [];
+var popup_tile_pos: Vector3i
 
-var characters: Array[Character];
+var characters: Array[Character] = [];
 
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
+const UNIT_POPUP = preload("res://scenes/userinterface/unit_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 
-var animation_path :Array[Vector3];
+var animation_path :Array[Vector3] = [];
 var is_animation_just_finished :bool = false;
 
 var is_dragging :bool = false;
@@ -69,7 +80,8 @@ var game_state : GameState;
 var is_in_menu: bool = false;
 var lock_camera: bool = false;
 var active_move: Command;
-var moves_stack: Array;
+#var moves_stack: Array;
+var moves_stack: Array[Command] = [];
 
 var ribbon: Ribbon;
 
@@ -113,18 +125,64 @@ var monster_names := [
 	"Sec'Mat"
 ]
 
+## Old
+#func show_move_popup(window_pos :Vector2) -> void:
+#	move_popup.show();
+#	is_in_menu = true;
+#	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
+#	if active_move is Attack:
+#		move_popup.attack_button.show();
+#	elif (active_move is Wait):
+#		move_popup.wait_button.show();
+#	else:
+#		move_popup.move_button.show();
+## new
+func show_move_popup(window_pos: Vector2) -> void:
+	move_popup.show()
+	is_in_menu = true
+	#move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
+	move_popup.position = Vector2(get_viewport().get_mouse_position())
 
-func show_move_popup(window_pos :Vector2) -> void:
-	move_popup.show();
-	is_in_menu = true;
-	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
-	if active_move is Attack:
-		move_popup.attack_button.show();
-	elif (active_move is Wait):
-		move_popup.wait_button.show();
-	else:
-		move_popup.move_button.show();
+	move_popup.move_button.hide()
+	move_popup.attack_button.hide()
+	move_popup.wait_button.hide()
 
+	# wait is always available when unit selected
+	move_popup.move_button.show()
+	
+	if planned_has_attack_from_desti:
+		move_popup.attack_button.show()
+
+	#var has_move := false
+	#var has_attack := false
+	
+	#if current_moves != null:
+	#	for cmd: Command in current_moves:
+	#		if cmd is Move:
+	#			has_move = true
+	#		elif cmd is Attack:
+	#			has_attack = true
+
+	#if has_move:
+	#	move_popup.move_button.show()
+	#if has_attack:
+	#	move_popup.attack_button.show()
+
+
+func show_unit_popup(window_pos: Vector2) -> void:
+	unit_popup.show()
+	is_in_menu = true
+	unit_popup.position = Vector2(get_viewport().get_mouse_position())
+
+	unit_popup.ability_button.show()
+	unit_popup.wait_button.show()
+	unit_popup.cancel_button.show()
+	
+	#if (can_attack_from_destination(current_tile) == true):
+	var here := Vector3i(selected_unit.state.grid_position.x, 0, selected_unit.state.grid_position.z)
+	unit_popup.attack_button.visible = can_attack_from_destination(here)
+	## TODO: Implement ability and wait logic
+	
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
@@ -173,15 +231,140 @@ func get_unit_name(pos : Vector3) -> String:
 	return units_map.mesh_library.get_item_name(item_id)
 
 
-func show_attack_tiles(pos : Vector3i) -> void:
-	path_arrow.clear();
-	var reachable : Array[Vector3i] = [];
+## Replaced with show_attack_origins_for_enemy()
+#func show_attack_tiles(pos : Vector3i) -> void:
+	#path_arrow.clear();
+	#var reachable : Array[Vector3i] = [];
+	#
+	#for move : Move in current_moves:
+		#reachable.append(move.end_pos);
+	#
+	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
+		#path_arrow.set_cell_item(tile, 0);
+
+
+func show_attack_origins_for_enemy(enemy_pos: Vector3i) -> void:
+	path_arrow.clear()
 	
-	for move : Move in current_moves:
-		reachable.append(move.end_pos);
+	## enemy_pos is the ATTACK TARGET tile
+	selected_attack_target_pos = enemy_pos
 	
-	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
-		path_arrow.set_cell_item(tile, 0);
+	## Should now highlight tiles to stand on this turn, and attack from
+	## Origins come from Attack.end_pos (the tile attacker stands on)
+	for cmd: Command in current_moves:
+		if cmd is Attack:
+			var atk := cmd as Attack
+			if atk.attack_pos == enemy_pos:
+				# origins are y=0 already in your data; keep drawing on y=0 overlays
+				var origin0 := Vector3i(atk.end_pos.x, 0, atk.end_pos.z)
+				path_arrow.set_cell_item(origin0, 0)
+
+
+func show_attack_targets() -> void:
+	movement_map.clear()
+	path_arrow.clear()
+
+	# Show all attackable target tiles (enemy positions)
+	for cmd: Command in current_moves:
+		if cmd is Attack:
+			var atk: Attack = cmd
+			var p := Vector3i(atk.attack_pos.x, 0, atk.attack_pos.z)
+			movement_map.set_cell_item(p, 0) # 0 = your attack marker id (choose a constant if you have one)
+
+	attack_mode_active = true;
+
+func can_attack_from_destination(dest: Vector3i) -> bool:
+	dest = Vector3i(dest.x, 0, dest.z)
+	
+	if current_moves == null:
+		return false;
+	
+	for cmd: Command in current_moves:
+		if cmd is Attack:
+			var atk := cmd as Attack
+			var origin := Vector3i(atk.end_pos.x, 0, atk.end_pos.z)
+			if origin == dest:
+				return true;
+	
+	return false;
+
+
+func show_attack_targets_from_destination(dest: Vector3i) -> void:
+	movement_map.clear()
+	path_arrow.clear()
+
+	dest = Vector3i(dest.x, 0, dest.z)
+
+	for cmd: Command in current_moves:
+		if cmd is Attack:
+			var atk := cmd as Attack
+			var origin := Vector3i(atk.end_pos.x, 0, atk.end_pos.z)
+
+			# Only attacks that are valid from this destination
+			if origin != dest:
+				continue
+
+			# Highlight the target tile (keep the target y as in the command)
+			# If your target is on y=1, keep it there for is_enemy checks,
+			# but draw highlight on y=0 overlay for clicking.
+			var t0 := Vector3i(atk.attack_pos.x, 0, atk.attack_pos.z)
+			movement_map.set_cell_item(t0, attack_code) # use your attack marker id
+
+
+func _on_attack_selected() -> void:
+	#if selected_attack_target_pos == Vector3i.ZERO:
+	if selected_unit == null:
+		return
+	
+	planned_destination = Vector3i(selected_unit.state.grid_position.x, 0, selected_unit.state.grid_position.z)
+	has_planned_destination = true
+	
+	is_in_menu = false
+	is_choosing_attack_target = true
+	planned_attack_target = Vector3i.ZERO
+
+	show_attack_targets_from_destination(planned_destination)	
+	return
+		
+	show_attack_origins_for_enemy(selected_attack_target_pos)
+	state = States.CHOOSING_ATTACK
+
+
+func _on_move_selected() -> void: ## TODO: implement move
+	## run virtual move
+	if selected_unit == null or not has_planned_destination:
+		is_in_menu = false
+		return
+
+	var start := Vector3i(selected_unit.state.grid_position.x, 0, selected_unit.state.grid_position.z)
+	var end := planned_destination
+
+	is_in_menu = false
+	movement_map.clear()
+	path_arrow.clear()
+
+	moves_stack.clear()
+	moves_stack.append(Move.new(start, end))
+	create_path(start, end)
+	state = States.ANIMATING
+
+	has_planned_destination = false
+	return 
+
+
+func _on_wait_selected() -> void:
+	is_in_menu = false;
+	return ## TODO: implement wait
+
+
+func _on_ability_selected() -> void:
+	is_in_menu = false;
+	return ## use ability here
+
+func _on_cancel_selected() -> void:
+	#selected_unit = null; ## deselect unit?
+	is_in_menu = false;
+	return
 
 
 func _input(event: InputEvent) -> void:
@@ -211,18 +394,57 @@ func _input(event: InputEvent) -> void:
 		if (event.button_index != MOUSE_BUTTON_LEFT):
 			return;
 		
-		# Get the tile clicked on
-		var pos :Vector3i = get_grid_cell_from_mouse();
-		print (pos);
-		pos.y = 0;
+		## Get the tile clicked on -- Using two 
+		var pos_raw: Vector3i = get_grid_cell_from_mouse() # y may be 1 for units layer
+		print(pos_raw)
+
+		var pos: Vector3i = Vector3i(pos_raw.x, 0, pos_raw.z) # overlay/pathing layer
+		
+		if is_choosing_attack_target:
+			## Click on a highlighted target tile?
+			if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+				planned_attack_target = pos
+				is_choosing_attack_target = false
+				movement_map.clear()
+				path_arrow.clear()
+
+				# Commit move+attack chain will go under here.
+				print("Planned target selected:", planned_attack_target)
+				return
+			else:
+				is_choosing_attack_target = false
+				movement_map.clear()
+				path_arrow.clear()
+				return
 		
 		if state == States.CHOOSING_ATTACK:
-			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-				active_move.end_pos = pos;
-				moves_stack.append(active_move);
+			#if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+			#	active_move.end_pos = pos;
+			#	moves_stack.append(active_move);
+			#if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				
-				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
-				state = States.ANIMATING;
+			#	var chosen_attack : Attack = null
+			#	for cmd in current_moves:
+			#		var atk := cmd as Attack
+			#		if atk.attack_pos == selected_attack_target_pos and atk.end_pos == pos:
+			#			chosen_attack = atk;
+			#			break
+			if path_arrow.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+				var chosen_attack: Attack = null
+				for cmd: Command in current_moves:
+					if cmd is Attack:
+						var atk := cmd as Attack
+						if atk.attack_pos == selected_attack_target_pos and Vector3i(atk.end_pos.x,0,atk.end_pos.z) == pos:
+							chosen_attack = atk
+							break
+						
+				if chosen_attack:
+					active_move = chosen_attack
+					moves_stack.append(active_move)
+					create_path(active_move.start_pos, active_move.end_pos)
+					state = States.ANIMATING
+				#create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
+				#state = States.ANIMATING;
 			return;
 		
 		if (selected_enemy_unit != null):
@@ -243,13 +465,20 @@ func _input(event: InputEvent) -> void:
 		var windowPos: Vector2 = Vector2(350,300)
 		
 		if (get_unit_name(pos) == CharacterStates.Player):
+			print("Pressed self/your current unit")
 			Tutorial.tutorial_unit_selected()
 			unit_pos = pos
 			movement_map.clear()
-			if (selected_unit == get_unit(pos)):
-				active_move = Wait.new(pos)
-				show_move_popup(windowPos)
+			if selected_unit == get_unit(pos):
+				## Pressing own unit char will now open a unit menu
+				#active_move = Wait.new(pos)
+				planned_destination = Vector3i(pos.x, 0, pos.z)
+				has_planned_destination = true
+				planned_has_attack_from_desti = can_attack_from_destination(planned_destination)
+				print("Attack-from-here setup dest=", planned_destination, " can_attack=", planned_has_attack_from_desti)
+				show_unit_popup(get_viewport().get_mouse_position()) ## show_unit_popup
 				#show_move_popup(selected_unit.get_unit(pos))
+				return;
 			else:
 				if selected_unit != null:
 					var character_script: Character = selected_unit
@@ -259,7 +488,19 @@ func _input(event: InputEvent) -> void:
 				ribbon.set_skills(selected_unit.state.skills)
 				#ribbon.set_abilities(selected_unit.skills);
 				
+				## STEP 1 - Generate moves after clicking friendly unit
 				current_moves = MoveGenerator.generate(selected_unit, game_state)
+				
+				## Print to check if attack moves are generated.
+				var atk_total := 0
+				var move_total := 0
+				for cmd: Command in current_moves:
+					if cmd is Attack:
+						atk_total += 1
+					elif cmd is Move:
+						move_total += 1
+				print("Generated moves: total=", current_moves.size(), " moves=", move_total, " attacks=", atk_total)
+				
 				movement_grid.fill_from_commands(current_moves, game_state)
 				
 				#for command in current_moves:
@@ -271,28 +512,35 @@ func _input(event: InputEvent) -> void:
 				#camera.position.x = selected_unit.position.x;# + 4.5;
 				#camera.position.z = selected_unit.position.z + 3.0;#6.5;
 				update_stat(selected_unit, stat_popup_player);
-		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			for i in range(current_moves.size()):
-				if current_moves[i] is Attack:
-					if current_moves[i].attack_pos == pos:
-						active_move = current_moves[i];
-				elif current_moves[i].end_pos == pos:
-					active_move = current_moves[i];
+		
+		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM and selected_unit != null):
+			## Virtual movement and planning attack.
+			planned_destination = Vector3i(pos.x, 0, pos.z)
+			has_planned_destination = true
+			planned_has_attack_from_desti = can_attack_from_destination(planned_destination);
+			 
+			show_move_popup(get_viewport().get_mouse_position());
+			return;
+			#	if current_moves[i] is Attack:
+			#		if current_moves[i].attack_pos == pos:
+			#			active_move = current_moves[i];
+			#	elif current_moves[i].end_pos == pos:
+			#		active_move = current_moves[i];
 			
-			if active_move is Attack:
-				show_attack_tiles(pos);
-				state = States.CHOOSING_ATTACK;
-			elif active_move is Move:
-				moves_stack.append(active_move);
-				state = States.ANIMATING;
-				create_path(unit_pos, pos); # a-star used for normal character movement
-				path_arrow.clear();
-			
+			#if active_move is Attack:
+			#	#show_attack_tiles(pos); ## replaced with function underneath
+			#	show_attack_origins_for_enemy(pos)
+			#	return;
+				
+			#elif active_move is Move:
+			#	moves_stack.append(active_move);
+			#	state = States.ANIMATING;
+			#	create_path(unit_pos, pos); # a-star used for normal character movement
+			#	path_arrow.clear();
+			#	movement_map.clear();
 			#activeMove.execute();
-			
 			#unitsMap.set_cell_item(pos, playerCodeDone);
 			#unitsMap.set_cell_item(unitPos, -1);
-			movement_map.clear();
 			#isUnitSelected = false;
 		else:
 			movement_map.clear();
@@ -310,6 +558,55 @@ func _input(event: InputEvent) -> void:
 			
 			selected_enemy_unit = get_unit(pos);
 			update_stat(selected_enemy_unit, stat_popup_enemy);
+			
+			#if selected_unit != null and current_moves != null:
+			#	selected_attack_target_pos = pos ## failsafe
+				
+			#var can_attack_this_enemy:= false
+			#for cmd: Command in current_moves:
+			#	if cmd is Attack:
+			#		var atk := cmd as Attack
+			#		if atk.attack_pos == pos:
+			#			can_attack_this_enemy = true
+			#			break
+			## Print check
+			if selected_unit != null:
+				print("ENEMY CLICK BLOCK HIT at pos=", pos, " get_unit_name=", get_unit_name(pos))
+				print("selected_unit is null? ", selected_unit == null)
+				print("current_moves is null? ", current_moves == null, " size=", (current_moves.size() if current_moves != null else -1))
+
+				var atk_total := 0
+				if current_moves != null:
+					for cmd in current_moves:
+						if cmd is Attack:
+							atk_total += 1
+				print("atk_total=", atk_total)
+
+				var options: Array[Command] = []
+				for cmd: Command in current_moves:
+					if cmd is Attack:
+						options.append(cmd)
+						break;
+						
+				if options.size() > 0:
+					show_move_popup(get_viewport().get_mouse_position())
+					## print to check for attack moves
+					var atk_vs_this_enemy := 0
+					print("Clicked enemy pos=", pos, " enemy grid_position=", selected_enemy_unit.state.grid_position)
+					## print to check pos coords
+					#for cmd: Command in current_moves:
+					#	if cmd is Attack:
+					#		var atk := cmd as Attack
+					#		print("Attack cmd target=", atk.attack_pos, " origin=", atk.end_pos, " typeof(target)=", typeof(atk.attack_pos))
+
+					for cmd: Command in current_moves:
+						if cmd is Attack: 
+							var atk:= cmd as Attack
+							if atk.attack_pos == pos_raw: # <-- compare on same y-layer
+								atk_vs_this_enemy += 1
+					print("Enemy click at ", pos_raw, " attack options vs this enemy=", atk_vs_this_enemy)
+					#show_move_popup(windowPos, options, pos)
+					return;
 		
 		if (get_unit_name(pos) == CharacterStates.PlayerDone):
 			update_stat(get_unit(pos), stat_popup_player);
@@ -436,6 +733,18 @@ func _ready() -> void:
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
+	
+	unit_popup = UNIT_POPUP.instantiate()
+	unit_popup.hide()
+	add_child(unit_popup)
+	
+	move_popup.attack_pressed.connect(_on_attack_selected)
+	move_popup.move_pressed.connect(_on_move_selected) ## TODO: Complete the func _on_move
+	move_popup.wait_pressed.connect(_on_wait_selected) ## TODO: Complete the func _on_wait
+	unit_popup.ability_pressed.connect(_on_ability_selected) ## TODO: Complete the func _on_move
+	unit_popup.wait_pressed.connect(_on_wait_selected) ## TODO: Complete the func _on_move
+	unit_popup.cancel_pressed.connect(_on_cancel_selected) ## TODO: Complete the func _on_move
+	unit_popup.attack_pressed.connect(_on_attack_selected) ## TODO: Complete the func
 	
 	stat_popup_player = STATS_POPUP.instantiate()
 	stat_popup_player.hide()
@@ -565,7 +874,7 @@ func _process(delta: float) -> void:
 	
 	if state == States.PLAYING and selected_unit and is_in_menu == false:
 		var pos :Vector3i = get_grid_cell_from_mouse();
-		pos.y = 0;
+		pos.y = 0; ## grid map is at y = 1
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			path_arrow.clear()
 			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)

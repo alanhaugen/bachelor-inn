@@ -15,6 +15,15 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var aggressor : Character = state.get_unit(start_pos);
 	var victim : Character = state.get_unit(attack_pos);
+	if aggressor == null or victim == null:
+		return;
+	
+	## --- move first, then attack
+	if end_pos != start_pos:
+		aggressor.move_to(end_pos, simulate_only)
+	victim = state.get_unit(attack_pos)
+	if victim == null:
+		return;
 	
 	var w: Weapon = aggressor.get_weapon();
 	var weapon_damage : int = 0;
@@ -70,7 +79,8 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 		# Do not go insane on victory
 		if victim.state.current_health > 0:
 			@warning_ignore("integer_division")
-			aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
+			aggressor.state.current_sanity -= victim.data.strength / max(1, aggressor.data.mind)
+			#aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
 			#Main.level.update_stat(aggressor, Main.level.stat_popup_player);
 			#Main.level.update_stat(victim, Main.level.stat_popup_enemy);
 	else:

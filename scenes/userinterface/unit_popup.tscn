@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://di0kyb4gmgj7v"]
+
+[ext_resource type="Script" uid="uid://cey57mmfj1s6u" path="res://scripts/ui/unit_popup.gd" id="1_f1i35"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_xku1n"]
+
+[node name="UnitPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+script = ExtResource("1_f1i35")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 58.0
+offset_bottom = 101.0
+
+[node name="AbilityButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_xku1n")
+theme_override_font_sizes/font_size = 72
+text = "Use Ability"
+
+[node name="AttackButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_xku1n")
+theme_override_font_sizes/font_size = 72
+text = "Attack from here"
+
+[node name="WaitButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_xku1n")
+theme_override_font_sizes/font_size = 72
+text = "Wait here"
+
+[node name="CancelButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_xku1n")
+theme_override_font_sizes/font_size = 72
+text = "Cancel"
+
+[connection signal="pressed" from="VBoxContainer/AbilityButton" to="." method="_on_wait_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/AttackButton" to="." method="_on_wait_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/WaitButton" to="." method="_on_wait_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
