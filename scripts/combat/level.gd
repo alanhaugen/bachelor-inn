@@ -294,7 +294,8 @@ func show_attack_targets_from_destination(dest: Vector3i) -> void:
 	path_arrow.clear()
 
 	dest = Vector3i(dest.x, 0, dest.z)
-
+	
+	var count: int = 0
 	for cmd: Command in current_moves:
 		if cmd is Attack:
 			var atk := cmd as Attack
@@ -309,6 +310,9 @@ func show_attack_targets_from_destination(dest: Vector3i) -> void:
 			# but draw highlight on y=0 overlay for clicking.
 			var t0 := Vector3i(atk.attack_pos.x, 0, atk.attack_pos.z)
 			movement_map.set_cell_item(t0, attack_code) # use your attack marker id
+			count += 1
+			print("show_attack_targets_from_destination dest=", dest, " targets_shown=", count)
+
 
 
 func _on_attack_selected() -> void:
