@@ -106,7 +106,7 @@ func has_enemy_moves() -> bool:
 
 func is_inside_map(pos : Vector3i) -> bool:
 	for t in terrain:
-		if t.position == pos:
+		if t.position.x == pos.x and t.position.z == pos.z:
 			return true;
 	
 	return false;
@@ -128,22 +128,29 @@ func is_free(pos : Vector3i) -> bool:
 
 func get_tile_cost(pos : Vector3i) -> int:
 	for t in terrain:
-		if t.position == pos and t.is_passable:
+		if t.is_passable and t.position.x == pos.x and t.position.z == pos.z:
 			return t.weight;
 	return int(INF);
 
 
 func is_enemy(pos : Vector3i) -> bool:
 	for u in units:
-		if u.state.is_enemy() == !is_current_player_enemy and u.state.grid_position == pos:
-			return true;
+		if not u.state.is_alive:
+			continue
+		## trying to avoid checking pos.y value
+		if u.state.is_enemy() and u.state.grid_position.x == pos.x and u.state.grid_position.z == pos.z:
+			return true
+	
+	#for u in units:
+	#	if u.state.is_enemy() == !is_current_player_enemy and u.state.grid_position == pos:
+	#		return true;
 	
 	return false;
 
 
 func is_unit(pos : Vector3i) -> bool:
 	for u in units:
-		if u.state.grid_position == pos:
+		if u.state.is_alive and u.state.grid_position.x == pos.x and u.state.grid_position.z == pos.z:
 			return true;
 	
 	return false;
@@ -151,7 +158,7 @@ func is_unit(pos : Vector3i) -> bool:
 
 func get_unit(pos : Vector3i) -> Character:
 	for u in units:
-		if u.state.grid_position == pos:
+		if u.state.is_alive and u.state.grid_position.x == pos.x and u.state.grid_position.z == pos.z:
 			return u;
 	
 	return null;

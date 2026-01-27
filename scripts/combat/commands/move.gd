@@ -24,6 +24,8 @@ func _init(inStartPos :Vector3i, inEndPos :Vector3i) -> void:
 
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var unit := state.get_unit(start_pos)
+	if unit == null:
+		return;
 	unit.move_to(end_pos, simulate_only)
 
 
