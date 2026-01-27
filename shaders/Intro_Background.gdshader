@@ -14,7 +14,6 @@ float rand(vec2 n) {
 }
 
 
-/*
 float noise(vec2 p){
     vec2 ip = floor(p);
     vec2 u = fract(p);
@@ -26,7 +25,21 @@ float noise(vec2 p){
 
     return res * res;
 }
-*/
+
+/*
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+
+    float a = rand(i);
+    float b = rand(i + vec2(1.0, 0.0));
+    float c = rand(i + vec2(0.0, 1.0));
+    float d = rand(i + vec2(1.0, 1.0));
+
+    vec2 u = f*f*(3.0 - 2.0*f);
+
+    return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
 
 float noise (in vec2 p) {
     vec2 i = floor(p);
@@ -44,7 +57,7 @@ float noise (in vec2 p) {
             (c - a)* u.y * (1.0 - u.x) +
             (d - b) * u.x * u.y;
 }
-
+*/
 #define NUM_OCTAVES 5
 #define iTime (TIME * speed)
 const mat2 mtx = mat2( vec2(0.80, -0.60), vec2(0.60, 0.80) );
@@ -77,7 +90,7 @@ float fbm( vec2 p ){
 	);
 	for (int i = 0; i < NUM_OCTAVES; ++i){
 		v+= a * noise(p);
-		p = rot * p * 2.0 + shift;
+		p = rot * p * 2.03 + shift;
 		a *=0.5;
 	}
 	return v;
@@ -114,7 +127,7 @@ void fragment() {
 	r.y = fbm( b_st + 1.0*q + vec2(8.3,2.8)+ 0.126 * iTime);
 	
 
-	float f = triple_warp(b_st*r);
+	float f = triple_warp(b_st+r);
 
 	vec2 c_st = SCREEN_UV * 2.0 - 1.0;
 	c_st.y -= offsety / st.y;
