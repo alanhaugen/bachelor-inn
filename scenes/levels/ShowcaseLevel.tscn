@@ -1,0 +1,66 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyimjpje0qdck"]
+
+[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_chklr"]
+[ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="2_sckex"]
+[ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="3_sckex"]
+
+[node name="Map3d" instance=ExtResource("1_chklr")]
+minimum_camera_x = -1000.0
+maximum_camera_x = 1000.0
+minimum_camera_z = -1000.0
+maximum_camera_z = 1000.0
+
+[node name="TerrainGrid" parent="." index="0"]
+data = {
+"cells": PackedInt32Array(65533, 0, 655379, 65534, 0, 655379, 65535, 0, 655379, 0, 0, 655379, 1, 0, 655379, 2, 0, 655379, 3, 0, 655379, 4, 0, 655379, 5, 0, 655379, 6, 0, 655379, 7, 0, 655379, 8, 0, 655379, 9, 0, 655379, 10, 0, 655379, 11, 0, 655379, 12, 0, 655379, 13, 0, 655379, 14, 0, 655379, 15, 0, 5, -65527, 0, 655380, -65526, 0, 655380, -65525, 0, 655380, -65524, 0, 655380, -65523, 0, 655380, -65522, 0, 655380, -65521, 0, 6, -13, 0, 655366, -12, 0, 655380, -11, 0, 655380, -10, 0, 655380, -9, 0, 655380, -8, 0, 655380, -7, 0, 655380, -6, 0, 655380, -5, 0, 655380, -4, 0, 655380, -3, 0, 655380, -2, 0, 655380, 65523, 0, 655365, 65524, 0, 655379, 65525, 0, 655379, 65526, 0, 655379, 65527, 0, 655379, 65528, 0, 655379, 65529, 0, 655379, 65530, 0, 655379, 65531, 0, 655379, 65532, 0, 655379, -1, 0, 655380, -65536, 0, 655380, -65535, 0, 655380, -65534, 0, 655380, -65533, 0, 655380, -65532, 0, 655380, -65531, 0, 655380, -65530, 0, 655380, -65529, 0, 655380, -65528, 0, 655380, -5, 65532, 655381, -65534, 65532, 655381, -65521, 65532, 655381, -65528, 65532, 655381, -12, 65532, 655381, 65524, 65532, 655401, 65531, 65532, 1441836, 2, 65532, 1048621, 8, 65532, 1048604, 15, 65532, 655402, -65524, 65532, 655381)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)
+
+[node name="MovementWeightsGrid" parent="." index="1"]
+mesh_library = ExtResource("2_sckex")
+data = {
+"cells": PackedInt32Array(65533, 0, 0, 65534, 0, 0, 65535, 0, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 0, 8, 0, 0, 9, 0, 0, 10, 0, 0, 11, 0, 0, 12, 0, 0, 13, 0, 0, 14, 0, 0, 15, 0, 0, 65532, 0, 655360, 65531, 0, 655360, 65530, 0, 655360, 65529, 0, 655360, 65528, 0, 655360, 65527, 0, 655360, 65526, 0, 655360, 65525, 0, 655360, 65524, 0, 655360, 65523, 0, 655360, -65524, 65532, 655360)
+}
+metadata/_editor_floor_ = Vector3(0, -1, 0)
+
+[node name="OccupancyOverlay" parent="." index="2"]
+data = {
+"cells": PackedInt32Array(65533, 0, 0, 65534, 0, 0, 65535, 0, 0, -65524, 65532, 655364)
+}
+
+[node name="Orb_Intro" parent="." index="13"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.650042, -0.9609258, -7.779953)
+
+[node name="Lamp" parent="Lights" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6893244, 0, 5.4732265)
+visible = true
+light_color = Color(0.34117648, 0.44313726, 0.6431373, 1)
+light_energy = 7.127
+
+[node name="Lamp2" parent="Lights" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.26219, -4.42302, 5.8588114)
+visible = true
+light_color = Color(1, 0.2901961, 0.29803923, 1)
+light_energy = 7.587
+
+[node name="Lamp3" parent="Lights" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.485885, -6.251044, 6.935453)
+visible = true
+light_color = Color(0.19215687, 0.8156863, 0.7607843, 1)
+light_energy = 5.582
+
+[node name="DirectionalLight3D" parent="Lights" index="3"]
+visible = false
+
+[node name="OmniLight3D" parent="Lights" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.376022, -3.0658665, 2.482553)
+visible = true
+light_color = Color(1, 0.34901962, 1, 1)
+light_energy = 1.911
+omni_range = 6.355
+
+[node name="Orb" parent="Particles" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.886019, 2.1548579, -6.9137683)
+
+[node name="FireParticle" parent="Particles" index="2" instance=ExtResource("3_sckex")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.166891, -0.2633431, -7.1564727)
