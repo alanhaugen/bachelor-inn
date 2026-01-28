@@ -294,7 +294,8 @@ func show_attack_targets_from_destination(dest: Vector3i) -> void:
 	path_arrow.clear()
 
 	dest = Vector3i(dest.x, 0, dest.z)
-
+	
+	var count: int = 0
 	for cmd: Command in current_moves:
 		if cmd is Attack:
 			var atk := cmd as Attack
