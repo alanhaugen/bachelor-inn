@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://bibvxf0718edk"]
+[gd_scene load_steps=46 format=3 uid="uid://cjnula2kvtp5h"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_f5yf2"]
 [ext_resource type="MeshLibrary" uid="uid://d38pmue2k0b7d" path="res://scenes/libraries/GridMapLibrary.tres" id="2_8tmoo"]
