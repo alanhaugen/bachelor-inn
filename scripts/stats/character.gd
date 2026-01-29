@@ -388,3 +388,16 @@ func ensure_weapon_equipped() -> void:
 		data.weapon_id = get_default_weapon_id()
 	
 	state.weapon = WeaponRegistry.get_weapon(data.weapon_id)
+
+
+func equip_weapon(new_weapon_id: String) -> void:
+	## Add restrictions/bools later
+	if data == null or state == null:
+		push_error("ERROR: New weapon not found.")
+		return;
+		
+	if new_weapon_id == "":
+		new_weapon_id = "unarmed"
+	
+	data.weapon_id = new_weapon_id
+	ensure_weapon_equipped()
