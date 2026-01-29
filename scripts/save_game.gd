@@ -85,7 +85,7 @@ func create_new_save_data() -> void:
 func write(_save_slot: int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	
-	if is_instance_valid(Main.level):
+	if !is_instance_valid(Main.level):
 		push_error("Main level does not exist");
 		return;
 	
@@ -175,7 +175,8 @@ func read(save_slot: int) -> bool:
 
 		character.data = data
 		character.state = state
-
+		character.ensure_weapon_equipped()
+		
 		Main.characters.append(character)
 
 	Main.load_level(Main.levels[level])
