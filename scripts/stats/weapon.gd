@@ -16,7 +16,7 @@ class_name Weapon
 @export var accuracy: int = 1;
 
 
-## BOOLS (if we want to implement later)
+## BOOLS (if we want to implement restrictions etc. later)
 @export var uses_action: bool = true;
 @export var requires_wep_skill: bool = false; ## Feks. polearm training etc.
 @export var requires_skill_tag: bool = false; ## Må ikke være skill. Kan være class specific etc. 
