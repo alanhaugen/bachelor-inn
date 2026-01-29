@@ -112,6 +112,7 @@ func clone() -> Character:
 	var c := Character.new()
 	c.data = data.duplicate_data()
 	c.state = state.duplicate_data()
+	c.ensure_weapon_equipped()
 	return c
 
 
@@ -226,6 +227,7 @@ func _ready() -> void:
 	health_bar_enemy.hide();
 	
 	calc_derived_stats()
+	ensure_weapon_equipped()
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
@@ -361,3 +363,13 @@ func save() -> Dictionary:
 		"data": data.save(),
 		"state": state.save()
 	}
+
+func ensure_weapon_equipped() -> void:
+	if data == null or state == null:
+		push_error("Character.ensure_weapon_equipped(): data or state is null.")
+		return
+	
+	if data.weapon_id == "":
+		data.weapon_id = "unarmed"
+	
+	state.weapon = WeaponRegistry.get_weapon(data.weapon_id)

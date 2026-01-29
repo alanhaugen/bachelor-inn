@@ -265,7 +265,7 @@ func _input(event: InputEvent) -> void:
 			movement_map.clear()
 			if (selected_unit == get_unit(pos)):
 				active_move = Wait.new(pos)
-				show_move_popup(windowPos)
+				show_move_popup(get_viewport().get_mouse_position()) #(windowPos)
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				if selected_unit != null:

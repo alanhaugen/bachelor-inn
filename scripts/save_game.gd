@@ -29,14 +29,17 @@ func create_new_save_data() -> void:
 	data1.speciality = CharacterData.Speciality.Scholar
 	data1.mind = 6
 	data1.focus = 5
+	data1.weapon_id = "axe_basic"
 
 	var state1 := CharacterState.new()
+	state1.weapon = WeaponRegistry.get_weapon(data1.weapon_id)
 
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
-	char1.scene_id = "Alfred"
-	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	char1.scene_id = "Alfred"	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+
+	
 	var data2 := CharacterData.new()
 	data2.unit_name = "Lucy"
 	data2.speciality = CharacterData.Speciality.Militia
@@ -47,8 +50,8 @@ func create_new_save_data() -> void:
 	var char2 := Character.new()
 	char2.data = data2
 	char2.state = state2
-	char2.scene_id = "Lucy"
-	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	char2.scene_id = "Lucy"	 #Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	
 	var units := [
 		char1.save(), 
 		char2.save()

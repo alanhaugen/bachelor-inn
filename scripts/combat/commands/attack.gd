@@ -36,7 +36,7 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 		weapon_crit = aggressor.state.weapon.weapon_critical;
 	
 	@warning_ignore("integer_division")
-	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.state.defense / 2);
+	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - (victim.state.defense / 2));
 	
 	
 	if simulate_only == false:

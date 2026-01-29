@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://c1b3txa4fyxec"]
+
+[ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_3y16w"]
+
+[resource]
+script = ExtResource("1_3y16w")
+weapon_id = "axe_basic"
+weapon_name = "Handaxe"
+weapon_tooltip = "A small axe made for chopping wood."
+damage_modifier = 3
+metadata/_custom_type_script = "uid://hhe2ydney01y"
