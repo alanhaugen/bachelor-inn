@@ -29,15 +29,16 @@ func create_new_save_data() -> void:
 	data1.speciality = CharacterData.Speciality.Scholar
 	data1.mind = 6
 	data1.focus = 5
-	data1.weapon_id = "axe_basic"
+	#data1.weapon_id = "axe_basic"
 
 	var state1 := CharacterState.new()
-	state1.weapon = WeaponRegistry.get_weapon(data1.weapon_id)
+	#state1.weapon = WeaponRegistry.get_weapon(data1.weapon_id)
 
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
 	char1.scene_id = "Alfred"	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	#char1.ensure_weapon_equipped();
 
 	
 	var data2 := CharacterData.new()
@@ -51,6 +52,7 @@ func create_new_save_data() -> void:
 	char2.data = data2
 	char2.state = state2
 	char2.scene_id = "Lucy"	 #Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	#char2.ensure_weapon_equipped();
 	
 	var units := [
 		char1.save(), 
@@ -153,13 +155,6 @@ func read(save_slot: int) -> bool:
 		data.endurance = data_dict["endurance"]
 
 
-		# --- WEAPON ---
-		var wep_id : String = str(data_dict.get("weapon_id", "unarmed"))
-		if wep_id == "":
-			wep_id = "unarmed"
-		data.weapon_id = wep_id
-
-
 		# --- STATE ---
 		var state := CharacterState.new()
 		var state_dict : Dictionary = unit_dict["state"]
@@ -172,10 +167,30 @@ func read(save_slot: int) -> bool:
 		state.level = state_dict["level"]
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
+		
+
+		# --- WEAPON ---
+		var wep_id : String = str(data_dict.get("weapon_id", "unarmed"))
+		if wep_id == "":
+			wep_id = "unarmed"
+		data.weapon_id = wep_id
 
 		character.data = data
 		character.state = state
 		character.ensure_weapon_equipped()
+		
+		var resolved_id := "NULL"
+		if character.state.weapon != null:
+			resolved_id = character.state.weapon.weapon_id
+
+		print(
+			"[WEAPON CHECK] ",
+			character.data.unit_name,
+			" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
+			" | weapon_id=", character.data.weapon_id,
+			" | resolved=", resolved_id
+		)
+
 		
 		Main.characters.append(character)
 

@@ -2,11 +2,11 @@ extends Node
 # Weapon_Registry is set to autoload
 
 const W_UNARMED: Weapon = preload("res://Data/Weapons/unarmed.tres")
-const W_AXE: Weapon = preload("res://Data/Weapons/axe_basic.tres")
-#const W_BOW: Weapon = prelaod()
-#const W_SCEPTER: Weapon = prelaod()
-#const W_SPEAR: Weapon = prelaod()
-#const W_SWORD: Weapon = prelaod()
+const W_AXE_BASIC: Weapon = preload("res://Data/Weapons/axe_basic.tres")
+#const W_BOW: Weapon = preload()
+const W_SCEPTER_BASIC: Weapon = preload("res://Data/Weapons/scepter_basic.tres")
+const W_SWORD_BASIC: Weapon = preload("res://Data/Weapons/sword_basic.tres")
+#const W_SWORD_ELITE: Weapon = preload("res://Data/Weapons/sword_elite.tres")
 
 
 var _by_id: Dictionary = {}
@@ -15,8 +15,9 @@ var _by_id: Dictionary = {}
 func _ready() -> void:
 	_by_id.clear()
 	_register(W_UNARMED)
-	_register(W_AXE)
-	#_register(W_AXE)
+	_register(W_AXE_BASIC)
+	_register(W_SWORD_BASIC)
+	_register(W_SCEPTER_BASIC)
 	#_register(W_AXE)
 	#_register(W_AXE)
 	#_register(W_AXE)

@@ -8,20 +8,21 @@ class_name CharacterData
 enum Speciality
 {
 	Generic,
+	
+	Runner,
 	## This class has more movement than the other classes
 	## allowing them to get to objectives or outrun enemies.
 	## This could for example be a horse rider in a medieval
 	## setting or a ranger in a fantasy setting
-	Runner,
+	Militia,
 	## Most classes usually fall in this category in games
 	## like fire emblem. If we want to use the sanity mechanic
 	## for our game, then these units might have extra resistance
 	## from sanity damage from battles
-	Militia,
+	Scholar
 	## The classic healer/utility buffer. Their abilities do not
 	## necessarily have to affect battles, they could improve
 	## movement or conjure terrain.
-	Scholar
 }
 
 enum Personality

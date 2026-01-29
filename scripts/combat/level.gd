@@ -427,7 +427,7 @@ func _ready() -> void:
 				if health == "0":
 					health = "fresh unit"
 					
-				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health));
+				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health) + ".");
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):

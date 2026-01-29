@@ -6,4 +6,5 @@
 script = ExtResource("1_ev6gq")
 weapon_id = "sword_elite"
 weapon_name = "Sword of a"
+damage_modifier = 12
 metadata/_custom_type_script = "uid://hhe2ydney01y"

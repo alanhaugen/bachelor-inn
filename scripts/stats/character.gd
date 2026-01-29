@@ -364,12 +364,27 @@ func save() -> Dictionary:
 		"state": state.save()
 	}
 
+## This func is used inside the next function - ensure_weapon_equipped()
+## Gives characters their base weapon based on speciality.
+func get_default_weapon_id() -> String:
+	match data.speciality:
+		CharacterData.Speciality.Militia:
+			return "sword_basic";
+		CharacterData.Speciality.Scholar:
+			return "scepter_basic";
+		CharacterData.Speciality.Runner:
+			return "bow_basic";
+		_:
+			return "unarmed"
+
+## If a base class that should ahve a weapon is spawned with "unarmed", this func will give the class its designated starter weapon.
+## More cases can be added when needed.
 func ensure_weapon_equipped() -> void:
 	if data == null or state == null:
 		push_error("Character.ensure_weapon_equipped(): data or state is null.")
 		return
 	
-	if data.weapon_id == "":
-		data.weapon_id = "unarmed"
+	if data.weapon_id == "" or data.weapon_id == "unarmed":
+		data.weapon_id = get_default_weapon_id()
 	
 	state.weapon = WeaponRegistry.get_weapon(data.weapon_id)
