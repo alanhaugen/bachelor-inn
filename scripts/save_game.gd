@@ -152,6 +152,14 @@ func read(save_slot: int) -> bool:
 		data.focus = data_dict["focus"]
 		data.endurance = data_dict["endurance"]
 
+
+		# --- WEAPON ---
+		var wep_id : String = str(data_dict.get("weapon_id", "unarmed"))
+		if wep_id == "":
+			wep_id = "unarmed"
+		data.weapon_id = wep_id
+
+
 		# --- STATE ---
 		var state := CharacterState.new()
 		var state_dict : Dictionary = unit_dict["state"]

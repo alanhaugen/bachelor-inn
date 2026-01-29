@@ -418,12 +418,15 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
+				new_unit.ensure_weapon_equipped();
 				new_unit.state.is_moved = false;
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
+				
 				var health := str(new_unit.state.current_health)
 				if health == "0":
 					health = "fresh unit"
+					
 				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health));
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
