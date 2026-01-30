@@ -112,6 +112,7 @@ func clone() -> Character:
 	var c := Character.new()
 	c.data = data.duplicate_data()
 	c.state = state.duplicate_data()
+	c.ensure_weapon_equipped()
 	return c
 
 
@@ -226,6 +227,7 @@ func _ready() -> void:
 	health_bar_enemy.hide();
 	
 	calc_derived_stats()
+	ensure_weapon_equipped()
 	
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
@@ -361,3 +363,41 @@ func save() -> Dictionary:
 		"data": data.save(),
 		"state": state.save()
 	}
+
+## This func is used inside the next function - ensure_weapon_equipped()
+## Gives characters their base weapon based on speciality.
+func get_default_weapon_id() -> String:
+	match data.speciality:
+		CharacterData.Speciality.Militia:
+			return "sword_basic";
+		CharacterData.Speciality.Scholar:
+			return "scepter_basic";
+		CharacterData.Speciality.Runner:
+			return "bow_basic";
+		_:
+			return "unarmed"
+
+## If a base class that should ahve a weapon is spawned with "unarmed", this func will give the class its designated starter weapon.
+## More cases can be added when needed.
+func ensure_weapon_equipped() -> void:
+	if data == null or state == null:
+		push_error("Character.ensure_weapon_equipped(): data or state is null.")
+		return
+	
+	if data.weapon_id == "" or data.weapon_id == "unarmed":
+		data.weapon_id = get_default_weapon_id()
+	
+	state.weapon = WeaponRegistry.get_weapon(data.weapon_id)
+
+
+func equip_weapon(new_weapon_id: String) -> void:
+	## Add restrictions/bools later
+	if data == null or state == null:
+		push_error("ERROR: New weapon not found.")
+		return;
+		
+	if new_weapon_id == "":
+		new_weapon_id = "unarmed"
+	
+	data.weapon_id = new_weapon_id
+	ensure_weapon_equipped()

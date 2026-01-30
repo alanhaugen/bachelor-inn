@@ -1,7 +1,7 @@
 [gd_scene load_steps=56 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
-[ext_resource type="MeshLibrary" uid="uid://dafu2fhhlqvso" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
+[ext_resource type="MeshLibrary" uid="uid://bhohnjgrmhp23" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://bqe8w1f2rn5eb" path="res://scenes/libraries/OccupancyMeshLibrary.tres" id="3_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="3_ks0nw"]
 [ext_resource type="MeshLibrary" uid="uid://bn03h5wqjx55b" path="res://scenes/libraries/TriggerMeshLibrary.tres" id="4_cx077"]
@@ -245,13 +245,6 @@ turbulence_influence_max = 0.18800001
 
 [node name="Map3d" type="Node3D"]
 script = ExtResource("1_yuxmn")
-level_name = null
-minimum_camera_height = null
-maximum_camera_height = null
-minimum_camera_x = null
-maximum_camera_x = null
-minimum_camera_z = null
-maximum_camera_z = null
 
 [node name="TerrainGrid" type="GridMap" parent="."]
 unique_name_in_owner = true

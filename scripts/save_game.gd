@@ -35,8 +35,9 @@ func create_new_save_data() -> void:
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
-	char1.scene_id = "Alfred"
-	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	char1.scene_id = "Alfred"	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+
+	
 	var data2 := CharacterData.new()
 	data2.unit_name = "Lucy"
 	data2.speciality = CharacterData.Speciality.Militia
@@ -47,8 +48,8 @@ func create_new_save_data() -> void:
 	var char2 := Character.new()
 	char2.data = data2
 	char2.state = state2
-	char2.scene_id = "Lucy"
-	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	char2.scene_id = "Lucy"	 #Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	
 	var units := [
 		char1.save(), 
 		char2.save()
@@ -82,7 +83,7 @@ func create_new_save_data() -> void:
 func write(_save_slot: int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	
-	if is_instance_valid(Main.level):
+	if !is_instance_valid(Main.level):
 		push_error("Main level does not exist");
 		return;
 	
@@ -149,6 +150,7 @@ func read(save_slot: int) -> bool:
 		data.focus = data_dict["focus"]
 		data.endurance = data_dict["endurance"]
 
+
 		# --- STATE ---
 		var state := CharacterState.new()
 		var state_dict : Dictionary = unit_dict["state"]
@@ -161,10 +163,31 @@ func read(save_slot: int) -> bool:
 		state.level = state_dict["level"]
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
+		
+
+		# --- WEAPON ---
+		var wep_id : String = str(data_dict.get("weapon_id", "unarmed"))
+		if wep_id == "":
+			wep_id = "unarmed"
+		data.weapon_id = wep_id
 
 		character.data = data
 		character.state = state
+		character.ensure_weapon_equipped()
+		
+		#var resolved_id := "NULL"
+		#if character.state.weapon != null:
+		#	resolved_id = character.state.weapon.weapon_id
+		#
+		#print(
+		#	"[WEAPON CHECK] ",
+		#	character.data.unit_name,
+		#	" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
+		#	" | weapon_id=", character.data.weapon_id,
+		#	" | resolved=", resolved_id
+		#)
 
+		
 		Main.characters.append(character)
 
 	Main.load_level(Main.levels[level])

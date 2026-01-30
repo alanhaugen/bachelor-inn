@@ -30,13 +30,15 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	#weapons
 	var weapon_damage : int;
 	var weapon_crit : int;
+	var weapon_name : String;
 	
 	if aggressor.state.weapon:
 		weapon_damage = aggressor.state.weapon.damage_modifier;
 		weapon_crit = aggressor.state.weapon.weapon_critical;
+		weapon_name = aggressor.state.weapon.weapon_name;
 	
 	@warning_ignore("integer_division")
-	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - victim.state.defense / 2);
+	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - (victim.state.defense / 2));
 	
 	
 	if simulate_only == false:
@@ -66,7 +68,9 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 		aggressor.update_health_bar();
 		victim.update_health_bar();
 		
-		Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
+		#Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
+		Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " +  str(attack_strength) + " damage. " + str(aggressor.data.strength) + 
+								" damage from str, and " + str(weapon_damage) + " weapon damage from " + str(weapon_name) + ". Victim defence is: " + str(victim.state.defense) + ".\n") + Main.battle_log.text;
 	
 	if aggressor.state.is_playable():
 		# Do not go insane on victory

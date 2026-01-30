@@ -265,7 +265,7 @@ func _input(event: InputEvent) -> void:
 			movement_map.clear()
 			if (selected_unit == get_unit(pos)):
 				active_move = Wait.new(pos)
-				show_move_popup(windowPos)
+				show_move_popup(get_viewport().get_mouse_position()) #(windowPos)
 				#show_move_popup(selected_unit.get_unit(pos))
 			else:
 				if selected_unit != null:
@@ -418,13 +418,16 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
+				new_unit.ensure_weapon_equipped();
 				new_unit.state.is_moved = false;
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
+				
 				var health := str(new_unit.state.current_health)
 				if health == "0":
 					health = "fresh unit"
-				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health));
+					
+				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health) + ".");
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
 		elif (get_unit_name(pos) == "Enemy"):
