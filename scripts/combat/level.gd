@@ -780,10 +780,14 @@ func _process(delta: float) -> void:
 			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
 				Dialogic.start(level_name + "LevelVictory")
 				
-			active_move.execute(game_state);
+			active_move.execute(game_state)
 			
 			if active_move is Attack: 
 				combat_vfx.play_attack(active_move.result)
+			
+			if is_player_turn:
+				active_move = Wait.new(active_move.end_pos)
+				show_move_popup(get_viewport().get_mouse_position())
 			
 			CheckVictoryConditions();
 			var code := enemy_code;

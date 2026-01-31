@@ -21,6 +21,13 @@ layout_mode = 0
 offset_right = 58.0
 offset_bottom = 101.0
 
+[node name="CancelButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_yxb3c")
+theme_override_font_sizes/font_size = 72
+text = "Items"
+
 [node name="MoveButton" type="Button" parent="VBoxContainer"]
 visible = false
 layout_mode = 2
@@ -45,14 +52,7 @@ theme_override_fonts/font = ExtResource("2_yxb3c")
 theme_override_font_sizes/font_size = 72
 text = "Wait"
 
-[node name="CancelButton" type="Button" parent="VBoxContainer"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_fonts/font = ExtResource("2_yxb3c")
-theme_override_font_sizes/font_size = 72
-text = "Cancel"
-
+[connection signal="pressed" from="VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/AttackButton" to="." method="_on_attack_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/WaitButton" to="." method="_on_wait_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/CancelButton" to="." method="_on_cancel_button_pressed"]
