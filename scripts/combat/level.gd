@@ -75,20 +75,22 @@ enum States {
 var state :int = States.PLAYING;
 var game_state : GameState;
 
-var is_in_menu: bool = false;
-var active_move: Command;
-var moves_stack: Array;
+var is_in_menu: bool = false
+var active_move: Command
+var moves_stack: Array
 
-var ribbon: Ribbon;
+var ribbon: Ribbon
 
-var current_moves: Array[Command];
-var is_player_turn: bool = true;
-var unit_pos: Vector3;
-var player_code: int = 0;
-var player_code_done: int = 3;
-var enemy_code: int = 1;
-var attack_code: int = 0;
-var move_code: int = 1;
+var current_moves: Array[Command]
+var is_player_turn: bool = true
+var unit_pos: Vector3
+var player_code: int = 0
+var player_code_done: int = 3
+var enemy_code: int = 1
+var attack_code: int = 0
+var move_code: int = 1
+
+var is_using_ability: bool = false
 
 #region Camera
 var camera_controller : CameraController
@@ -202,17 +204,29 @@ func get_unit_name(pos : Vector3) -> String:
 	return occupancy_map.mesh_library.get_item_name(item_id)
 
 
-func show_attack_tiles(pos : Vector3i) -> void:
-	path_map.clear();
-	var reachable : Array[Vector3i] = [];
-	
-	for move : Move in current_moves:
-		reachable.append(move.end_pos);
-	
-	for tile :Vector3i in MoveGenerator.get_attack_origins(selected_unit, game_state, pos, reachable):
-		path_map.set_cell_item(tile, 0);
-	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
-	#	path_map.set_cell_item(tile, 0);
+func show_attack_tiles(pos: Vector3i) -> void:
+	path_map.clear()
+
+	var reachable: Array[Vector3i] = []
+
+	# Collect all MOVE destinations (possible attack origins)
+	for cmd in current_moves:
+		if cmd is Move:
+			reachable.append(cmd.end_pos)
+
+	# Include standing still as an origin
+	reachable.append(selected_unit.state.grid_position)
+
+	# Generate attack tiles
+	var tiles := MoveGenerator.get_attack_origins(
+		selected_unit,
+		game_state,
+		pos,
+		reachable
+	)
+
+	for tile: Vector3i in tiles:
+		path_map.set_cell_item(tile, 0)
 
 
 func _can_handle_input(event: InputEvent) -> bool:
@@ -333,21 +347,29 @@ func _deselect_current_unit() -> void:
 func _handle_action_tile_click(pos: Vector3i) -> void:
 	active_move = null
 
+	var found_move : Move = null
+	var found_attack : Attack = null
+
 	for cmd in current_moves:
-		if cmd is Attack and cmd.attack_pos == pos:
-			active_move = cmd
-		elif cmd.end_pos == pos:
-			active_move = cmd
+		if cmd is Move and cmd.end_pos == pos:
+			found_move = cmd
+		elif cmd is Attack and cmd.attack_pos == pos:
+			found_attack = cmd
 
-	if active_move is Attack:
-		show_attack_tiles(pos)
-		state = States.CHOOSING_ATTACK
+	# MOVE HAS PRIORITY
+	if found_move != null:
+		active_move = found_move
 
-	elif active_move is Move:
 		moves_stack.append(active_move)
 		state = States.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
+
+	elif found_attack != null:
+		active_move = found_attack
+
+		show_attack_tiles(pos)
+		state = States.CHOOSING_ATTACK
 
 	movement_map.clear()
 
@@ -363,12 +385,29 @@ func _clear_selection() -> void:
 	ribbon.hide()
 
 
+func _handle_abilities(pos: Vector3i) -> bool:
+	if is_using_ability:
+		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+			for cmd: Heal in current_moves:
+				if cmd.end_pos == pos:
+					cmd.execute(game_state)
+					is_using_ability = false
+					selected_unit.state.is_moved = true
+					get_unit(pos).update_health_bar()
+					movement_map.clear()
+					return true
+	return false
+
+
 func _input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
 		return
-
+	
 	var pos: Vector3i = get_grid_cell_from_mouse()
 	print(pos)
+	
+	if _handle_abilities(pos):
+		return
 
 	_update_cursor(pos)
 

@@ -23,6 +23,7 @@ func execute(state: GameState, simulate_only: bool = false) -> void:
 	# Apply healing
 	if not simulate_only:
 		unit.state.current_health = min(unit.state.max_health, unit.state.current_health + amount)
+		Main.battle_log.text = unit.data.unit_name + " is healed by " + str(amount) + " hp\n" + Main.battle_log.text;
 
 # Undo the heal
 func undo(state: GameState, simulate_only: bool = false) -> void:

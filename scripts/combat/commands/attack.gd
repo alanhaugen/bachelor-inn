@@ -1,10 +1,13 @@
-extends Move
+extends Command
 class_name Attack
 ## AttackMove is atomic: movement + attack resolution.
 ## Used as a single minimax action.
 
 var attack_pos : Vector3i;
 var result : AttackResult
+
+var start_pos : Vector3i
+var end_pos : Vector3i
 
 func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -> void:
 	start_pos = inStartPos;
