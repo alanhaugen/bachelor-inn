@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://bu3kvc2qxcq2w"]
+[gd_scene load_steps=11 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
 [ext_resource type="MeshLibrary" uid="uid://dafu2fhhlqvso" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
@@ -9,10 +9,9 @@
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="5_yex0l"]
 [ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_8a3vg"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
-[ext_resource type="PackedScene" uid="uid://cwb5ihgj4ap4k" path="res://art/WIP/CharTest.tscn" id="13_s0ebr"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
-[node name="Map3d" type="Node3D"]
+[node name="Map3d2" type="Node3D"]
 script = ExtResource("1_yuxmn")
 
 [node name="TerrainGrid" type="GridMap" parent="."]
@@ -143,10 +142,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.23863, -2.744268, -1.87495
 visible = false
 light_energy = 0.7
 light_specular = 3.335
-
-[node name="CharTest" parent="." instance=ExtResource("13_s0ebr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.17461252, 2.7966332, -1.5080466)
-visible = false
 
 [node name="Particles" type="Node3D" parent="."]
 
