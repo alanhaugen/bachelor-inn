@@ -20,11 +20,11 @@ func update_playerStats(character: Character, popup: StatPopUp) -> void:
 			stat_script.max_sanity = character_script.state.max_sanity
 			stat_script.sanity = character_script.state.current_sanity
 			
-			stat_script.strength = character_script.data.strength
-			stat_script.mind = character_script.data.mind
-			stat_script.speed = character_script.data.speed
-			stat_script.focus = character_script.data.focus
-			stat_script.endurance = character_script.data.endurance
+			stat_script.strength = character_script.data.strength #should be set onto a Label called $Value_Strength
+			stat_script.mind = character_script.data.mind#$Value_Mind
+			stat_script.speed = character_script.data.speed#$Value_Speed
+			stat_script.focus = character_script.data.focus#$Value_Focus
+			stat_script.endurance = character_script.data.endurance#$Value_Endurance
 			
 			stat_script.level = "Level: " + str(character_script.state.current_level);
 			
