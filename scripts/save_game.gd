@@ -175,17 +175,17 @@ func read(save_slot: int) -> bool:
 		character.state = state
 		character.ensure_weapon_equipped()
 		
-		#var resolved_id := "NULL"
-		#if character.state.weapon != null:
-		#	resolved_id = character.state.weapon.weapon_id
-		#
-		#print(
-		#	"[WEAPON CHECK] ",
-		#	character.data.unit_name,
-		#	" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
-		#	" | weapon_id=", character.data.weapon_id,
-		#	" | resolved=", resolved_id
-		#)
+		var resolved_id := "NULL"
+		if character.state.weapon != null:
+			resolved_id = character.state.weapon.weapon_id
+		
+		print(
+			"[WEAPON CHECK] ",
+			character.data.unit_name,
+			" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
+			" | weapon_id=", character.data.weapon_id,
+			" | resolved=", resolved_id
+		)
 
 		
 		Main.characters.append(character)
