@@ -239,7 +239,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	if is_best_cell != false:
 		return best_cell
 
-	return INVALID_CELL  # fallback
+	return Vector3i()  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
@@ -274,7 +274,7 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	#	path_map.set_cell_item(tile, 0);
 
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_TAB:
