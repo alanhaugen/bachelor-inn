@@ -343,7 +343,7 @@ lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_c8buq")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Orb_Intro" type="Node3D" parent="." index="17"]
+[node name="Orb_Intro" type="Node3D" parent="." index="16"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.70415, 1.0557723, 0.23919928)
 
 [node name="Orb" type="MeshInstance3D" parent="Orb_Intro" index="0"]

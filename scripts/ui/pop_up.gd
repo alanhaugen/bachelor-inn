@@ -17,22 +17,6 @@ class_name StatPopUp
 @onready var type: Label = %Type
 @onready var level_text: Label = %Level
 
-var icon: TextureRect = null : set = _set_icon;
-var health: int = 0 : set = _set_health;
-var mana: int = 0 : set = _set_magic;
-var sanity: int = 0 : set = _set_sanity;
-var max_health: int = 0 : set = _set_max_health;
-var max_mana: int = 0 : set = _set_max_magic;
-var max_sanity: int = 0 : set = _set_max_sanity;
-
-var strength: int = 0 : set = _set_strength;
-var mind: int = 0 : set = _set_mind;
-var speed: int = 0 : set = _set_speed;
-var focus: int = 0 : set = _set_focus;
-var endurance: int = 0 : set = _set_endurance;
-
-var level: String = "" : set = _set_level;
-
 func apply_stats(stats: Dictionary) -> void:
 	icon_texture.texture = stats.portrait
 	name_label.text = stats.name
@@ -53,8 +37,26 @@ func apply_stats(stats: Dictionary) -> void:
 	
 	level_text.text = "Level: %d" % stats.level
 	type.text = stats.type
-	
-	
+
+#old below
+var icon: TextureRect = null : set = _set_icon;
+var health: int = 0 : set = _set_health;
+var mana: int = 0 : set = _set_magic;
+var sanity: int = 0 : set = _set_sanity;
+var max_health: int = 0 : set = _set_max_health;
+var max_mana: int = 0 : set = _set_max_magic;
+var max_sanity: int = 0 : set = _set_max_sanity;
+
+var strength: int = 0 : set = _set_strength;
+var mind: int = 0 : set = _set_mind;
+var speed: int = 0 : set = _set_speed;
+var focus: int = 0 : set = _set_focus;
+var endurance: int = 0 : set = _set_endurance;
+
+var level: String = "" : set = _set_level;
+
+
+
 func _set_icon(texture: TextureRect) -> void:
 	icon_texture = texture;
 
