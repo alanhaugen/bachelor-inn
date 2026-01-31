@@ -8,6 +8,10 @@ func _init(grid_map : GridMap) -> void:
 	grid = grid_map
 
 
+func set_tile(tile : GridTile) -> void:
+	grid.set_cell_item(tile.pos, tile.type)
+
+
 func cell_to_world(pos: Vector3i) -> Vector3:
 	return grid.to_global(grid.map_to_local(pos))
 
