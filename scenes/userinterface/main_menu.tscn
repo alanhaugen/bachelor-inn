@@ -5,19 +5,19 @@
 [ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
+[ext_resource type="Texture2D" uid="uid://bp4lixtwcocx2" path="res://art/textures/NobleNightsLogo_BorderBluePink.png" id="4_fj817"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
-[ext_resource type="Texture2D" uid="uid://orevhtcy5gdj" path="res://art/textures/NobleNightsLogo_basecolour.png" id="8_d233l"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")
-shader_parameter/colA = Color(0.6467571, 0.2016879, 0.99999994, 1)
-shader_parameter/colB = Color(1.697393, 0.0798977, 1.0850894, 1)
-shader_parameter/colC = Color(0, 1.06581, 1.9795256, 1)
+shader_parameter/colA = Color(0.40844727, 0.2113064, 0.99871415, 1)
+shader_parameter/colB = Color(0, 0.7423105, 0.23405302, 1)
+shader_parameter/colC = Color(1.2429751, 2.0088365, 2.8066084, 1)
 shader_parameter/pixelation = 80.0
 shader_parameter/pixelated = true
 shader_parameter/offsety = 0.515
@@ -227,7 +227,7 @@ offset_left = -109.67435
 offset_top = -120.78242
 offset_right = 110.658966
 offset_bottom = 42.612617
-texture = ExtResource("8_d233l")
+texture = ExtResource("4_fj817")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu"]
 layout_mode = 0

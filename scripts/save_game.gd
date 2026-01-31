@@ -21,6 +21,25 @@ func is_savefile_existing() -> bool:
 	return FileAccess.file_exists(SAVE_GAME_PATH);
 
 
+func create_new_from_state(slot:int, level: int, state: GameState) -> void:
+	var units: Array[Character]
+	
+	for unit in state.units:
+		units.append(unit.save())
+	
+	# TODO: Save into correct slot
+	# TODO: Make sure it does not overwrite other files
+	var _save := {
+		"level": level,
+		"units": units
+	}
+	
+	# TODO: Save to file
+	#var json_string: String = JSON.stringify(saves);
+	#save_file.store_string(json_string);
+	#save_file.close();
+
+
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
@@ -31,12 +50,12 @@ func create_new_save_data() -> void:
 	data1.focus = 5
 
 	var state1 := CharacterState.new()
+	state1.weapon = WeaponRegistry.get_weapon("scepter_basic")
 
 	var char1 := Character.new()
 	char1.data = data1
 	char1.state = state1
 	char1.scene_id = "Alfred"	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
-
 	
 	var data2 := CharacterData.new()
 	data2.unit_name = "Lucy"
@@ -44,6 +63,7 @@ func create_new_save_data() -> void:
 	data2.strength = 10
 
 	var state2 := CharacterState.new()
+	state2.weapon = WeaponRegistry.get_weapon("sword_basic")
 
 	var char2 := Character.new()
 	char2.data = data2
@@ -74,9 +94,9 @@ func create_new_save_data() -> void:
 		},
 	}
 	
-	#is the VAR necessary?????
-	#var json_string: String = JSON.stringify(saves);
-	save_file.store_string(JSON.stringify(saves));
+	#is the VAR necessary????? nope. but it is more readable
+	var json_string: String = JSON.stringify(saves);
+	save_file.store_string(json_string);
 	save_file.close();
 
 
@@ -163,30 +183,10 @@ func read(save_slot: int) -> bool:
 		state.level = state_dict["level"]
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
+		state.weapon = WeaponRegistry.get_weapon(state_dict["weapon_id"])
 		
-
-		# --- WEAPON ---
-		var wep_id : String = str(data_dict.get("weapon_id", "unarmed"))
-		if wep_id == "":
-			wep_id = "unarmed"
-		data.weapon_id = wep_id
-
 		character.data = data
 		character.state = state
-		character.ensure_weapon_equipped()
-		
-		var resolved_id := "NULL"
-		if character.state.weapon != null:
-			resolved_id = character.state.weapon.weapon_id
-		
-		print(
-			"[WEAPON CHECK] ",
-			character.data.unit_name,
-			" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
-			" | weapon_id=", character.data.weapon_id,
-			" | resolved=", resolved_id
-		)
-
 		
 		Main.characters.append(character)
 

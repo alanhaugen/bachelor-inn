@@ -1,7 +1,7 @@
 [gd_scene load_steps=56 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
-[ext_resource type="MeshLibrary" uid="uid://bhohnjgrmhp23" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
+[ext_resource type="MeshLibrary" uid="uid://d1p1bflduhst1" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://bqe8w1f2rn5eb" path="res://scenes/libraries/OccupancyMeshLibrary.tres" id="3_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="3_ks0nw"]
 [ext_resource type="MeshLibrary" uid="uid://bn03h5wqjx55b" path="res://scenes/libraries/TriggerMeshLibrary.tres" id="4_cx077"]
@@ -10,17 +10,17 @@
 [ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_8a3vg"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_b4hrp"]
-[ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_22kqp"]
-[ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="10_j7b6t"]
-[ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="11_4f8d2"]
+[ext_resource type="Texture2D" uid="uid://b33jkq5s683ck" path="res://art/textures/Orb.png" id="9_22kqp"]
+[ext_resource type="Texture2D" uid="uid://c6kbc4515il1j" path="res://art/textures/M_Orb.png" id="10_j7b6t"]
+[ext_resource type="Texture2D" uid="uid://bkek8ogqv3wgc" path="res://art/textures/No_Orb.png" id="11_4f8d2"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="12_fiawb"]
 [ext_resource type="PackedScene" uid="uid://cwb5ihgj4ap4k" path="res://art/WIP/CharTest.tscn" id="13_s0ebr"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="14_nou32"]
-[ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="15_jyv61"]
-[ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="16_fwwfx"]
-[ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="17_1sfft"]
+[ext_resource type="Texture2D" uid="uid://c87baja4rh5qf" path="res://art/textures/ParticleTex/Star_Particle.png" id="15_jyv61"]
+[ext_resource type="Texture2D" uid="uid://dgc3pcg0tfg2j" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="16_fwwfx"]
+[ext_resource type="Texture2D" uid="uid://dltjt0hh3xp5s" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="17_1sfft"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="18_pm7mh"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="19_0by4d"]
+[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="19_0by4d"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d1qpj"]
@@ -243,7 +243,7 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
-[node name="Map3d" type="Node3D"]
+[node name="Map3d2" type="Node3D"]
 script = ExtResource("1_yuxmn")
 
 [node name="TerrainGrid" type="GridMap" parent="."]
@@ -291,6 +291,13 @@ cell_size = Vector3(2, 1, 2)
 data = {
 "cells": PackedInt32Array(1, 0, 1179649)
 }
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="AttackRangeOverlay" type="GridMap" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
+mesh_library = ExtResource("3_ks0nw")
+cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="PathOverlay" type="GridMap" parent="."]

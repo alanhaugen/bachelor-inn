@@ -12,10 +12,6 @@ edge_fade = 0.42870885
 level_name = "first fen edition"
 minimum_camera_height = 10.0
 maximum_camera_height = 30.0
-minimum_camera_x = -10.0
-maximum_camera_x = 100.0
-minimum_camera_z = -10.0
-maximum_camera_z = 10.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {

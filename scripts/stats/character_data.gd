@@ -62,7 +62,6 @@ enum Personality
 @export var speed : int = 4
 @export var focus : int = 4
 @export var endurance : int = 4
-@export var weapon_id : String = "unarmed"
 
 
 func duplicate_data() -> CharacterData:
@@ -78,6 +77,5 @@ func save() -> Dictionary:
 		"mind": mind,
 		"speed": speed,
 		"focus": focus,
-		"endurance": endurance,
-		"weapon_id" : weapon_id
+		"endurance": endurance
 	}

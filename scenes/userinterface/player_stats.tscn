@@ -1,0 +1,427 @@
+[gd_scene load_steps=14 format=3 uid="uid://cogf2xkkqlmrb"]
+
+[ext_resource type="Script" uid="uid://y5jmxyksgjji" path="res://scripts/ui/pop_up.gd" id="1_q6cx0"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_gvilx"]
+[ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="3_d46rh"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="4_tlwca"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b741m"]
+atlas = ExtResource("2_gvilx")
+region = Rect2(184, 8, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c7dy5"]
+texture = ExtResource("2_gvilx")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pyip5"]
+texture = ExtResource("2_gvilx")
+expand_margin_top = 1.0
+region_rect = Rect2(228, 16, 10, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1do4"]
+atlas = ExtResource("2_gvilx")
+region = Rect2(176, 0, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1htk0"]
+texture = ExtResource("2_gvilx")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q3i2e"]
+texture = ExtResource("2_gvilx")
+expand_margin_top = 1.0
+region_rect = Rect2(208, 16, 10, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v7bq"]
+atlas = ExtResource("2_gvilx")
+region = Rect2(184, 0, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b6nfr"]
+texture = ExtResource("2_gvilx")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ck02a"]
+texture = ExtResource("2_gvilx")
+expand_margin_top = 1.0
+region_rect = Rect2(198, 16, 10, 15)
+
+[node name="Player_Stats" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -0.25
+offset_top = 197.0
+offset_right = -0.25
+offset_bottom = 197.0
+grow_vertical = 0
+script = ExtResource("1_q6cx0")
+metadata/_edit_group_ = true
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -15.5
+offset_top = -7.25
+offset_right = -15.5
+offset_bottom = -7.25
+
+[node name="Background" type="NinePatchRect" parent="Control"]
+z_index = -3
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -46.0
+offset_right = 214.5
+offset_bottom = 36.25
+grow_vertical = 0
+texture = ExtResource("2_gvilx")
+region_rect = Rect2(96, 0, 32.077, 32)
+patch_margin_left = 11
+patch_margin_top = 11
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Magic_Icon" type="TextureRect" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = -288.25
+offset_top = -71.0
+offset_right = -281.25
+offset_bottom = -64.0
+tooltip_text = "Mana remaining"
+texture = SubResource("AtlasTexture_b741m")
+stretch_mode = 2
+
+[node name="MagicBar" type="ProgressBar" parent="Control/Magic_Icon"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -6.0
+offset_right = 66.0
+grow_vertical = 0
+tooltip_text = "Mana remaining"
+theme_override_styles/background = SubResource("StyleBoxTexture_c7dy5")
+theme_override_styles/fill = SubResource("StyleBoxTexture_pyip5")
+value = 80.0
+show_percentage = false
+
+[node name="MagicText" type="Label" parent="Control/Magic_Icon"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 72.0
+offset_top = -4.0
+offset_right = 116.0
+offset_bottom = 10.0
+text = "100/100"
+
+[node name="StatBG" type="NinePatchRect" parent="Control"]
+z_index = -3
+layout_mode = 0
+offset_left = 157.25
+offset_top = -40.0
+offset_right = 208.75
+offset_bottom = 30.25
+texture = ExtResource("2_gvilx")
+region_rect = Rect2(64, 32, 32, 32)
+patch_margin_left = 2
+patch_margin_top = 2
+patch_margin_right = 2
+patch_margin_bottom = 2
+
+[node name="StatHolder" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 160.25
+offset_top = -40.5
+offset_right = 205.25
+offset_bottom = 29.5
+theme_override_constants/separation = 0
+metadata/_edit_group_ = true
+
+[node name="STR_Box" type="HBoxContainer" parent="Control/StatHolder"]
+layout_mode = 2
+
+[node name="STR_Text" type="Label" parent="Control/StatHolder/STR_Box"]
+layout_mode = 2
+size_flags_horizontal = 0
+tooltip_text = "Strength"
+mouse_filter = 0
+text = "Str"
+
+[node name="Value_Strength" type="Label" parent="Control/StatHolder/STR_Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Strength"
+mouse_filter = 0
+text = "99"
+
+[node name="MND_Box" type="HBoxContainer" parent="Control/StatHolder"]
+layout_mode = 2
+
+[node name="Mnd_Text" type="Label" parent="Control/StatHolder/MND_Box"]
+layout_mode = 2
+tooltip_text = "Mind"
+mouse_filter = 0
+text = "Mnd"
+
+[node name="Value_Mind" type="Label" parent="Control/StatHolder/MND_Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Mind"
+mouse_filter = 0
+text = "99"
+
+[node name="SPD_Box" type="HBoxContainer" parent="Control/StatHolder"]
+layout_mode = 2
+
+[node name="SPD_Text" type="Label" parent="Control/StatHolder/SPD_Box"]
+layout_mode = 2
+tooltip_text = "Speed"
+mouse_filter = 0
+text = "Spd"
+
+[node name="Value_Speed" type="Label" parent="Control/StatHolder/SPD_Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Speed"
+mouse_filter = 0
+text = "99"
+
+[node name="FCS_Box" type="HBoxContainer" parent="Control/StatHolder"]
+layout_mode = 2
+
+[node name="FCS_Text" type="Label" parent="Control/StatHolder/FCS_Box"]
+layout_mode = 2
+tooltip_text = "Focus"
+mouse_filter = 0
+text = "Fcs"
+
+[node name="Value_Focus" type="Label" parent="Control/StatHolder/FCS_Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Focus"
+mouse_filter = 0
+text = "99"
+horizontal_alignment = 1
+
+[node name="EDR_Box" type="HBoxContainer" parent="Control/StatHolder"]
+layout_mode = 2
+
+[node name="EDR_Text" type="Label" parent="Control/StatHolder/EDR_Box"]
+layout_mode = 2
+tooltip_text = "Endurance"
+mouse_filter = 0
+text = "Edr"
+
+[node name="Value_Endurance" type="Label" parent="Control/StatHolder/EDR_Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+tooltip_text = "Endurance"
+mouse_filter = 0
+text = "99"
+horizontal_alignment = 1
+
+[node name="Icon" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.25
+offset_top = -39.0
+offset_right = 44.0
+offset_bottom = -4.0
+grow_vertical = 0
+texture = ExtResource("2_gvilx")
+region_rect = Rect2(132, 4, 24, 24)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="Control/Icon"]
+clip_contents = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 34.0
+offset_bottom = 33.999996
+color = Color(1, 1, 1, 0)
+
+[node name="Icon_texture" type="TextureRect" parent="Control/Icon/ColorRect"]
+unique_name_in_owner = true
+z_index = -1
+layout_mode = 1
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("3_d46rh")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 46.75
+offset_top = -37.25
+offset_right = 256.25
+offset_bottom = 37.75
+scale = Vector2(0.5, 0.5)
+theme_override_constants/separation = 3
+metadata/_edit_group_ = true
+
+[node name="CharacterName" type="Label" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Long Name for longer wierdoes"
+autowrap_mode = 2
+max_lines_visible = 2
+
+[node name="Type" type="Label" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "Fighter"
+
+[node name="Level" type="Label" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+text = "level 200"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 7.5
+offset_top = 0.75
+offset_right = 146.5
+offset_bottom = 28.75
+theme_override_constants/separation = 0
+metadata/_edit_group_ = true
+
+[node name="Health" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Health_Icon" type="TextureRect" parent="Control/VBoxContainer/Health"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Health remaining"
+texture = SubResource("AtlasTexture_l1do4")
+stretch_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="Control/VBoxContainer/Health"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Health remaining"
+theme_override_styles/background = SubResource("StyleBoxTexture_1htk0")
+theme_override_styles/fill = SubResource("StyleBoxTexture_q3i2e")
+value = 59.58
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="Control/VBoxContainer/Health"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("4_tlwca")
+theme_override_font_sizes/font_size = 16
+text = "100/100"
+
+[node name="Sanity" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Sanity_Icon" type="TextureRect" parent="Control/VBoxContainer/Sanity"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Sanity remaining"
+texture = SubResource("AtlasTexture_0v7bq")
+stretch_mode = 2
+
+[node name="SanityBar" type="ProgressBar" parent="Control/VBoxContainer/Sanity"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Sanity remaining"
+theme_override_styles/background = SubResource("StyleBoxTexture_b6nfr")
+theme_override_styles/fill = SubResource("StyleBoxTexture_ck02a")
+value = 80.0
+show_percentage = false
+
+[node name="SanityText" type="Label" parent="Control/VBoxContainer/Sanity"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("4_tlwca")
+theme_override_font_sizes/font_size = 16
+text = "100/100"
+
+[node name="Control2" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_top = -4.0
+offset_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control2"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = -5.0
+offset_right = 113.0
+offset_bottom = 23.0
+
+[node name="Button" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "1"
+
+[node name="Button2" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "2"
+
+[node name="Button3" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "3"
+
+[node name="Button4" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "4"
+
+[node name="Button5" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "5"
+
+[node name="Button6" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "6"
