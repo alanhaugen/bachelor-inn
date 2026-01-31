@@ -177,6 +177,33 @@ func select_character(character: Character) -> void:
 	cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
 	cursor.show()
 
+func get_selectable_characters() -> Array[Character]:
+	var result: Array[Character] =[]
+	for c in characters:
+		if not is_instance_valid(c):
+			continue
+		if c.state.faction != CharacterState.Faction.PLAYER:
+			continue
+		#if c.state.is_dead:
+			#continue
+		result.append(c)
+	return result
+
+func select_next_character() -> void:
+	var list := get_selectable_characters()
+	if list.is_empty():
+		return
+
+	if selected_unit == null:
+		select_character(list[0])
+		return
+	var index := list.find(selected_unit)
+	if index == -1:
+		select_character(list[0])
+		return
+
+	var next_index := (index + 1) % list.size()
+	select_character(list[next_index])
 
 const INVALID_CELL := Vector3i(-1, -1, -1)
 func get_grid_cell_from_mouse() -> Vector3i:
@@ -248,6 +275,12 @@ func show_attack_tiles(pos : Vector3i) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	
+	if event is InputEventKey and event.pressed:
+		if event.keycode == KEY_TAB:
+			select_next_character()
+			return
+			
 	if state == States.ANIMATING:
 		return;
 	if is_in_menu:
