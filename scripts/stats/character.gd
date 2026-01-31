@@ -230,6 +230,9 @@ func _ready() -> void:
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
 	state.skills.append(get_random_unaquired_skill());
+	
+	if data.speciality == CharacterData.Speciality.Scholar:
+		state.skills.append(SkillRegistry.get_skill("heal_basic"));
 	#abilities.append(abilites[0]);
 	
 	if state.is_playable():

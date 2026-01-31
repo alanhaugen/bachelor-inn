@@ -180,7 +180,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	if is_best_cell != false:
 		return best_cell
 
-	return Vector3i()  # fallback
+	return Vector3i(INF,INF,INF)  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
@@ -215,122 +215,189 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	#	path_map.set_cell_item(tile, 0);
 
 
-func _input(event: InputEvent) -> void:
-	if state == States.ANIMATING:
-		return;
-	if is_in_menu:
-		return;
+func _can_handle_input(event: InputEvent) -> bool:
+	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
+		return false
 	
-	if event is InputEventMouseButton:
-		if Input.is_action_pressed("enable_dragging"):
-			return
-		if event.button_index != MOUSE_BUTTON_LEFT:
-			return;
-		if event.pressed == false:
-			return;
-			
-		# Get the tile clicked on
-		var pos :Vector3i = get_grid_cell_from_mouse();
-		print (pos);
-		
-		if state == States.CHOOSING_ATTACK:
-			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-				active_move.end_pos = pos;
-				moves_stack.append(active_move);
-				
-				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star used to select how the character moves when move + attack
-				state = States.ANIMATING;
-			return;
-		
-		#hide enemy stat display after deselecting them
-		if (selected_enemy_unit != null):
-			selected_enemy_unit.hide_ui();
-			stat_popup_enemy.hide();
-			#if selected_unit == null:
-			#	stat_popup_player.hide();
-		
-		if (get_tile_name(pos) == "Water"):
-			return
-		
-		var world_pos := grid_to_world(pos)
-		cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
+	if get_viewport().get_mouse_position().y > ribbon.position.y:
+		return false
+	
+	if state == States.ANIMATING:
+		return false
 
-		#map.set_cell(pos, 1);
-		#unitsMap.set_cell(pos, 0, Vector2(14,3));
-		cursor.show()
-		
-		if (get_unit_name(pos) == CharacterStates.Player):
-			Tutorial.tutorial_unit_selected()
-			unit_pos = pos
-			movement_map.clear()
-			if (selected_unit == get_unit(pos)):
-				active_move = Wait.new(pos)
-				show_move_popup(get_viewport().get_mouse_position()) #(windowPos)
-				#show_move_popup(selected_unit.get_unit(pos))
-			else:
-				if selected_unit != null:
-					var character_script: Character = selected_unit
-					character_script.hide_ui()
-				selected_unit = get_unit(pos)
-				ribbon.show()
-				ribbon.set_skills(selected_unit.state.skills)
-				#ribbon.set_abilities(selected_unit.skills);
-				
-				current_moves = MoveGenerator.generate(selected_unit, game_state)
-				movement_grid.fill_from_commands(current_moves, game_state)
-				
-				#for command in current_moves:
-				#	if command  is Move:
-				#		touch(command.end_pos);
-				#	if command is Attack:
-				#		movement_map.set_cell_item(command.attack_pos, attack_code);
-				
-				#update_stat(selected_unit, stat_popup_player);
-				
-		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
-			for i in range(current_moves.size()):
-				if current_moves[i] is Attack:
-					if current_moves[i].attack_pos == pos:
-						active_move = current_moves[i];
-				elif current_moves[i].end_pos == pos:
-					active_move = current_moves[i];
-			
-			if active_move is Attack:
-				show_attack_tiles(pos);
-				state = States.CHOOSING_ATTACK;
-			elif active_move is Move:
-				moves_stack.append(active_move);
-				state = States.ANIMATING;
-				create_path(unit_pos, pos); # a-star used for normal character movement
-				path_map.clear();
-			
-			#activeMove.execute();
-			
-			#unitsMap.set_cell_item(pos, playerCodeDone);
-			#unitsMap.set_cell_item(unitPos, -1);
-			movement_map.clear();
-			#isUnitSelected = false;
-		else:
-			movement_map.clear();
-			path_map.clear();
-			
-			if selected_unit is Character:
-				var character_script: Character = selected_unit;
-				character_script.hide_ui();
-			
-			selected_unit = null;
-			
-			ribbon.hide();
-		
-		if (get_unit_name(pos) == CharacterStates.Enemy):
-			##select enemy unit for player attack
-			selected_enemy_unit = get_unit(pos);
-			#update_stat(selected_enemy_unit, stat_popup_enemy);
-		
-		#if (get_unit_name(pos) == CharacterStates.PlayerDone):
-		#	update_stat(get_unit(pos), stat_popup_player);
-	#elif event is InputEventMouseMotion:
-	#	print("Mouse Motion at: ", event.position)
+	if is_in_menu:
+		return false
+
+	if not (event is InputEventMouseButton):
+		return false
+
+	if event.button_index != MOUSE_BUTTON_LEFT:
+		return false
+
+	if not event.pressed:
+		return false
+
+	if Input.is_action_pressed("enable_dragging"):
+		return false
+
+	return true
+
+
+func _update_cursor(pos: Vector3i) -> void:
+	if get_tile_name(pos) == "Water":
+		return
+
+	var world_pos := grid_to_world(pos)
+	cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
+	cursor.show()
+
+
+func _handle_attack_choice(pos: Vector3i) -> void:
+	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return
+
+	active_move.end_pos = pos
+	moves_stack.append(active_move)
+
+	create_path(
+		moves_stack.front().start_pos,
+		moves_stack.front().end_pos
+	)
+
+	state = States.ANIMATING
+
+
+func _hide_enemy_ui() -> void:
+	if selected_enemy_unit == null:
+		return
+
+	selected_enemy_unit.hide_ui()
+	stat_popup_enemy.hide()
+
+
+func _is_invalid_tile(pos: Vector3i) -> bool:
+	return get_tile_name(pos) == "Water"
+
+
+func _handle_player_click(pos: Vector3i) -> void:
+	# Heal execution shortcut
+	if selected_unit == null:
+		Tutorial.tutorial_unit_selected()
+
+	unit_pos = pos
+	movement_map.clear()
+
+	# Same unit clicked again
+	if selected_unit == get_unit(pos):
+		active_move = Wait.new(pos)
+		show_move_popup(get_viewport().get_mouse_position())
+		return
+
+	# Switching unit
+	_deselect_current_unit()
+
+	selected_unit = get_unit(pos)
+
+	ribbon.show()
+	ribbon.set_skills(selected_unit.state.skills)
+
+	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	movement_grid.fill_from_commands(current_moves, game_state)
+
+
+func _deselect_current_unit() -> void:
+	# Hide selected player unit UI
+	if selected_unit is Character:
+		selected_unit.hide_ui()
+
+	selected_unit = null
+
+	# Hide enemy selection UI
+	if selected_enemy_unit != null:
+		selected_enemy_unit.hide_ui()
+		selected_enemy_unit = null
+
+	stat_popup_enemy.hide()
+
+	# Clear visual helpers
+	movement_map.clear()
+	path_map.clear()
+
+	# Hide ability ribbon
+	ribbon.hide()
+
+	# Reset moves
+	current_moves.clear()
+
+
+func _handle_action_tile_click(pos: Vector3i) -> void:
+	active_move = null
+
+	for cmd in current_moves:
+		if cmd is Attack and cmd.attack_pos == pos:
+			active_move = cmd
+		elif cmd.end_pos == pos:
+			active_move = cmd
+
+	if active_move is Attack:
+		show_attack_tiles(pos)
+		state = States.CHOOSING_ATTACK
+
+	elif active_move is Move:
+		moves_stack.append(active_move)
+		state = States.ANIMATING
+		create_path(unit_pos, pos)
+		path_map.clear()
+
+	movement_map.clear()
+
+
+func _clear_selection() -> void:
+	movement_map.clear()
+	path_map.clear()
+
+	if selected_unit is Character:
+		selected_unit.hide_ui()
+
+	selected_unit = null
+	ribbon.hide()
+
+
+func _input(event: InputEvent) -> void:
+	if not _can_handle_input(event):
+		return
+
+	var pos: Vector3i = get_grid_cell_from_mouse()
+	print(pos)
+
+	_update_cursor(pos)
+
+	# Attack selection phase
+	if state == States.CHOOSING_ATTACK:
+		_handle_attack_choice(pos)
+		return
+
+	_hide_enemy_ui()
+
+	if _is_invalid_tile(pos):
+		return
+
+	# Player unit clicked
+	if get_unit_name(pos) == CharacterStates.Player:
+		_handle_player_click(pos)
+		return
+
+	# Clicked on movement/attack tile
+	if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+		_handle_action_tile_click(pos)
+		return
+
+	# Clicked empty tile
+	_clear_selection()
+
+	# Enemy clicked (for info panel)
+	if get_unit_name(pos) == CharacterStates.Enemy:
+		selected_enemy_unit = get_unit(pos)
 
 
 func update_stat(character: Character, popup: StatPopUp) -> void:

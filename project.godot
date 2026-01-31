@@ -21,7 +21,8 @@ Main="*res://scripts/main.gd"
 Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 Tutorial="*res://scripts/tutorial.gd"
 Event="*res://scripts/combat/event.gd"
-WeaponRegistry="*res://scripts/combat/commands/weapon_registry.gd"
+WeaponRegistry="*res://scripts/stats/weapon_registry.gd"
+SkillRegistry="*res://scripts/stats/skillregistry.gd"
 
 [debug]
 
