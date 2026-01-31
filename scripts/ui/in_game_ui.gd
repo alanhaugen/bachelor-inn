@@ -1,11 +1,10 @@
 extends Control
 class_name ui_controller
 
-#@export var SelectedCharacterStatus: PackedScene
-@export var CharacterPreview: PackedScene 
-#var level.gd (holds all the data i need, i probably should only get the dictionary from it when stats like
-#selected character or hp change, 
+@export var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/CharacterPreview.tscn")
 @onready var preview_container := %Characters_VBOX
+@onready var player_stats: PlayerStatsUI = %Player_Stats
+var previews := {} 
 
 
 
@@ -35,14 +34,75 @@ func build_character_stats(character: Character) -> Dictionary:
 
 
 #Update the player stats to send it to the Player_Stats, gets set in its own script
-func update_playerStats(character: Character, popup: StatPopUp) -> void:
-	popup.apply_stats(build_character_stats(character))
-	popup.show();
+#func update_playerStats(character: Character, popup: StatPopUp) -> void:
+	#popup.apply_stats(build_character_stats(character))
+	#popup.show();
+
+
+func _ready() -> void:
+	#var level := get_tree().get_first_node_in_group("level")
+	call_deferred("_connect_to_level")
 
 
 #adds character preview scene to Vbox
-func _add_CharacterPreview(character: Character) -> CharacterPreview:
-	var preview := CharacterPreview.instantiate()
+func add_character_preview(character: Character) -> void:
+	if character.state.faction == CharacterState.Faction.ENEMY:
+		return
+		
+	var preview := CharacterPreviewScene.instantiate()
 	preview_container.add_child(preview)
-	preview.apply_stats(build_character_stats(character))
-	return preview
+	preview.preview_selected.connect(_on_preview_selected)
+	
+	preview.call_deferred(
+		"apply_stats",
+		build_character_stats(character),
+		character
+	)
+	
+	previews[character] = preview
+
+func _on_preview_selected(character: Character) -> void:
+	var level := get_tree().get_first_node_in_group("level")
+	if level:
+		level.select_character(character)
+
+func _connect_to_level() -> void:
+	var level := get_tree().get_first_node_in_group("level")
+	if level == null:
+		push_error("UIController: Level not found in group 'level'")
+		return
+
+	level.character_selected.connect(_on_character_selected)
+	level.character_deselected.connect(_on_character_deselected)
+	level.character_stats_changed.connect(_on_character_stats_changed)
+	level.party_updated.connect(_on_party_updated)
+	
+	if level.characters.size() > 0:
+		_on_party_updated(level.characters)
+
+func _on_character_selected(character: Character) -> void:
+	player_stats.apply_stats(build_character_stats(character))
+	player_stats.show()
+
+	for c: Character in previews.keys():
+		previews[c].is_selected = (c == character)
+		
+
+func _on_character_deselected() -> void:
+	player_stats.hide()
+
+	for preview: CharacterPreview in previews.values():
+		preview.is_selected = false
+		
+
+func _on_character_stats_changed(character: Character) -> void:
+	if previews.has(character):
+		previews[character].apply_stats(build_character_stats(character))
+
+	if player_stats.visible:
+		player_stats.apply_stats(build_character_stats(character))
+		
+
+func _on_party_updated(characters: Array[Character]) -> void:
+	for character in characters:
+		add_character_preview(character)

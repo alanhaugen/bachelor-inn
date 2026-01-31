@@ -9,6 +9,13 @@ class_name Level
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
 
+#### signals 
+
+signal character_selected(character: Character)
+signal character_deselected
+signal character_stats_changed(character: Character)
+signal party_updated(characters: Array[Character])
+
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 
 @export var level_name :String
@@ -49,18 +56,20 @@ var movement_weights_grid : Grid
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var move_popup: Control;
-var stat_popup_player: Control;
-var side_bar_array : Array[SideBar];
-var stat_popup_enemy: Control;
+#var stat_popup_player: Control;
+#var side_bar_array : Array[SideBar];
+#var stat_popup_enemy: Control;
 var completed_moves :Array[Command];
 
 var characters: Array[Character];
+
+const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
 
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
-const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
+#const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
@@ -79,7 +88,7 @@ var is_in_menu: bool = false;
 var active_move: Command;
 var moves_stack: Array;
 
-var ribbon: Ribbon;
+#var ribbon: Ribbon;
 
 var current_moves: Array[Command];
 var is_player_turn: bool = true;
@@ -148,7 +157,30 @@ func grid_to_world(pos: Vector3i) -> Vector3:
 	var world:= terrain_map.map_to_local(pos)
 	return world
 
+func select_character(character: Character) -> void:
+	if character == null:
+		return
+	if selected_unit and selected_unit != character:
+		selected_unit.hide_ui()
+	selected_unit = character
+	selected_enemy_unit = null
+	
+	unit_pos = character.state.grid_position
+	movement_map.clear()
+	
+	emit_signal("character_selected", selected_unit)
+	
+	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	movement_grid.fill_from_commands(current_moves, game_state)
+
+	var world_pos := grid_to_world(unit_pos)
+	cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
+	cursor.show()
+
+
+const INVALID_CELL := Vector3i(-1, -1, -1)
 func get_grid_cell_from_mouse() -> Vector3i:
+
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var ray_origin: Vector3 = camera_controller.project_ray_origin(mouse_pos)
 	var ray_dir: Vector3 = camera_controller.project_ray_normal(mouse_pos).normalized()
@@ -180,7 +212,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	if is_best_cell != false:
 		return best_cell
 
-	return Vector3i()  # fallback
+	return INVALID_CELL  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
@@ -243,9 +275,10 @@ func _input(event: InputEvent) -> void:
 			return;
 		
 		#hide enemy stat display after deselecting them
-		if (selected_enemy_unit != null):
-			selected_enemy_unit.hide_ui();
-			stat_popup_enemy.hide();
+		if selected_enemy_unit:
+			selected_enemy_unit = null
+			emit_signal("character_deselected")
+
 			#if selected_unit == null:
 			#	stat_popup_player.hide();
 		
@@ -271,21 +304,18 @@ func _input(event: InputEvent) -> void:
 				if selected_unit != null:
 					var character_script: Character = selected_unit
 					character_script.hide_ui()
-				selected_unit = get_unit(pos)
-				ribbon.show()
-				ribbon.set_skills(selected_unit.state.skills)
+
+				select_character(get_unit(pos))
+
+				#ribbon.show()
+				#ribbon.set_skills(selected_unit.state.skills)
 				#ribbon.set_abilities(selected_unit.skills);
-				
-				current_moves = MoveGenerator.generate(selected_unit, game_state)
-				movement_grid.fill_from_commands(current_moves, game_state)
-				
+
 				#for command in current_moves:
 				#	if command  is Move:
 				#		touch(command.end_pos);
 				#	if command is Attack:
 				#		movement_map.set_cell_item(command.attack_pos, attack_code);
-				
-				#update_stat(selected_unit, stat_popup_player);
 				
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
@@ -313,18 +343,17 @@ func _input(event: InputEvent) -> void:
 		else:
 			movement_map.clear();
 			path_map.clear();
-			
-			if selected_unit is Character:
-				var character_script: Character = selected_unit;
-				character_script.hide_ui();
-			
-			selected_unit = null;
-			
-			ribbon.hide();
+
+			if selected_unit:
+				selected_unit = null
+				emit_signal("character_deselected")
+
+			#ribbon.hide();
 		
 		if (get_unit_name(pos) == CharacterStates.Enemy):
 			##select enemy unit for player attack
 			selected_enemy_unit = get_unit(pos);
+			
 			#update_stat(selected_enemy_unit, stat_popup_enemy);
 		
 		#if (get_unit_name(pos) == CharacterStates.PlayerDone):
@@ -332,42 +361,6 @@ func _input(event: InputEvent) -> void:
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
-
-func update_stat(character: Character, popup: StatPopUp) -> void:
-	if character is Character:
-		var character_script: Character = character;
-		character_script.show_ui();
-		#character_script.print_stats();
-		if popup is StatPopUp:
-			var stat_script: StatPopUp = popup;
-			stat_script.icon_texture.texture = character_script.portrait
-			stat_script.name_label.text = character_script.data.unit_name
-			stat_script.max_health = character_script.state.max_health
-			stat_script.health = character_script.state.current_health
-			stat_script.max_sanity = character_script.state.max_sanity
-			stat_script.sanity = character_script.state.current_sanity
-			
-			stat_script.strength = character_script.data.strength
-			stat_script.mind = character_script.data.mind
-			stat_script.speed = character_script.data.speed
-			stat_script.focus = character_script.data.focus
-			stat_script.endurance = character_script.data.endurance
-			
-			stat_script.level = "Level: " + str(character_script.state.current_level);
-			
-			stat_script._set_type(CharacterData.Speciality.keys()[character_script.data.speciality] + " " + CharacterData.Personality.keys()[character_script.data.personality]);
-			
-			popup.show();
-
-func update_side_bar(character: Character, side_bar: SideBar) -> void:
-	if character is Character:
-		var character_script: Character = character;
-		side_bar.icon_texture.texture = character_script.portrait;
-		#side_bar.name_label.text = character_script.unit_name;
-		side_bar.max_health = character_script.state.max_health;
-		side_bar.health = character_script.state.current_health;
-		side_bar.max_sanity = max(side_bar.max_sanity, character_script.state.current_sanity);
-		side_bar.sanity = character_script.state.current_sanity;
 
 func _ready() -> void:
 	camera_controller = Main.camera_controller
@@ -393,9 +386,9 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
-	ribbon = RIBBON.instantiate();
-	add_child(ribbon);
-	ribbon.hide();
+	#ribbon = RIBBON.instantiate();
+	#add_child(ribbon);
+	#ribbon.hide();
 	
 	if (level_name == "first"):
 		Dialogic.start(str(level_name) + "Level");
@@ -496,30 +489,8 @@ func _ready() -> void:
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
-	
-	stat_popup_player = STATS_POPUP.instantiate()
-	stat_popup_player.hide()
-	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale)
-	stat_popup_player.position = Vector2(0, -30)
 
-	add_child(stat_popup_player)
-	
-	stat_popup_enemy = STATS_POPUP.instantiate()
-	stat_popup_enemy.hide()
-	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale)
-	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30)
 
-	add_child(stat_popup_enemy)
-	
-	for i in range(Main.characters.size()):
-		var new_side_bar := SIDE_BAR.instantiate();
-		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
-		if i != 0:
-			new_side_bar.position.y += -get_window().size.y/(15/Main.ui_scale)*i;
-		side_bar_array.append(new_side_bar);
-		add_child(new_side_bar);
-		print("made bar");
-	
 	
 	game_state = GameState.from_level(self)
 	
@@ -527,6 +498,10 @@ func _ready() -> void:
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
+	add_to_group("level")
+	emit_signal("party_updated", characters)
+	
+
 
 
 func get_unit(pos: Vector3i) -> Character:
@@ -551,6 +526,8 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 		animation_path.append(anim_pos)
 
 	selected_unit = get_unit(start)
+
+
 
 
 func reset_all_units() -> void:
@@ -620,8 +597,8 @@ func _process(delta: float) -> void:
 		camera_controller.lock_camera()
 		return;
 		
-	for i in Main.characters.size():
-		update_side_bar(Main.characters[i], side_bar_array[i]);
+	#for i in Main.characters.size():
+		#update_side_bar(Main.characters[i], side_bar_array[i]);
 		
 	turn_transition.hide();
 	camera_controller.unlock_camera()
@@ -678,7 +655,9 @@ func _process(delta: float) -> void:
 			
 			if active_move is Attack: 
 				combat_vfx.play_attack(active_move.result)
-			
+				#emit_signal("character_stats_changed", active_move.result.target)
+
+
 			CheckVictoryConditions();
 			var code := enemy_code;
 			if is_player_turn:
@@ -688,6 +667,8 @@ func _process(delta: float) -> void:
 			selected_unit.move_to(active_move.end_pos);
 			selected_unit.pause_anim()
 			selected_unit = null;
+			emit_signal("character_deselected")
+
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
 			
