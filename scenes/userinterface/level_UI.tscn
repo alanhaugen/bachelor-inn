@@ -24,6 +24,10 @@ offset_bottom = 40.0
 
 [node name="HealthBar" parent="Character" instance=ExtResource("1_u2joq")]
 layout_mode = 0
+offset_left = 10.0
+offset_top = -142.0
+offset_right = 42.0
+offset_bottom = -138.0
 
 [node name="GUI_POPUP2" parent="Character" instance=ExtResource("2_b5cm8")]
 layout_mode = 0
@@ -38,12 +42,24 @@ layout_mode = 1
 
 [node name="HealthBar2" parent="Character" instance=ExtResource("6_u6dcv")]
 layout_mode = 0
+offset_left = 8.0
+offset_top = -71.0
+offset_right = 40.0
+offset_bottom = -67.0
 
 [node name="Ribbon" parent="Character" instance=ExtResource("7_b5cm8")]
 layout_mode = 1
+offset_left = 361.0
+offset_top = -259.0
+offset_right = 361.0
+offset_bottom = -259.0
 
 [node name="SkillChoose" parent="Character" instance=ExtResource("3_0bx5w")]
 layout_mode = 1
+offset_left = -378.0
+offset_top = 115.0
+offset_right = -378.0
+offset_bottom = 115.0
 
 [node name="Interface" type="Control" parent="."]
 anchors_preset = 0
