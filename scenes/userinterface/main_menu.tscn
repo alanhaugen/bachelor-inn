@@ -199,6 +199,7 @@ grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(4, 4)
 size_flags_horizontal = 6
+mouse_filter = 2
 
 [node name="Background" type="ColorRect" parent="UI"]
 material = SubResource("ShaderMaterial_gkqwp")

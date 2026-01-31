@@ -1,11 +1,11 @@
-[gd_scene load_steps=43 format=3 uid="uid://mc5u6gfquy7q"]
+[gd_scene load_steps=44 format=3 uid="uid://mc5u6gfquy7q"]
 
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_akwul"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_uhntr"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="3_qaf04"]
-[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_dsruw"]
+[ext_resource type="MeshLibrary" uid="uid://dafu2fhhlqvso" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_dsruw"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="4_q0lo1"]
-[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="5_dsruw"]
+[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="5_dsruw"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="6_40x11"]
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="7_4aqdv"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="8_q0lo1"]
@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="13_y13he"]
 [ext_resource type="Shader" uid="uid://b5ptog53u0l54" path="res://art/WIP/Materials and Shaders/ScreenEffects_Ultimate.tres" id="14_dsruw"]
 [ext_resource type="PackedScene" uid="uid://ddvscfqfihmwr" path="res://scenes/Development/Particles/hit_particle.tscn" id="16_6lhpm"]
+[ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="17_w357l"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q0lo1"]
 render_priority = 0
@@ -306,3 +307,5 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="HitFX" parent="." instance=ExtResource("16_6lhpm")]
+
+[node name="Smog" parent="." instance=ExtResource("17_w357l")]

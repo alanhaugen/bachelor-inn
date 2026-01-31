@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene load_steps=48 format=3 uid="uid://kkgvyut22uqr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
 [ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
 [ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_ovtcx"]
 [ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="10_nxa0q"]
@@ -342,6 +343,14 @@ amount = 30
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_c8buq")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
+
+[node name="Smog" parent="Particles" index="4" instance=ExtResource("8_kofws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4099474, 1.3807526, -8.951434)
+visible = false
+
+[node name="Smog2" parent="Particles" index="5" instance=ExtResource("8_kofws")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
+visible = false
 
 [node name="Orb_Intro" type="Node3D" parent="." index="16"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.70415, 1.0557723, 0.23919928)

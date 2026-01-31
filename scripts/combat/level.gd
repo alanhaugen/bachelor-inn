@@ -160,8 +160,8 @@ func grid_to_world(pos: Vector3i) -> Vector3:
 func select_character(character: Character) -> void:
 	if character == null:
 		return
-	if selected_unit and selected_unit != character:
-		selected_unit.hide_ui()
+	#if selected_unit and selected_unit != character:
+		#selected_unit.hide_ui()
 	selected_unit = character
 	selected_enemy_unit = null
 	
@@ -273,12 +273,50 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
 	#	path_map.set_cell_item(tile, 0);
 
+func _print_all_nodes_or_something() -> void:
+	var type_counts := {}
+
+	_count_node_types(get_tree().get_root(), type_counts)
+
+	# Convert to array for sorting
+	var sorted := []
+	for t: String in type_counts.keys():
+		sorted.append({
+			"type": t,
+			"count": type_counts[t]
+		})
+
+	# Sort descending by count
+	sorted.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return a["count"] > b["count"]
+	)
+
+	print("=== Node Types in Scene (Descending) ===")
+	for entry: Dictionary in sorted:
+		print("%s: %d" % [entry["type"], entry["count"]])
+
+
+func _count_node_types(node: Node, counts: Dictionary) -> void:
+	var type_name := node.get_class()
+
+	if not counts.has(type_name):
+		counts[type_name] = 0
+	counts[type_name] += 1
+
+	for child in node.get_children():
+		_count_node_types(child, counts)
 
 func _unhandled_input(event: InputEvent) -> void:
-	
+	if state == States.ANIMATING:
+		return
+		
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_TAB:
 			select_next_character()
+			return
+		if event.keycode == KEY_K:
+			#_print_all_nodes_or_something()
+			print_orphan_nodes()
 			return
 			
 	if state == States.ANIMATING:
@@ -336,7 +374,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			else:
 				if selected_unit != null:
 					var character_script: Character = selected_unit
-					character_script.hide_ui()
+					#character_script.hide_ui()
 
 				select_character(get_unit(pos))
 
@@ -516,7 +554,7 @@ func _ready() -> void:
 			
 			if new_unit is Character:
 				var character_script : Character = new_unit;
-				character_script.hide_ui();
+				#character_script.hide_ui();
 				new_unit.state.grid_position = pos;
 	
 	move_popup = MOVE_POPUP.instantiate()
@@ -688,7 +726,7 @@ func _process(delta: float) -> void:
 			
 			if active_move is Attack: 
 				combat_vfx.play_attack(active_move.result)
-				#emit_signal("character_stats_changed", active_move.result.target)
+				
 
 
 			CheckVictoryConditions();

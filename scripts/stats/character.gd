@@ -35,8 +35,8 @@ var my_outline_material : ShaderMaterial = null
 #endregion
 
 #region packed scenes
-const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
-const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
+#const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
+#const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
 const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
 const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
 #endregion
@@ -46,8 +46,8 @@ var camera : Camera3D
 var health_bar : HealthBar
 var level_up_popup : LevelUpPopUp
 var skill_choose_popup : SkillChoose
-var health_bar_ally : HealthBar
-var health_bar_enemy : HealthBar
+#var health_bar_ally : HealthBar
+#var health_bar_enemy : HealthBar
 #endregion
 
 
@@ -119,12 +119,12 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 	if state.current_sanity <= 0 and state.current_health >= 0:
 		state.faction = CharacterState.Faction.ENEMY
 		data.unit_name = data.unit_name + "'cthulhu"
-		health_bar = health_bar_enemy
-		health_bar_ally.hide()
-		health_bar_enemy.show()
+		#health_bar = health_bar_enemy
+		#health_bar_ally.hide()
+		#health_bar_enemy.show()
 		Main.characters.erase(self)
-	if health_bar:
-		update_health_bar()
+	#if health_bar:
+		#update_health_bar()
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -186,10 +186,10 @@ func _on_experience_changed(in_experience: int) -> void:
 			skill_choose_popup.show();
 
 
-func update_health_bar() -> void:
-	health_bar.health = state.current_health;
-	health_bar.sanity = state.current_sanity;
-	health_bar.name_label = data.unit_name;
+#func update_health_bar() -> void:
+	#health_bar.health = state.current_health;
+	#health_bar.sanity = state.current_sanity;
+	#health_bar.name_label = data.unit_name;
 
 
 func calibrate_level_popup() -> void:
@@ -218,12 +218,12 @@ func _ready() -> void:
 		state.sanity_changed.connect(_on_sanity_changed)
 		state.experience_changed.connect(_on_experience_changed)
 	
-	health_bar_ally = HEALTH_BAR_SCENE.instantiate();
-	health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
-	add_child(health_bar_ally);
-	add_child(health_bar_enemy);
-	health_bar_ally.hide();
-	health_bar_enemy.hide();
+	#health_bar_ally = HEALTH_BAR_SCENE.instantiate();
+	#health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
+	#add_child(health_bar_ally);
+	#add_child(health_bar_enemy);
+	#health_bar_ally.hide();
+	#health_bar_enemy.hide();
 	
 	calc_derived_stats()
 	
@@ -232,10 +232,10 @@ func _ready() -> void:
 	state.skills.append(get_random_unaquired_skill());
 	#abilities.append(abilites[0]);
 	
-	if state.is_playable():
-		health_bar = health_bar_ally;
-	else:
-		health_bar = health_bar_enemy;
+	if not state.is_playable():
+		#health_bar = health_bar_ally;
+	#else:
+		#health_bar = health_bar_enemy;
 		state.faction = CharacterState.Faction.ENEMY;
 	
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
@@ -260,19 +260,19 @@ func _ready() -> void:
 	stop_anim = true
 	
 	camera = get_viewport().get_camera_3d()
-	update_health_bar()
+	#update_health_bar()
 
 
 func _process(delta: float) -> void:
 	var mesh_3d_position: Vector3 = global_transform.origin;
 	
-	if state.is_alive:
-		show_ui() # hack, TODO: removeme
+	#if state.is_alive:
+		#show_ui() # hack, TODO: removeme
 	
-	if camera:
-		var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		health_bar.position = screen_position_2d - Vector2(3 * 15, 0);
-		health_bar.position.y += 70; # move down a little 
+	#if camera:
+		#var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
+		#health_bar.position = screen_position_2d - Vector2(3 * 15, 0);
+		#health_bar.position.y += 70; # move down a little 
 	
 	if current_animation == null:
 		return
@@ -287,12 +287,12 @@ func _process(delta: float) -> void:
 		sprite.material_override.set_shader_parameter("frame_index", frame_index)
 
 
-func hide_ui() -> void:
-	health_bar.hide()
+#func hide_ui() -> void:
+	#health_bar.hide()
 
 
-func show_ui() -> void:
-	health_bar.show()
+#func show_ui() -> void:
+	#health_bar.show()
 
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
@@ -318,7 +318,7 @@ func reset() -> void:
 	if state.is_playable():
 		state.current_sanity += 1;
 		state.is_ability_used = false
-	hide_ui();
+	#hide_ui();
 	show();
 	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)

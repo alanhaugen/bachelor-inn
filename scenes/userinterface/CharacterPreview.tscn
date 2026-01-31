@@ -203,6 +203,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_st0te")
 
 [node name="SelectedUnit" type="NinePatchRect" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 98.25
 offset_top = 8.5
