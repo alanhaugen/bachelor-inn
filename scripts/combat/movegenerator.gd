@@ -166,7 +166,7 @@ static func get_attack_origins(unit: Character, state: GameState, start_pos: Vec
 
 	# Temporary rule: enemy must share same height as origin
 	# Weapon range from registry
-	var w: Weapon = WeaponRegistry.get_weapon(unit.data.weapon_id)
+	var w: Weapon = WeaponRegistry.get_weapon(unit.state.weapon.weapon_id)
 	var min_r: int = w.min_range
 	var max_r: int = w.max_range
 
