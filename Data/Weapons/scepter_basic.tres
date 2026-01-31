@@ -8,5 +8,4 @@ weapon_id = "scepter_basic"
 weapon_name = "Rusty Scepter"
 weapon_tooltip = "Poorly passed down for.. some generations."
 damage_modifier = 2
-max_range = 3
 metadata/_custom_type_script = "uid://hhe2ydney01y"
