@@ -419,7 +419,6 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
-				new_unit.ensure_weapon_equipped();
 				new_unit.state.is_moved = false;
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
