@@ -188,19 +188,6 @@ func read(save_slot: int) -> bool:
 		character.data = data
 		character.state = state
 		
-		var resolved_id := "NULL"
-		if character.state.weapon != null:
-			resolved_id = character.state.weapon.weapon_id
-		
-		print(
-			"[WEAPON CHECK] ",
-			character.data.unit_name,
-			" | speciality=", CharacterData.Speciality.keys()[character.data.speciality],
-			" | weapon_id=", character.state.weapon.weapon_id,
-			" | resolved=", resolved_id
-		)
-
-		
 		Main.characters.append(character)
 
 	Main.load_level(Main.levels[level])

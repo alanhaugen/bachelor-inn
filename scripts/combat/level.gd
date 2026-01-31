@@ -209,8 +209,10 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	for move : Move in current_moves:
 		reachable.append(move.end_pos);
 	
-	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
+	for tile :Vector3i in MoveGenerator.get_attack_origins(selected_unit, game_state, pos, reachable):
 		path_map.set_cell_item(tile, 0);
+	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
+	#	path_map.set_cell_item(tile, 0);
 
 
 func _input(event: InputEvent) -> void:
