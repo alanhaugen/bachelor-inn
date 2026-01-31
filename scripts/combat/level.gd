@@ -286,6 +286,7 @@ func _input(event: InputEvent) -> void:
 				#		movement_map.set_cell_item(command.attack_pos, attack_code);
 				
 				update_stat(selected_unit, stat_popup_player);
+				
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
 				if current_moves[i] is Attack:

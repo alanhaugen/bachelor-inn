@@ -13,7 +13,10 @@ var sanity: int = 0 : set = _set_sanity;
 var max_health: int = 0 : set = _set_max_health;
 #var max_magic: int = 0 : set = _set_max_magic;
 var max_sanity: int = 0 : set = _set_max_sanity;
+var is_selected: bool = false : set =_set_is_selected;
 
+func _set_is_selected(in_is_selected: bool) -> void:
+	$SelectedUnit.visible = in_is_selected
 
 func _set_icon(texture: TextureRect) -> void:
 	icon_texture = texture;
@@ -41,3 +44,8 @@ func _set_max_health(in_health: int) -> void:
 
 func _set_max_sanity(in_sanity: int) -> void:
 	sanity_bar.max_value = in_sanity;
+
+
+func _on_button_pressed() -> void:
+	#something something send a signal to Level to say that this character is selected
+	print("Character has been pressed :D")

@@ -1,0 +1,214 @@
+[gd_scene load_steps=12 format=3 uid="uid://dokhyh7eo4mwv"]
+
+[ext_resource type="Script" uid="uid://cgbmrv70w7dys" path="res://scripts/ui/side_bar.gd" id="1_4cty7"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
+[ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="3_st0te"]
+[ext_resource type="StyleBox" uid="uid://dly7gpxmaudqk" path="res://scenes/userinterface/Invisible_Button.tres" id="4_spspg"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5oovn"]
+atlas = ExtResource("2_spspg")
+region = Rect2(176, 0, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b706j"]
+texture = ExtResource("2_spspg")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_len0o"]
+texture = ExtResource("2_spspg")
+expand_margin_top = 1.0
+region_rect = Rect2(208, 16, 10, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_owq5w"]
+atlas = ExtResource("2_spspg")
+region = Rect2(184, 0, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3pl1b"]
+texture = ExtResource("2_spspg")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_w8mwe"]
+texture = ExtResource("2_spspg")
+expand_margin_top = 1.0
+region_rect = Rect2(198, 16, 10, 15)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_st0te"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="CharacterPreview" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_4cty7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 90.0
+offset_bottom = 46.0
+mouse_filter = 0
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 90.0
+offset_bottom = 46.0
+size_flags_vertical = 3
+
+[node name="Background" type="NinePatchRect" parent="Control"]
+z_index = -3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 8.0
+offset_bottom = 0.25
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_spspg")
+region_rect = Rect2(96, 0, 32.076996, 29)
+patch_margin_left = 9
+patch_margin_top = 9
+patch_margin_right = 9
+patch_margin_bottom = 4
+
+[node name="Icon" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.075
+anchor_top = 0.147
+anchor_right = 0.075
+anchor_bottom = 0.147
+offset_top = -0.012000084
+offset_right = 34.0
+offset_bottom = 34.988
+grow_vertical = 2
+texture = ExtResource("2_spspg")
+region_rect = Rect2(132, 4, 24, 24)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="ColorRect" type="ColorRect" parent="Control/Icon"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.037
+anchor_top = 0.036000002
+anchor_right = 0.037
+anchor_bottom = 0.036000002
+offset_left = -0.008000016
+offset_top = -0.01000011
+offset_right = 31.992
+offset_bottom = 33.74
+color = Color(1, 1, 1, 0)
+
+[node name="Icon_texture" type="TextureRect" parent="Control/Icon/ColorRect"]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+offset_right = 32.0
+offset_bottom = 32.75
+texture = ExtResource("3_st0te")
+stretch_mode = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 46.5
+offset_top = 7.0
+offset_right = 134.5
+offset_bottom = 33.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/line_spacing = -3
+text = "Short but long name"
+autowrap_mode = 2
+max_lines_visible = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 46.0
+offset_top = 23.0
+offset_right = 89.0
+offset_bottom = 41.5
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Health_Icon" type="TextureRect" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_5oovn")
+stretch_mode = 3
+
+[node name="HealthBar" type="ProgressBar" parent="Control/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxTexture_b706j")
+theme_override_styles/fill = SubResource("StyleBoxTexture_len0o")
+value = 80.0
+show_percentage = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 6
+
+[node name="Sanity_Icon" type="TextureRect" parent="Control/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_owq5w")
+stretch_mode = 3
+
+[node name="SanityBar" type="ProgressBar" parent="Control/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_styles/background = SubResource("StyleBoxTexture_3pl1b")
+theme_override_styles/fill = SubResource("StyleBoxTexture_w8mwe")
+value = 80.0
+show_percentage = false
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 2.75
+offset_top = 3.0
+offset_right = 93.75
+offset_bottom = 46.25
+theme_override_styles/normal = ExtResource("4_spspg")
+theme_override_styles/pressed = ExtResource("4_spspg")
+theme_override_styles/hover = ExtResource("4_spspg")
+theme_override_styles/disabled = ExtResource("4_spspg")
+theme_override_styles/focus = SubResource("StyleBoxFlat_st0te")
+
+[node name="SelectedUnit" type="NinePatchRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 98.25
+offset_top = 8.5
+offset_right = 107.25
+offset_bottom = 40.5
+texture = ExtResource("2_spspg")
+region_rect = Rect2(99, 32, 9, 32)
+patch_margin_left = 4
+patch_margin_top = 16
+patch_margin_right = 5
+patch_margin_bottom = 16
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
