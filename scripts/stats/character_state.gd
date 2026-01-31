@@ -52,6 +52,10 @@ signal level_changed(new_level: int)
 
 
 #region methods
+func is_ally(in_faction: Faction) -> bool:
+	return faction == in_faction;
+
+
 func is_enemy() -> bool:
 	return faction == Faction.ENEMY;
 

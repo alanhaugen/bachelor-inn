@@ -259,8 +259,6 @@ func _input(event: InputEvent) -> void:
 		#unitsMap.set_cell(pos, 0, Vector2(14,3));
 		cursor.show()
 		
-		var windowPos: Vector2 = Vector2(350,300)
-		
 		if (get_unit_name(pos) == CharacterStates.Player):
 			Tutorial.tutorial_unit_selected()
 			unit_pos = pos
@@ -287,7 +285,7 @@ func _input(event: InputEvent) -> void:
 				#	if command is Attack:
 				#		movement_map.set_cell_item(command.attack_pos, attack_code);
 				
-				update_stat(selected_unit, stat_popup_player);
+				#update_stat(selected_unit, stat_popup_player);
 				
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
@@ -327,10 +325,10 @@ func _input(event: InputEvent) -> void:
 		if (get_unit_name(pos) == CharacterStates.Enemy):
 			##select enemy unit for player attack
 			selected_enemy_unit = get_unit(pos);
-			update_stat(selected_enemy_unit, stat_popup_enemy);
+			#update_stat(selected_enemy_unit, stat_popup_enemy);
 		
-		if (get_unit_name(pos) == CharacterStates.PlayerDone):
-			update_stat(get_unit(pos), stat_popup_player);
+		#if (get_unit_name(pos) == CharacterStates.PlayerDone):
+		#	update_stat(get_unit(pos), stat_popup_player);
 	#elif event is InputEventMouseMotion:
 	#	print("Mouse Motion at: ", event.position)
 
@@ -636,8 +634,8 @@ func _process(delta: float) -> void:
 			for point in points:
 				path_map.set_cell_item(point, 0)
 			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
-			if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
-				update_stat(get_unit(pos), stat_popup_enemy);
+			#if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
+			#	update_stat(get_unit(pos), stat_popup_enemy);
 	
 	if (is_in_menu):
 		return;

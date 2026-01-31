@@ -1,5 +1,5 @@
-class_name Wait
 extends Move
+class_name Wait
 
 
 func _init(inStartPos :Vector3i) -> void:

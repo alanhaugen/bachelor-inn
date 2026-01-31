@@ -44,6 +44,9 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 		if command is Attack:
 			tile = GridTile.new(command.attack_pos, GridTile.Type.ATTACK, 9999999)
 		
+		elif command is Heal:
+			tile = GridTile.new(command.end_pos, GridTile.Type.INTERACT, weight)
+		
 		elif command is Move:
 			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
 		

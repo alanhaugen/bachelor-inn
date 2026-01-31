@@ -1,6 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpce0elf5r6ky"]
+[gd_scene load_steps=8 format=3 uid="uid://dpce0elf5r6ky"]
 
-[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="2_0xku5"]
+[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="2_0xku5"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_surpk"]
 transparency = 1
@@ -22,6 +22,15 @@ texture_filter = 0
 [sub_resource type="PlaneMesh" id="PlaneMesh_qu0n2"]
 material = SubResource("StandardMaterial3D_7052x")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xku5"]
+transparency = 1
+albedo_texture = ExtResource("2_0xku5")
+uv1_scale = Vector3(0.13, 0.13, 0.13)
+uv1_offset = Vector3(0.37, 0, 0)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2554m"]
+material = SubResource("StandardMaterial3D_0xku5")
+
 [node name="Node3D" type="Node3D"]
 
 [node name="Dot" type="MeshInstance3D" parent="."]
@@ -31,3 +40,7 @@ mesh = SubResource("PlaneMesh_7052x")
 [node name="Attack" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.2165147, 0)
 mesh = SubResource("PlaneMesh_qu0n2")
+
+[node name="Interact" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.2165147, 0)
+mesh = SubResource("PlaneMesh_2554m")

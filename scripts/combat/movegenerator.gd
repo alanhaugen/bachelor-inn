@@ -137,6 +137,11 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 
 						commands.append(Attack.new(start_pos, t, origin))
 
+		if unit.data.speciality == CharacterData.Speciality.Scholar:
+			for ally: Character in state.units:
+				if ally.state.faction == unit.state.faction:
+					commands.append(Heal.new(unit.state.grid_position, ally.state.grid_position, unit.data.mind))
+	
 	# -------------------------
 	# 4) Always allow WAIT
 	# -------------------------
