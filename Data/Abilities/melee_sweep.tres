@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://cqwy7r0vxoxy"]
+
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_v5vr7"]
+
+[resource]
+script = ExtResource("1_v5vr7")
+skill_id = "melee_sweep"
+metadata/_custom_type_script = "uid://c3p07am3ababr"

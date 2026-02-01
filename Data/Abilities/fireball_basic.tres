@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Skill" load_steps=4 format=3 uid="uid://x7mbefo655v8"]
+
+[ext_resource type="Script" uid="uid://drewwlgvyo2q5" path="res://scripts/combat/commands/attack.gd" id="1_sxwr3"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_u21qa"]
+
+[sub_resource type="Resource" id="Resource_11pje"]
+script = ExtResource("1_sxwr3")
+metadata/_custom_type_script = "uid://drewwlgvyo2q5"
+
+[resource]
+script = ExtResource("1_u21qa")
+skill_id = "fireball_basic"
+command = SubResource("Resource_11pje")
+damage_amount = 5
+max_range = 3
+metadata/_custom_type_script = "uid://c3p07am3ababr"
