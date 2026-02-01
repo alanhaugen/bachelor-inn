@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://dokhyh7eo4mwv"]
+[gd_scene load_steps=13 format=3 uid="uid://dokhyh7eo4mwv"]
 
 [ext_resource type="Script" uid="uid://23wrdfc0atd" path="res://scripts/ui/CharacterPreview.gd" id="1_4hx64"]
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="3_st0te"]
+[ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="4_bxick"]
 [ext_resource type="StyleBox" uid="uid://dly7gpxmaudqk" path="res://scenes/userinterface/Invisible_Button.tres" id="4_spspg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5oovn"]
@@ -74,7 +75,6 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = 8.0
-offset_bottom = 0.25
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_spspg")
@@ -130,26 +130,29 @@ metadata/_edit_use_anchors_ = true
 [node name="CharacterName" type="Label" parent="Control"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 46.5
-offset_top = 7.0
-offset_right = 134.5
-offset_bottom = 33.0
+offset_left = 43.0
+offset_top = 8.0
+offset_right = 131.0
+offset_bottom = 26.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_constants/line_spacing = -3
-text = "Short but long name"
+theme_override_fonts/font = ExtResource("4_bxick")
+theme_override_font_sizes/font_size = 18
+text = "Name"
 autowrap_mode = 2
-max_lines_visible = 2
+max_lines_visible = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 0
-offset_left = 46.0
-offset_top = 23.0
-offset_right = 89.0
-offset_bottom = 41.5
+offset_left = 42.0
+offset_top = 21.0
+offset_right = 85.0
+offset_bottom = 39.5
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
+metadata/_edit_group_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/VBoxContainer"]
 layout_mode = 2
@@ -190,6 +193,7 @@ value = 80.0
 show_percentage = false
 
 [node name="Button" type="Button" parent="."]
+visible = false
 layout_mode = 0
 offset_left = 2.75
 offset_top = 3.0

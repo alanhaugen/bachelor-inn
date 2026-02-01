@@ -271,8 +271,8 @@ func _can_handle_input(event: InputEvent) -> bool:
 	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
 		return false
 	
-	if get_viewport().get_mouse_position().y > 700:
-		return false
+	#if get_viewport().get_mouse_position().y > 700:
+		#return false
 	
 	if state == States.ANIMATING:
 		return false
@@ -402,12 +402,16 @@ func _handle_abilities(pos: Vector3i) -> bool:
 					return true
 	return false
 
-
-func _print_all_nodes_or_something() -> void:
-	var type_counts := {}
-
-
+#_input is always handled first, then UI, then Unhandled input
+#(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! always remember to change these on UI nodes when they are created)
 func _input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed:
+			if event.keycode == KEY_TAB:
+				select_next_character()
+
+
+func _unhandled_input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
 		return
 	
@@ -444,42 +448,8 @@ func _input(event: InputEvent) -> void:
 	if get_unit_name(pos) == CharacterStates.Enemy:
 		selected_enemy_unit = get_unit(pos)
 
-#	_count_node_types(get_tree().get_root(), type_counts)
-
-	# Convert to array for sorting
-	var sorted := []
-#	for t: String in type_counts.keys():
-#		sorted.append({
-#			"type": t,
-#			"count": type_counts[t]
-#		})
-
-	# Sort descending by count
-	sorted.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return a["count"] > b["count"]
-	)
-
-	print("=== Node Types in Scene (Descending) ===")
-	for entry: Dictionary in sorted:
-		print("%s: %d" % [entry["type"], entry["count"]])
 
 
-func _count_node_types(node: Node, counts: Dictionary) -> void:
-	var type_name := node.get_class()
-
-	if not counts.has(type_name):
-		counts[type_name] = 0
-	counts[type_name] += 1
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		if event.pressed:
-			if event.keycode == KEY_TAB:
-				select_next_character()
-			elif event.keycode == KEY_K:
-				#_print_all_nodes_or_something()
-				print_orphan_nodes()
 
 
 func _ready() -> void:
