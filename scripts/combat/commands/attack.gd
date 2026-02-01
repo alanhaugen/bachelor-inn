@@ -68,8 +68,8 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	
 	
 	if simulate_only == false:
-		aggressor.update_health_bar();
-		victim.update_health_bar();
+		#aggressor.update_health_bar();
+		#victim.update_health_bar();
 		
 		#Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " +  str(attack_strength) + " damage. " + str(aggressor.data.strength) + 

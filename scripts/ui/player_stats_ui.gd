@@ -1,5 +1,5 @@
 extends Control
-class_name PlayerStats
+class_name PlayerStatsUI
 
 @onready var icon_texture: TextureRect = %Icon_texture
 @onready var health_bar: ProgressBar = %HealthBar
@@ -16,6 +16,10 @@ class_name PlayerStats
 @onready var endurance_text: Label = %Value_Endurance
 @onready var type: Label = %Type
 @onready var level_text: Label = %Level
+@onready var Stats_Container: Control = %Stats
+@onready var open_close_stats_button: Button = %Open_Close_stats
+@onready var oc_icon: TextureRect = %O_C_icon
+
 
 func apply_stats(stats: Dictionary) -> void:
 	icon_texture.texture = stats.portrait
@@ -37,3 +41,8 @@ func apply_stats(stats: Dictionary) -> void:
 	
 	level_text.text = "Level: %d" % stats.level
 	type.text = stats.type
+	
+func _on_open_close_stats_pressed() -> void:
+	Stats_Container.visible = not Stats_Container.visible
+	oc_icon.flip_h = not Stats_Container.visible
+	

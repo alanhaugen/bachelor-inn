@@ -11,8 +11,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_aljfs")
-CharacterPreview = ExtResource("6_aljfs")
 
 [node name="Scale" type="Control" parent="."]
 layout_mode = 1
@@ -21,9 +21,11 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="Player_Stats" parent="Scale" instance=ExtResource("2_3kd8n")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 offset_left = 65.0
 offset_top = -130.0
@@ -39,7 +41,9 @@ offset_top = 15.0
 offset_right = 115.0
 offset_bottom = 190.0
 scale = Vector2(4, 4)
+mouse_filter = 2
 theme_override_constants/separation = 47
 
 [node name="CharacterPreview" parent="Scale/Characters_VBOX" instance=ExtResource("6_aljfs")]
+visible = false
 layout_mode = 2

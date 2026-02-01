@@ -9,6 +9,13 @@ class_name Level
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
 
+#### signals 
+
+signal character_selected(character: Character)
+signal character_deselected
+signal character_stats_changed(character: Character)
+signal party_updated(characters: Array[Character])
+
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 
 @export var level_name :String
@@ -49,18 +56,20 @@ var movement_weights_grid : Grid
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var move_popup: Control;
-var stat_popup_player: Control;
-var side_bar_array : Array[SideBar];
-var stat_popup_enemy: Control;
+#var stat_popup_player: Control;
+#var side_bar_array : Array[SideBar];
+#var stat_popup_enemy: Control;
 var completed_moves :Array[Command];
 
 var characters: Array[Character];
+
+const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
 
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
-const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
+#const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
@@ -78,8 +87,6 @@ var game_state : GameState;
 var is_in_menu: bool = false
 var active_move: Command
 var moves_stack: Array
-
-var ribbon: Ribbon
 
 var current_moves: Array[Command]
 var is_player_turn: bool = true
@@ -144,11 +151,42 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 		return result.position
 	return Vector3();
 
-#fens kinda wonky grid to world transform that might be crap
 
+#fens kinda wonky grid to world transform that might be crap
 func grid_to_world(pos: Vector3i) -> Vector3:
 	var world:= terrain_map.map_to_local(pos)
 	return world
+
+
+func get_selectable_characters() -> Array[Character]:
+	var result: Array[Character] =[]
+	for c in characters:
+		if not is_instance_valid(c):
+			continue
+		if c.state.faction != CharacterState.Faction.PLAYER:
+			continue
+		#if c.state.is_dead:
+			#continue
+		result.append(c)
+	return result
+
+
+func select_next_character() -> void:
+	var list := get_selectable_characters()
+	if list.is_empty():
+		return
+
+	if selected_unit == null:
+		select_unit(list[0])
+		return
+	var index := list.find(selected_unit)
+	if index == -1:
+		select_unit(list[0])
+		return
+
+	var next_index := (index + 1) % list.size()
+	select_unit(list[next_index])
+
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
@@ -233,9 +271,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
 		return false
 	
-	if get_viewport().get_mouse_position().y > ribbon.position.y:
-		return false
-	
 	if state == States.ANIMATING:
 		return false
 
@@ -258,9 +293,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 
 
 func _update_cursor(pos: Vector3i) -> void:
-	if get_tile_name(pos) == "Water":
-		return
-
 	var world_pos := grid_to_world(pos)
 	cursor.position = Vector3(world_pos.x, cursor.position.y, world_pos.z)
 	cursor.show()
@@ -281,16 +313,21 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	state = States.ANIMATING
 
 
-func _hide_enemy_ui() -> void:
-	if selected_enemy_unit == null:
-		return
-
-	selected_enemy_unit.hide_ui()
-	stat_popup_enemy.hide()
-
-
 func _is_invalid_tile(pos: Vector3i) -> bool:
 	return get_tile_name(pos) == "Water"
+
+
+func select_unit(unit: Character) -> void:
+	# Switching unit
+	_clear_selection()
+
+	selected_unit = unit
+	unit_pos = unit.state.grid_position
+	_update_cursor(unit.state.grid_position)
+	emit_signal("character_selected", selected_unit)
+
+	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	movement_grid.fill_from_commands(current_moves, game_state)
 
 
 func _handle_player_click(pos: Vector3i) -> void:
@@ -307,41 +344,7 @@ func _handle_player_click(pos: Vector3i) -> void:
 		show_move_popup(get_viewport().get_mouse_position())
 		return
 
-	# Switching unit
-	_deselect_current_unit()
-
-	selected_unit = get_unit(pos)
-
-	ribbon.show()
-	ribbon.set_skills(selected_unit.state.skills)
-
-	current_moves = MoveGenerator.generate(selected_unit, game_state)
-	movement_grid.fill_from_commands(current_moves, game_state)
-
-
-func _deselect_current_unit() -> void:
-	# Hide selected player unit UI
-	if selected_unit is Character:
-		selected_unit.hide_ui()
-
-	selected_unit = null
-
-	# Hide enemy selection UI
-	if selected_enemy_unit != null:
-		selected_enemy_unit.hide_ui()
-		selected_enemy_unit = null
-
-	stat_popup_enemy.hide()
-
-	# Clear visual helpers
-	movement_map.clear()
-	path_map.clear()
-
-	# Hide ability ribbon
-	ribbon.hide()
-
-	# Reset moves
-	current_moves.clear()
+	select_unit(get_unit(pos))
 
 
 func _handle_action_tile_click(pos: Vector3i) -> void:
@@ -375,14 +378,12 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 
 
 func _clear_selection() -> void:
+	emit_signal("character_deselected")
 	movement_map.clear()
 	path_map.clear()
 
-	if selected_unit is Character:
-		selected_unit.hide_ui()
-
 	selected_unit = null
-	ribbon.hide()
+	emit_signal("character_deselected")
 
 
 func _handle_abilities(pos: Vector3i) -> bool:
@@ -397,6 +398,10 @@ func _handle_abilities(pos: Vector3i) -> bool:
 					movement_map.clear()
 					return true
 	return false
+
+
+func _print_all_nodes_or_something() -> void:
+	var type_counts := {}
 
 
 func _input(event: InputEvent) -> void:
@@ -415,8 +420,6 @@ func _input(event: InputEvent) -> void:
 	if state == States.CHOOSING_ATTACK:
 		_handle_attack_choice(pos)
 		return
-
-	_hide_enemy_ui()
 
 	if _is_invalid_tile(pos):
 		return
@@ -438,42 +441,43 @@ func _input(event: InputEvent) -> void:
 	if get_unit_name(pos) == CharacterStates.Enemy:
 		selected_enemy_unit = get_unit(pos)
 
+#	_count_node_types(get_tree().get_root(), type_counts)
 
-func update_stat(character: Character, popup: StatPopUp) -> void:
-	if character is Character:
-		var character_script: Character = character;
-		character_script.show_ui();
-		#character_script.print_stats();
-		if popup is StatPopUp:
-			var stat_script: StatPopUp = popup;
-			stat_script.icon_texture.texture = character_script.portrait
-			stat_script.name_label.text = character_script.data.unit_name
-			stat_script.max_health = character_script.state.max_health
-			stat_script.health = character_script.state.current_health
-			stat_script.max_sanity = character_script.state.max_sanity
-			stat_script.sanity = character_script.state.current_sanity
-			
-			stat_script.strength = character_script.data.strength
-			stat_script.mind = character_script.data.mind
-			stat_script.speed = character_script.data.speed
-			stat_script.focus = character_script.data.focus
-			stat_script.endurance = character_script.data.endurance
-			
-			stat_script.level = "Level: " + str(character_script.state.current_level);
-			
-			stat_script._set_type(CharacterData.Speciality.keys()[character_script.data.speciality] + " " + CharacterData.Personality.keys()[character_script.data.personality]);
-			
-			popup.show();
+	# Convert to array for sorting
+	var sorted := []
+#	for t: String in type_counts.keys():
+#		sorted.append({
+#			"type": t,
+#			"count": type_counts[t]
+#		})
 
-func update_side_bar(character: Character, side_bar: SideBar) -> void:
-	if character is Character:
-		var character_script: Character = character;
-		side_bar.icon_texture.texture = character_script.portrait;
-		#side_bar.name_label.text = character_script.unit_name;
-		side_bar.max_health = character_script.state.max_health;
-		side_bar.health = character_script.state.current_health;
-		side_bar.max_sanity = max(side_bar.max_sanity, character_script.state.current_sanity);
-		side_bar.sanity = character_script.state.current_sanity;
+	# Sort descending by count
+	sorted.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return a["count"] > b["count"]
+	)
+
+	print("=== Node Types in Scene (Descending) ===")
+	for entry: Dictionary in sorted:
+		print("%s: %d" % [entry["type"], entry["count"]])
+
+
+func _count_node_types(node: Node, counts: Dictionary) -> void:
+	var type_name := node.get_class()
+
+	if not counts.has(type_name):
+		counts[type_name] = 0
+	counts[type_name] += 1
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		if event.pressed:
+			if event.keycode == KEY_TAB:
+				select_next_character()
+			elif event.keycode == KEY_K:
+				#_print_all_nodes_or_something()
+				print_orphan_nodes()
+
 
 func _ready() -> void:
 	camera_controller = Main.camera_controller
@@ -499,9 +503,9 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
-	ribbon = RIBBON.instantiate();
-	add_child(ribbon);
-	ribbon.hide();
+	#ribbon = RIBBON.instantiate();
+	#add_child(ribbon);
+	#ribbon.hide();
 	
 	if (level_name == "first"):
 		Dialogic.start(str(level_name) + "Level");
@@ -596,36 +600,14 @@ func _ready() -> void:
 			
 			if new_unit is Character:
 				var character_script : Character = new_unit;
-				character_script.hide_ui();
+				#character_script.hide_ui();
 				new_unit.state.grid_position = pos;
 	
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
-	
-	stat_popup_player = STATS_POPUP.instantiate()
-	stat_popup_player.hide()
-	stat_popup_player.scale = Vector2(Main.ui_scale, Main.ui_scale)
-	stat_popup_player.position = Vector2(0, -30)
 
-	add_child(stat_popup_player)
-	
-	stat_popup_enemy = STATS_POPUP.instantiate()
-	stat_popup_enemy.hide()
-	stat_popup_enemy.scale = Vector2(Main.ui_scale, Main.ui_scale)
-	stat_popup_enemy.position = Vector2(get_window().size.x - 155, -30)
 
-	add_child(stat_popup_enemy)
-	
-	for i in range(Main.characters.size()):
-		var new_side_bar := SIDE_BAR.instantiate();
-		new_side_bar.scale = Vector2(Main.ui_scale, Main.ui_scale);
-		if i != 0:
-			new_side_bar.position.y += -get_window().size.y/(15/Main.ui_scale)*i;
-		side_bar_array.append(new_side_bar);
-		add_child(new_side_bar);
-		print("made bar");
-	
 	
 	game_state = GameState.from_level(self)
 	
@@ -633,6 +615,10 @@ func _ready() -> void:
 	#turn_transition.get_canvas().hide();
 	#tiles = map.get_used_cells();
 #	units.append(unit);
+	add_to_group("level")
+	emit_signal("party_updated", characters)
+	
+
 
 
 func get_unit(pos: Vector3i) -> Character:
@@ -657,6 +643,8 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 		animation_path.append(anim_pos)
 
 	selected_unit = get_unit(start)
+
+
 
 
 func reset_all_units() -> void:
@@ -726,8 +714,8 @@ func _process(delta: float) -> void:
 		camera_controller.lock_camera()
 		return;
 		
-	for i in Main.characters.size():
-		update_side_bar(Main.characters[i], side_bar_array[i]);
+	#for i in Main.characters.size():
+		#update_side_bar(Main.characters[i], side_bar_array[i]);
 		
 	turn_transition.hide();
 	camera_controller.unlock_camera()
@@ -797,7 +785,8 @@ func _process(delta: float) -> void:
 			occupancy_map.set_cell_item(active_move.end_pos, code);
 			selected_unit.move_to(active_move.end_pos);
 			selected_unit.pause_anim()
-			selected_unit = null;
+			_clear_selection()
+
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
 			
@@ -813,7 +802,6 @@ func _process(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		# Process animation
 		else:
-			
 			var movement_speed := 8.0 # units per second
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position

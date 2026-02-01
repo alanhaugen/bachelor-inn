@@ -2,5 +2,5 @@
 do Event.set_objective_find_object()
 WipGroup13: Hello we are group 13, we are making this game!
 WipGroup13: Here is grass. Its grassy. The rock is a bit rocky. The shaders are throwing shade on everything.
-WipGroup13: SAMPLE TEXT
+Mordi: A temporary phenomenon occurred about the houses and every miracle.
 do Tutorial.tutorial_unlock_menus()
