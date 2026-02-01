@@ -271,6 +271,9 @@ func _can_handle_input(event: InputEvent) -> bool:
 	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
 		return false
 	
+	if get_viewport().get_mouse_position().y > 700:
+		return false
+	
 	if state == States.ANIMATING:
 		return false
 
