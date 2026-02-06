@@ -106,4 +106,8 @@ func _on_character_stats_changed(character: Character) -> void:
 
 func _on_party_updated(characters: Array[Character]) -> void:
 	for character in characters:
+		##If statement in case an enemy dies during playtie, which then makes them null.
+		##Instead we should be moving the null value out of the array.
+		if (character == null) :
+			continue;
 		add_character_preview(character)
