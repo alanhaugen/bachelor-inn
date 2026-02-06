@@ -86,6 +86,8 @@ func _on_character_selected(character: Character) -> void:
 	player_stats.show()
 
 	for c: Character in previews.keys():
+		if (c == null):
+			continue;
 		previews[c].is_selected = (c == character)
 		
 
