@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://du1thdha7r8q8"]
 
-[ext_resource type="Texture2D" uid="uid://byfb2spwsk7vf" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred.png" id="1_mcri0"]
-[ext_resource type="Texture2D" uid="uid://jcjxfkjvh0px" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred_Mask4.png" id="2_ldq13"]
-[ext_resource type="Texture2D" uid="uid://r6242v3hguxu" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred_Normals.png" id="3_hb0ie"]
+[ext_resource type="Texture2D" uid="uid://xbhedgale0oq" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred.png" id="1_mcri0"]
+[ext_resource type="Texture2D" uid="uid://braiqxqckjqa4" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred_Mask4.png" id="2_ldq13"]
+[ext_resource type="Texture2D" uid="uid://du5vokdyvh610" path="res://art/Animations/Characters/Alfred/Tex_New/L_Animation_Alfred_Normals.png" id="3_hb0ie"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="4_jskse"]
 
 [resource]

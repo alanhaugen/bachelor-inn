@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://cx03dpln0b65p"]
 
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_a63dh"]
-[ext_resource type="Texture2D" uid="uid://dniub5gwqivsr" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_basecolour.png" id="1_p4yvv"]
-[ext_resource type="Texture2D" uid="uid://b46l4tn4c3vm0" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_mask4.png" id="2_jj0ik"]
-[ext_resource type="Texture2D" uid="uid://rcsbjjqj58bc" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_normal.png" id="3_uit53"]
+[ext_resource type="Texture2D" uid="uid://bciqd18vdjke6" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_basecolour.png" id="1_p4yvv"]
+[ext_resource type="Texture2D" uid="uid://blk8r8ghoguqp" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_mask4.png" id="2_jj0ik"]
+[ext_resource type="Texture2D" uid="uid://dy164bp8oxt2u" path="res://art/Animations/Characters/Lucy/Tex/D_lucystill_normal.png" id="3_uit53"]
 
 [resource]
 script = ExtResource("1_a63dh")

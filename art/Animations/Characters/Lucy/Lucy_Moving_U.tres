@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://cfmnuaxxcga7p"]
 
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_bj134"]
-[ext_resource type="Texture2D" uid="uid://dt113lpdufx7x" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_basecolour.png" id="1_xh2r5"]
-[ext_resource type="Texture2D" uid="uid://ctxkh8au4a8rh" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_mask4.png" id="2_luion"]
-[ext_resource type="Texture2D" uid="uid://24wdjnmih5rl" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_normal.png" id="3_m3smv"]
+[ext_resource type="Texture2D" uid="uid://ohlsxg2hw3cx" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_basecolour.png" id="1_xh2r5"]
+[ext_resource type="Texture2D" uid="uid://bhiayvruixqd3" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_mask4.png" id="2_luion"]
+[ext_resource type="Texture2D" uid="uid://dn20ncjeeqgwa" path="res://art/Animations/Characters/Lucy/Tex/U_Anim_lucywalk_normal.png" id="3_m3smv"]
 
 [resource]
 script = ExtResource("1_bj134")
