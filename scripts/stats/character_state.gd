@@ -23,7 +23,7 @@ signal level_changed(new_level: int)
 #endregion
 
 #region variables
-@export var weapon : Weapon = null; ## Weapon held by unit
+@export var weapon : Weapon = WeaponRegistry.get_weapon("unarmed");
 
 @export var faction : Faction = Faction.PLAYER;
 @export var connections : Array[int] = [];
@@ -32,6 +32,7 @@ signal level_changed(new_level: int)
 @export var next_level_experience: int = 1;
 @export var is_alive: bool = true;
 @export var is_moved :bool = false;
+@export var has_preformed_action :bool = false;
 @export var is_ability_used :bool = false;
 @export var experience := 0 : set = _set_experience
 @export var level := 1
@@ -104,6 +105,7 @@ func save() -> Dictionary:
 		"experience": experience,
 		"level": level,
 		"current_health": current_health,
-		"current_sanity": current_sanity
+		"current_sanity": current_sanity,
+		"weapon_id": weapon.weapon_id
 	}
 #endregion

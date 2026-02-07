@@ -243,7 +243,7 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
-[node name="Map3d" type="Node3D"]
+[node name="Map3d2" type="Node3D"]
 script = ExtResource("1_yuxmn")
 
 [node name="TerrainGrid" type="GridMap" parent="."]
@@ -291,6 +291,13 @@ cell_size = Vector3(2, 1, 2)
 data = {
 "cells": PackedInt32Array(1, 0, 1179649)
 }
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="AttackRangeOverlay" type="GridMap" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
+mesh_library = ExtResource("3_ks0nw")
+cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="PathOverlay" type="GridMap" parent="."]

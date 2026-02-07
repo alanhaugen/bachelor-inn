@@ -209,8 +209,10 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	for move : Move in current_moves:
 		reachable.append(move.end_pos);
 	
-	for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
+	for tile :Vector3i in MoveGenerator.get_attack_origins(selected_unit, game_state, pos, reachable):
 		path_map.set_cell_item(tile, 0);
+	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
+	#	path_map.set_cell_item(tile, 0);
 
 
 func _input(event: InputEvent) -> void:
@@ -286,6 +288,7 @@ func _input(event: InputEvent) -> void:
 				#		movement_map.set_cell_item(command.attack_pos, attack_code);
 				
 				update_stat(selected_unit, stat_popup_player);
+				
 		elif (movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM):
 			for i in range(current_moves.size()):
 				if current_moves[i] is Attack:
@@ -418,7 +421,6 @@ func _ready() -> void:
 		if (get_unit_name(pos) == "Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed];
-				new_unit.ensure_weapon_equipped();
 				new_unit.state.is_moved = false;
 				new_unit.camera = get_viewport().get_camera_3d();
 				characters_placed += 1;
