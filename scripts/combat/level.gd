@@ -271,9 +271,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
 		return false
 	
-	#if get_viewport().get_mouse_position().y > 700:
-		#return false
-	
 	if state == States.ANIMATING:
 		return false
 
@@ -449,17 +446,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		selected_enemy_unit = get_unit(pos)
 
 
-
-
-
 func _ready() -> void:
 	camera_controller = Main.camera_controller
 	camera_controller.make_current()
-	camera_controller.setup_minmax_positions(minimum_camera_x, maximum_camera_x, minimum_camera_z, maximum_camera_z)
+	camera_controller.setup_minmax_positions(
+		minimum_camera_x,
+		maximum_camera_x,
+		minimum_camera_z,
+		maximum_camera_z
+	)
 	camera_controller.springarm_length_maximum = maximum_camera_height
 	camera_controller.springarm_length_minimum = minimum_camera_height
 	camera_controller.free_camera()
-	
+
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
@@ -467,7 +466,7 @@ func _ready() -> void:
 	occupancy_map.hide()
 	path_map.clear()
 	fog_map.clear()
-	
+
 	terrain_grid = Grid.new(terrain_map)
 	occupancy_grid = Grid.new(movement_map)
 	trigger_grid = Grid.new(movement_map)
@@ -475,123 +474,90 @@ func _ready() -> void:
 	movement_weights_grid = Grid.new(movement_weights_map)
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
-	
-	#ribbon = RIBBON.instantiate();
-	#add_child(ribbon);
-	#ribbon.hide();
-	
-	if (level_name == "first"):
-		Dialogic.start(str(level_name) + "Level");
-		is_in_menu = true;
-	if (level_name == "Fen"):
+
+	if level_name == "first":
+		Dialogic.start(level_name + "Level")
+		is_in_menu = true
+	elif level_name == "Fen":
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
-	
-	Main.battle_log = battle_log;
-	
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
-	
-	var characters_placed := 0;
-	
-	print("Loading new level, number of playable characters: " + str(Main.characters.size()));
-	
-	for i in units.size():
-		var pos: Vector3 = units[i];
-		var new_unit: Character = null;
-		
-		if (get_unit_name(pos) == "Unit"):
-			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed];
-				new_unit.state.is_moved = false;
-				new_unit.camera = get_viewport().get_camera_3d();
-				characters_placed += 1;
-				
-				var health := str(new_unit.state.current_health)
-				if health == "0":
-					health = "fresh unit"
-					
-				print("This character exists: " + str(new_unit.data.unit_name) + " health: " + str(health) + ".");
-			else:
-				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
-		elif (get_unit_name(pos) == "Enemy"):
-			new_unit = PLAYER.instantiate()
-			
-			var data := CharacterData.new()
 
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY;
+	Main.battle_log = battle_log
 
-			new_unit.data = data
-			new_unit.state = c_state
+	var units: Array[Vector3i] = occupancy_map.get_used_cells()
+	var characters_placed := 0
 
-			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
-		elif (get_unit_name(pos) == "EnemyBird"):
-			new_unit = BIRD_ENEMY.instantiate()
-			
-			var data := CharacterData.new()
+	print("Loading new level, number of playable characters: ", Main.characters.size())
 
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY;
+	for i in range(units.size()):
+		var pos: Vector3i = units[i]
+		var new_unit: Character = null
 
-			new_unit.data = data
-			new_unit.state = c_state
+		match get_unit_name(pos):
+			"Unit":
+				if characters_placed < Main.characters.size():
+					new_unit = Main.characters[characters_placed]
+					new_unit.state.is_moved = false
+					new_unit.camera = get_viewport().get_camera_3d()
+					characters_placed += 1
 
-			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
+					var health := new_unit.state.current_health
+					print(
+						"This character exists: ",
+						new_unit.data.unit_name,
+						" health: ",
+						health if health > 0 else "fresh unit"
+					)
+				else:
+					occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
-		elif (get_unit_name(pos) == "EnemyGhost"):
-			new_unit = GHOST_ENEMY.instantiate()
-			
-			var data := CharacterData.new()
+			"Enemy", "EnemyBird", "EnemyGhost":
+				new_unit = (
+					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
+					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
+					else PLAYER.instantiate()
+				)
 
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY;
+				var data := CharacterData.new()
+				var c_state := CharacterState.new()
+				c_state.faction = CharacterState.Faction.ENEMY
 
-			new_unit.data = data
-			new_unit.state = c_state
+				new_unit.data = data
+				new_unit.state = c_state
+				new_unit.data.unit_name = monster_names.pick_random()
 
-			new_unit.data.unit_name = monster_names[randi_range(0, monster_names.size() - 1)];
-			
-		elif (get_unit_name(pos) == "Chest"):
-			var chest: Node = CHEST.instantiate();
-			chest.position = grid_to_world(pos)
+			"Chest":
+				var chest := CHEST.instantiate()
+				chest.position = grid_to_world(pos)
+				add_child(chest)
 
-			add_child(chest);
-		elif (get_unit_name(pos) == "VictoryTrigger"):
-			pass
-		else:
-			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM);
-			
-		if (new_unit != null):
-			#unitArray.append(newUnit);
+			"VictoryTrigger":
+				pass
+
+			_:
+				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+
+		if new_unit:
 			new_unit.position = grid_to_world(pos)
 
-			#newUnit = 2;
-			if new_unit.get_parent():
-				new_unit.reparent(Main.world, false);
-			add_child(new_unit);
-			characters.append(new_unit);
-			
+			if new_unit.get_parent() != Main.world:
+				Main.world.add_child(new_unit)
+
+			characters.append(new_unit)
+
 			if new_unit is Character:
-				var character_script : Character = new_unit;
-				#character_script.hide_ui();
-				new_unit.state.grid_position = pos;
-	
+				new_unit.state.grid_position = pos
+
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
 
-
-	
 	game_state = GameState.from_level(self)
-	
+
 	turn_transition_animation_player.play()
-	#turn_transition.get_canvas().hide();
-	#tiles = map.get_used_cells();
-#	units.append(unit);
+
 	add_to_group("level")
 	emit_signal("party_updated", characters)
-	
-
 
 
 func get_unit(pos: Vector3i) -> Character:
