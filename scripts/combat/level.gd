@@ -80,6 +80,7 @@ var is_animation_just_finished :bool = false;
 enum States {
 	PLAYING,
 	ANIMATING,
+	TRANSITION,
 	CHOOSING_ATTACK };
 var state :int = States.PLAYING;
 var game_state : GameState;
@@ -635,19 +636,47 @@ func CheckVictoryConditions() -> void:
 
 
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
-	#global_transform.origin = global_transform.origin.lerp(
-	#	target_transform.origin,
-	#	1.0 - exp(-camera_speed * delta)
-	#)
-	#
-	#global_transform.basis = global_transform.basis.slerp(
-	#	target_transform.basis,
-	#	1.0 - exp(-camera_speed * delta)
-	#)
-	camera_controller.set_pivot_target_transform(target_transform);
+	camera_controller.set_pivot_target_transform(target_transform)
 
 
 func _process(delta: float) -> void:
+	_process_old(delta)
+	return
+	
+	# FUTURE:
+	match state:
+		States.PLAYING:
+			process_playing(delta)
+		States.ANIMATING:
+			process_animating(delta)
+		States.TRANSITION:
+			process_transition(delta)
+
+
+func process_playing(delta: float) -> void:
+	pass
+
+
+func process_animating(delta: float) -> void:
+	pass
+
+
+func process_transition(delta: float) -> void:
+	pass
+
+
+func get_screen_position(sprite: Sprite3D) -> Vector2:
+	var camera := get_viewport().get_camera_3d()
+	if not camera:
+		return Vector2.ZERO
+
+	if camera.is_position_behind(sprite.global_position):
+		return Vector2(-9999, -9999) # or hide UI
+
+	return camera.unproject_position(sprite.global_position)
+
+
+func _process_old(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
 		camera_controller.lock_camera()
@@ -714,7 +743,7 @@ func _process(delta: float) -> void:
 			
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
-				show_move_popup(get_viewport().get_mouse_position())
+				show_move_popup(get_screen_position(selected_unit.sprite))
 			
 			CheckVictoryConditions();
 			var code := enemy_code;
