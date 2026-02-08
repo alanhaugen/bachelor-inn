@@ -11,27 +11,26 @@ var is_current_player_enemy := true;
 static func from_level(level : Level) -> GameState:
 	var state : GameState = GameState.new();
 	
-	var level_units :Array[Vector3i] = level.occupancy_map.get_used_cells();
+	var level_units :Array[Character] = level.characters
 	for i in range(level_units.size()):
-		var pos : Vector3i = level_units[i];
-		var character : Character = level.get_unit(pos);
+		var character: Character = level_units[i];
 		# Add a unit to the units array
 		if character is Character:
 			state.units.append(character);
-		else:
-			# Interactables will be considered terrain, but is in the units_map
-			var id : int = level.units_map.get_cell_item(pos);
-			var type : String = level.units_map.mesh_library.get_item_name(id);
-			state.terrain.append(Terrain.new(pos, type));
+		#else:
+		#	# Interactables will be considered terrain, but is in the units_map
+		#	var id : int = level.units_map.get_cell_item(pos);
+		#	var type : String = level.units_map.mesh_library.get_item_name(id);
+		#	state.terrain.append(Terrain.new(pos, type));
 	
-	var level_terrain :Array[Vector3i] = level.movement_weights_map.get_used_cells();
+	var level_terrain :Array[Vector3i] = level.movement_weights_grid.get_used_cells();
 	for i in range(level_terrain.size()):
 		var pos : Vector3i = level_terrain[i];
-		var id : int = level.movement_weights_map.get_cell_item(pos);
-		var type : String = level.movement_weights_map.mesh_library.get_item_name(id);
+		var id : int = level.movement_weights_grid.get_cell_item(pos);
+		var type : String = level.movement_weights_grid.mesh_library.get_item_name(id);
 		state.terrain.append(Terrain.new(pos, type));
 	
-	state.is_current_player_enemy = (level.is_player_turn == false);
+	state.is_current_player_enemy = false
 	
 	return state;
 
@@ -57,10 +56,10 @@ func reset_moves() -> void:
 func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	var new_state : GameState = clone()
 	
-	var unit : Character = new_state.get_unit(move.start_pos)
+	var unit: Character = new_state.get_unit(move.start_pos)
 	unit.state.phase = CharacterState.UnitPhase.MOVED
 	
-	move.execute(new_state, simulate_only)
+	move.execute(new_state)
 	
 	if new_state.no_units_remaining():
 		new_state.end_turn()
@@ -94,6 +93,14 @@ func get_legal_moves() -> Array[Command]:
 		moves += MoveGenerator.generate(unit, self);
 
 	return moves
+
+
+func sync_world_from_state(state: GameState, occupancy_map: Grid) -> void:
+	# Clear grid
+	occupancy_map.clear()
+
+	for unit in state.units:
+		occupancy_map.set_tile(GridTile.new(unit.state.grid_position))
 
 
 func has_enemy_moves() -> bool:

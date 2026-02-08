@@ -51,6 +51,7 @@ func next_level() -> void:
 	else:
 		load_level(levels[current_level_index]);
 
+
 ## Loads a new level and cleanup previously loaded level
 ##
 ## @param level_name: New level name to load

@@ -3,7 +3,6 @@ class_name MovementGrid
 
 #region State variables
 var cost_map : Dictionary = {} # Vector3i -> int
-var used_cells : Dictionary = {} # Vector3i -> bool
 #endregion
 
 
@@ -24,7 +23,6 @@ func is_blocked(pos : Vector3i) -> bool:
 func clear() -> void:
 	grid.clear()
 	cost_map.clear()
-	used_cells.clear()
 
 
 func fill(tiles : Array[GridTile]) -> void:
@@ -42,13 +40,13 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 		var weight := state.get_tile_cost(command.end_pos)
 		
 		if command is Attack:
-			tile = GridTile.new(command.attack_pos, GridTile.Type.ATTACK, 9999999)
+			tile = GridTile.new(command.attack_pos, GridTile.TileFlags.ATTACK, 9999999)
 		
 		elif command is Heal:
-			tile = GridTile.new(command.end_pos, GridTile.Type.INTERACT, weight)
+			tile = GridTile.new(command.end_pos, GridTile.TileFlags.VISIBLE, weight)
 		
 		elif command is Move:
-			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
+			tile = GridTile.new(command.end_pos, GridTile.TileFlags.WALKABLE, weight)
 		
 		if tile:
 			set_tile(tile)
@@ -56,16 +54,15 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 
 func set_tile(tile : GridTile) -> void:
 	cost_map[tile.pos] = tile.weight
-	used_cells[tile.pos] = true
 	grid.set_cell_item(tile.pos, tile.type)
 
 
 func set_move_tile(pos : Vector3i) -> void:
-	grid.set_cell_item(pos, GridTile.Type.MOVE)
+	grid.set_cell_item(pos, GridTile.TileFlags.WALKABLE)
 
 
 func set_attack_tile(pos : Vector3i) -> void:
-	grid.set_cell_item(pos, GridTile.Type.ATTACK)
+	grid.set_cell_item(pos, GridTile.TileFlags.ATTACK)
 
 
 # Heuristic: Manhattan distance for grid
