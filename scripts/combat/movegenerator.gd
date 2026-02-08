@@ -24,7 +24,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	cost_so_far[start_pos] = 0
 
 	var movement_range: int = unit.state.movement
-	if unit.state.is_moved:
+	if unit.state.phase != CharacterState.UnitPhase.READY:
 		movement_range = 0
 
 	# -------------------------
@@ -87,7 +87,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	# -------------------------
 	# 2) Build MOVE commands
 	# -------------------------
-	if not unit.state.is_moved:
+	if unit.state.phase == CharacterState.UnitPhase.READY:
 		for tile: Vector3i in reachable:
 			commands.append(Move.new(start_pos, tile))
 
@@ -96,7 +96,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	#    (Temporary rule: weapon range == movement_range)
 	#    (Temporary rule: enemy must be on same y as origin)
 	# -------------------------
-	if not unit.state.is_ability_used:
+	if unit.state.phase == CharacterState.UnitPhase.READY:
 		# Include "attack from current position"
 		var attack_origins: Array[Vector3i] = [start_pos]
 		for r: Vector3i in reachable:

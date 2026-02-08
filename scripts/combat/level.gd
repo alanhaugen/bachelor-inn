@@ -498,7 +498,7 @@ func _ready() -> void:
 			"Unit":
 				if characters_placed < Main.characters.size():
 					new_unit = Main.characters[characters_placed]
-					new_unit.state.is_moved = false
+					new_unit.state.phase = CharacterState.UnitPhase.READY
 					new_unit.camera = get_viewport().get_camera_3d()
 					characters_placed += 1
 

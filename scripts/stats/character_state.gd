@@ -4,7 +4,19 @@ class_name CharacterState
 ## No scene or node access should happen here.
 
 #region enums
-enum Faction { PLAYER, ENEMY, NEUTRAL }
+enum Faction
+{
+	PLAYER,
+	ENEMY,
+	NEUTRAL
+}
+
+enum UnitPhase
+{
+	READY,      # Can move
+	MOVED,      # Can act
+	DONE        # Turn over
+}
 
 enum SanityState
 {
@@ -28,14 +40,14 @@ signal level_changed(new_level: int)
 @export var faction : Faction = Faction.PLAYER;
 @export var connections : Array[int] = [];
 
-@export var grid_position: Vector3i;
 @export var next_level_experience: int = 1;
-@export var is_alive: bool = true;
-@export var is_moved :bool = false;
-@export var is_ability_used :bool = false;
 @export var experience := 0 : set = _set_experience
 @export var level := 1
 @export var skills: Array[Skill] = []
+
+var grid_position: Vector3i;
+var is_alive: bool = true;
+var phase: UnitPhase = UnitPhase.READY
 #endregion
 
 #region inferred vars calculated from CharacterData on spawn
@@ -104,7 +116,7 @@ func save() -> Dictionary:
 		"faction": faction,
 		"grid_position": [grid_position.x, grid_position.y, grid_position.z],
 		"is_alive": is_alive,
-		"is_moved": is_moved,
+		"phase": phase,
 		"experience": experience,
 		"level": level,
 		"current_health": current_health,

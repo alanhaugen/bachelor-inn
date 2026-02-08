@@ -37,35 +37,35 @@ static func from_level(level : Level) -> GameState:
 
 
 func clone() -> GameState:
-	var cloned_state : GameState = GameState.new();
+	var cloned_state : GameState = GameState.new()
 	
 	for unit in units:
-		cloned_state.units.append(unit.clone());
+		cloned_state.units.append(unit.clone())
 	
-	cloned_state.terrain = terrain;
+	cloned_state.terrain = terrain
 	
-	cloned_state.is_current_player_enemy = is_current_player_enemy;
+	cloned_state.is_current_player_enemy = is_current_player_enemy
 	
-	return cloned_state;
+	return cloned_state
 
 
 func reset_moves() -> void:
 	for unit in units:
-		unit.state.is_moved = false;
+		unit.state.is_moved = false
 
 
 func apply_move(move : Command, simulate_only : bool = false) -> GameState:
-	var new_state : GameState = clone();
+	var new_state : GameState = clone()
 	
 	var unit : Character = new_state.get_unit(move.start_pos)
-	unit.state.is_moved = true;
+	unit.state.phase = CharacterState.UnitPhase.MOVED
 	
-	move.execute(new_state, simulate_only);
+	move.execute(new_state, simulate_only)
 	
 	if new_state.no_units_remaining():
-		new_state.end_turn();
+		new_state.end_turn()
 	
-	return new_state;
+	return new_state
 
 
 func no_units_remaining() -> bool:
@@ -84,7 +84,7 @@ func get_legal_moves() -> Array[Command]:
 	var moves : Array[Command] = []
 
 	for unit in units:
-		if unit.state.is_moved:
+		if unit.state.phase == CharacterState.UnitPhase.DONE:
 			continue;
 		if unit.state.is_alive == false:
 			continue;

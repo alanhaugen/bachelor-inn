@@ -298,33 +298,14 @@ func _process(delta: float) -> void:
 	#health_bar.show()
 
 
-func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
-	if simulate_only == false:
-		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM);
-	
-	state.is_alive = true;
-	state.grid_position = pos;
-	state.is_moved = true;
-	
-	if simulate_only == false:
-		var grid_code := Main.level.player_code;
-		if state.is_enemy():
-			grid_code = Main.level.enemy_code;
-		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
-		#if state.is_playable():
-			#my_material.set_shader_parameter("grey_tint", true)
-
+func move_to(pos: Vector3i) -> void:
+	state.grid_position = pos
+	state.phase = CharacterState.UnitPhase.MOVED
 
 func reset() -> void:
-	state.is_alive = true;
-	# slowly heal sanity
-	if state.is_playable():
-		state.current_sanity += 1;
-		state.is_ability_used = false
-	#hide_ui();
-	show();
-	state.is_moved = false;
-	#my_material.set_shader_parameter("grey_tint", false)
+	state.is_alive = true
+	show()
+	state.phase = CharacterState.UnitPhase.READY
 
 func flash_hit(crit : bool) -> void:
 	if my_material == null:
