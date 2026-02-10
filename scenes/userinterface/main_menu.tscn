@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="Texture2D" uid="uid://7t6w4fwhg0q6" path="res://art/textures/NobleNightsLogo_BorderBluePink.png" id="4_fj817"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
@@ -15,9 +15,9 @@
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")
-shader_parameter/colA = Color(0.40844727, 0.2113064, 0.99871415, 1)
-shader_parameter/colB = Color(0, 0.7423105, 0.23405302, 1)
-shader_parameter/colC = Color(1.2429751, 2.0088365, 2.8066084, 1)
+shader_parameter/colA = Color(0.8736039, 0, 0.3253183, 1)
+shader_parameter/colB = Color(0.960668, 0.28518322, 1.92523e-07, 1)
+shader_parameter/colC = Color(0, 2.2155962, 2.258279, 1)
 shader_parameter/pixelation = 80.0
 shader_parameter/pixelated = true
 shader_parameter/offsety = 0.515
@@ -224,10 +224,10 @@ offset_bottom = 40.0
 [node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
 custom_minimum_size = Vector2(6.66, 163.395)
 layout_mode = 1
-offset_left = -109.67435
-offset_top = -120.78242
-offset_right = 110.658966
-offset_bottom = 42.612617
+offset_left = -109.674
+offset_top = -93.112
+offset_right = 110.65931
+offset_bottom = 70.283035
 texture = ExtResource("4_fj817")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu"]
