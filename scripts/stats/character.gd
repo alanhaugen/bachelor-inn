@@ -110,8 +110,12 @@ func pause_anim() -> void:
 
 func clone() -> Character:
 	var c := Character.new()
+	c.set_process(false)
+	c.set_physics_process(false)
+	c.queue_free()
 	c.data = data.duplicate_data()
 	c.state = state.duplicate_data()
+
 	return c
 
 
