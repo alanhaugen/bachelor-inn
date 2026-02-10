@@ -605,7 +605,7 @@ func MoveAI() -> void:
 	
 	
 	if current_state.has_enemy_moves():
-		var move : Command = ai.choose_best_move(current_state, 2);
+		var move : Command = ai.choose_best_move(current_state, 1);
 		moves_stack.append(move);
 		current_state = current_state.apply_move(move, true);
 	
