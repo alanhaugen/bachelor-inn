@@ -54,10 +54,10 @@ tracks/0/path = NodePath("CanvasLayer/VBoxContainer/ColorRect3/playerLabel:posit
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.5, 2),
-"transitions": PackedFloat32Array(0.124999955, 1, 4.5947914, 1),
+"times": PackedFloat32Array(0, 0.5, 1.49, 2),
+"transitions": PackedFloat32Array(0.124999955, 1, 1, 1),
 "update": 0,
-"values": [Vector2(271, 35), Vector2(0, 35), Vector2(0, 35), Vector2(-258, 35)]
+"values": [Vector2(749.07, 35), Vector2(390.095, 35), Vector2(390.095, 35), Vector2(126.005, 35)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -78,10 +78,10 @@ tracks/2/path = NodePath("CanvasLayer/VBoxContainer/ColorRect3/enemyLabel:positi
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5, 1.5, 2),
-"transitions": PackedFloat32Array(1, 1, 4.5947914, 1),
+"times": PackedFloat32Array(0, 0.5, 1.4863706, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(271, 35), Vector2(0, 35), Vector2(0, 35), Vector2(-258, 35)]
+"values": [Vector2(737.06, 35), Vector2(376.715, 35), Vector2(376.715, 35), Vector2(114.31, 35)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_20num"]
@@ -105,23 +105,21 @@ anchors_preset = 14
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_top = -35.5
-offset_bottom = 35.5
+offset_left = 3.0
+offset_top = -540.0
+offset_right = 3.0
+offset_bottom = -390.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
-layout_mode = 2
-size_flags_vertical = 0
-color = Color(0, 0, 0, 0.5176471)
+mouse_filter = 2
 
 [node name="ColorRect3" type="ColorRect" parent="CanvasLayer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 150)
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 2
 color = Color(0, 0, 0, 0)
 
 [node name="playerLabel" type="Label" parent="CanvasLayer/VBoxContainer/ColorRect3"]
@@ -131,9 +129,9 @@ anchor_left = 0.53400004
 anchor_top = 0.5
 anchor_right = 0.53400004
 anchor_bottom = 0.5
-offset_left = -615.168
+offset_left = -1025.28
 offset_top = -68.5
-offset_right = 536.832
+offset_right = 126.71997
 offset_bottom = 68.49994
 grow_horizontal = 2
 grow_vertical = 2
@@ -149,20 +147,15 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -576.0
+offset_left = -960.0
 offset_top = -68.5
-offset_right = 576.0
+offset_right = 192.0
 offset_bottom = 68.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "ENEMY TURN"
 label_settings = SubResource("LabelSettings_p0s4e")
 horizontal_alignment = 1
-
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
-layout_mode = 2
-color = Color(0, 0, 0, 0.5176471)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
