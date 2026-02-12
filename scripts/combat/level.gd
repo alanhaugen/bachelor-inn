@@ -218,10 +218,11 @@ func get_grid_cell_from_mouse() -> Vector3i:
 
 		distance += step
 
+	
 	if is_best_cell != false:
 		return best_cell
 
-	return Vector3i(INF,INF,INF)  # fallback
+	return Vector3i(-999,-999,-999)  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
@@ -269,8 +270,9 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 
 func _can_handle_input(event: InputEvent) -> bool:
-	if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
-		return false
+	##old
+	#if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
+		#return false
 	
 	if state == States.ANIMATING:
 		return false
@@ -288,6 +290,10 @@ func _can_handle_input(event: InputEvent) -> bool:
 		return false
 
 	if Input.is_action_pressed("enable_dragging"):
+		return false
+	
+	if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
+		_clear_selection();
 		return false
 
 	return true
