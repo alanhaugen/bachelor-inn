@@ -238,11 +238,21 @@ func get_unit_name(pos : Vector3) -> String:
 		return "null"
 		
 	if item_id >= occupancy_map.mesh_library.get_item_list().size():
-		push_warning("Invalid MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
+		push_warning("Invalid Unit MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
 		return "null"
 	
 	return occupancy_map.mesh_library.get_item_name(item_id)
 
+func get_trigger_name(pos : Vector3) -> String:
+	var trigger_id: int = trigger_map.get_cell_item(pos)
+	if trigger_id == GridMap.INVALID_CELL_ITEM:
+		return "null"
+	
+	if trigger_id >= trigger_map.mesh_library.get_item_list().size():
+		push_warning("Invalid Trigger MeshLibrary item: " + str(trigger_id) + " at position: " + str(pos))
+		return "null"
+	
+	return trigger_map.mesh_library.get_item_name(trigger_id)
 
 func show_attack_tiles(pos: Vector3i) -> void:
 	path_map.clear()
@@ -739,8 +749,9 @@ func _process_old(delta: float) -> void:
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
-			if get_unit_name(active_move.end_pos) == "VictoryTrigger":
-				Dialogic.start(level_name + "LevelVictory")
+			if get_trigger_name(active_move.end_pos) == "Victory":
+				Main.next_level();
+				##Dialogic.start(level_name + "LevelVictory")
 				
 			active_move.execute(game_state)
 			
