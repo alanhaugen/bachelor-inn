@@ -642,14 +642,36 @@ func CheckVictoryConditions() -> void:
 	for i in units.size():
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
+			if get_trigger_name(pos) == "Victory":
+				is_player_turn = true;
+				next_level();
+				return;
 			numberOfPlayerUnits += 1;
+			
 		elif (occupancy_map.get_cell_item(pos) >= enemy_code):
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
-		Main.next_level();
+		is_player_turn = true;
+		next_level();
+		return;
+
+##Removing unwanted occupants and resetting movement of characters
+func next_level() -> void:
+	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
+	for i in positions.size():
+		##occupancy_map 0 == Unit, 3 == UnitDone
+		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
+			get_unit(positions[i]).reset();
+			get_unit(positions[i]).state.grid_position = Vector3i(0, 0, 0)
+
+		##Remove all other occupants, since they should not be in the next level
+		else:
+			get_unit(positions[i]).die(false)
+	
+	Main.next_level()
 
 
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
@@ -719,6 +741,8 @@ func _process_old(delta: float) -> void:
 	if (is_in_menu):
 		return;
 	
+	CheckVictoryConditions();
+	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
 			is_animation_just_finished = false;
@@ -750,8 +774,8 @@ func _process_old(delta: float) -> void:
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
-			if get_trigger_name(active_move.end_pos) == "Victory":
-				Main.next_level();
+			#if get_trigger_name(active_move.end_pos) == "Victory":
+				#next_level();
 				##Dialogic.start(level_name + "LevelVictory")
 				
 			active_move.execute(game_state)
@@ -763,7 +787,6 @@ func _process_old(delta: float) -> void:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))
 			
-			CheckVictoryConditions();
 			var code := enemy_code;
 			if is_player_turn:
 				code = player_code_done;
