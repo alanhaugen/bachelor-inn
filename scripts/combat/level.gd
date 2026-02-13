@@ -630,6 +630,7 @@ func MoveAI() -> void:
 		state = States.ANIMATING;
 		camera_controller.focus_camera(selected_unit)
 	else:
+		camera_controller.set_pivot_target_translate(Main.characters.front().position)
 		camera_controller.free_camera()
 
 
