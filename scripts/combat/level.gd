@@ -312,7 +312,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 func _update_cursor(pos: Vector3i) -> void:
 	var world_pos := grid_to_world(pos)
 	cursor.position = Vector3(world_pos.x, world_pos.y + 0.1, world_pos.z)
-	show_attack_tiles(cursor.position)
 	cursor.show()
 
 
