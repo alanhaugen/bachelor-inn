@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqxnj06jaw6ps"]
+[gd_scene format=3 uid="uid://bqxnj06jaw6ps"]
 
 [ext_resource type="Script" uid="uid://d3jhky6totysk" path="res://scripts/ui/ribbon.gd" id="1_aveyg"]
 
-[node name="Ribbon" type="Control"]
+[node name="Ribbon" type="Control" unique_id=1705108152]
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0
@@ -16,30 +16,30 @@ size_flags_horizontal = 0
 size_flags_vertical = 8
 script = ExtResource("1_aveyg")
 
-[node name="VBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="HBoxContainer" parent="." unique_id=175584395]
 layout_mode = 0
 offset_right = 96.0
 offset_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer" unique_id=10097238]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer" unique_id=451485778]
 layout_mode = 2
 text = "Skills"
 
-[node name="Skills" type="HBoxContainer" parent="VBoxContainer/VBoxContainer"]
+[node name="Skills" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=638056183]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer" unique_id=1739104351]
 layout_mode = 2
 
-[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer2"]
+[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer2" unique_id=1496100575]
 layout_mode = 2
 text = "Abilities"
 
-[node name="Abilities" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2"]
+[node name="Abilities" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2" unique_id=593472449]
 unique_name_in_owner = true
 layout_mode = 2

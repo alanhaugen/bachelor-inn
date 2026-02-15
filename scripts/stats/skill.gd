@@ -14,6 +14,7 @@ var max_level : int = 5
 ## STATS
 @export var damage_amount: int = 0;
 @export var heal_amount: int = 0;
+@export var heal_sanity_amount: int = 0;
 @export var min_range: int = 1;
 @export var max_range: int = 1;
 

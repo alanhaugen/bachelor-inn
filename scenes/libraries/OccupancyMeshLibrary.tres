@@ -1,4 +1,4 @@
-[gd_resource type="MeshLibrary" load_steps=31 format=4 uid="uid://bqe8w1f2rn5eb"]
+[gd_resource type="MeshLibrary" format=4 uid="uid://bqe8w1f2rn5eb"]
 
 [ext_resource type="Texture2D" uid="uid://cnbsbknrh5hx2" path="res://art/gltf/Chest_0.png" id="1_w06hx"]
 
