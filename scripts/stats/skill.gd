@@ -17,8 +17,8 @@ var max_level : int = 5
 @export var heal_sanity_amount: int = 0;
 @export var min_range: int = 1;
 @export var max_range: int = 1;
-@export var speed_bonus: int = 0        # how many tiles extra
-@export var duration_turns: int = 0     # how long it lasts
+@export var speed_bonus: int = 0        ## #how many tiles extra
+@export var duration_turns: int = 0     ## how long it lasts
 
 # BOOLS / REQUIREMENTS
 @export var uses_action: bool = true;

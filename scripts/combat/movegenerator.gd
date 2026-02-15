@@ -24,6 +24,7 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	cost_so_far[start_pos] = 0
 
 	var movement_range: int = unit.state.movement
+	## TODO: Spells/Abilities - add an effect checker for buffs/debuffs
 	if unit.state.is_moved:
 		movement_range = 0
 

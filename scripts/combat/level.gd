@@ -660,7 +660,8 @@ func _process(delta: float) -> void:
 				enemy_label.show();
 				player_label.hide();
 		else:
-			reset_all_units();
+			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
+			#reset_all_units();   ## this reset can clear states etc before enemy does their thing. 
 			MoveAI();
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
@@ -668,7 +669,12 @@ func _process(delta: float) -> void:
 			state = States.PLAYING;
 			movement_map.clear()
 			if (is_player_turn == false):
+				## END OF ROUND - RESET POINT
+				## Going from enemy phase to player phase
 				is_animation_just_finished = true;
+				# decay_all_effects();
+				# remove_expired_effects();
+				reset_all_units();
 				is_player_turn = true;
 		# Done with one move, execute it and start on next
 		elif (animation_path.is_empty()):
@@ -694,16 +700,16 @@ func _process(delta: float) -> void:
 			Tutorial.tutorial_unit_moved();
 			
 			if is_player_turn == false:
-				MoveAI(); # called after an enemy is done moving
+				MoveAI(); ## called after an enemy is done moving
 			
 			if (moves_stack.is_empty() == false):
-				#called after any enemy except the final enemy is done moving
+				## called after any enemy except the final enemy is done moving
 				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
-				#called after any enemy except the final enemy is done moving
+				## called after any enemy except the final enemy is done moving
 				selected_unit.position = animation_path.pop_front();
-		# Process animation
+		## Process animation
 		else:
 			
 			var movement_speed := 8.0 # units per second
