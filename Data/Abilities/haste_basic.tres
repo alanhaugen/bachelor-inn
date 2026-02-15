@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://lvhavkk1vueb"]
+
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_xcv5g"]
+
+[resource]
+script = ExtResource("1_xcv5g")
+skill_id = "haste_basic"
+skill_name = "haste_basic"
+tooltip = "Increases the movement range of a target unit."
+speed_bonus = 1
+metadata/_custom_type_script = "uid://c3p07am3ababr"

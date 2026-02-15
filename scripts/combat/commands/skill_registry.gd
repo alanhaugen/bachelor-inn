@@ -3,8 +3,9 @@ extends Node
 
 const S_NO_SKILL = preload("res://Data/Abilities/no_skill.tres")
 const S_HEAL_BASIC = preload("res://Data/Abilities/heal_basic.tres")
-const S_FIREBALL_BASIC = preload("res://Data/Abilities/heal_basic.tres")
+const S_FIREBALL_BASIC = preload("res://Data/Abilities/fireball_basic.tres")
 const S_MELEE_SWEEP = preload("res://Data/Abilities/melee_sweep.tres")
+const S_HASTE_BASIC = preload("res://Data/Abilities/haste_basic.tres")
 
 var _by_id: Dictionary = {}
 
@@ -15,20 +16,21 @@ func _ready() -> void:
 	_register(S_HEAL_BASIC)
 	_register(S_FIREBALL_BASIC)
 	_register(S_MELEE_SWEEP)
+	_register(S_HASTE_BASIC)
 
-func _register(w: Skill) -> void:
-	if w == null:
+func _register(s: Skill) -> void:
+	if s == null:
 		push_error("SkillRegister: Tried to reg NULL skill.")
 		return
 	
-	if w.weapon_id == "":
-		push_error("SkillRegister: Skill '" + str(w.weapon_name) + "' has EMPTY skill_id (fix the .tres file).")
+	if s.skill_id == "":
+		push_error("SkillRegister: Skill '" + str(s.skill_name) + "' has EMPTY skill_id (fix the .tres file).")
 		return
 	
-	if _by_id.has(w.weapon_id):
-		push_warning("SkillRegister: duplicate skill_id '" + w.weapon_id+ "' found. Overwriting.")
+	if _by_id.has(s.skill_id):
+		push_warning("SkillRegister: duplicate skill_id '" + s.skill_id+ "' found. Overwriting.")
 	
-	_by_id[w.weapon_id] = w;
+	_by_id[s.skill_id] = s;
 
 func get_skill(id: String) -> Skill:
 	if _by_id.has(id):

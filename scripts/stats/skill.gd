@@ -17,10 +17,12 @@ var max_level : int = 5
 @export var heal_sanity_amount: int = 0;
 @export var min_range: int = 1;
 @export var max_range: int = 1;
+@export var speed_bonus: int = 0        # how many tiles extra
+@export var duration_turns: int = 0     # how long it lasts
 
-# BOOLS
+# BOOLS / REQUIREMENTS
 @export var uses_action: bool = true;
-@export var requires_wep_skill: bool = false; ## Feks. polearm training etc.
+@export var requires_speciality: bool = false; ## Feks. polearm training etc.
 @export var has_requirement: bool = false; ## Må ikke være skill. Kan være class specific etc. 
 
 func _init(inName : String = "", inTooltip : String = "", inIcon : Texture2D = null, inLevel : int = 1, inMaxLevel : int = 1, inCommand : Command = null) -> void:
