@@ -3,15 +3,24 @@ class_name CombatVFXController
 
 @export var damage_number_scene : PackedScene
 @export var hit_particles_scene : PackedScene
-
+@export var ranged_attack_scene : PackedScene
 
 func play_attack(result : AttackResult) -> void:
 	if result == null:
 		return
 	
-	_spawn_dmg_number_scene(result)
-	_spawn_hit_particles(result.victim)
-	_trigger_hit_flash(result.victim, result.was_critical)
+	var attacker : Character= result.aggressor
+	if attacker and attacker.state and attacker.state.weapon:
+		if attacker.state.weapon.is_melee():
+			_spawn_hit_particles(result.victim)
+			_spawn_dmg_number_scene(result)
+			_trigger_hit_flash(result.victim, result.was_critical)
+		else:
+			_spawn_ranged_attack(attacker, result.victim, result)
+	
+	
+	
+	
 	
 	
 func _spawn_dmg_number_scene(result : AttackResult) -> void:
@@ -42,3 +51,28 @@ func _spawn_hit_particles(target : Character) -> void:
 func _trigger_hit_flash(target : Character, crit : bool) -> void:
 	if target.has_method("flash_hit"):
 		target.flash_hit(crit)
+
+
+func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
+	if not ranged_attack_scene:
+		return
+	var projectile := ranged_attack_scene.instantiate()
+	get_tree().current_scene.add_child(projectile)
+	projectile.global_position = attacker.global_position + Vector3(0, 1, 0)
+	
+	var tween: = projectile.create_tween()
+	tween.tween_property(
+		projectile, "global_position", target.global_position + Vector3(0, 1, 0), 0.5
+	)
+	
+	tween.finished.connect(func() -> void:
+		projectile.queue_free()
+		_spawn_hit_particles(target)
+		_spawn_dmg_number_scene(result)
+		_trigger_hit_flash(target, result.was_critical)
+	)
+	
+	
+	
+	
+	
