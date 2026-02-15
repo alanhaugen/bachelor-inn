@@ -312,6 +312,7 @@ func _can_handle_input(event: InputEvent) -> bool:
 func _update_cursor(pos: Vector3i) -> void:
 	var world_pos := grid_to_world(pos)
 	cursor.position = Vector3(world_pos.x, world_pos.y + 0.1, world_pos.z)
+	show_attack_tiles(cursor.position)
 	cursor.show()
 
 
@@ -777,12 +778,14 @@ func _process_old(delta: float) -> void:
 			#if get_trigger_name(active_move.end_pos) == "Victory":
 				#next_level();
 				##Dialogic.start(level_name + "LevelVictory")
-				
-			active_move.execute(game_state)
-			
-			if active_move is Attack: 
-				combat_vfx.play_attack(active_move.result)
-			
+
+
+
+			active_move.prepare(game_state)
+			combat_vfx.play_attack(active_move.result, func() -> void:
+				active_move.apply_damage(game_state)
+			)
+
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))

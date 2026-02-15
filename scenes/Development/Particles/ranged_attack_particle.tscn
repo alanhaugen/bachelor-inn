@@ -1,18 +1,15 @@
 [gd_scene load_steps=3 format=3 uid="uid://bhfj4kn8ra1o3"]
 
-[ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="1_th035"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_fr0lo"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xl5xg"]
-transparency = 1
-albedo_color = Color(4.6165767, 2.4459717, 1.2651622, 1)
-albedo_texture = ExtResource("1_th035")
-billboard_mode = 1
+[sub_resource type="BoxMesh" id="BoxMesh_fr0lo"]
 
 [node name="Node3D" type="Node3D"]
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 1, 0, 0, 0)
-material_override = SubResource("StandardMaterial3D_xl5xg")
-pixel_size = 0.001
-billboard = 1
-texture = ExtResource("1_th035")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.20207983, 0, 0, 0, -2.3104125e-08, 0.20207983, 0, -0.52856076, -8.83319e-09, 0, 0, 0.3799978)
+mesh = SubResource("CylinderMesh_fr0lo")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.4853409, 0, 0, 0, 0.6527401, 0, 0, 0, 0.42625946, 0, 0, -0.25995642)
+mesh = SubResource("BoxMesh_fr0lo")

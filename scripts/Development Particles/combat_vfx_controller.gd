@@ -5,7 +5,7 @@ class_name CombatVFXController
 @export var hit_particles_scene : PackedScene
 @export var ranged_attack_scene : PackedScene
 
-func play_attack(result : AttackResult) -> void:
+func play_attack(result : AttackResult, on_finished: Callable) -> void:
 	if result == null:
 		return
 	
@@ -15,8 +15,9 @@ func play_attack(result : AttackResult) -> void:
 			_spawn_hit_particles(result.victim)
 			_spawn_dmg_number_scene(result)
 			_trigger_hit_flash(result.victim, result.was_critical)
+			on_finished.call()
 		else:
-			_spawn_ranged_attack(attacker, result.victim, result)
+			_spawn_ranged_attack(attacker, result.victim, result, on_finished)
 	
 	
 	
@@ -53,25 +54,38 @@ func _trigger_hit_flash(target : Character, crit : bool) -> void:
 		target.flash_hit(crit)
 
 
-func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
+func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult, on_finished: Callable) -> void:
 	if not ranged_attack_scene:
 		return
+	
 	var projectile := ranged_attack_scene.instantiate()
 	get_tree().current_scene.add_child(projectile)
+	
 	projectile.global_position = attacker.global_position + Vector3(0, 1, 0)
+	var start_pos: = attacker.global_position + Vector3(0, 1, 0)
+	var end_pos: = target.global_position + Vector3(0, 1, 0)
 	
 	var tween: = projectile.create_tween()
+	tween.set_parallel(true)
+	
+	var dir := (end_pos - start_pos).normalized()
+	projectile.look_at(start_pos + dir, Vector3.UP)
+	
 	tween.tween_property(
-		projectile, "global_position", target.global_position + Vector3(0, 1, 0), 0.5
+		projectile, 
+		"global_position", 
+		end_pos, 
+		0.3
 	)
+	
 	
 	tween.finished.connect(func() -> void:
 		projectile.queue_free()
 		_spawn_hit_particles(target)
 		_spawn_dmg_number_scene(result)
 		_trigger_hit_flash(target, result.was_critical)
+		on_finished.call()
 	)
-	
 	
 	
 	
