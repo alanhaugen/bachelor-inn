@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://uwkg1mydmaxl"]
 
-[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_vlk3e"]
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_vlk3e"]
 [ext_resource type="Resource" uid="uid://3cd4cr5lmyf6" path="res://art/Animations/Enemies/Bird/Bird_Moving_L.tres" id="2_2k662"]
 [ext_resource type="Resource" uid="uid://dksa5tevjcrv3" path="res://art/Animations/Enemies/Bird/Bird_Moving_U.tres" id="3_1o3ex"]
 [ext_resource type="Resource" uid="uid://slltmy14nx2g" path="res://art/Animations/Enemies/Bird/Bird_Moving_R.tres" id="3_nb2gx"]

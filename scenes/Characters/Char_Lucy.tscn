@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://18v4frr576yx"]
 
-[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_yyrg3"]
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_yyrg3"]
 [ext_resource type="Resource" uid="uid://c28usyvygwoon" path="res://art/Animations/Characters/Lucy/Lucy_Moving_L.tres" id="2_8n4yx"]
 [ext_resource type="Resource" uid="uid://dpukbl3rh8fwv" path="res://art/Animations/Characters/Lucy/Lucy_Moving_R.tres" id="3_q036t"]
 [ext_resource type="Resource" uid="uid://cfmnuaxxcga7p" path="res://art/Animations/Characters/Lucy/Lucy_Moving_U.tres" id="4_tulk5"]

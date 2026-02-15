@@ -70,9 +70,9 @@ const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 #const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
-const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
-const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
-const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
+const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn");
+const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
+const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;

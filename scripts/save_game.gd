@@ -4,17 +4,11 @@ class_name SaveGame
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 
 
-const ALFRED: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
-const LUCY: PackedScene = preload("res://scenes/grid_items/Char_Lucy.tscn");
-
-const CHARACTER_SCENES := {
-	"Alfred" : ALFRED,
-	"Lucy" : LUCY
-}
-
 ## Use this to detect old player save files and update them 
 @export var version := 1;
 @export var map_name := "first";
+var registry: CharacterRegistry = load("res://scripts/Characters/CharacterRegistry.tres")
+
 
 
 func is_savefile_existing() -> bool:
@@ -43,37 +37,18 @@ func create_new_from_state(slot:int, level: int, state: GameState) -> void:
 func create_new_save_data() -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE);
 	
-	var data1 := CharacterData.new()
-	data1.unit_name = "Alfred"
-	data1.speciality = CharacterData.Speciality.Scholar
-	data1.mind = 6
-	data1.focus = 5
-
-	var state1 := CharacterState.new()
-	state1.weapon = WeaponRegistry.get_weapon("scepter_basic")
-
-	var char1 := Character.new()
-	char1.data = data1
-	char1.state = state1
-	char1.scene_id = "Alfred"	#Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	var units := []
 	
-	var data2 := CharacterData.new()
-	data2.unit_name = "Lucy"
-	data2.speciality = CharacterData.Speciality.Militia
-	data2.strength = 10
-
-	var state2 := CharacterState.new()
-	state2.weapon = WeaponRegistry.get_weapon("sword_basic")
-
-	var char2 := Character.new()
-	char2.data = data2
-	char2.state = state2
-	char2.scene_id = "Lucy"	 #Scene id er den scena som skal loades for denne karakteren!! du må definere Packed scene som en constant øverst
+	for id: String in registry.characters.keys():
+		var def: CharacterDefinition = registry.characters[id]
+		
+		var char := Character.new()
+		char.data = def.base_data.duplicate()
+		char.state = def.base_state.duplicate()
+		char.scene_id = id
+		
+		units.append(char.save())
 	
-	var units := [
-		char1.save(), 
-		char2.save()
-	];
 	
 	var saves := {
 		"Noble Nights Save format": version,
@@ -94,7 +69,6 @@ func create_new_save_data() -> void:
 		},
 	}
 	
-	#is the VAR necessary????? nope. but it is more readable
 	var json_string: String = JSON.stringify(saves);
 	save_file.store_string(json_string);
 	save_file.close();
@@ -154,7 +128,12 @@ func read(save_slot: int) -> bool:
 	for unit_dict : Dictionary in units:
 		
 		var scene_id : String = unit_dict.get("scene")
-		var packed_scene : PackedScene = CHARACTER_SCENES.get(scene_id)
+		var def: CharacterDefinition = registry.characters.get(scene_id)
+		if def == null:
+			push_error("Unknown character scene_id: " + scene_id)
+			continue
+		var packed_scene: PackedScene = def.scene
+		
 		var character := packed_scene.instantiate();
 
 		# --- DATA ---
