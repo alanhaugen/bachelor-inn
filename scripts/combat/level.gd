@@ -781,9 +781,8 @@ func _process_old(delta: float) -> void:
 
 
 			active_move.prepare(game_state)
-			combat_vfx.play_attack(active_move.result, func() -> void:
-				active_move.apply_damage(game_state)
-			)
+			await combat_vfx.play_attack(active_move.result)
+			active_move.apply_damage(game_state)
 
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)

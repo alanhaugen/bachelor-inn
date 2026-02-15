@@ -1,15 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhfj4kn8ra1o3"]
+[gd_scene load_steps=5 format=3 uid="uid://bhfj4kn8ra1o3"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_fr0lo"]
+[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_xl5xg"]
+[ext_resource type="Texture2D" uid="uid://bmpspt3r1tunw" path="res://art/textures/ParticleTex/muzzle_05_rotated.png" id="2_bdpgj"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_fr0lo"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5d4l2"]
+render_priority = 0
+shader = ExtResource("1_xl5xg")
+shader_parameter/diffuse_tex = ExtResource("2_bdpgj")
+shader_parameter/colorTint = Color(2.184344, 1.8180914, 1.5267541, 1)
 
-[node name="Node3D" type="Node3D"]
+[sub_resource type="QuadMesh" id="QuadMesh_fr0lo"]
+material = SubResource("ShaderMaterial_5d4l2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.20207983, 0, 0, 0, -2.3104125e-08, 0.20207983, 0, -0.52856076, -8.83319e-09, 0, 0, 0.3799978)
-mesh = SubResource("CylinderMesh_fr0lo")
+[node name="MAIN" type="Node3D"]
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.4853409, 0, 0, 0, 0.6527401, 0, 0, 0, 0.42625946, 0, 0, -0.25995642)
-mesh = SubResource("BoxMesh_fr0lo")
+[node name="Particle" type="MeshInstance3D" parent="."]
+transform = Transform3D(-9.9246314e-08, 1.7539933, 4.371139e-08, 0, -7.666948e-08, 1, 2.270491, 7.666948e-08, 1.9106855e-15, 0.007662803, -0.0070314407, 0.58753264)
+mesh = SubResource("QuadMesh_fr0lo")

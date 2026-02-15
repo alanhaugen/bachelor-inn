@@ -5,7 +5,7 @@ class_name CombatVFXController
 @export var hit_particles_scene : PackedScene
 @export var ranged_attack_scene : PackedScene
 
-func play_attack(result : AttackResult, on_finished: Callable) -> void:
+func play_attack(result : AttackResult) -> void:
 	if result == null:
 		return
 	
@@ -15,10 +15,10 @@ func play_attack(result : AttackResult, on_finished: Callable) -> void:
 			_spawn_hit_particles(result.victim)
 			_spawn_dmg_number_scene(result)
 			_trigger_hit_flash(result.victim, result.was_critical)
-			on_finished.call()
+			await get_tree().create_timer(0.1).timeout
 		else:
-			_spawn_ranged_attack(attacker, result.victim, result, on_finished)
-	
+			await _spawn_ranged_attack(attacker, result.victim, result)
+
 	
 	
 	
@@ -54,38 +54,32 @@ func _trigger_hit_flash(target : Character, crit : bool) -> void:
 		target.flash_hit(crit)
 
 
-func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult, on_finished: Callable) -> void:
+func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
 	if not ranged_attack_scene:
 		return
-	
 	var projectile := ranged_attack_scene.instantiate()
 	get_tree().current_scene.add_child(projectile)
 	
-	projectile.global_position = attacker.global_position + Vector3(0, 1, 0)
 	var start_pos: = attacker.global_position + Vector3(0, 1, 0)
 	var end_pos: = target.global_position + Vector3(0, 1, 0)
+
+	projectile.global_position = start_pos
+	projectile.look_at(end_pos, Vector3.UP)
 	
 	var tween: = projectile.create_tween()
-	tween.set_parallel(true)
-	
-	var dir := (end_pos - start_pos).normalized()
-	projectile.look_at(start_pos + dir, Vector3.UP)
 	
 	tween.tween_property(
 		projectile, 
 		"global_position", 
 		end_pos, 
-		0.3
+		0.25
 	)
+	await tween.finished
+	projectile.queue_free()
+	_spawn_hit_particles(target)
+	_spawn_dmg_number_scene(result)
+	_trigger_hit_flash(target, result.was_critical)
 	
-	
-	tween.finished.connect(func() -> void:
-		projectile.queue_free()
-		_spawn_hit_particles(target)
-		_spawn_dmg_number_scene(result)
-		_trigger_hit_flash(target, result.was_critical)
-		on_finished.call()
-	)
 	
 	
 	
