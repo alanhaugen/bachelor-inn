@@ -1,16 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://bu3kvc2qxcq2w"]
+[gd_scene load_steps=15 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
-[ext_resource type="MeshLibrary" uid="uid://c2m4bduhp1odo" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
+[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://bqe8w1f2rn5eb" path="res://scenes/libraries/OccupancyMeshLibrary.tres" id="3_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="3_ks0nw"]
 [ext_resource type="MeshLibrary" uid="uid://bn03h5wqjx55b" path="res://scenes/libraries/TriggerMeshLibrary.tres" id="4_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="4_dypiu"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="5_yex0l"]
-[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_8a3vg"]
+[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="6_8a3vg"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
 [ext_resource type="PackedScene" uid="uid://c4b8f02hyixcc" path="res://scenes/userinterface/InGameUI_WIP.tscn" id="11_06w7e"]
-[ext_resource type="PackedScene" uid="uid://d4b4a1hbdjh6j" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
+[ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="11_85lyy"]
+[ext_resource type="PackedScene" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
+[ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="12_vltbs"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
 [node name="Map3d2" type="Node3D"]
@@ -144,6 +146,8 @@ light_specular = 3.335
 [node name="Particles" type="Node3D" parent="."]
 
 [node name="CombatVFXController" parent="." instance=ExtResource("22_dypiu")]
+ranged_attack_scene = ExtResource("11_85lyy")
+melee_attack_scene = ExtResource("12_vltbs")
 
 [node name="GUI" parent="." instance=ExtResource("11_06w7e")]
 
