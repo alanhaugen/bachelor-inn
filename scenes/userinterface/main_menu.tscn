@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene load_steps=35 format=3 uid="uid://cm02uehw506nt"]
 
 [ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
@@ -12,6 +12,7 @@
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
+[ext_resource type="AudioStream" uid="uid://b67e003o351lb" path="res://audio/Music/260216themeWIP.wav" id="12_xr6vh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")
@@ -365,18 +366,10 @@ text = "Back"
 [node name="World" type="Node3D" parent="."]
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World"]
+stream = ExtResource("12_xr6vh")
 autoplay = true
 
 [node name="CameraScene" parent="World" instance=ExtResource("10_0a1r8")]
-_lerp_weight = null
-_springarm_target_length = null
-springarm_length_maximum = null
-springarm_length_minimum = null
-_pivot_max_x = null
-_pivot_min_x = null
-_pivot_max_z = null
-_pivot_min_z = null
-mouse_drag_sensitivity = null
 
 [connection signal="pressed" from="UI/MainMenu/Selector/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Selector/QuitButton" to="." method="_on_quit_button_pressed"]

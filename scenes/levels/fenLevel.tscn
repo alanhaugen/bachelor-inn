@@ -520,6 +520,7 @@ mesh = ExtResource("17_ovtcx")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -59.724022, 1.0681987, 2.2893815)
 mesh = ExtResource("17_ovtcx")
 
-[node name="Vine1Mesh" type="MeshInstance3D" parent="." index="18"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.963726, 1.3589392, -6.071386)
+[node name="Vine1Mesh" type="MeshInstance3D" parent="Scatterables" index="10"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.233303, 0.7964392, 3.263589)
 mesh = ExtResource("18_nxa0q")
+skeleton = NodePath("../..")
