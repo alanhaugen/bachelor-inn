@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Skill" load_steps=5 format=3 uid="uid://dgwuq42f3o3hr"]
 
 [ext_resource type="Script" uid="uid://dujsv356f3fvb" path="res://scripts/combat/commands/heal.gd" id="1_gyhp3"]
-[ext_resource type="Texture2D" uid="uid://0yyioj4x21kh" path="res://art/WIP/Textures/Bright.jpg" id="2_7cy7j"]
+[ext_resource type="Texture2D" uid="uid://bux1vspsa1djj" path="res://art/WIP/Textures/Bright.jpg" id="2_7cy7j"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_rij6h"]
 
 [sub_resource type="Resource" id="Resource_w6rda"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cnagni7ikbg16"]
 
-[ext_resource type="Script" uid="uid://bf4ljwcdlbq45" path="res://scripts/combat/cameracontroller.gd" id="1_wiudl"]
+[ext_resource type="Script" uid="uid://bf4ljwcdlbq45" path="res://scripts/Camera/cameracontroller.gd" id="1_wiudl"]
 [ext_resource type="Shader" uid="uid://dbapk0dtj85oy" path="res://art/WIP/Materials and Shaders/ColorCorrection_Mini.tres" id="2_ebp8v"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_xfa4h"]

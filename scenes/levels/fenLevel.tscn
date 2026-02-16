@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
 [ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="9_6eqfw"]
@@ -265,8 +265,6 @@ turbulence_influence_max = 0.18800001
 
 [node name="Map3d" instance=ExtResource("1_xwjaq")]
 level_name = "first fen edition"
-minimum_camera_height = 10.0
-maximum_camera_height = 30.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {
@@ -302,16 +300,12 @@ data = {
 "cells": PackedInt32Array(1, 65533, 1179649, 1, 2, 2, 0, 2, 2)
 }
 
-[node name="Camera3D" parent="." index="7"]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, -2.8392298, 15.881016, 9.044029)
-fov = 35.0
-
-[node name="Cursor" parent="." index="8"]
+[node name="Cursor" parent="." index="7"]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.5490399, -1.017)
 visible = true
 no_depth_test = false
 
-[node name="WorldEnvironment" parent="." index="11"]
+[node name="WorldEnvironment" parent="." index="10"]
 environment = SubResource("Environment_u2wd5")
 
 [node name="Lamp" parent="Lights" index="0"]
@@ -479,9 +473,12 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
 
-[node name="CombatVFXController" parent="." index="15"]
+[node name="CombatVFXController" parent="." index="14"]
 ranged_attack_scene = ExtResource("9_6eqfw")
 melee_attack_scene = ExtResource("10_u2wd5")
+
+[node name="CameraSettings" parent="." index="16"]
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 33, 0, -1)
 
 [node name="Scatterables" type="Node3D" parent="." index="17"]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)
@@ -532,6 +529,3 @@ mesh = ExtResource("17_ovtcx")
 [node name="Vine1Mesh" type="MeshInstance3D" parent="." index="18"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.963726, 1.3589392, -6.071386)
 mesh = ExtResource("18_nxa0q")
-
-[node name="CameraStartPos" type="Node3D" parent="." index="19"]
-unique_name_in_owner = true

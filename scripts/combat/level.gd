@@ -45,13 +45,7 @@ var movement_weights_grid : Grid
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-@export var minimum_camera_height: float = 3.0
-@export var maximum_camera_height: float = 15.0
 
-@export var minimum_camera_x: float = -10.0
-@export var maximum_camera_x: float = 100.0
-@export var minimum_camera_z: float = -10.0
-@export var maximum_camera_z: float = 10.0
 
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
@@ -465,16 +459,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	camera_controller = Main.camera_controller
-	camera_controller.make_current()
-	camera_controller.setup_minmax_positions(
-		minimum_camera_x,
-		maximum_camera_x,
-		minimum_camera_z,
-		maximum_camera_z
-	)
-	camera_controller.springarm_length_maximum = maximum_camera_height
-	camera_controller.springarm_length_minimum = minimum_camera_height
-	camera_controller.free_camera()
+	
 
 	cursor.hide()
 	trigger_map.hide()

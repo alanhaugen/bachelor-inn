@@ -1,15 +1,16 @@
-[gd_scene load_steps=12 format=3 uid="uid://bu3kvc2qxcq2w"]
+[gd_scene load_steps=13 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
-[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
+[ext_resource type="MeshLibrary" uid="uid://c2m4bduhp1odo" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://bqe8w1f2rn5eb" path="res://scenes/libraries/OccupancyMeshLibrary.tres" id="3_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="3_ks0nw"]
 [ext_resource type="MeshLibrary" uid="uid://bn03h5wqjx55b" path="res://scenes/libraries/TriggerMeshLibrary.tres" id="4_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="4_dypiu"]
 [ext_resource type="Environment" uid="uid://dupp65trea8t0" path="res://art/Environment/WE_DefaultEnvironment.tres" id="5_yex0l"]
-[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="6_8a3vg"]
+[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_8a3vg"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
 [ext_resource type="PackedScene" uid="uid://c4b8f02hyixcc" path="res://scenes/userinterface/InGameUI_WIP.tscn" id="11_06w7e"]
+[ext_resource type="PackedScene" uid="uid://d4b4a1hbdjh6j" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
 [node name="Map3d2" type="Node3D"]
@@ -71,12 +72,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
-
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1.250097, 15.881016, 5.8819647)
-environment = ExtResource("5_yex0l")
-current = true
-fov = 37.849285
 
 [node name="Cursor" type="Sprite3D" parent="."]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.06, -1.017)
@@ -152,5 +147,4 @@ light_specular = 3.335
 
 [node name="GUI" parent="." instance=ExtResource("11_06w7e")]
 
-[node name="CameraSettings" type="Node3D" parent="."]
-unique_name_in_owner = true
+[node name="CameraSettings" parent="." instance=ExtResource("12_2iq81")]
