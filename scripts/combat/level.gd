@@ -616,6 +616,20 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform);
 
 
+func tick_all_units_end_round() -> void:
+	for c in characters:
+		if not is_instance_valid(c):
+			continue
+		if not (c is Character):
+			continue
+
+		# Optional: skip dead units if you use is_alive properly
+		if c.state and c.state.is_alive == false:
+			continue
+
+		c.state.tick_effects_end_round()
+
+
 func _process(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
@@ -668,15 +682,16 @@ func _process(delta: float) -> void:
 		if (moves_stack.is_empty()):
 			state = States.PLAYING;
 			movement_map.clear()
+			
 			if (is_player_turn == false):
 				## END OF ROUND - RESET POINT
 				## Going from enemy phase to player phase
 				is_animation_just_finished = true;
-				# decay_all_effects();
-				# remove_expired_effects();
+				tick_all_units_end_round(); ## Decay effects
 				reset_all_units();
 				is_player_turn = true;
-		# Done with one move, execute it and start on next
+				# Done with one move, execute it and start on next
+		
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
 			if get_unit_name(active_move.end_pos) == "VictoryTrigger":

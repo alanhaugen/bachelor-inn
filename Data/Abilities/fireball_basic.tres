@@ -11,6 +11,8 @@ metadata/_custom_type_script = "uid://drewwlgvyo2q5"
 script = ExtResource("1_u21qa")
 skill_id = "fireball_basic"
 command = SubResource("Resource_11pje")
-damage_amount = 5
+effect_mods = {
+&"damage": 4
+}
 max_range = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"

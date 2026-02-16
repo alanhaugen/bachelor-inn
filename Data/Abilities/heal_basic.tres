@@ -1,8 +1,11 @@
-[gd_resource type="Resource" script_class="Skill" load_steps=2 format=3 uid="uid://c8qah7yiks0t"]
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://c8qah7yiks0t"]
 
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_wxe0v"]
 
 [resource]
 script = ExtResource("1_wxe0v")
 skill_id = "heal_basic"
+effect_mods = {
+&"heal": 2
+}
 metadata/_custom_type_script = "uid://c3p07am3ababr"
