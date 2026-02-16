@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene load_steps=54 format=3 uid="uid://kkgvyut22uqr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
@@ -15,6 +15,28 @@
 [ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="10_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="11_h5d6a"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="12_roefr"]
+[ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="16_xnnr5"]
+[ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="17_ovtcx"]
+[ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="18_nxa0q"]
+
+[sub_resource type="Environment" id="Environment_u2wd5"]
+background_mode = 1
+sdfgi_bounce_feedback = 1.99
+sdfgi_cascades = 1
+fog_enabled = true
+fog_light_color = Color(0.02837259, 0.034384977, 0.044885457, 1)
+fog_light_energy = 0.0
+fog_density = 0.0
+fog_sky_affect = 0.0
+fog_height = 0.56
+fog_height_density = 0.602
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.0395
+volumetric_fog_albedo = Color(0.24949007, 0.24949007, 0.24949007, 1)
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_gi_inject = 0.3
+volumetric_fog_detail_spread = 2.0705304
+volumetric_fog_temporal_reprojection_enabled = false
 
 [sub_resource type="FogMaterial" id="FogMaterial_2ubu0"]
 density = 8.0
@@ -152,6 +174,21 @@ particles_anim_loop = false
 [sub_resource type="QuadMesh" id="QuadMesh_1cwsm"]
 material = SubResource("StandardMaterial3D_yapfn")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_quxob"]
+render_priority = 5
+shader = ExtResource("8_xnnr5")
+shader_parameter/diffuse_tex = ExtResource("9_ovtcx")
+shader_parameter/normal_map = ExtResource("11_h5d6a")
+shader_parameter/edge_mask = ExtResource("10_nxa0q")
+shader_parameter/edge_strength = 1.0
+shader_parameter/edge_tint = Color(0, 0, 0, 1)
+shader_parameter/normal_tilt = 4.0
+shader_parameter/normal_sensitivity = 1.0
+shader_parameter/flip_normal_y = true
+
+[sub_resource type="QuadMesh" id="QuadMesh_vg5tu"]
+material = SubResource("ShaderMaterial_quxob")
+
 [sub_resource type="Curve" id="Curve_wrvsu"]
 _data = [Vector2(0.0031847134, 0), 0.0, 0.0, 0, 0, Vector2(0.5, 0.99167746), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
 point_count = 3
@@ -187,9 +224,8 @@ scale_curve = SubResource("CurveTexture_qrewn")
 color_ramp = ExtResource("6_ygipt")
 alpha_curve = SubResource("CurveTexture_7jryq")
 hue_variation_curve = SubResource("CurveTexture_vstu2")
-turbulence_enabled = true
-turbulence_noise_strength = 4.95
-turbulence_noise_scale = 3.673
+turbulence_noise_strength = 9.24
+turbulence_noise_scale = 4.128
 turbulence_influence_max = 0.18800001
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3i8j3"]
@@ -227,21 +263,6 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_quxob"]
-render_priority = 5
-shader = ExtResource("8_xnnr5")
-shader_parameter/diffuse_tex = ExtResource("9_ovtcx")
-shader_parameter/normal_map = ExtResource("11_h5d6a")
-shader_parameter/edge_mask = ExtResource("10_nxa0q")
-shader_parameter/edge_strength = 1.0
-shader_parameter/edge_tint = Color(0.012617188, 0.012617188, 0.012617188, 1)
-shader_parameter/normal_tilt = 0.0
-shader_parameter/normal_sensitivity = 0.0
-shader_parameter/flip_normal_y = true
-
-[sub_resource type="QuadMesh" id="QuadMesh_vg5tu"]
-material = SubResource("ShaderMaterial_quxob")
-
 [node name="Map3d" instance=ExtResource("1_xwjaq")]
 level_name = "first fen edition"
 minimum_camera_height = 10.0
@@ -254,6 +275,7 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
 [node name="MovementWeightsGrid" parent="." index="1"]
+visible = false
 data = {
 "cells": PackedInt32Array(65532, 2, 655361, 65533, 2, 655361, 65534, 2, 655361, 65535, 2, 655361, 0, 2, 655361, 1, 2, 655361, 2, 2, 655361, 65533, 1, 655360, 65534, 1, 655360, 65535, 1, 655360, 0, 1, 655360, 1, 1, 655360, 2, 1, 655360, 3, 1, 655360, 4, 1, 655360, 4, 0, 655360, 3, 0, 655360, 2, 0, 655360, 2, 65535, 655361, 0, 65535, 655361, 0, 0, 655360, 1, 0, 655360, 65535, 65535, 655360, 65534, 65535, 655360, 65533, 65535, 655360, 65534, 0, 655360, 65535, 0, 655360, 65533, 0, 655360, 65532, 0, 655360, 65532, 65535, 655360, 65532, 65534, 655360, 65532, 65533, 655361, 65533, 65534, 655360, 65534, 65534, 655360, 65535, 65534, 655360, 5, 1, 655361, 5, 0, 655360, 65532, 1, 655361, 3, 2, 655361, 4, 2, 655361, 5, 2, 655361, 6, 1, 655361, 7, 2, 655361, 6, 2, 655361, 8, 2, 655361, 9, 2, 655361, 9, 1, 655361, 8, 1, 655361, 7, 1, 655361, 8, 0, 655361, 7, 0, 655361, 10, 0, 655361, 9, 0, 655361, 11, 0, 655361, 11, 1, 655361, 65531, 1, 655361, 65531, 0, 655361, 65530, 0, 655361, 65529, 0, 655361, 65529, 65535, 655361, 65530, 65535, 655361, 65530, 65534, 655361, 65531, 65535, 655361, 65531, 65534, 655361, 65531, 65533, 655361, 65530, 65533, 655361, 65530, 65532, 655361, 65529, 65532, 655361, 65529, 65533, 655361, 65529, 65534, 655361, 65531, 65532, 655361, 65532, 65532, 655361, 65532, 65531, 655361, 65533, 65531, 655361, 65533, 65532, 655361, 65534, 65532, 655361, 65535, 65532, 655361, 65535, 65531, 655361, 65534, 65531, 655361, 2, 65533, 655361, 1, 65534, 655361, 0, 65534, 655361, 3, 65533, 655361, 3, 65534, 655361, 3, 65535, 655361, 4, 65535, 655361, 5, 65535, 655361, 6, 65534, 655361, 7, 65534, 655361, 5, 65534, 655361, 4, 65534, 655361, 4, 65533, 655361, 4, 65532, 655361, 3, 65532, 655361, 2, 65532, 655361, 1, 65532, 655361, 0, 65532, 655361, 9, 65534, 655361, 8, 65534, 655361, 6, 0, 655360, 6, 65535, 655360, 7, 65535, 655360, 8, 65535, 655360, 9, 65535, 655360, 10, 65535, 655360, 11, 65535, 655360, 12, 65535, 655360, 12, 0, 655360, 13, 0, 655360, 14, 0, 655360, 15, 0, 655360, 16, 0, 655360, 17, 0, 655360, 17, 65535, 655360, 18, 65535, 655360, 16, 65535, 655360, 17, 65534, 655360, 17, 65533, 655360, 16, 65533, 655360, 12, 1, 655361, 13, 1, 655361, 14, 1, 655361, 15, 1, 655361, 15, 65535, 655361, 15, 65534, 655361, 16, 65534, 655361, 14, 65534, 655361, 14, 65533, 655361, 15, 65533, 655361, 13, 65533, 655361, 12, 65533, 655361, 11, 65533, 655361, 10, 65533, 655361, 11, 65534, 655361, 12, 65534, 655361, 13, 65534, 655361, 13, 65535, 655361, 14, 65535, 655361, 2, 65534, 655361, 19, 1, 0, 18, 1, 0, 18, 0, 0, 19, 0, 0, 19, 65535, 0, 18, 65534, 0, 19, 65534, 1, 65556, 65534, 1441792, 65556, 65535, 1441792, 65556, 0, 1441792, 65557, 65534, 1441792, 65557, 65535, 1441792, 65557, 0, 1441792, 65557, 1, 1441792, 65558, 1, 1441792, 65558, 2, 1441792, 65561, 1, 1441792, 65561, 0, 1441792, 65561, 65535, 1441792, 65560, 65535, 1441792, 65559, 65535, 1441792, 65558, 65535, 1441792, 65566, 1, 1441792, 65565, 1, 1441792, 65564, 1, 1441792, 65563, 1, 1441792, 65562, 1, 1441792, 65566, 2, 1441792, 65565, 2, 1441792, 65567, 2, 1441792, 65567, 1, 1441792, 65567, 0, 1441792, 65567, 65535, 1441792, 65566, 65535, 1441792, 65568, 65535, 1441792, 65568, 65534, 1441792, 65569, 65534, 1441792, 65570, 65534, 1441792, 65571, 65535, 1441792, 65570, 65535, 1441792, 65569, 65535, 1441792, 65568, 0, 1441792, 65568, 1, 1441792, 65568, 2, 1441792, 65569, 2, 1441792, 65570, 2, 1441792, 65570, 1, 1441792, 65569, 1, 1441792, 65571, 1, 1441792, 65571, 0, 1441792, 65570, 0, 1441792, 65572, 65535, 1441792, 65567, 65534, 1441793, 65566, 65534, 1441793, 65565, 65534, 1441793, 65565, 65535, 1441793, 65565, 0, 1441793, 65564, 0, 1441793, 65563, 0, 1441793, 65562, 0, 1441793, 65562, 65535, 1441793, 65563, 65535, 1441793, 65564, 65535, 1441793, 65564, 65534, 1441793, 65564, 65533, 1441793, 65566, 65532, 1441793, 65567, 65532, 1441793, 65568, 65532, 1441793, 65568, 65533, 1441793, 65569, 65532, 1441793, 65570, 65532, 1441793, 65571, 65532, 1441793, 65571, 65533, 1441793, 65571, 65534, 1441793, 65570, 65533, 1441793, 65573, 65535, 1441793, 65574, 65535, 1441793, 65575, 65535, 1441793, 65576, 65535, 1441793, 65576, 0, 1441793, 65576, 1, 1441793, 65576, 2, 1441793, 65576, 3, 1441793, 65575, 3, 1441793, 65574, 3, 1441793, 65573, 3, 1441793, 65572, 3, 1441793, 65572, 2, 1441793, 65572, 1, 1441793, 65573, 1, 1441793, 65574, 1, 1441793, 65574, 0, 1441793, 65573, 0, 1441793, 65575, 0, 1441793, 65575, 1, 1441793, 65575, 2, 1441793, 65574, 2, 1441793, 65573, 2, 1441793, 65571, 2, 1441793, 65571, 3, 1441793, 65571, 4, 1441793, 65570, 4, 1441793, 65570, 3, 1441793, 65573, 4, 1441793, 65573, 5, 1441793, 65572, 5, 1441793, 65571, 5, 1441793, 65570, 5, 1441793, 65572, 4, 1441793, 65569, 4, 1441793, 65568, 3, 1441793, 65567, 3, 1441793, 65566, 3, 1441793, 65565, 3, 1441793, 65564, 3, 1441793, 65564, 4, 1441793, 65565, 4, 1441793, 65566, 4, 1441793, 65564, 2, 1441793, 65563, 2, 1441793, 65562, 2, 1441793, 65561, 2, 1441793, 65560, 2, 1441793, 65559, 2, 1441793, 65559, 1, 1441793, 65558, 0, 1441793, 65559, 0, 1441793, 65560, 0, 1441793, 65560, 1, 1441793, 65558, 65534, 1441793, 65559, 65534, 1441793, 131096, 65534, 1441792, 131097, 65534, 1441792, 131098, 65534, 1441792, 131099, 65534, 1441792, 131098, 65533, 1441792, 131099, 65533, 1441792, 131097, 65533, 1441793, 131096, 65533, 1441793, 131095, 65533, 1441793, 131094, 65533, 1441793, 131093, 65533, 1441793, 131092, 65533, 1441793, 131091, 65533, 1441792, 131091, 65532, 1441792, 131090, 65532, 1441792, 131089, 65532, 1441792, 131088, 65532, 1441792, 131087, 65532, 1441792, 131086, 65532, 1441792, 131085, 65532, 1441792, 131084, 65532, 1441792, 131083, 65532, 1441792, 131082, 65532, 1441792, 131081, 65532, 1441792, 131081, 65533, 1441792, 131080, 65533, 1441792, 131079, 65533, 1441792, 131078, 65533, 1441792, 131077, 65533, 1441792, 131077, 65532, 1441792, 131077, 65531, 1441792, 131076, 65531, 1441792, 131075, 65531, 1441792, 131074, 65531, 1441792, 131073, 65531, 1441792, 131072, 65531, 1441792, 131112, 65534, 1441793, 131111, 65534, 1441793, 131110, 65534, 1441793, 131109, 65534, 1441793, 131108, 65534, 1441793, 131108, 65533, 1441793, 131108, 65532, 1441793, 131108, 65531, 1441793, 131101, 65532, 1441793, 131101, 65531, 1441793, 131102, 65531, 1441793, 131103, 65531, 1441793, 131104, 65531, 1441793, 131105, 65531, 1441793, 131106, 65531, 1441793, 131107, 65531, 1441793)
 }
@@ -261,13 +283,13 @@ metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="OccupancyOverlay" parent="." index="2"]
 data = {
-"cells": PackedInt32Array(65534, 65535, 0, 65535, 65535, 0, 65535, 65534, 0, 65529, 65534, 4, 65535, 0, 0, 65534, 0, 0, 65533, 0, 0, 65529, 65533, 5)
+"cells": PackedInt32Array(65529, 65534, 4, 65529, 65533, 5, 17, 65535, 0, 16, 65535, 0, 16, 0, 0, 15, 65535, 0, 15, 0, 0, 17, 65534, 0, 8, 65535, 5, 5, 0, 4)
 }
 
 [node name="TriggerOverlay" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.43, 0)
 data = {
-"cells": PackedInt32Array(1, 65534, 0, 65570, 65535, 0, 65570, 0, 0, 65570, 1, 0, 65569, 1, 0, 65568, 1, 0, 65568, 0, 0, 65568, 65535, 0, 65569, 65535, 0)
+"cells": PackedInt32Array(65570, 65535, 0, 65570, 0, 0, 65570, 1, 0, 65569, 1, 0, 65568, 1, 0, 65568, 0, 0, 65568, 65535, 0, 65569, 65535, 0)
 }
 
 [node name="MovementOverlay" parent="." index="4"]
@@ -289,11 +311,62 @@ transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4
 visible = true
 no_depth_test = false
 
-[node name="DirectionalLight3D" parent="Lights" index="3"]
+[node name="WorldEnvironment" parent="." index="11"]
+environment = SubResource("Environment_u2wd5")
+
+[node name="Lamp" parent="Lights" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.670338, 2.7036004, 2.237699)
+visible = true
+light_color = Color(0.92156863, 0.78431374, 0.48235294, 1)
+light_energy = 11.192
+light_indirect_energy = 0.588
+light_volumetric_fog_energy = 0.452
+omni_range = 11.3858185
+
+[node name="Lamp2" parent="Lights" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.272133, 1.949902, 2.7793136)
+light_color = Color(1, 0.9019608, 0.54509807, 1)
+omni_range = 13.993263
+
+[node name="Lamp3" parent="Lights" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.13447, -1.6432605, 4.7953854)
+visible = true
+light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
+light_energy = 1.207
+omni_range = 5.179
+
+[node name="Lamp4" type="OmniLight3D" parent="Lights" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.79294, -0.79151535, -4.5395775)
+light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
+light_energy = 1.207
+shadow_enabled = true
+omni_range = 8.426303
+
+[node name="Lamp5" type="OmniLight3D" parent="Lights" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.423065, -0.79151535, 0.16459882)
+light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
+light_energy = 3.169
+shadow_enabled = true
+omni_range = 6.3741245
+
+[node name="Lamp6" type="OmniLight3D" parent="Lights" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.34454, -1.3571138, 0.15665781)
+light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
+light_energy = 2.415
+shadow_enabled = true
+omni_range = 5.2330184
+
+[node name="DirectionalLight3D" parent="Lights" index="6"]
 light_color = Color(0.7162962, 0.7162962, 0.7162962, 1)
 light_energy = 0.501
 light_indirect_energy = 0.352
 light_volumetric_fog_energy = 0.0
+
+[node name="OmniLight3D" parent="Lights" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.23863, -0.42855263, -0.008448482)
+visible = true
+light_color = Color(0.40784314, 1, 0.7019608, 1)
+light_energy = 0.335
 
 [node name="Fog WIP" type="FogVolume" parent="Particles" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.440939, 6.2290134, -5.168091)
@@ -325,18 +398,70 @@ lifetime = 3.0
 process_material = SubResource("ParticleProcessMaterial_6k23p")
 draw_pass_1 = SubResource("QuadMesh_1cwsm")
 
+[node name="Orb_Intro" type="Node3D" parent="Particles/Orb" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7640228, -3.1157837, -0.767671)
+
+[node name="Orb" type="MeshInstance3D" parent="Particles/Orb/Orb_Intro" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.6226785, 0.7824778, 0, -0.7824778, 0.6226785, -0.7192459, 2.9517221, 0.6498735)
+sorting_offset = 1.1
+cast_shadow = 0
+gi_mode = 0
+mesh = SubResource("QuadMesh_vg5tu")
+skeleton = NodePath("")
+script = ExtResource("12_roefr")
+
 [node name="Fireflies" type="Node3D" parent="Particles" index="3"]
 
 [node name="Particles" type="Node3D" parent="Particles/Fireflies" index="0"]
 
 [node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles" index="0"]
-transform = Transform3D(4.4691944, 0, 0, 0, 0.96094286, 0, 0, 0, 3.1751602, 2.241094, 5.206482, -2.3762107)
-amount = 20
+transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
+amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles2" type="Node3D" parent="Particles/Fireflies" index="1"]
+[node name="Particles3" type="Node3D" parent="Particles/Fireflies" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.432861, 9.536743e-07, -3.6942549)
+
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles3" index="0"]
+transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
+amount = 15
+lifetime = 2.11
+process_material = SubResource("ParticleProcessMaterial_s3ueo")
+draw_pass_1 = SubResource("QuadMesh_np4w8")
+
+[node name="Particles4" type="Node3D" parent="Particles/Fireflies" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.431442, 9.536743e-07, 3.803968)
+
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles4" index="0"]
+transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
+amount = 15
+lifetime = 2.11
+process_material = SubResource("ParticleProcessMaterial_s3ueo")
+draw_pass_1 = SubResource("QuadMesh_np4w8")
+
+[node name="Particles5" type="Node3D" parent="Particles/Fireflies" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.64444, 1.7684164, -0.5853262)
+
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles5" index="0"]
+transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -1.5849228, 3.0587149, -2.6563263)
+amount = 15
+lifetime = 2.11
+process_material = SubResource("ParticleProcessMaterial_s3ueo")
+draw_pass_1 = SubResource("QuadMesh_np4w8")
+
+[node name="Particles6" type="Node3D" parent="Particles/Fireflies" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.13668, 2.5801983, 8.03256)
+
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles6" index="0"]
+transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
+amount = 15
+lifetime = 2.11
+process_material = SubResource("ParticleProcessMaterial_s3ueo")
+draw_pass_1 = SubResource("QuadMesh_np4w8")
+
+[node name="Particles2" type="Node3D" parent="Particles/Fireflies" index="5"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.402056, 0, -1.3699706)
 
 [node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles2" index="0"]
@@ -358,14 +483,55 @@ visible = false
 ranged_attack_scene = ExtResource("9_6eqfw")
 melee_attack_scene = ExtResource("10_u2wd5")
 
-[node name="Orb_Intro" type="Node3D" parent="." index="16"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 67.70415, 1.0557723, 0.23919928)
+[node name="Scatterables" type="Node3D" parent="." index="17"]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)
 
-[node name="Orb" type="MeshInstance3D" parent="Orb_Intro" index="0"]
-transform = Transform3D(1, 0, 0, 0, 0.6226785, 0.7824778, 0, -0.7824778, 0.6226785, -0.7192459, 2.9517221, 0.6498735)
-sorting_offset = 1.1
-cast_shadow = 0
-gi_mode = 0
-mesh = SubResource("QuadMesh_vg5tu")
-skeleton = NodePath("")
-script = ExtResource("12_roefr")
+[node name="GrassMesh" type="MeshInstance3D" parent="Scatterables" index="0"]
+mesh = ExtResource("16_xnnr5")
+skeleton = NodePath("../..")
+
+[node name="GrassMesh2" type="MeshInstance3D" parent="Scatterables" index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.840391, 0, 3.223936)
+mesh = ExtResource("16_xnnr5")
+skeleton = NodePath("../..")
+
+[node name="GrassMesh3" type="MeshInstance3D" parent="Scatterables" index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.296736, 0, -5.3271265)
+mesh = ExtResource("16_xnnr5")
+skeleton = NodePath("../..")
+
+[node name="GrassMesh4" type="MeshInstance3D" parent="Scatterables" index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.026525, 0, 0.5633981)
+mesh = ExtResource("16_xnnr5")
+skeleton = NodePath("../..")
+
+[node name="GrassMesh5" type="MeshInstance3D" parent="Scatterables" index="4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.65063, 1, -4.369963)
+mesh = ExtResource("16_xnnr5")
+
+[node name="GrassMesh6" type="MeshInstance3D" parent="Scatterables" index="5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.380703, 1, -3.4117384)
+mesh = ExtResource("16_xnnr5")
+
+[node name="GrassMesh7" type="MeshInstance3D" parent="Scatterables" index="6"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.10535, 1, -10.215845)
+mesh = ExtResource("16_xnnr5")
+
+[node name="GrassMesh8" type="MeshInstance3D" parent="Scatterables" index="7"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.71364, 0.99999905, -12.248171)
+mesh = ExtResource("16_xnnr5")
+
+[node name="Vine2Mesh" type="MeshInstance3D" parent="Scatterables" index="8"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.750145, 0.9395361, 1.2234058)
+mesh = ExtResource("17_ovtcx")
+
+[node name="Vine2Mesh2" type="MeshInstance3D" parent="Scatterables" index="9"]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -59.724022, 1.0681987, 2.2893815)
+mesh = ExtResource("17_ovtcx")
+
+[node name="Vine1Mesh" type="MeshInstance3D" parent="." index="18"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.963726, 1.3589392, -6.071386)
+mesh = ExtResource("18_nxa0q")
+
+[node name="CameraStartPos" type="Node3D" parent="." index="19"]
+unique_name_in_owner = true

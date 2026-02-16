@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://mc5u6gfquy7q"]
+[gd_scene load_steps=45 format=3 uid="uid://mc5u6gfquy7q"]
 
 [ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_akwul"]
 [ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_uhntr"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="12_w357l"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="13_y13he"]
 [ext_resource type="Shader" uid="uid://b5ptog53u0l54" path="res://art/WIP/Materials and Shaders/ScreenEffects_Ultimate.tres" id="14_dsruw"]
+[ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="15_y13he"]
 [ext_resource type="PackedScene" uid="uid://ddvscfqfihmwr" path="res://scenes/Development/Particles/hit_particle.tscn" id="16_6lhpm"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="17_w357l"]
 
@@ -276,18 +277,7 @@ mesh = SubResource("QuadMesh_0ucq8")
 skeleton = NodePath("")
 script = ExtResource("13_y13he")
 
-[node name="Fireflies" type="Node3D" parent="."]
-visible = false
-
-[node name="Particles" type="Node3D" parent="Fireflies"]
-
-[node name="Firefly" type="GPUParticles3D" parent="Fireflies/Particles"]
-transform = Transform3D(3.2621775, 0, 0, 0, 3.2621775, 0, 0, 0, 3.2621775, 0.9525676, 3.1733303, -0.9017568)
-cast_shadow = 0
-amount = 20
-lifetime = 2.11
-process_material = SubResource("ParticleProcessMaterial_d1qpj")
-draw_pass_1 = SubResource("QuadMesh_er3k5")
+[node name="Fireflies" parent="." instance=ExtResource("15_y13he")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1.250097, 15.881016, 5.8819647)

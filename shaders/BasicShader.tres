@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://ce01hqrh5eoct"]
+
+[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_giv56"]
+[ext_resource type="Texture2D" uid="uid://dnfmcug0fuede" path="res://art/meshes/OtherAssets.png" id="2_tkjys"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_giv56")
+shader_parameter/diffuse_tex = ExtResource("2_tkjys")
+shader_parameter/colorTint = Color(1, 1, 1, 1)
