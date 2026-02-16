@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene load_steps=52 format=3 uid="uid://kkgvyut22uqr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
@@ -6,13 +6,11 @@
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
-[ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="9_6eqfw"]
 [ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_ovtcx"]
 [ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="10_nxa0q"]
-[ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="10_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="11_h5d6a"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="12_roefr"]
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="16_xnnr5"]
@@ -472,10 +470,6 @@ visible = false
 [node name="Smog2" parent="Particles" index="5" instance=ExtResource("8_kofws")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
-
-[node name="CombatVFXController" parent="." index="14"]
-ranged_attack_scene = ExtResource("9_6eqfw")
-melee_attack_scene = ExtResource("10_u2wd5")
 
 [node name="CameraSettings" parent="." index="16"]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 33, 0, -1)
