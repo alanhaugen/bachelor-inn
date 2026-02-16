@@ -124,6 +124,7 @@ func _process(delta: float) -> void:
 
 
 func _process_pivot(delta: float) -> void:
+	delta = min(delta, 0.04)
 	var weight: float = 1 - pow(_lerp_weight, delta)
 	pivot.transform.origin = pivot.transform.origin.lerp(
 			_pivot_target_transform.origin,
