@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
 [ext_resource type="PackedScene" uid="uid://c4b8f02hyixcc" path="res://scenes/userinterface/InGameUI_WIP.tscn" id="11_06w7e"]
 [ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="11_85lyy"]
-[ext_resource type="PackedScene" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
+[ext_resource type="PackedScene" uid="uid://d4b4a1hbdjh6j" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
 [ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="12_vltbs"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
@@ -152,3 +152,4 @@ melee_attack_scene = ExtResource("12_vltbs")
 [node name="GUI" parent="." instance=ExtResource("11_06w7e")]
 
 [node name="CameraSettings" parent="." instance=ExtResource("12_2iq81")]
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0)
