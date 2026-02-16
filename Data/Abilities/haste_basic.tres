@@ -8,4 +8,5 @@ skill_id = "haste_basic"
 skill_name = "haste_basic"
 tooltip = "Increases the movement range of a target unit."
 speed_bonus = 1
+duration_turns = 2
 metadata/_custom_type_script = "uid://c3p07am3ababr"

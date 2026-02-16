@@ -1,10 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://byl1oxmtxjlp8"]
+[gd_scene format=3 uid="uid://byl1oxmtxjlp8"]
 
 [ext_resource type="PackedScene" path="res://scenes/levels/LevelTemplate.tscn" id="1_ai64h"]
 
 [sub_resource type="MeshLibrary" id="MeshLibrary_ai64h"]
 
-[node name="Map3d" instance=ExtResource("1_ai64h")]
+[node name="Map3d" unique_id=1032230894 instance=ExtResource("1_ai64h")]
 
 [node name="MovementWeightsGrid" parent="." index="1"]
 mesh_library = SubResource("MeshLibrary_ai64h")
@@ -25,7 +25,7 @@ data = {
 "cells": PackedInt32Array(1, 65535, 1179649, 1, 0, 1179649)
 }
 
-[node name="PathOverlay" parent="." index="5"]
+[node name="PathOverlay" parent="." index="6"]
 data = {
 "cells": PackedInt32Array(1, 65533, 1179649)
 }
