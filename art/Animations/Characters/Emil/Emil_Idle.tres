@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://ckms4h2b0o7c3"]
+
+[ext_resource type="Texture2D" uid="uid://dbuf80y04p0nk" path="res://art/Animations/Characters/Emil/Tex/D_emilstill_basecolourl.png" id="1_5ruun"]
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_8syhx"]
+[ext_resource type="Texture2D" uid="uid://dkxdvp72eojfo" path="res://art/Animations/Characters/Emil/Tex/D_emilstill_edge4.png" id="2_ke61l"]
+[ext_resource type="Texture2D" uid="uid://cp736otegxtq8" path="res://art/Animations/Characters/Emil/Tex/D_emilstill_normals.png" id="3_7xtfw"]
+
+[resource]
+script = ExtResource("1_8syhx")
+diffuse_atlas = ExtResource("1_5ruun")
+normal_atlas = ExtResource("3_7xtfw")
+mask_atlas = ExtResource("2_ke61l")
+frame_columns = 1
+metadata/_custom_type_script = "uid://c876dul20yd5j"

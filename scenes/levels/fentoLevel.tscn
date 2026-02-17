@@ -38,8 +38,8 @@ data = {
 }
 
 [node name="DirectionalLight3D" parent="Lights" index="3"]
-light_color = Color(0.7162962, 0.7162962, 0.7162962, 1)
-light_energy = 0.501
+light_color = Color(1, 0.76862746, 0.60784316, 1)
+light_energy = 0.8
 light_indirect_energy = 0.352
 light_volumetric_fog_energy = 0.0
 
