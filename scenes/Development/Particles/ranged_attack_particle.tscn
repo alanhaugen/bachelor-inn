@@ -7,7 +7,8 @@
 render_priority = 0
 shader = ExtResource("1_xl5xg")
 shader_parameter/diffuse_tex = ExtResource("2_bdpgj")
-shader_parameter/colorTint = Color(2.184344, 1.8180914, 1.5267541, 1)
+shader_parameter/colorTint = Color(1.6518712, 0.9489926, 4.100857e-05, 1)
+shader_parameter/clippingMask = 0.150000007125
 
 [sub_resource type="QuadMesh" id="QuadMesh_fr0lo"]
 material = SubResource("ShaderMaterial_5d4l2")

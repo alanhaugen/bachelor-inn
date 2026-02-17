@@ -61,6 +61,10 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	unit.state.is_moved = true;
 	
 	move.execute(new_state, simulate_only);
+
+	move.prepare(new_state, simulate_only)
+	move.apply_damage(new_state)
+
 	
 	if new_state.no_units_remaining():
 		new_state.end_turn();

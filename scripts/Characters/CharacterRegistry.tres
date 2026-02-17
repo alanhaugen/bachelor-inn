@@ -1,44 +1,16 @@
-[gd_resource type="Resource" script_class="CharacterRegistry" load_steps=14 format=3 uid="uid://ctkbvcilsv633"]
+[gd_resource type="Resource" script_class="CharacterRegistry" load_steps=6 format=3 uid="uid://ctkbvcilsv633"]
 
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="1_far1n"]
 [ext_resource type="Resource" uid="uid://dhdymgaw357sb" path="res://scripts/Characters/Def_Alfred.tres" id="2_far1n"]
 [ext_resource type="Resource" uid="uid://dbkk31say6g4i" path="res://scripts/Characters/Def_Lucy.tres" id="3_440dy"]
-[ext_resource type="Resource" uid="uid://bsae7c5rxyhqs" path="res://scripts/Characters/Def_Billy.tres" id="4_440dy"]
-[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="4_enylw"]
+[ext_resource type="Resource" uid="uid://bc2h11fdxqmbc" path="res://scripts/Characters/Def_Emil.tres" id="4_440dy"]
 [ext_resource type="Script" uid="uid://ds4wpawmu15iw" path="res://scripts/Characters/character_registry.gd" id="4_qg64p"]
-[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="5_cfqt1"]
-[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="6_xv64h"]
-[ext_resource type="Resource" uid="uid://c1b3txa4fyxec" path="res://Data/Weapons/axe_basic.tres" id="8_cfqt1"]
-[ext_resource type="PackedScene" uid="uid://crgdpyhxu1t8u" path="res://scenes/Characters/Ghost_Enemy.tscn" id="9_xv64h"]
-
-[sub_resource type="Resource" id="Resource_cfqt1"]
-script = ExtResource("4_enylw")
-unit_name = "bobby"
-speciality = 2
-personality = 19
-strength = 1
-focus = 6
-endurance = 10
-metadata/_custom_type_script = "uid://cfb66ehlpe84n"
-
-[sub_resource type="Resource" id="Resource_xv64h"]
-script = ExtResource("5_cfqt1")
-weapon = ExtResource("8_cfqt1")
-metadata/_custom_type_script = "uid://dnpndvvrnj26q"
-
-[sub_resource type="Resource" id="Resource_uphhp"]
-script = ExtResource("1_far1n")
-scene = ExtResource("9_xv64h")
-base_data = SubResource("Resource_cfqt1")
-base_state = SubResource("Resource_xv64h")
-metadata/_custom_type_script = "uid://csv21vgg7ba7q"
 
 [resource]
 script = ExtResource("4_qg64p")
 characters = Dictionary[String, ExtResource("1_far1n")]({
 "alfred": ExtResource("2_far1n"),
-"billy": ExtResource("4_440dy"),
-"bobby": SubResource("Resource_uphhp"),
+"emil": ExtResource("4_440dy"),
 "lucy": ExtResource("3_440dy")
 })
 metadata/_custom_type_script = "uid://ds4wpawmu15iw"

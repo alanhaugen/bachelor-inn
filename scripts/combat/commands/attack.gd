@@ -16,7 +16,7 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -
 
 
 
-func prepare(state : GameState) -> void:
+func prepare(state : GameState, simulate_only: bool = false) -> void:
 	result = AttackResult.new()
 
 	var aggressor : Character = state.get_unit(start_pos);
@@ -45,18 +45,19 @@ func prepare(state : GameState) -> void:
 	var attack_strength :int = max(1, (aggressor.data.strength + weapon_damage) - (victim.state.defense / 2));
 
 	# Critical logic
-	@warning_ignore("integer_division")
-	if (randi_range(0,100) < (aggressor.data.focus / 2) + weapon_crit):
-		Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
-		print("Critical hit!");
-		result.was_critical = true;
-		attack_strength *= 2;
+	if simulate_only == false:
+		@warning_ignore("integer_division")
+		if (randi_range(0,100) < (aggressor.data.focus / 2) + weapon_crit):
+			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
+			print("Critical hit!");
+			result.was_critical = true;
+			attack_strength *= 2;
 	
 	result.damage = attack_strength
 
 
-# never called if its a ranged attack???? seems to be a timing issue
-func apply_damage(state: GameState) -> void:
+
+func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
 	

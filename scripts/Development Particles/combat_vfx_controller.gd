@@ -65,8 +65,7 @@ func _spawn_melee_attack(attacker : Character, target : Character, result: Attac
 	slice.rotation_degrees.y -= 60.0
 	
 	var tween: = slice.create_tween()
-	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	
+
 	tween.tween_property(
 		slice, 
 		"rotation_degrees:y", 

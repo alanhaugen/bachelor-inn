@@ -772,6 +772,7 @@ func _process_old(delta: float) -> void:
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))
+
 			
 			var code := enemy_code;
 			if is_player_turn:
@@ -780,6 +781,7 @@ func _process_old(delta: float) -> void:
 			occupancy_map.set_cell_item(active_move.end_pos, code);
 			selected_unit.move_to(active_move.end_pos);
 			selected_unit.pause_anim()
+			camera_controller.free_camera()
 			_clear_selection()
 
 			completed_moves.append(active_move);
@@ -787,6 +789,8 @@ func _process_old(delta: float) -> void:
 			
 			if is_player_turn == false:
 				MoveAI(); # called after an enemy is done moving
+				
+
 			
 			if (moves_stack.is_empty() == false):
 				#called after any enemy except the final enemy is done moving

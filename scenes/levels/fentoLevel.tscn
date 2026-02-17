@@ -5,8 +5,6 @@
 
 [node name="Map3d" instance=ExtResource("1_bwofp")]
 level_name = "first fen edition"
-minimum_camera_height = 10.0
-maximum_camera_height = 30.0
 
 [node name="TerrainGrid" parent="." index="0"]
 data = {
@@ -34,13 +32,9 @@ data = {
 "cells": PackedInt32Array(1, 65533, 1179649)
 }
 
-[node name="Camera3D" parent="." index="7"]
-transform = Transform3D(1, 0, 0, 0, 0.64278764, 0.76604444, 0, -0.76604444, 0.64278764, -2.8392298, 15.881016, 9.044029)
-fov = 35.0
-
 [node name="DirectionalLight3D" parent="Lights" index="3"]
-light_color = Color(0.7162962, 0.7162962, 0.7162962, 1)
-light_energy = 0.501
+light_color = Color(1, 0.76862746, 0.60784316, 1)
+light_energy = 0.8
 light_indirect_energy = 0.352
 light_volumetric_fog_energy = 0.0
 

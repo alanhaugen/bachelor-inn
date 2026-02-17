@@ -8,6 +8,7 @@ render_priority = 0
 shader = ExtResource("1_iyie4")
 shader_parameter/diffuse_tex = ExtResource("2_iyie4")
 shader_parameter/colorTint = Color(2.5210483, 2.5210483, 2.5210483, 1)
+shader_parameter/clippingMask = 0.03600000171
 
 [sub_resource type="QuadMesh" id="QuadMesh_hu7jt"]
 material = SubResource("ShaderMaterial_i6lff")
@@ -15,5 +16,5 @@ material = SubResource("ShaderMaterial_i6lff")
 [node name="MAIN" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1.3113416e-07, -2.9999998, -4.3711385e-08, 0, -1.3113416e-07, 0.99999994, -2.9999998, 1.3113416e-07, 1.9106853e-15, 0, 0.14175403, -0.0737797)
+transform = Transform3D(-0.13587981, -2.9969206, -4.3666528e-08, 0, -1.3113416e-07, 0.99999994, -2.9969206, 0.13587981, 1.9798314e-09, 0, 0.14175403, -0.0737797)
 mesh = SubResource("QuadMesh_hu7jt")
