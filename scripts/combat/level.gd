@@ -496,7 +496,7 @@ func _ready() -> void:
 		var new_unit: Character = null
 
 		match get_unit_name(pos):
-			"Unit":
+			"00_Unit":
 				if characters_placed < Main.characters.size():
 					new_unit = Main.characters[characters_placed]
 					new_unit.state.is_moved = false
@@ -513,7 +513,7 @@ func _ready() -> void:
 				else:
 					occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
-			"Enemy", "EnemyBird", "EnemyGhost":
+			"01_Enemy", "04_EnemyBird", "05_EnemyGhost", "06_EnemyMonster":
 				new_unit = (
 					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
 					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
@@ -528,13 +528,11 @@ func _ready() -> void:
 				new_unit.state = c_state
 				new_unit.data.unit_name = monster_names.pick_random()
 
-			"Chest":
+			"02_Chest":
 				var chest := CHEST.instantiate()
 				chest.position = grid_to_world(pos)
 				add_child(chest)
 
-			"VictoryTrigger":
-				pass
 
 			_:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
@@ -627,7 +625,7 @@ func CheckVictoryConditions() -> void:
 	for i in units.size():
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
-			if get_trigger_name(pos) == "Victory":
+			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
 				next_level();
 				return;

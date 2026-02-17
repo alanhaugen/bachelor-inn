@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="Texture2D" uid="uid://7t6w4fwhg0q6" path="res://art/textures/NobleNightsLogo_BorderBluePink.png" id="4_fj817"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
-[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]

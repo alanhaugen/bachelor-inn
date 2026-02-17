@@ -1,6 +1,6 @@
 class_name CharacterStates
 extends RefCounted
 
-const Player := "Unit";
-const Enemy := "Enemy";
-const PlayerDone := "UnitDone"
+const Player := "00_Unit";
+const Enemy := "01_Enemy";
+const PlayerDone := "03_UnitDone"
