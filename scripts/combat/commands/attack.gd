@@ -57,7 +57,7 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 
 
 
-func apply_damage(state: GameState , simulate_only: bool = false) -> void:
+func apply_damage(state: GameState , _simulate_only: bool = false) -> void:
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
 	

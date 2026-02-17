@@ -703,7 +703,8 @@ func _process_old(delta: float) -> void:
 		turn_transition.show()
 		camera_controller.lock_camera()
 		return;
-		
+	if(!combat_vfx.is_finished()):
+		return
 	#for i in Main.characters.size():
 		#update_side_bar(Main.characters[i], side_bar_array[i]);
 		

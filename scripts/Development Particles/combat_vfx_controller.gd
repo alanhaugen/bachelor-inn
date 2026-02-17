@@ -6,6 +6,8 @@ class_name CombatVFXController
 @export var ranged_attack_scene : PackedScene
 @export var melee_attack_scene  : PackedScene
 
+var _is_aniamting_attack : bool = false;
+
 func play_attack(result : AttackResult) -> void:
 	if result == null:
 		return
@@ -64,6 +66,7 @@ func _spawn_melee_attack(attacker : Character, target : Character, result: Attac
 	slice.look_at(end_pos, Vector3.UP)
 	slice.rotation_degrees.y -= 60.0
 	
+	_is_aniamting_attack = true;
 	var tween: = slice.create_tween()
 
 	tween.tween_property(
@@ -79,6 +82,7 @@ func _spawn_melee_attack(attacker : Character, target : Character, result: Attac
 	_spawn_hit_particles(target)
 	_spawn_dmg_number_scene(result)
 	_trigger_hit_flash(target, result.was_critical)
+	_is_aniamting_attack = false;
 	
 func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
 	if not ranged_attack_scene:
@@ -92,6 +96,7 @@ func _spawn_ranged_attack(attacker : Character, target : Character, result: Atta
 	projectile.global_position = start_pos
 	projectile.look_at(end_pos, Vector3.UP)
 	
+	_is_aniamting_attack = true;
 	var tween: = projectile.create_tween()
 	
 	tween.tween_property(
@@ -105,8 +110,10 @@ func _spawn_ranged_attack(attacker : Character, target : Character, result: Atta
 	_spawn_hit_particles(target)
 	_spawn_dmg_number_scene(result)
 	_trigger_hit_flash(target, result.was_critical)
+	_is_aniamting_attack = false;
 	
-	
+func is_finished() -> bool:
+	return !_is_aniamting_attack
 	
 	
 	
