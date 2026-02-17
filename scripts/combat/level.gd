@@ -515,8 +515,8 @@ func _ready() -> void:
 
 			"01_Enemy", "04_EnemyBird", "05_EnemyGhost", "06_EnemyMonster":
 				new_unit = (
-					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
-					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
+					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "04_EnemyBird"
+					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "05_EnemyGhost"
 					else PLAYER.instantiate()
 				)
 
