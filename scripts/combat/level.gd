@@ -94,6 +94,8 @@ var move_code: int = 1
 
 var is_using_ability: bool = false
 
+var is_enemy_turn: bool = false
+
 #region Camera
 var camera_controller : CameraController
 #endregion
@@ -172,15 +174,15 @@ func select_next_character() -> void:
 		return
 
 	if selected_unit == null:
-		select_unit(list[0])
+		try_select_unit(list[0])
 		return
 	var index := list.find(selected_unit)
 	if index == -1:
-		select_unit(list[0])
+		try_select_unit(list[0])
 		return
 
 	var next_index := (index + 1) % list.size()
-	select_unit(list[next_index])
+	try_select_unit(list[next_index])
 
 
 func get_grid_cell_from_mouse() -> Vector3i:
@@ -277,6 +279,8 @@ func _can_handle_input(event: InputEvent) -> bool:
 	##old
 	#if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
 		#return false
+	if not is_player_turn:
+		return false
 	
 	if state == States.ANIMATING:
 		return false
@@ -328,6 +332,19 @@ func _is_invalid_tile(pos: Vector3i) -> bool:
 	return get_tile_name(pos) == "Water"
 
 
+func can_handle_ui_input() -> bool:
+		return(
+			is_player_turn
+			and state == States.PLAYING
+			and not is_in_menu
+		)
+		
+func try_select_unit(unit: Character) -> void:
+	if not can_handle_ui_input():
+		return
+	
+	select_unit(unit)
+	
 func select_unit(unit: Character) -> void:
 	# Switching unit
 	_clear_selection()
@@ -767,11 +784,15 @@ func _process_old(delta: float) -> void:
 			active_move.prepare(game_state)
 			await combat_vfx.play_attack(active_move.result)
 			active_move.apply_damage(game_state)
-
+			
+			#looks like this is end of player turn! 
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))
-
+				for character in Main.characters:
+					if characters == null: 
+						return
+					emit_signal("character_stats_changed", character)
 			
 			var code := enemy_code;
 			if is_player_turn:
@@ -788,7 +809,10 @@ func _process_old(delta: float) -> void:
 			
 			if is_player_turn == false:
 				MoveAI(); # called after an enemy is done moving
-				
+				for character in Main.characters:
+					if characters == null: 
+						return
+					emit_signal("character_stats_changed", character)
 
 			
 			if (moves_stack.is_empty() == false):

@@ -29,10 +29,10 @@ vec2 atlas_uv(vec2 uv) {
 
 void fragment() {
     vec2 uv = atlas_uv(UV);
-
-    float outline = texture(mask_atlas, uv).r;
+	vec4 m = texture(mask_atlas, uv);
+    float outline = m.r;
     if (outline <= 0.1) discard;
-
+	
     ALBEDO = outline_color * outline;
 
 }

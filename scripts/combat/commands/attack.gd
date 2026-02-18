@@ -63,7 +63,6 @@ func apply_damage(state: GameState , _simulate_only: bool = false) -> void:
 	
 	#apply dmg
 	victim.state.current_health -= result.damage
-	print("APPLY_DAMAGE: victim hp after =", victim.state.current_health)
 	#sanity
 	if aggressor.state.is_playable():
 		if victim.state.current_health > 0:

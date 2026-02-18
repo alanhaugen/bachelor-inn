@@ -61,10 +61,12 @@ func add_character_preview(character: Character) -> void:
 	
 	previews[character] = preview
 
+
+
 func _on_preview_selected(character: Character) -> void:
 	var level := get_tree().get_first_node_in_group("level")
 	if level:
-		level.select_unit(character) 
+		level.try_select_unit(character) 
 
 
 func _connect_to_level() -> void:
@@ -102,7 +104,7 @@ func _on_character_deselected() -> void:
 
 func _on_character_stats_changed(character: Character) -> void:
 	if previews.has(character):
-		previews[character].apply_stats(build_character_stats(character))
+		previews[character].apply_stats(build_character_stats(character), character)
 
 	if player_stats.visible:
 		player_stats.apply_stats(build_character_stats(character))
