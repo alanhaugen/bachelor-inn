@@ -4,6 +4,7 @@ class_name ui_controller
 @export var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/CharacterPreview.tscn")
 @onready var preview_container := %Characters_VBOX
 @onready var player_stats: PlayerStatsUI = %Player_Stats
+@onready var enemy_stats: EnemyStatsUI = %Enemy_Stats
 var previews := {} 
 
 
@@ -32,6 +33,13 @@ func build_character_stats(character: Character) -> Dictionary:
 		]
 	}
 
+func build_enemy_Stats(character: Character) -> Dictionary:
+	return {
+		"portrait": character.portrait,
+		"name": character.data.unit_name,
+		"health": character.state.current_health,
+		"max_health": character.state.max_health,
+	}
 
 #Update the player stats to send it to the Player_Stats, gets set in its own script
 #func update_playerStats(character: Character, popup: StatPopUp) -> void:
@@ -79,6 +87,8 @@ func _connect_to_level() -> void:
 	level.character_deselected.connect(_on_character_deselected)
 	level.character_stats_changed.connect(_on_character_stats_changed)
 	level.party_updated.connect(_on_party_updated)
+	level.enemy_selected.connect(_on_enemy_selected)
+	#level.enemy_deselected.connect(_on_enemy_deselected)
 	
 	if level.characters.size() > 0:
 		_on_party_updated(level.characters)
@@ -94,9 +104,16 @@ func _on_character_selected(character: Character) -> void:
 			continue;
 		previews[c].is_selected = (c == character)
 		
+func _on_enemy_selected(enemy: Character) -> void:
+	enemy_stats.apply_stats(build_enemy_Stats(enemy))
+	enemy_stats.show()
+	print("a enemy has been selected")
 
+#func _on_enemy_deselected() -> void:
+	#enemy_stats.hide()
+	
 func _on_character_deselected() -> void:
-	player_stats.hide()
+	#player_stats.hide()
 
 	for preview: CharacterPreview in previews.values():
 		preview.is_selected = false

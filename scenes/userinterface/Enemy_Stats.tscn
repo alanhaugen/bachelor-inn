@@ -1,0 +1,265 @@
+[gd_scene load_steps=12 format=3 uid="uid://3dh3t2j28eq1"]
+
+[ext_resource type="Script" uid="uid://cvm8v3uib7wn6" path="res://scripts/ui/Enemy_Stats_UI.tres.gd" id="1_c5vva"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_mj1vr"]
+[ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="3_mbo6i"]
+[ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="4_f503c"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="5_infih"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b741m"]
+atlas = ExtResource("2_mj1vr")
+region = Rect2(184, 8, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c7dy5"]
+texture = ExtResource("2_mj1vr")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_pyip5"]
+texture = ExtResource("2_mj1vr")
+expand_margin_top = 1.0
+region_rect = Rect2(228, 16, 10, 15)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l1do4"]
+atlas = ExtResource("2_mj1vr")
+region = Rect2(176, 0, 7, 7)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1htk0"]
+texture = ExtResource("2_mj1vr")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+expand_margin_left = 1.0
+expand_margin_top = 2.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+region_rect = Rect2(32, 0, 32, 32)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_q3i2e"]
+texture = ExtResource("2_mj1vr")
+expand_margin_top = 1.0
+region_rect = Rect2(208, 16, 10, 15)
+
+[node name="Enemy_Stats" type="Control"]
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -0.25
+offset_top = 197.0
+offset_right = -0.25
+offset_bottom = 197.0
+grow_vertical = 0
+script = ExtResource("1_c5vva")
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = -15.5
+offset_top = -7.25
+offset_right = -15.5
+offset_bottom = -7.25
+
+[node name="Background" type="NinePatchRect" parent="Control"]
+z_index = -3
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -46.0
+offset_right = 135.75
+offset_bottom = 16.25
+grow_vertical = 0
+texture = ExtResource("2_mj1vr")
+region_rect = Rect2(96, 0, 32.077, 32)
+patch_margin_left = 11
+patch_margin_top = 11
+patch_margin_right = 11
+patch_margin_bottom = 11
+
+[node name="Magic_Icon" type="TextureRect" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = -288.25
+offset_top = -71.0
+offset_right = -281.25
+offset_bottom = -64.0
+tooltip_text = "Mana remaining"
+texture = SubResource("AtlasTexture_b741m")
+stretch_mode = 2
+
+[node name="MagicBar" type="ProgressBar" parent="Control/Magic_Icon"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -6.0
+offset_right = 66.0
+grow_vertical = 0
+tooltip_text = "Mana remaining"
+theme_override_styles/background = SubResource("StyleBoxTexture_c7dy5")
+theme_override_styles/fill = SubResource("StyleBoxTexture_pyip5")
+value = 80.0
+show_percentage = false
+
+[node name="MagicText" type="Label" parent="Control/Magic_Icon"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 72.0
+offset_top = -4.0
+offset_right = 116.0
+offset_bottom = 10.0
+text = "100/100"
+
+[node name="Icon" type="NinePatchRect" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8.25
+offset_top = -39.0
+offset_right = 44.0
+offset_bottom = -4.0
+grow_vertical = 0
+texture = ExtResource("2_mj1vr")
+region_rect = Rect2(132, 4, 24, 24)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="Control/Icon"]
+clip_contents = true
+layout_mode = 0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 34.0
+offset_bottom = 33.999996
+color = Color(1, 1, 1, 0)
+
+[node name="Icon_texture" type="TextureRect" parent="Control/Icon/ColorRect"]
+unique_name_in_owner = true
+z_index = -1
+layout_mode = 1
+offset_right = 32.0
+offset_bottom = 32.0
+texture = ExtResource("4_f503c")
+expand_mode = 2
+stretch_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 44.75
+offset_top = -38.75
+offset_right = 220.75
+offset_bottom = 39.25
+scale = Vector2(0.5, 0.5)
+theme_override_constants/separation = 3
+metadata/_edit_group_ = true
+
+[node name="CharacterName" type="Label" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(168.64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("3_mbo6i")
+theme_override_font_sizes/font_size = 18
+text = "Long Name for longer wierdoes"
+autowrap_mode = 2
+max_lines_visible = 1
+
+[node name="Type" type="Label" parent="Control/VBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_mbo6i")
+theme_override_font_sizes/font_size = 18
+text = "Fighter"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 8.75
+offset_top = -2.75
+offset_right = 127.75
+offset_bottom = 11.25
+theme_override_constants/separation = 0
+metadata/_edit_group_ = true
+
+[node name="Health" type="HBoxContainer" parent="Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Health_Icon" type="TextureRect" parent="Control/VBoxContainer/Health"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Health remaining"
+texture = SubResource("AtlasTexture_l1do4")
+stretch_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="Control/VBoxContainer/Health"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Health remaining"
+theme_override_styles/background = SubResource("StyleBoxTexture_1htk0")
+theme_override_styles/fill = SubResource("StyleBoxTexture_q3i2e")
+value = 59.58
+show_percentage = false
+
+[node name="HealthText" type="Label" parent="Control/VBoxContainer/Health"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_fonts/font = ExtResource("5_infih")
+theme_override_font_sizes/font_size = 16
+text = "100/100"
+
+[node name="Control2" type="Control" parent="."]
+visible = false
+anchors_preset = 0
+offset_top = -4.0
+offset_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control2"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = -5.0
+offset_right = 113.0
+offset_bottom = 23.0
+
+[node name="Button" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "1"
+
+[node name="Button2" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "2"
+
+[node name="Button3" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "3"
+
+[node name="Button4" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "4"
+
+[node name="Button5" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "5"
+
+[node name="Button6" type="Button" parent="Control2/HBoxContainer"]
+layout_mode = 2
+text = "6"

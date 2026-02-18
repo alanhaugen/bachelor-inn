@@ -27,5 +27,3 @@ func apply_stats(stats: Dictionary, in_character: Character) -> void:
 
 func _on_button_pressed() -> void:
 	emit_signal("preview_selected", character)
-	#something something send a signal to Level to say that this character is selected
-	print("Character has been pressed :D")

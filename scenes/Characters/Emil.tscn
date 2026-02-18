@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://bdk4vocbwpyik" path="res://art/Animations/Characters/Emil/Emil_Moving_U.tres" id="4_t0xrm"]
 [ext_resource type="Resource" uid="uid://bhhk2lpeelql2" path="res://art/Animations/Characters/Emil/Emil_Moving_D.tres" id="5_25xcv"]
 [ext_resource type="Resource" uid="uid://ckms4h2b0o7c3" path="res://art/Animations/Characters/Emil/Emil_Idle.tres" id="6_y50yk"]
-[ext_resource type="Texture2D" uid="uid://bb65nig7oniqc" path="res://art/textures/Lucy_portrait.png" id="7_h1ln4"]
+[ext_resource type="Texture2D" uid="uid://boyi2mqyjqo52" path="res://art/textures/Emil_portrait.png" id="7_0pfu4"]
 
 [node name="Character2" instance=ExtResource("1_u1bnp")]
 run_left_animation = ExtResource("2_0pfu4")
@@ -14,4 +14,4 @@ run_right_animation = ExtResource("3_g5akw")
 run_up_animation = ExtResource("4_t0xrm")
 run_down_animation = ExtResource("5_25xcv")
 idle_animation = ExtResource("6_y50yk")
-portrait = ExtResource("7_h1ln4")
+portrait = ExtResource("7_0pfu4")

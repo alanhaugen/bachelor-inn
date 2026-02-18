@@ -13,8 +13,15 @@ class_name Level
 
 signal character_selected(character: Character)
 signal character_deselected
+signal enemy_selected(enemy: Character)
+signal enemy_deselected
+
 signal character_stats_changed(character: Character)
 signal party_updated(characters: Array[Character])
+
+
+
+
 
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 
@@ -407,11 +414,10 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 
 func _clear_selection() -> void:
 	emit_signal("character_deselected")
+	emit_signal("enemy_deselected")
 	movement_map.clear()
 	path_map.clear()
-
 	selected_unit = null
-	emit_signal("character_deselected")
 
 
 func _handle_abilities(pos: Vector3i) -> bool:
@@ -470,8 +476,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	_clear_selection()
 
 	# Enemy clicked (for info panel)
-	if get_unit_name(pos) == CharacterStates.Enemy:
+	if get_unit(pos) and get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
 		selected_enemy_unit = get_unit(pos)
+		emit_signal("enemy_selected", selected_enemy_unit)
+		print("hey an enemy has been selected ")
 
 
 func _ready() -> void:

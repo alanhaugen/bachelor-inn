@@ -33,16 +33,15 @@ func apply_stats(stats: Dictionary) -> void:
 	sanity_bar.value = stats.sanity
 	sanity_text.text = "%d/%d" % [stats.sanity, stats.max_sanity]
 	
-	strength_text.text = str(stats.strength)
-	mind_text.text = str(stats.mind)
-	speed_text.text = str(stats.speed)
-	focus_text.text = str(stats.focus)
-	endurance_text.text = str(stats.endurance)
+	strength_text.text = str(stats.strength).pad_zeros(2)
+	mind_text.text = str(stats.mind).pad_zeros(2)
+	speed_text.text = str(stats.speed).pad_zeros(2)
+	focus_text.text = str(stats.focus).pad_zeros(2)
+	endurance_text.text = str(stats.endurance).pad_zeros(2)
 	
 	level_text.text = "Level: %d" % stats.level
 	type.text = stats.type
-	
+
 func _on_open_close_stats_pressed() -> void:
 	Stats_Container.visible = not Stats_Container.visible
 	oc_icon.flip_h = not Stats_Container.visible
-	
