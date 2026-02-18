@@ -572,6 +572,7 @@ func _ready() -> void:
 
 			if new_unit is Character:
 				new_unit.state.grid_position = pos
+				new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
@@ -580,10 +581,10 @@ func _ready() -> void:
 	game_state = GameState.from_level(self)
 
 	turn_transition_animation_player.play()
-
+	
+			
 	add_to_group("level")
 	emit_signal("party_updated", characters)
-
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
@@ -681,6 +682,11 @@ func next_level() -> void:
 	
 	Main.next_level()
 
+func _on_character_sanity_flipped(character: Character) -> void:
+	emit_signal("character_stats_changed", character)
+	characters.erase(character)
+	
+	
 
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform)
@@ -797,7 +803,7 @@ func _process_old(delta: float) -> void:
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))
-				for character in Main.characters:
+				for character in characters:
 					if characters == null: 
 						return
 					emit_signal("character_stats_changed", character)

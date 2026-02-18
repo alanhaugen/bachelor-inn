@@ -1,10 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://3dh3t2j28eq1"]
+[gd_scene load_steps=11 format=3 uid="uid://3dh3t2j28eq1"]
 
 [ext_resource type="Script" uid="uid://cvm8v3uib7wn6" path="res://scripts/ui/Enemy_Stats_UI.tres.gd" id="1_c5vva"]
 [ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_mj1vr"]
 [ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="3_mbo6i"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="4_f503c"]
-[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="5_infih"]
+[ext_resource type="FontVariation" uid="uid://7336aouh2e68" path="res://art/Fonts/RetroByteFontVariation.tres" id="5_c5vva"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b741m"]
 atlas = ExtResource("2_mj1vr")
@@ -26,10 +26,6 @@ region_rect = Rect2(32, 0, 32, 32)
 texture = ExtResource("2_mj1vr")
 expand_margin_top = 1.0
 region_rect = Rect2(228, 16, 10, 15)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l1do4"]
-atlas = ExtResource("2_mj1vr")
-region = Rect2(176, 0, 7, 7)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1htk0"]
 texture = ExtResource("2_mj1vr")
@@ -76,7 +72,7 @@ anchor_bottom = 1.0
 offset_left = 1.0
 offset_top = -46.0
 offset_right = 135.75
-offset_bottom = 16.25
+offset_bottom = 3.25
 grow_vertical = 0
 texture = ExtResource("2_mj1vr")
 region_rect = Rect2(96, 0, 32.077, 32)
@@ -176,38 +172,24 @@ size_flags_horizontal = 0
 theme_override_constants/line_spacing = 0
 theme_override_fonts/font = ExtResource("3_mbo6i")
 theme_override_font_sizes/font_size = 18
-text = "Long Name for longer wierdoes"
+text = "Long Name"
 autowrap_mode = 2
 max_lines_visible = 1
 
-[node name="Type" type="Label" parent="Control/VBoxContainer2"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(125, 0)
-layout_mode = 2
-theme_override_fonts/font = ExtResource("3_mbo6i")
-theme_override_font_sizes/font_size = 18
-text = "Fighter"
-
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 0
-offset_left = 8.75
-offset_top = -2.75
-offset_right = 127.75
-offset_bottom = 11.25
+offset_left = 45.75
+offset_top = -25.75
+offset_right = 126.75
+offset_bottom = -1.75
 theme_override_constants/separation = 0
 metadata/_edit_group_ = true
 
-[node name="Health" type="HBoxContainer" parent="Control/VBoxContainer"]
+[node name="Health2" type="VBoxContainer" parent="Control/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/separation = 1
 
-[node name="Health_Icon" type="TextureRect" parent="Control/VBoxContainer/Health"]
-layout_mode = 2
-size_flags_vertical = 4
-tooltip_text = "Health remaining"
-texture = SubResource("AtlasTexture_l1do4")
-stretch_mode = 2
-
-[node name="HealthBar" type="ProgressBar" parent="Control/VBoxContainer/Health"]
+[node name="HealthBar" type="ProgressBar" parent="Control/VBoxContainer/Health2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
@@ -219,11 +201,12 @@ theme_override_styles/fill = SubResource("StyleBoxTexture_q3i2e")
 value = 59.58
 show_percentage = false
 
-[node name="HealthText" type="Label" parent="Control/VBoxContainer/Health"]
+[node name="HealthText" type="Label" parent="Control/VBoxContainer/Health2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_fonts/font = ExtResource("5_infih")
+theme_override_constants/line_spacing = 0
+theme_override_fonts/font = ExtResource("5_c5vva")
 theme_override_font_sizes/font_size = 16
 text = "100/100"
 

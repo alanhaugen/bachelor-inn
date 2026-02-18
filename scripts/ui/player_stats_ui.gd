@@ -27,11 +27,11 @@ func apply_stats(stats: Dictionary) -> void:
 	
 	health_bar.max_value = stats.max_health
 	health_bar.value = stats.health
-	health_text.text = "%d/%d" % [stats.health, stats.max_health]
+	health_text.text = "%02d/%02d" % [stats.health, stats.max_health]
 	
 	sanity_bar.max_value = stats.max_sanity
 	sanity_bar.value = stats.sanity
-	sanity_text.text = "%d/%d" % [stats.sanity, stats.max_sanity]
+	sanity_text.text = "%02d/%02d" % [stats.sanity, stats.max_sanity]
 	
 	strength_text.text = str(stats.strength).pad_zeros(2)
 	mind_text.text = str(stats.mind).pad_zeros(2)

@@ -10,10 +10,11 @@
 [sub_resource type="Resource" id="Resource_dg3df"]
 script = ExtResource("1_y7k22")
 unit_name = "Lucy"
-strength = 10
-mind = 6
+strength = 5
+mind = 3
 speed = 2
 focus = 3
+endurance = 2
 metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 
 [sub_resource type="Resource" id="Resource_g0ljv"]

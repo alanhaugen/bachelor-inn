@@ -20,6 +20,13 @@ class_name Character
 @export var state : CharacterState
 @export var scene_id : String = ""
 
+
+
+
+### SIGNALS
+
+signal sanity_flipped(character: Character)
+
 #region animation state
 var current_animation : SpriteAnim = null
 
@@ -73,10 +80,6 @@ func play(anim : SpriteAnim) -> void:
 		if outline_mat == null:
 			push_error("Outline requires a ShaderMaterial on material_override.")
 			return
-			
-		print("Sprite material:", sprite.material_override) 
-		print("Outline material:", outline.material_override)
-		
 		my_material = main_mat.duplicate(true)
 		my_outline_material = outline_mat.duplicate(true)
 		
@@ -122,11 +125,13 @@ func clone() -> Character:
 func _on_sanity_changed(_in_sanity : int) -> void:
 	if state.current_sanity <= 0 and state.current_health >= 0:
 		state.faction = CharacterState.Faction.ENEMY
-		data.unit_name = data.unit_name + "'cthulhu"
+		data.unit_name = data.unit_name + "'thulhu"
 		#health_bar = health_bar_enemy
 		#health_bar_ally.hide()
 		#health_bar_enemy.show()
-		Main.characters.erase(self)
+
+		emit_signal("sanity_flipped", self)
+
 	#if health_bar:
 		#update_health_bar()
 

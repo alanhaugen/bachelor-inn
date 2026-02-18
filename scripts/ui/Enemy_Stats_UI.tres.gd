@@ -9,7 +9,12 @@ class_name EnemyStatsUI
 @onready var oc_icon: TextureRect = %O_C_icon
 
 
-func apply_stats(stats: Dictionary) -> void:
+var current_enemy: Character = null
+
+
+
+func apply_stats(stats: Dictionary, enemy: Character) -> void:
+	current_enemy = enemy
 	icon_texture.texture = stats.portrait
 	name_label.text = stats.name
 	

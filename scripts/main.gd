@@ -64,4 +64,9 @@ func load_level(level_name: String) -> void:
 	level = load(level_path).instantiate();
 	level.level_name = level_name;
 	world.add_child(level) # Add the new level to the World node
+	
+	await get_tree().process_frame
+	var ui := get_tree().get_first_node_in_group("ui_controller")
+	if ui:
+		ui._connect_to_level(level)
 #endregion

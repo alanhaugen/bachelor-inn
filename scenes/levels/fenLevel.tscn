@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
 [ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_ovtcx"]
@@ -266,8 +266,9 @@ data = {
 [node name="TriggerOverlay" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.43, 0)
 data = {
-"cells": PackedInt32Array(65570, 65535, 0, 65570, 0, 0, 65570, 1, 0, 65569, 1, 0, 65568, 1, 0, 65568, 0, 0, 65568, 65535, 0, 65569, 65535, 0)
+"cells": PackedInt32Array(65570, 65535, 0, 65570, 0, 0, 65570, 1, 0, 65569, 1, 0, 65568, 1, 0, 65568, 0, 0, 65568, 65535, 0, 65569, 65535, 0, 15, 65534, 0)
 }
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="MovementOverlay" parent="." index="4"]
 data = {

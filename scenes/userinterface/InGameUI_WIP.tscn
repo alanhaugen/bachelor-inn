@@ -38,10 +38,10 @@ scale = Vector2(3, 3)
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-offset_left = 1554.0001
-offset_top = -30.0
-offset_right = 1554.0001
-offset_bottom = -30.0
+offset_left = 1553.0
+offset_top = 11.0
+offset_right = 1553.0
+offset_bottom = 11.0
 scale = Vector2(3, 3)
 
 [node name="Characters_VBOX" type="VBoxContainer" parent="Scale"]
