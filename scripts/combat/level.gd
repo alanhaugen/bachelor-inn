@@ -58,8 +58,7 @@ enum States
 {
 	PLAYING,
 	ANIMATING,
-	TRANSITION,
-	CHOOSING_ATTACK
+	TRANSITION
 };
 
 var state :int = States.PLAYING;
@@ -481,6 +480,8 @@ func process_playing(delta: float) -> void:
 
 func process_animating(delta: float) -> void:
 	pass
+	#var new_state = game_state.apply_move(move)
+	#animate_diff(game_state, new_state)
 
 
 func process_transition(delta: float) -> void:
