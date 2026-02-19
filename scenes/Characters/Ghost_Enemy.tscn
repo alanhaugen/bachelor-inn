@@ -34,12 +34,12 @@ idle_animation = ExtResource("6_f02yr")
 portrait = ExtResource("7_iu64w")
 
 [node name="Sprite" parent="." index="0"]
-transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.9779439, -0.53662795)
+transform = Transform3D(7.06, 0, 0, 0, 3.1610909, 2.4510214, 0, -2.4510214, 3.1610909, 0, 1.1570795, -0.23443079)
 material_override = SubResource("ShaderMaterial_og36s")
 script = ExtResource("9_iu64w")
 
 [node name="Outline" parent="." index="1"]
-transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.9779439, -0.53662795)
+transform = Transform3D(7.06, 0, 0, 0, 3.1610909, 2.4510214, 0, -2.4510214, 3.1610909, 0, 1.1570795, -0.23443079)
 script = ExtResource("9_iu64w")
 
 [node name="Shadow" parent="." index="2"]

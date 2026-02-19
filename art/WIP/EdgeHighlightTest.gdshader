@@ -69,11 +69,11 @@ void fragment() {
 void light() {
     float NdotL = max(dot(NORMAL, LIGHT), 0.0);
     float DL = step(0.0, NdotL);
-    DIFFUSE_LIGHT += DL * LIGHT_COLOR * ATTENUATION;
+    DIFFUSE_LIGHT += NdotL * LIGHT_COLOR * ATTENUATION;
 
     float edge = pow(2.0 * NdotL, 4.0);
     float mask = texture(mask_atlas, atlas_uv(UV)).r;
 
     vec3 edge_light = edge_tint.rgb * edge * edge_strength * mask;
-    DIFFUSE_LIGHT += edge_light * LIGHT_COLOR * ATTENUATION;
+    DIFFUSE_LIGHT += edge_light * ATTENUATION;
 }

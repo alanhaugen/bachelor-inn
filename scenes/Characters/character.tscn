@@ -44,5 +44,7 @@ texture = ExtResource("3_8sm5s")
 
 [node name="Shadow" type="Sprite3D" parent="."]
 transform = Transform3D(10.268, 0, 0, 0, -2.3468644e-07, -4, 0, 5.369, -1.7484555e-07, 0, 0.07548618, 0.025605679)
+transparency = 0.44
+cast_shadow = 0
 pixel_size = 0.001
 texture = ExtResource("5_1qt5x")
