@@ -1,12 +1,13 @@
-[gd_scene load_steps=51 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene load_steps=52 format=3 uid="uid://kkgvyut22uqr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
+[ext_resource type="Texture2D" uid="uid://6d1mv5u71ue0" path="res://art/textures/GoboLightShaftPixelated.png" id="2_6llwq"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
 [ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="3_kofws"]
 [ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
 [ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
 [ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_ovtcx"]
@@ -338,6 +339,38 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.23863, -0.42855263, -0.008
 visible = true
 light_color = Color(0.40784314, 1, 0.7019608, 1)
 light_energy = 0.335
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Lights" index="8"]
+transform = Transform3D(0.88069093, -0.28864282, 0.37559134, -0.14553392, 0.5896776, 0.7944183, -0.45078087, -0.7542982, 0.47731635, 81.23284, 7.1872287, 7.938027)
+light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
+light_energy = 3.322
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 16.0
+light_projector = ExtResource("2_6llwq")
+light_size = 1.0
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 10.0
+shadow_transmittance_bias = 11.476
+shadow_blur = 10.0
+spot_range = 40.353317
+spot_angle = 15.399274
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="Lights" index="9"]
+transform = Transform3D(0.88069093, -0.28864282, 0.37559137, 0.03987147, 0.8352598, 0.54840803, -0.4720104, -0.4680026, 0.74711436, 48.571922, 3.4257026, 9.035437)
+light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
+light_energy = 1.282
+light_indirect_energy = 0.0
+light_volumetric_fog_energy = 1.967
+light_projector = ExtResource("2_6llwq")
+light_size = 5.745
+shadow_enabled = true
+shadow_bias = 0.0
+shadow_normal_bias = 10.0
+shadow_transmittance_bias = 11.476
+shadow_blur = 10.0
+spot_range = 40.353317
+spot_angle = 27.590014
 
 [node name="Fog WIP" type="FogVolume" parent="Particles" index="0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.440939, 6.2290134, -5.168091)

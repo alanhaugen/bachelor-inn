@@ -127,7 +127,10 @@ var monster_names := [
 	"Borrowed Faces",
 	"The Unfinished",
 	"Echo",
-	"Sec'Mat"
+	"Sec'Mat",
+	"Unfinished projects",
+	"d'ave",
+	"mar'k"
 ]
 
 
