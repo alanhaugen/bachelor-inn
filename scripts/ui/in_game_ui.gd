@@ -88,6 +88,8 @@ func _connect_to_level(level: Node) -> void:
 	_on_party_updated(level.characters)
 #adds character preview scene to Vbox
 func add_character_preview(character: Character) -> void:
+	if previews.has(character):
+		return
 	if character.state.faction == CharacterState.Faction.ENEMY:
 		return
 		

@@ -33,7 +33,7 @@ void light() {
 	float NdotL = max(dot(NORMAL, LIGHT), 0.0);
 	float L = step(0.0, NdotL);
 	float DL = step(0.0, NdotL);
-	DIFFUSE_LIGHT += DL * LIGHT_COLOR * ATTENUATION;
+	DIFFUSE_LIGHT += NdotL * LIGHT_COLOR * ATTENUATION;
 
 	float edge = pow(2.0 * NdotL, 4.0);
 

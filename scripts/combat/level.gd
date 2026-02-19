@@ -580,14 +580,11 @@ func _ready() -> void:
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
-
-	game_state = GameState.from_level(self)
-
-	turn_transition_animation_player.play()
 	
-			
-	add_to_group("level")
-	emit_signal("party_updated", characters)
+	game_state = GameState.from_level(self)
+	
+	turn_transition_animation_player.play()
+
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
