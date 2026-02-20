@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_eyfme"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_uj5nr"]
 [ext_resource type="Resource" uid="uid://cegp3wmw3wytm" path="res://Data/Weapons/sword_basic.tres" id="4_0f07t"]
-[ext_resource type="PackedScene" path="res://scenes/Characters/Emil.tscn" id="5_pibb2"]
+[ext_resource type="PackedScene" uid="uid://b86o8tlch4nw8" path="res://scenes/Characters/Emil.tscn" id="5_pibb2"]
 
 [sub_resource type="Resource" id="Resource_vicn1"]
 script = ExtResource("1_2a4ej")

@@ -683,8 +683,9 @@ func next_level() -> void:
 	Main.next_level()
 
 func _on_character_sanity_flipped(character: Character) -> void:
+	print("heyaaa, we just flipped sanity")
 	emit_signal("character_stats_changed", character)
-	characters.erase(character)
+	#characters.erase(character)
 	
 	
 
