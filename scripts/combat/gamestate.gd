@@ -84,18 +84,32 @@ func end_turn() -> void:
 	reset_moves();
 
 
-func get_legal_moves() -> Array[Command]:
+func get_legal_moves(chara : Character = null) -> Array[Command]:
 	var moves : Array[Command] = []
-
-	for unit in units:
-		if unit.state.is_moved:
-			continue;
-		if unit.state.is_alive == false:
-			continue;
-		if unit.state.is_enemy() != is_current_player_enemy:
-			continue;
+	
+	if( chara == null):
+		for unit in units:
+			if unit.state.is_moved:
+				continue;
+			if unit.state.is_alive == false:
+				continue;
+			if unit.state.is_enemy() != is_current_player_enemy:
+				continue;
 		
-		moves += MoveGenerator.generate(unit, self);
+			moves += MoveGenerator.generate(unit, self);
+	else:
+		var has_moved : bool = false
+		var is_dead : bool = false
+		var isEnemy: bool  = false
+		if chara.state.is_moved:
+			has_moved = true;
+		if chara.state.is_alive == false:
+			is_dead = true;
+		if chara.state.is_enemy() != is_current_player_enemy:
+			isEnemy = true;
+		
+		if(!(has_moved || is_dead || isEnemy)):
+			moves += MoveGenerator.generate(chara, self);
 
 	return moves
 
