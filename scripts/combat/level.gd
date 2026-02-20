@@ -584,7 +584,7 @@ func _ready() -> void:
 	game_state = GameState.from_level(self)
 	
 	turn_transition_animation_player.play()
-
+	add_to_group("level")
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
