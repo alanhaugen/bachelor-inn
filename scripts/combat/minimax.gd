@@ -2,11 +2,11 @@ class_name MinimaxAI
 extends RefCounted
 
 
-func minimax(state : GameState, depth : int) -> float:
+func minimax(state : GameState, depth : int, specific_character : Character = null) -> float:
 	if depth == 0:
 		return evaluate(state)
 
-	var moves : Array[Command] = state.get_legal_moves()
+	var moves : Array[Command] = state.get_legal_moves(specific_character)
 	if moves.is_empty():
 		return evaluate(state)
 
@@ -15,12 +15,12 @@ func minimax(state : GameState, depth : int) -> float:
 	if enemy_turn:
 		var best := -INF
 		for move : Command in moves:
-			best = max(best, minimax(state.apply_move(move, true), depth - 1))
+			best = max(best, minimax(state.apply_move(move, true), depth - 1, specific_character))
 		return best
 	else:
 		var best := INF
 		for move : Command in moves:
-			best = min(best, minimax(state.apply_move(move, true), depth - 1))
+			best = min(best, minimax(state.apply_move(move, true), depth - 1, specific_character))
 		return best
 
 
@@ -78,12 +78,12 @@ func evaluate(state : GameState) -> int:
 	return score
 
 
-func choose_best_move(state : GameState, depth : int) -> Command:
+func choose_best_move(state : GameState, depth : int, specific_character : Character = null) -> Command:
 	var best_score := -INF
 	var best_move : Command = null
 	
-	for move in state.get_legal_moves():
-		var score : float = minimax(state.apply_move(move, true), depth - 1)
+	for move in state.get_legal_moves(specific_character):
+		var score : float = minimax(state.apply_move(move, true), depth - 1, specific_character)
 
 		if score > best_score:
 			best_score = score
