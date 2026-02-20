@@ -47,11 +47,16 @@ void fragment() {
     if (flip_normal_y) {
         n.y = -n.y;
     }
-    n = normalize(n * normal_tilt);
-    NORMAL = normalize(NORMAL + n * normal_sensitivity);
-
+    n *= normal_tilt;
+	mat3 TBN = mat3(TANGENT, BINORMAL, NORMAL);
+	vec3 world_n = normalize(TBN * n);
+	
+	
     vec4 d = texture(diffuse_atlas, uv);
     if (d.a < 0.5) discard;
+	
+	
+	
 	
 	if (grey_tint)
 	{
@@ -61,8 +66,8 @@ void fragment() {
 	if (hit_effect > 0.0){
 		d.rgb = mix(d.rgb, d.rgb * hit_effect_color, hit_effect);
 	}
-
-    ALBEDO = d.rgb;
+	NORMAL = normalize(NORMAL + world_n * normal_sensitivity);
+	ALBEDO = d.rgb;
 }
 
 

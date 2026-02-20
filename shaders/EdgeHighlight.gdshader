@@ -18,10 +18,13 @@ void fragment() {
 	if(flip_normal_y) {
 		n.y = -n.y;
 	}
-	n = normalize(vec3(n * normal_tilt));
+	n *= normal_tilt;
 	
-	NORMAL = normalize(NORMAL + n * normal_sensitivity);
+	mat3 TBN = mat3(TANGENT, BINORMAL, NORMAL);
 	
+	vec3 world_n = normalize(TBN * n);
+	//NORMAL = normalize(NORMAL + n * normal_sensitivity);
+	NORMAL = normalize(NORMAL + world_n * normal_sensitivity);
 	vec4 d = texture(diffuse_tex, UV);
 	if(d.a < 0.5) discard;
 	
