@@ -54,15 +54,17 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 			attack_strength *= 2;
 	
 	result.damage = attack_strength
+	
 
 
 
-func apply_damage(state: GameState , _simulate_only: bool = false) -> void:
+func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
 	
 	#apply dmg
 	victim.state.current_health -= result.damage
+	result.killed = victim.state.current_health <= 0
 	#sanity
 	if aggressor.state.is_playable():
 		if victim.state.current_health > 0:
@@ -74,8 +76,8 @@ func apply_damage(state: GameState , _simulate_only: bool = false) -> void:
 	
 	#death
 	if victim.state.current_health <= 0:
-		victim.die(false)
-		if aggressor.state.is_playable():
+		victim.die(simulate_only)
+		if aggressor.state.is_playable() and simulate_only == false:
 			aggressor.state.experience += victim.data.strength
 	
 #old, replaced by Prepare and Apply
