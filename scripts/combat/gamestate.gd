@@ -72,11 +72,17 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	return new_state;
 
 
-func no_units_remaining() -> bool:
-	for unit in units:
-		if unit.state.is_moved == false and unit.state.is_enemy() == is_current_player_enemy:
+func no_units_remaining(specific_unit : Character = null) -> bool:
+	if( specific_unit == null):
+		for unit in units:
+			if unit.state.is_moved == false and unit.state.is_enemy() == is_current_player_enemy:
+				return false;
+		return true;
+	else:
+		if specific_unit.state.is_moved == false and specific_unit.state.is_enemy() == is_current_player_enemy:
 			return false;
-	return true;
+		else:
+			return true
 
 
 func end_turn() -> void:
@@ -114,8 +120,8 @@ func get_legal_moves(chara : Character = null) -> Array[Command]:
 	return moves
 
 
-func has_enemy_moves() -> bool:
-	if get_legal_moves().is_empty():
+func has_enemy_moves(chara : Character = null) -> bool:
+	if get_legal_moves(chara).is_empty():
 		return false;
 	
 	return true;
