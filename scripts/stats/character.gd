@@ -280,7 +280,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var mesh_3d_position: Vector3 = global_transform.origin;
+	#var mesh_3d_position: Vector3 = global_transform.origin;
 	
 	#if state.is_alive:
 		#show_ui() # hack, TODO: removeme
