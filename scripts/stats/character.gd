@@ -129,6 +129,10 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 		#health_bar = health_bar_enemy
 		#health_bar_ally.hide()
 		#health_bar_enemy.show()
+		
+	#todo:
+	#Create an enemy character instance based of this character
+	#Then delete this character instance
 
 		emit_signal("sanity_flipped", self)
 
