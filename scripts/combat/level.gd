@@ -338,109 +338,38 @@ func get_unit_name(pos : Vector3) -> String:
 	return occupancy_overlay.mesh_library.get_item_name(item_id)
 
 
-func _ready() -> void:
-	camera_controller = Main.camera_controller
-	camera_controller.make_current()
-	camera_controller.setup_minmax_positions(
-		minimum_camera_x,
-		maximum_camera_x,
-		minimum_camera_z,
-		maximum_camera_z
-	)
-	camera_controller.springarm_length_maximum = maximum_camera_height
-	camera_controller.springarm_length_minimum = minimum_camera_height
-	camera_controller.free_camera()
+func _setup_environment() -> void:
+	pass
 
-	cursor.hide()
-	movement_weights_grid.hide()
-	occupancy_overlay.hide()
 
-	occupancy_grid = Grid.new(ui_overlay)
-	fog_grid = Grid.new(fog_overlay)
+func _spawn_players(layout : Layout) -> void:
+	pass
+
+
+func _spawn_enemies(layout : Layout) -> void:
+	pass
+
+
+func _spawn_chests(layout : Layout) -> void:
+	pass
+
+
+func _parse_layout() -> Layout:
+	return Layout.new()
+
+
+func _spawn_from_layout(layout : Layout) -> void:
+	pass
 	
-	if level_name == "first":
-		Dialogic.start(level_name + "Level")
-		is_in_menu = true
-	elif level_name == "Fen":
-		Dialogic.start("Showcase_Intro")
-		is_in_menu = true
+func _initialize_game_state() -> void:
+	pass
 
-	Main.battle_log = battle_log
 
-	var units: Array[Vector3i] = occupancy_overlay.get_used_cells()
-	var characters_placed := 0
-
-	print("Loading new level, number of playable characters: ", Main.characters.size())
-
-	for i in range(units.size()):
-		var pos: Vector3i = units[i]
-		var new_unit: Character = null
-
-		match get_unit_name(pos):
-			"Unit":
-				if characters_placed < Main.characters.size():
-					new_unit = Main.characters[characters_placed]
-					new_unit.state.phase = CharacterState.UnitPhase.READY
-					new_unit.camera = get_viewport().get_camera_3d()
-					characters_placed += 1
-
-					var health := new_unit.state.current_health
-					print(
-						"This character exists: ",
-						new_unit.data.unit_name,
-						" health: ",
-						health if health > 0 else "fresh unit"
-					)
-				else:
-					occupancy_overlay.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-
-			#"Enemy", "EnemyBird", "EnemyGhost":
-			#	new_unit = (
-			#		BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
-			#		else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
-			#		else PLAYER.instantiate()
-			#	)
-
-				var data := CharacterData.new()
-				var c_state := CharacterState.new()
-				c_state.faction = CharacterState.Faction.ENEMY
-
-				new_unit.data = data
-				new_unit.state = c_state
-				new_unit.data.unit_name = monster_names.pick_random()
-
-			"Chest":
-				var chest := CHEST.instantiate()
-				chest.position = grid_to_world(pos)
-				add_child(chest)
-
-			"VictoryTrigger":
-				pass
-
-			_:
-				occupancy_overlay.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-
-		if new_unit:
-			new_unit.position = grid_to_world(pos)
-
-			if new_unit.get_parent() != Main.world:
-				Main.world.add_child(new_unit)
-
-			characters.append(new_unit)
-
-			if new_unit is Character:
-				new_unit.state.grid_position = pos
-
-	move_popup = MOVE_POPUP.instantiate()
-	move_popup.hide()
-	add_child(move_popup)
-
-	game_state = GameState.from_level(self)
-
-	turn_transition_animation_player.play()
-
-	add_to_group("level")
-	emit_signal("party_updated", characters)
+func _ready() -> void:
+	_setup_environment()
+	var layout : Layout = _parse_layout()
+	_spawn_from_layout(layout)
+	_initialize_game_state()
 
 
 func MoveAI() -> void:
