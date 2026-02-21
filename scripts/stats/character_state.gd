@@ -154,6 +154,15 @@ func tick_effects_end_round() -> void:
 
 
 func save() -> Dictionary:
+	# Convert Skill resources -> Array[String] for JSON
+	var ids: Array[String] = []
+	for s: Skill in skills:
+		if s == null:
+			continue
+		if s.skill_id == "":
+			continue
+		ids.append(s.skill_id)
+	
 	return {
 		"faction": faction,
 		"grid_position": [grid_position.x, grid_position.y, grid_position.z],
@@ -163,6 +172,7 @@ func save() -> Dictionary:
 		"level": level,
 		"current_health": current_health,
 		"current_sanity": current_sanity,
-		"weapon_id": weapon.weapon_id
+		"weapon_id": weapon.weapon_id,
+		"skill_ids" : ids
 	}
 #endregion

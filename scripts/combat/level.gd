@@ -276,6 +276,7 @@ func _input(event: InputEvent) -> void:
 				selected_unit = get_unit(pos)
 				ribbon.show()
 				ribbon.set_skills(selected_unit.state.skills)
+				print("DEBUG SELECT:", selected_unit.data.unit_name, "skills:", selected_unit.state.skills.size())
 				#ribbon.set_abilities(selected_unit.skills);
 				
 				current_moves = MoveGenerator.generate(selected_unit, game_state)
