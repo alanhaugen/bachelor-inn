@@ -4,13 +4,13 @@ class_name SaveGame
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 
 
-const ALFRED: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
-const LUCY: PackedScene = preload("res://scenes/grid_items/Char_Lucy.tscn");
+#const ALFRED: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
+#const LUCY: PackedScene = preload("res://scenes/grid_items/Char_Lucy.tscn");
 
-const CHARACTER_SCENES := {
-	"Alfred" : ALFRED,
-	"Lucy" : LUCY
-}
+#const CHARACTER_SCENES := {
+#	"Alfred" : ALFRED,
+#	"Lucy" : LUCY
+#}
 
 ## Use this to detect old player save files and update them 
 @export var version := 1;
@@ -154,8 +154,8 @@ func read(save_slot: int) -> bool:
 	for unit_dict : Dictionary in units:
 		
 		var scene_id : String = unit_dict.get("scene")
-		var packed_scene : PackedScene = CHARACTER_SCENES.get(scene_id)
-		var character := packed_scene.instantiate();
+		#var packed_scene : PackedScene = CHARACTER_SCENES.get(scene_id)
+		#var character := packed_scene.instantiate();
 
 		# --- DATA ---
 		var data := CharacterData.new()
@@ -185,10 +185,10 @@ func read(save_slot: int) -> bool:
 		state.current_sanity = state_dict["current_sanity"]
 		state.weapon = WeaponRegistry.get_weapon(state_dict["weapon_id"])
 		
-		character.data = data
-		character.state = state
+#		character.data = data
+#		character.state = state
 		
-		Main.characters.append(character)
+#		Main.characters.append(character)
 
 	Main.load_level(Main.levels[level])
 	return true

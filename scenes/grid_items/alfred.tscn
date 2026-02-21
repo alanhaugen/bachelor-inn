@@ -1,6 +1,5 @@
-[gd_scene load_steps=8 format=3 uid="uid://b10bf6hwaqddg"]
+[gd_scene load_steps=7 format=3 uid="uid://b10bf6hwaqddg"]
 
-[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/grid_items/character.tscn" id="1_br8hb"]
 [ext_resource type="Resource" uid="uid://b5tfb3fssigcy" path="res://art/Animations/Characters/Alfred/Alfred_Moving_D.tres" id="2_mfx1k"]
 [ext_resource type="Resource" uid="uid://du1thdha7r8q8" path="res://art/Animations/Characters/Alfred/Alfred_Moving_L.tres" id="3_d2cp7"]
 [ext_resource type="Resource" uid="uid://crj6fyqc42yx1" path="res://art/Animations/Characters/Alfred/Alfred_Moving_R.tres" id="3_mfx1k"]
@@ -8,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://dg1jj5qvf04uy" path="res://art/Animations/Characters/Alfred/Alfred_Idle.tres" id="6_d2cp7"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="7_d2cp7"]
 
-[node name="Character" instance=ExtResource("1_br8hb")]
+[node name="Character"]
 run_left_animation = ExtResource("3_d2cp7")
 run_right_animation = ExtResource("3_mfx1k")
 run_up_animation = ExtResource("5_o3dv1")

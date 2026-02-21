@@ -49,9 +49,9 @@ const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 #const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
-const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
-const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
-const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
+#const PLAYER: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
+#const BIRD_ENEMY: PackedScene  = preload("res://scenes/grid_items/bird.tscn")
+#const GHOST_ENEMY: PackedScene  = preload("res://scenes/grid_items/Ghost_Enemy.tscn")
 #endregion
 
 enum States
@@ -394,12 +394,12 @@ func _ready() -> void:
 				else:
 					occupancy_overlay.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
-			"Enemy", "EnemyBird", "EnemyGhost":
-				new_unit = (
-					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
-					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
-					else PLAYER.instantiate()
-				)
+			#"Enemy", "EnemyBird", "EnemyGhost":
+			#	new_unit = (
+			#		BIRD_ENEMY.instantiate() if get_unit_name(pos) == "EnemyBird"
+			#		else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "EnemyGhost"
+			#		else PLAYER.instantiate()
+			#	)
 
 				var data := CharacterData.new()
 				var c_state := CharacterState.new()

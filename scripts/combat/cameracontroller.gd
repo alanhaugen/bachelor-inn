@@ -2,7 +2,8 @@
 
 ## Class to control a camera.
 ## Design is to set a destination to the
-class_name CameraController extends Node3D
+extends Node3D
+class_name CameraController
 
 #region Components
 @onready var springarm : Node3D = %Springarm
