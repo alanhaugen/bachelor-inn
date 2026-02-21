@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix,cull_disabled, diffuse_burley, specular_schlick_ggx, skip_vertex_transform;
+render_mode  skip_vertex_transform;
 
 group_uniforms Tex;
 uniform sampler2D albedo: source_color, filter_nearest;
@@ -13,11 +13,6 @@ uniform float detail = 1.0;
 uniform float distortion : hint_range(0.0, 1.0);
 uniform vec2 direction = vec2(1.0, 0.0);
 uniform float heightOffset = 0.0;
-
-uniform vec3 uv1_scale;
-uniform vec3 uv1_offset;
-uniform vec3 uv2_scale;
-uniform vec3 uv2_offset;
 
 vec3 getWind(mat4 worldMatrix, vec3 vertex, float timer){
 	vec4 pos = worldMatrix * mix(vec4(1.0), vec4(vertex, 1.0), distortion);
@@ -35,7 +30,7 @@ void vertex() {
 	worldPos.xyz += getWind(MODEL_MATRIX, VERTEX, TIME);
 	VERTEX = (VIEW_MATRIX * worldPos).xyz;
 	NORMAL = (MODELVIEW_MATRIX * vec4(NORMAL, 0.0)).xyz;
-	UV = UV * uv1_scale.xy + uv1_offset.xy;
+
 
 }
 
