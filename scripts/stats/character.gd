@@ -227,9 +227,10 @@ func _ready() -> void:
 	
 	calc_derived_stats()
 	
+	## Skill aquirement commented out for now
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	state.skills.append(get_random_unaquired_skill());
+	#state.skills.append(get_random_unaquired_skill());
 	#abilities.append(abilites[0]);
 	
 	if state.is_playable():

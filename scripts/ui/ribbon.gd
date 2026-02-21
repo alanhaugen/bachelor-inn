@@ -23,7 +23,6 @@ func set_skills(in_skills: Array[Skill]) -> void:
 			b.show()
 			b.disabled = false
 
-			# Icon is optional; if null you'll still see the button
 			b.texture_normal = s.icon
 			b.tooltip_text = "%s\n%s" % [s.skill_name, s.tooltip]
 

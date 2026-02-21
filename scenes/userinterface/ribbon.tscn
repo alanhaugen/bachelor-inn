@@ -34,19 +34,29 @@ custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 
 [node name="Ability1" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=1937252399]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+stretch_mode = 0
 
 [node name="Ability2" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=1807369008]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+stretch_mode = 0
 
 [node name="Ability3" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=803770614]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+stretch_mode = 0
 
 [node name="Ability4" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=246561587]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+stretch_mode = 0
 
 [node name="Ability5" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=19738247]
+custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+stretch_mode = 0
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer" unique_id=1739104351]
 layout_mode = 2

@@ -65,6 +65,11 @@ func create_new_save_data() -> void:
 
 	var state2 := CharacterState.new()
 	state2.weapon = WeaponRegistry.get_weapon("sword_basic")
+	state2.skills = [SkillRegistry.get_skill("defence_basic")]
+	state2.skills = [
+					SkillRegistry.get_skill("defence_basic"),
+					SkillRegistry.get_skill("trap_basic")
+					]
 
 	var char2 := Character.new()
 	char2.data = data2
@@ -197,6 +202,8 @@ func read(save_slot: int) -> bool:
 		character.state = state
 		
 		print("DEBUG LOADED unit:", data.unit_name, " skills:", state.skills.size(), " ids:", state_dict.get("skill_ids", []))
+		print("LOADED ", data.unit_name, " skill_ids=", state_dict.get("skill_ids", []))
+		print("RESOLVED ", data.unit_name, " skills=", state.skills.map(func(s: Skill) -> String: return s.skill_id if s else "NULL"))
 		
 		Main.characters.append(character)
 
