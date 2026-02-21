@@ -3,18 +3,8 @@ class_name SaveGame
 
 const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 
-
-#const ALFRED: PackedScene = preload("res://scenes/grid_items/alfred.tscn");
-#const LUCY: PackedScene = preload("res://scenes/grid_items/Char_Lucy.tscn");
-
-#const CHARACTER_SCENES := {
-#	"Alfred" : ALFRED,
-#	"Lucy" : LUCY
-#}
-
 ## Use this to detect old player save files and update them 
 @export var version := 1;
-@export var map_name := "first";
 
 
 func is_savefile_existing() -> bool:
@@ -35,9 +25,9 @@ func create_new_from_state(slot:int, level: int, state: GameState) -> void:
 	}
 	
 	# TODO: Save to file
-	#var json_string: String = JSON.stringify(saves);
-	#save_file.store_string(json_string);
-	#save_file.close();
+	#var json_string: String = JSON.stringify(saves)
+	#save_file.store_string(json_string)
+	#save_file.close()
 
 
 func create_new_save_data() -> void:
@@ -95,9 +85,9 @@ func create_new_save_data() -> void:
 	}
 	
 	#is the VAR necessary????? nope. but it is more readable
-	var json_string: String = JSON.stringify(saves);
-	save_file.store_string(json_string);
-	save_file.close();
+	var json_string: String = JSON.stringify(saves)
+	save_file.store_string(json_string)
+	save_file.close()
 
 
 func write(_save_slot: int) -> void:
@@ -148,9 +138,7 @@ func read(save_slot: int) -> bool:
 
 	var level : int = slot["level"]
 	var units : Array = slot["units"]
-
-	Main.characters.clear()
-
+	
 	for unit_dict : Dictionary in units:
 		
 		var scene_id : String = unit_dict.get("scene")

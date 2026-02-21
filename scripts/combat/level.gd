@@ -360,7 +360,8 @@ func _parse_layout() -> Layout:
 
 func _spawn_from_layout(layout : Layout) -> void:
 	pass
-	
+
+
 func _initialize_game_state() -> void:
 	pass
 
