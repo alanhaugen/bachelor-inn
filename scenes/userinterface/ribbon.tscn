@@ -33,6 +33,21 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 
+[node name="Ability1" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=1937252399]
+layout_mode = 2
+
+[node name="Ability2" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=1807369008]
+layout_mode = 2
+
+[node name="Ability3" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=803770614]
+layout_mode = 2
+
+[node name="Ability4" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=246561587]
+layout_mode = 2
+
+[node name="Ability5" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills" unique_id=19738247]
+layout_mode = 2
+
 [node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer" unique_id=1739104351]
 layout_mode = 2
 
@@ -42,4 +57,19 @@ text = "Abilities"
 
 [node name="Abilities" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2" unique_id=593472449]
 unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities" unique_id=247386107]
+layout_mode = 2
+
+[node name="TextureButton2" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities" unique_id=531976456]
+layout_mode = 2
+
+[node name="TextureButton3" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities" unique_id=1339891192]
+layout_mode = 2
+
+[node name="TextureButton4" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities" unique_id=1206182608]
+layout_mode = 2
+
+[node name="TextureButton5" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities" unique_id=1612655850]
 layout_mode = 2

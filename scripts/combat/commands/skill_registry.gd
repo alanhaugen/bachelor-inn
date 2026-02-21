@@ -3,9 +3,13 @@ extends Node
 
 const S_NO_SKILL = preload("res://Data/Abilities/no_skill.tres")
 const S_HEAL_BASIC = preload("res://Data/Abilities/heal_basic.tres")
+const S_HEAL_SANITY_BASIC = preload("res://Data/Abilities/heal_sanity_basic.tres")
 const S_FIREBALL_BASIC = preload("res://Data/Abilities/fireball_basic.tres")
 const S_MELEE_SWEEP = preload("res://Data/Abilities/melee_sweep.tres")
 const S_HASTE_BASIC = preload("res://Data/Abilities/haste_basic.tres")
+const S_DEFENCE_BASIC = preload("res://Data/Abilities/defence_basic.tres")
+const S_TRAP_BASIC = preload("res://Data/Abilities/trap_basic.tres")
+const S_BOMB_BASIC = preload("res://Data/Abilities/bomb_basic.tres")
 
 var _by_id: Dictionary = {}
 
@@ -17,6 +21,10 @@ func _ready() -> void:
 	_register(S_FIREBALL_BASIC)
 	_register(S_MELEE_SWEEP)
 	_register(S_HASTE_BASIC)
+	_register(S_BOMB_BASIC)
+	_register(S_HEAL_SANITY_BASIC)
+	_register(S_TRAP_BASIC)
+	_register(S_DEFENCE_BASIC)
 
 func _register(s: Skill) -> void:
 	if s == null:

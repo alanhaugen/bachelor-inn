@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://dwvsqt8okj8n1"]
+
+[ext_resource type="Texture2D" uid="uid://b5po4sj1km0ar" path="res://Data/Abilities/UI_Icon_Trap_Basic.png" id="1_g07fu"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_jqrh8"]
+
+[resource]
+script = ExtResource("1_jqrh8")
+skill_id = "trap_basic"
+skill_name = "trap basic"
+tooltip = "Reduses movement of the effected unit. "
+icon = ExtResource("1_g07fu")
+effect_mods = {
+&"movement": -4
+}
+metadata/_custom_type_script = "uid://c3p07am3ababr"

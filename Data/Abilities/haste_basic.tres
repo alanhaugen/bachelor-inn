@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="Skill" format=3 uid="uid://lvhavkk1vueb"]
 
+[ext_resource type="Texture2D" uid="uid://cucofljj0yug7" path="res://Data/Abilities/UI_Icon_Haste_Basic.png" id="1_7cx8k"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_xcv5g"]
 
 [resource]
@@ -7,6 +8,7 @@ script = ExtResource("1_xcv5g")
 skill_id = "haste_basic"
 skill_name = "haste_basic"
 tooltip = "Increases the movement range of a target unit."
+icon = ExtResource("1_7cx8k")
 effect_mods = {
 &"movement": 2
 }

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://213btyk7kq4i"]
+
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_hkrdj"]
+[ext_resource type="Texture2D" uid="uid://clfryh1b0vp2t" path="res://Data/Abilities/UI_Icon_Defence_Basic.png" id="1_wynyv"]
+
+[resource]
+script = ExtResource("1_hkrdj")
+skill_id = "defence_basic"
+skill_name = "defence basic"
+icon = ExtResource("1_wynyv")
+effect_mods = {
+&"defence": 5
+}
+metadata/_custom_type_script = "uid://c3p07am3ababr"
