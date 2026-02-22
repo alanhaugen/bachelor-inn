@@ -50,7 +50,7 @@ var selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
-var is_chosing_skill_target: bool = false
+var is_choosing_skill_target: bool = false
 var move_popup: Control;
 var stat_popup_player: Control;
 var side_bar_array : Array[SideBar];
@@ -217,8 +217,8 @@ func show_attack_tiles(pos : Vector3i) -> void:
 	#for tile :Vector3i in MoveGenerator.get_valid_neighbours(pos, reachable):
 	#	path_map.set_cell_item(tile, 0);
 
-
-func _input(event: InputEvent) -> void:
+## Renamed from '_input' to '_unhandeled_input' to enable clicking UI elements
+func _unhandled_input(event: InputEvent) -> void:
 	if state == States.ANIMATING:
 		return;
 	if is_in_menu:
@@ -235,6 +235,26 @@ func _input(event: InputEvent) -> void:
 		# Get the tile clicked on
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		print (pos);
+		
+		## SKILL TARGETING MODE
+		if is_choosing_skill_target == true:
+			if get_unit_name(pos) == CharacterStates.Player:
+				var target: Character = get_unit(pos)
+				print("Target selected: ", target.data.unit_name, " for skill: ", active_skill.skill_id)
+
+				## exiting targeting mode
+				is_choosing_skill_target = false
+				active_skill = null
+				skill_caster = null
+				return
+
+			# click anywhere else: cancel targeting (optional but recommended)
+			print("Cancelled skill targeting.")
+			is_choosing_skill_target = false
+			active_skill = null
+			skill_caster = null
+			return
+		
 		
 		if state == States.CHOOSING_ATTACK:
 			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
@@ -636,7 +656,15 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
-	print("Pressed skill:", skill.skill_id)
+	if selected_unit == null:
+		print("Pressed skill: ", skill.skill_id, " but no unit selected. This should never happen!")
+		return
+	
+	active_skill = skill
+	skill_caster = selected_unit
+	is_choosing_skill_target = true
+	
+	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
 
 
 func _process(delta: float) -> void:
