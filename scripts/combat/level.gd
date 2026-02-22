@@ -51,6 +51,7 @@ var selected_enemy_unit: Character = null
 var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
 var is_choosing_skill_target: bool = false
+var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
 var move_popup: Control;
 var stat_popup_player: Control;
 var side_bar_array : Array[SideBar];
@@ -92,6 +93,7 @@ var player_code_done: int = 3;
 var enemy_code: int = 1;
 var attack_code: int = 0;
 var move_code: int = 1;
+var skill_target_code: int = 0
 
 #region Camera
 var camera_controller : CameraController
@@ -238,15 +240,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		## SKILL TARGETING MODE
 		if is_choosing_skill_target == true:
-			if get_unit_name(pos) == CharacterStates.Player:
+			if valid_skill_target_tiles.has(pos):
 				var target: Character = get_unit(pos)
-				print("Target selected: ", target.data.unit_name, " for skill: ", active_skill.skill_id)
-
-				## exiting targeting mode
-				is_choosing_skill_target = false
-				active_skill = null
-				skill_caster = null
-				return
+				print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+			
+			# TODO: apply the skill effect (next step)
+			# target.state.apply_skill_effect(active_skill)
+				_exit_skill_target_mode()
+			else:
+				# click elsewhere cancels
+				_exit_skill_target_mode()
+			return
 
 			# click anywhere else: cancel targeting (optional but recommended)
 			print("Cancelled skill targeting.")
@@ -356,7 +360,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		if (get_unit_name(pos) == CharacterStates.PlayerDone):
 			update_stat(get_unit(pos), stat_popup_player);
 	#elif event is InputEventMouseMotion:
-	#	print("Mouse Motion at: ", event.position)
+	#print("Mouse Motion at: ", event.position)
 
 
 func update_stat(character: Character, popup: StatPopUp) -> void:
@@ -664,7 +668,42 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	skill_caster = selected_unit
 	is_choosing_skill_target = true
 	
+	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
+
+func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
+	valid_skill_target_tiles.clear()
+	path_map.clear()  # or whichever overlay you want to use
+
+	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
+
+	for t in tiles_in_range:
+		# only highlight units (targets), not empty tiles
+		if get_unit_name(t) == CharacterStates.Player:
+			# you can add extra filters here (alive, etc.)
+			valid_skill_target_tiles[t] = true
+			path_map.set_cell_item(t, skill_target_code)
+
+func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int) -> Array[Vector3i]:
+	var out: Array[Vector3i] = []
+	min_r = max(min_r, 0)
+	max_r = max(max_r, 0)
+
+	for dx in range(-max_r, max_r + 1):
+		var rem:int = max_r - abs(dx)
+		for dz in range(-rem, rem + 1):
+			var dist :int = abs(dx) + abs(dz)
+			if dist < min_r or dist > max_r:
+				continue
+			out.append(Vector3i(origin.x + dx, origin.y, origin.z + dz))
+	return out
+
+func _exit_skill_target_mode() -> void:
+	is_choosing_skill_target = false
+	active_skill = null
+	skill_caster = null
+	valid_skill_target_tiles.clear()
+	path_map.clear()
 
 
 func _process(delta: float) -> void:
