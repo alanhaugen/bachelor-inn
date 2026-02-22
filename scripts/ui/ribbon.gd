@@ -48,6 +48,7 @@ func _connect_group(buttons: Array[TextureButton], handler: Callable) -> void:
 			b.pressed.connect(handler.bind(b))
 
 func _on_skill_button_pressed(button: TextureButton) -> void:
+	print("Skill button pressed.")
 	var s: Skill = button.get_meta("skill") as Skill
 	if s != null:
 		skill_pressed.emit(s)

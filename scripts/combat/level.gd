@@ -48,6 +48,9 @@ var movement_weights_grid : Grid
 
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
+var active_skill: Skill = null
+var skill_caster: Character = null ## The one using ability
+var is_chosing_skill_target: bool = false
 var move_popup: Control;
 var stat_popup_player: Control;
 var side_bar_array : Array[SideBar];
@@ -399,6 +402,7 @@ func _ready() -> void:
 	ribbon = RIBBON.instantiate();
 	add_child(ribbon);
 	ribbon.hide();
+	ribbon.skill_pressed.connect(_on_ribbon_skill_pressed)
 	
 	if (level_name == "first"):
 		Dialogic.start(str(level_name) + "Level");
@@ -629,6 +633,10 @@ func tick_all_units_end_round() -> void:
 			continue
 
 		c.state.tick_effects_end_round()
+
+
+func _on_ribbon_skill_pressed(skill: Skill) -> void:
+	print("Pressed skill:", skill.skill_id)
 
 
 func _process(delta: float) -> void:
