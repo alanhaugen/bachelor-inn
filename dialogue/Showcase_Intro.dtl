@@ -1,6 +1,8 @@
 [style name="CustomDialogicStyle"]
 do Event.set_objective_find_object()
-WipGroup13: Hello we are group 13, we are making this game!
-WipGroup13: Here is grass. Its grassy. The rock is a bit rocky. The shaders are throwing shade on everything.
-Mordi: A temporary phenomenon occurred about the houses and every miracle.
+WipGroup13: A world in turmoil, where from the shadows, monsters feed.\
+A flood of apathy, an ignorance, a greed.
+WipGroup13: The river of despair. It poisons, corrupts, consumes.\
+Yet, a desperate cry for life. A collective anger blooms. \
+Focused and determined, creates a hope that then illumes.
 do Tutorial.tutorial_unlock_menus()
