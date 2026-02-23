@@ -1,26 +1,42 @@
 class_name MinimaxAI
 extends RefCounted
 
-
-func minimax(state : GameState, depth : int, specific_character : Character = null) -> float:
+func minimax(state : GameState, depth : int, specific_character_pos : NullablePosition = null) -> float:
 	if depth == 0:
 		return evaluate(state)
 
-	var moves : Array[Command] = state.get_legal_moves(specific_character)
+	var moves : Array[Command] = state.get_legal_moves(specific_character_pos)
 	if moves.is_empty():
 		return evaluate(state)
 
 	var enemy_turn := state.is_current_player_enemy
-
+	
+	
 	if enemy_turn:
 		var best := -INF
 		for move : Command in moves:
-			best = max(best, minimax(state.apply_move(move, true), depth - 1, specific_character))
+			var end_pos : NullablePosition = null
+			if specific_character_pos != null:
+				if move is Attack:
+					end_pos = NullablePosition.new(move.attack_pos)
+				elif move is Move:
+					end_pos = NullablePosition.new(move.end_pos)
+				else:
+					push_error("UNHANDLED COMMAND TYPE")
+			best = max(best, minimax(state.apply_move(move, true), depth - 1, end_pos))
 		return best
 	else:
 		var best := INF
 		for move : Command in moves:
-			best = min(best, minimax(state.apply_move(move, true), depth - 1, specific_character))
+			var end_pos : NullablePosition = null
+			if specific_character_pos != null:
+				if move is Attack:
+					end_pos = NullablePosition.new(move.attack_pos)
+				elif move is Move:
+					end_pos = NullablePosition.new(move.end_pos)
+				else:
+					push_error("UNHANDLED COMMAND TYPE")
+			best = min(best, minimax(state.apply_move(move, true), depth - 1, end_pos))
 		return best
 
 
@@ -81,9 +97,23 @@ func evaluate(state : GameState) -> int:
 func choose_best_move(state : GameState, depth : int, specific_character : Character = null) -> Command:
 	var best_score := -INF
 	var best_move : Command = null
+	var start_pos : NullablePosition = null
 	
-	for move in state.get_legal_moves(specific_character):
-		var score : float = minimax(state.apply_move(move, true), depth - 1, specific_character)
+	if(specific_character != null):
+		start_pos = NullablePosition.new(specific_character.state.grid_position)
+		
+	for move in state.get_legal_moves(start_pos):
+		var end_pos : NullablePosition = null
+		if(specific_character != null):
+			if move is Attack:
+				end_pos = NullablePosition.new(move.attack_pos)
+			elif move is Move:
+				end_pos = NullablePosition.new(move.end_pos)
+			else:
+				push_error("UNHANDLED COMMAND TYPE")
+			
+		var move_state : GameState = state.apply_move(move, true)
+		var score : float = minimax(move_state, depth - 1, end_pos)
 
 		if score > best_score:
 			best_score = score

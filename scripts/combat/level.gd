@@ -642,6 +642,35 @@ func MoveAI() -> void:
 		camera_controller.set_pivot_target_translate(Main.characters.front().position)
 		camera_controller.free_camera()
 
+func MoveSingleAI() -> void:
+	var ai := MinimaxAI.new();
+	var current_state := GameState.from_level(self);
+	
+	var currentEnemy : Character = null
+	for unit in characters:
+		if unit == null:
+			continue
+		if !unit.state.is_enemy():
+			continue
+		if unit.state.is_moved:
+			continue
+		currentEnemy = unit
+		break
+	
+	if currentEnemy != null:
+		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
+		if current_state.has_enemy_moves(curEnemyPos):
+			var move : Command = ai.choose_best_move(current_state, 3, currentEnemy);
+			moves_stack.append(move);
+			current_state = current_state.apply_move(move, true);
+	
+	if (moves_stack.is_empty() == false):
+		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
+		state = States.ANIMATING;
+		camera_controller.focus_camera(selected_unit)
+	else:
+		camera_controller.set_pivot_target_translate(Main.characters.front().position)
+		camera_controller.free_camera()
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
@@ -778,7 +807,8 @@ func _process_old(delta: float) -> void:
 				player_label.hide();
 		else:
 			reset_all_units();
-			MoveAI();
+			#MoveAI();
+			MoveSingleAI()
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
@@ -823,7 +853,8 @@ func _process_old(delta: float) -> void:
 			Tutorial.tutorial_unit_moved();
 			
 			if is_player_turn == false:
-				MoveAI(); # called after an enemy is done moving
+				#MoveAI(); # called after an enemy is done moving
+				MoveSingleAI()
 				for character in Main.characters:
 					if characters == null: 
 						return

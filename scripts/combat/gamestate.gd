@@ -90,10 +90,10 @@ func end_turn() -> void:
 	reset_moves();
 
 
-func get_legal_moves(chara : Character = null) -> Array[Command]:
+func get_legal_moves(charaPos : NullablePosition = null) -> Array[Command]:
 	var moves : Array[Command] = []
 	
-	if( chara == null):
+	if( charaPos == null):
 		for unit in units:
 			if unit.state.is_moved:
 				continue;
@@ -107,6 +107,7 @@ func get_legal_moves(chara : Character = null) -> Array[Command]:
 		var has_moved : bool = false
 		var is_dead : bool = false
 		var isEnemy: bool  = false
+		var chara : Character = get_unit(charaPos.position)
 		if chara.state.is_moved:
 			has_moved = true;
 		if chara.state.is_alive == false:
@@ -120,8 +121,8 @@ func get_legal_moves(chara : Character = null) -> Array[Command]:
 	return moves
 
 
-func has_enemy_moves(chara : Character = null) -> bool:
-	if get_legal_moves(chara).is_empty():
+func has_enemy_moves(charaPos : NullablePosition = null) -> bool:
+	if get_legal_moves(charaPos).is_empty():
 		return false;
 	
 	return true;
