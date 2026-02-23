@@ -12,4 +12,6 @@ icon = ExtResource("1_7cx8k")
 effect_mods = {
 &"movement": 2
 }
+max_range = 3
+duration_turns = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"

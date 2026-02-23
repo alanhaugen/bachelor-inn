@@ -111,13 +111,12 @@ func apply_skill_effect(skill: Skill) -> void:
 			e["mods"] = skill.effect_mods.duplicate(true)
 			e["source"] = skill.skill_id
 			return
-
-	# Otherwise add new effect instance
-	active_effects.append(
-		{
-		"id": skill.sk
-		})
-
+			
+	active_effects.append({
+		"id": skill.skill_id,
+		"rounds": skill.duration_turns,
+		"mods": skill.effect_mods.duplicate(true),
+		"source": skill.skill_id})
 
 func get_effective_movement() -> int:
 	var base: int = movement
@@ -132,9 +131,6 @@ func get_effective_movement() -> int:
 
 ## This tics down spells and effects that lasts for more than 1 round.
 func tick_effects_end_round() -> void:
-	# Decrement duration and remove expired effects.
-	# active_effects entry schema:
-	# { "id": StringName/String, "rounds": int, "mods": Dictionary, "source": StringName/String }
 	for i in range(active_effects.size() - 1, -1, -1):
 		var e: Dictionary = active_effects[i]
 
@@ -148,10 +144,18 @@ func tick_effects_end_round() -> void:
 			active_effects.remove_at(i)
 		else:
 			e["rounds"] = r
-			active_effects[i] = e # keep the updated dictionary in the array
+			active_effects[i] = e 
 
 
-
+static func make_active_effect(skill: Skill, caster: Object) -> Dictionary:
+	return {
+		"skill": skill,
+		"skill_id": skill.skill_id,
+		"caster": caster, # can be Character, CharacterState, etc.
+		"caster_instance_id": caster.get_instance_id() if caster else 0,
+		"remaining_turns": skill.duration_turns,
+		"mods": skill.effect_mods.duplicate(true) # deep copy
+	}
 
 func save() -> Dictionary:
 	# Convert Skill resources -> Array[String] for JSON

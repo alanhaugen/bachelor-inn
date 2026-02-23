@@ -660,6 +660,8 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
+	movement_grid.clear()
+	
 	if selected_unit == null:
 		print("Pressed skill: ", skill.skill_id, " but no unit selected. This should never happen!")
 		return
@@ -679,7 +681,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 
 	for t in tiles_in_range:
 		# only highlight units (targets), not empty tiles
-		if get_unit_name(t) == CharacterStates.Player:
+		if get_unit_name(t) == CharacterStates.Player or get_unit_name(t) == CharacterStates.PlayerDone:
 			# you can add extra filters here (alive, etc.)
 			valid_skill_target_tiles[t] = true
 			path_map.set_cell_item(t, skill_target_code)
