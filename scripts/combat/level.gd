@@ -105,6 +105,12 @@ var is_enemy_turn: bool = false
 
 #region Camera
 var camera_controller : CameraController
+const post_enemy_move_wait : float = 0.1
+const post_enemy_attack_wait : float = 0.4
+const pre_enemy_turn_wait : float = 0.2
+var wait_timer : float = 0.0
+@onready var timer : Timer = $Timer
+var wait_for_camera : bool = false
 #endregion
 
 var monster_names := [
@@ -130,7 +136,8 @@ var monster_names := [
 	"Sec'Mat",
 	"Unfinished projects",
 	"d'ave",
-	"mar'k"
+	"mar'k",
+	"Cringe Memory",
 ]
 
 
@@ -668,6 +675,10 @@ func MoveSingleAI() -> void:
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
 		camera_controller.focus_camera(selected_unit)
+		wait_for_camera = true
+		timer.start(pre_enemy_turn_wait)
+		await timer.timeout
+		wait_for_camera = false
 	else:
 		camera_controller.set_pivot_target_translate(get_selectable_characters().front().position)
 		camera_controller.free_camera()
@@ -766,6 +777,8 @@ func _process_old(delta: float) -> void:
 		return;
 	if(!combat_vfx.is_finished()):
 		return
+	if wait_for_camera:
+		return
 	#for i in Main.characters.size():
 		#update_side_bar(Main.characters[i], side_bar_array[i]);
 		
@@ -854,6 +867,16 @@ func _process_old(delta: float) -> void:
 			
 			if is_player_turn == false:
 				#MoveAI(); # called after an enemy is done moving
+				if(active_move is Attack):
+					wait_for_camera = true
+					timer.start(post_enemy_attack_wait)
+					await timer.timeout
+					wait_for_camera = false
+				elif active_move is Move:
+					wait_for_camera = true
+					timer.start(post_enemy_move_wait)
+					await timer.timeout
+					wait_for_camera = false
 				MoveSingleAI()
 				for character in Main.characters:
 					if characters == null: 

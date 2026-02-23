@@ -1,12 +1,12 @@
 [gd_scene load_steps=15 format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
-[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
+[ext_resource type="MeshLibrary" uid="uid://c2m4bduhp1odo" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://bqe8w1f2rn5eb" path="res://scenes/libraries/OccupancyMeshLibrary.tres" id="3_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://cf7mu0h5aey6v" path="res://scenes/libraries/LIB_MovementGridSimplification.gltf" id="3_ks0nw"]
 [ext_resource type="MeshLibrary" uid="uid://bn03h5wqjx55b" path="res://scenes/libraries/TriggerMeshLibrary.tres" id="4_cx077"]
 [ext_resource type="MeshLibrary" uid="uid://dan04754q5nkc" path="res://scenes/libraries/MovementMapLibrary.tres" id="4_dypiu"]
-[ext_resource type="Texture2D" uid="uid://s635gsj08vhr" path="res://art/textures/Cursors.png" id="6_8a3vg"]
+[ext_resource type="Texture2D" uid="uid://chmtlewxvxl6h" path="res://art/textures/Cursors.png" id="6_8a3vg"]
 [ext_resource type="PackedScene" uid="uid://bmb7trymiv3jj" path="res://scenes/userinterface/turn_transition.tscn" id="7_ygto3"]
 [ext_resource type="Environment" uid="uid://bptw2s8sfbjfe" path="res://art/Environment/WE_NewDefault.tres" id="9_85lyy"]
 [ext_resource type="PackedScene" uid="uid://c4b8f02hyixcc" path="res://scenes/userinterface/InGameUI_WIP.tscn" id="11_06w7e"]
@@ -150,3 +150,6 @@ melee_attack_scene = ExtResource("12_vltbs")
 
 [node name="CameraSettings" parent="." instance=ExtResource("12_2iq81")]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0)
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
