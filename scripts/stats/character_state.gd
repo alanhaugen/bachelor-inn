@@ -100,26 +100,40 @@ func get_sanity_state() -> SanityState:
 func apply_skill_effect(skill: Skill) -> void:
 	if skill == null:
 		return
-	if skill.duration_turns <= 0:
-		return
-	if skill.effect_mods == null or skill.effect_mods.is_empty():
-		return
+	
+	var mods: Dictionary = {}
+	if skill.effect_mods != null:
+		for k:String in skill.effect_mods.keys():
+			# ignore non-passive keys we treat as special
+			if k in ["damage", "dot_tick_damage"]:
+				continue
+			mods[k] = skill.effect_mods[k]
+
+	## Passive mods effect, if any
+	if mods.size() > 0 and skill.duration_turns > 0:
+		var effect := {
+			"id": skill.skill_id,
+			"rounds": int(skill.duration_turns),
+			"mods": mods
+		}
+		active_effects.append(effect)
+
+	## DoT effect if skill have
+	if skill.effect_mods != null and skill.effect_mods.has("dot_tick_damage"):
+		var dot := {
+			"id": str(skill.skill_id) + "_dot",
+			"rounds": int(skill.duration_turns),
+			"tick": { "damage": int(skill.effect_mods["dot_tick_damage"]) }
+		}
+
 		
-	## Check if effect already exists + refresh duration
-	for i in range(active_effects.size()):
-		var e: Dictionary = active_effects[i]
-		if str(e.get("id", "")) == skill.skill_id:
-			e["rounds"] = max(int(e.get("rounds", 0)), skill.duration_turns)
-			e["mods"] = skill.effect_mods.duplicate(true)
-			e["source"] = skill.skill_id
-			active_effects[i] = e
-			return
-			
-	active_effects.append({
-		"id": skill.skill_id,
-		"rounds": skill.duration_turns,
-		"mods": skill.effect_mods.duplicate(true),
-		"source": skill.skill_id})
+		## If we want stacking instead of refresh, uncomment this:
+		for i in range(active_effects.size() - 1, -1, -1):
+			if active_effects[i].get("id", "") == dot["id"]:
+				active_effects.remove_at(i)
+
+		active_effects.append(dot)
+
 
 func get_effective_movement() -> int:
 	var base: int = movement
@@ -131,6 +145,15 @@ func get_effective_movement() -> int:
 		bonus += int(mods.get(K_MOVEMENT, 0))
 
 	return max(0, base + bonus)
+
+## Use signal?
+#func apply_damage(amount: int) -> void:
+#	amount = int(amount)
+#	if amount <= 0:
+#		return
+#	current_health = max(0, hp - amount)
+	# Optional: emit signal / set dead flag / etc.
+	# if hp == 0: is_dead = true
 
 ## This tics down spells and effects that lasts for more than 1 round.
 func tick_effects_end_round() -> void:
