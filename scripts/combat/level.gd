@@ -74,6 +74,7 @@ const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn");
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
+const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -552,6 +553,7 @@ func _ready() -> void:
 				new_unit = (
 					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "04_EnemyBird"
 					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "05_EnemyGhost"
+					else HORROR_ENEMY.instantiate() if get_unit_name(pos) == "06_EnemyMonster"
 					else PLAYER.instantiate()
 				)
 

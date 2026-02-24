@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://basxatsw3yrbq"]
+
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_7fk8w"]
+[ext_resource type="Texture2D" uid="uid://bnmk25pej75js" path="res://art/Animations/Enemies/TentacleMonster/texture/U_Horror1_walkcycle_basecolour.png" id="1_jsi8p"]
+[ext_resource type="Texture2D" uid="uid://dowai0iknmw07" path="res://art/Animations/Enemies/TentacleMonster/texture/U_Horror1_walkcycle_mask4.png" id="2_q8pey"]
+[ext_resource type="Texture2D" uid="uid://lgf2tr3ankpq" path="res://art/Animations/Enemies/TentacleMonster/texture/U_Horror1_walkcycle_normal.png" id="3_ohx0v"]
+
+[resource]
+script = ExtResource("1_7fk8w")
+diffuse_atlas = ExtResource("1_jsi8p")
+normal_atlas = ExtResource("3_ohx0v")
+mask_atlas = ExtResource("2_q8pey")
+metadata/_custom_type_script = "uid://c876dul20yd5j"

@@ -209,7 +209,7 @@ layout_mode = 2
 [node name="STR_Text" type="Label" parent="Control/Stats/StatHolder/STR_Box"]
 layout_mode = 2
 size_flags_horizontal = 0
-tooltip_text = "Strength"
+tooltip_text = "Increases attack damage! "
 mouse_filter = 0
 theme_override_fonts/font = ExtResource("3_amsg4")
 theme_override_font_sizes/font_size = 18

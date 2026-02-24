@@ -1,0 +1,29 @@
+[gd_scene load_steps=9 format=3 uid="uid://dr44snhdeohul"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_ad4sb"]
+[ext_resource type="Resource" uid="uid://tfgni1ny6mgm" path="res://art/Animations/Enemies/TentacleMonster/L_Run_HorrorTentacles.tres" id="2_4cf3j"]
+[ext_resource type="Resource" uid="uid://chpj4dys2c4y8" path="res://art/Animations/Enemies/TentacleMonster/R_Run_HorrorTentacles.tres" id="3_jtemf"]
+[ext_resource type="Resource" uid="uid://basxatsw3yrbq" path="res://art/Animations/Enemies/TentacleMonster/U_Run_HorrorTentacles.tres" id="4_lfgvp"]
+[ext_resource type="Resource" uid="uid://3rc1i1th4xs4" path="res://art/Animations/Enemies/TentacleMonster/D_Run_HorrorTentacles.tres" id="5_6v5nd"]
+[ext_resource type="Resource" uid="uid://c3ea7odi7pcwb" path="res://art/Animations/Enemies/TentacleMonster/Idle_HorrorTentacles.tres" id="6_lbjy3"]
+[ext_resource type="Texture2D" uid="uid://umbje1f6nq36" path="res://art/textures/Horror1_portrait.png" id="7_y5mi4"]
+[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="8_4cf3j"]
+
+[node name="Character2" instance=ExtResource("1_ad4sb")]
+run_left_animation = ExtResource("2_4cf3j")
+run_right_animation = ExtResource("4_lfgvp")
+run_up_animation = ExtResource("5_6v5nd")
+run_down_animation = ExtResource("3_jtemf")
+idle_animation = ExtResource("6_lbjy3")
+portrait = ExtResource("7_y5mi4")
+
+[node name="Sprite" parent="." index="0"]
+transform = Transform3D(16, 0, 0, 0, 4.939582, 3.1464474, 0, -6.2928944, 2.4697912, 0, 1.5070372, -1.2454202)
+script = ExtResource("8_4cf3j")
+
+[node name="Outline" parent="." index="1"]
+transform = Transform3D(16, 0, 0, 0, 4.939582, 3.1464474, 0, -6.2928944, 2.4697912, 0, 1.5070372, -1.2454202)
+script = ExtResource("8_4cf3j")
+
+[node name="Shadow" parent="." index="2"]
+transform = Transform3D(14.850084, 0, 0, 0, -2.4668174e-07, -4, 0, 5.6434207, -1.7484555e-07, 0, 0.07548618, -0.009224594)

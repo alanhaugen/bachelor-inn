@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dokhyh7eo4mwv"]
+[gd_scene load_steps=27 format=3 uid="uid://dokhyh7eo4mwv"]
 
 [ext_resource type="Script" uid="uid://23wrdfc0atd" path="res://scripts/ui/CharacterPreview.gd" id="1_4hx64"]
 [ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="3_st0te"]
 [ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="4_bxick"]
 [ext_resource type="StyleBox" uid="uid://dly7gpxmaudqk" path="res://scenes/userinterface/Invisible_Button.tres" id="4_spspg"]
+[ext_resource type="StyleBox" uid="uid://cv04fi2snp0rd" path="res://scenes/userinterface/CharacterPreviewOCEffectDrawer.tres" id="6_khx38"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5oovn"]
 atlas = ExtResource("2_spspg")
@@ -51,19 +52,63 @@ region_rect = Rect2(198, 16, 10, 15)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_st0te"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8i0es"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ha13n"]
+atlas = SubResource("CompressedTexture2D_8i0es")
+region = Rect2(160, 64, 7, 9)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_vvpmc"]
+texture = SubResource("AtlasTexture_ha13n")
+modulate_color = Color(0.6789437, 0.6789437, 0.6789437, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_f0dpo"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_282ap"]
+atlas = SubResource("CompressedTexture2D_f0dpo")
+region = Rect2(160, 64, 7, 9)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1nmp8"]
+texture = SubResource("AtlasTexture_282ap")
+modulate_color = Color(0.6955032, 0.6955031, 0.6955031, 1)
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_pvteg"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6l07"]
+atlas = SubResource("CompressedTexture2D_pvteg")
+region = Rect2(160, 64, 7, 9)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1hefv"]
+texture = SubResource("AtlasTexture_f6l07")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_mbir6"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqxqi"]
+atlas = SubResource("CompressedTexture2D_mbir6")
+region = Rect2(160, 64, 7, 9)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4hkds"]
+texture = SubResource("AtlasTexture_xqxqi")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khx38"]
+atlas = ExtResource("2_spspg")
+region = Rect2(177, 67, 3, 2)
+
 [node name="CharacterPreview" type="Control"]
+custom_minimum_size = Vector2(0, 46)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 92.08
+offset_bottom = 64.235
 script = ExtResource("1_4hx64")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 90.0
-offset_bottom = 46.0
-mouse_filter = 0
+metadata/_edit_lock_ = true
 
 [node name="Control" type="Control" parent="."]
-anchors_preset = 0
+layout_mode = 1
 offset_right = 90.0
 offset_bottom = 46.0
 size_flags_vertical = 3
@@ -74,11 +119,12 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 8.0
+offset_right = 2.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_spspg")
-region_rect = Rect2(96, 0, 32.076996, 29)
+region_rect = Rect2(98, 66, 28, 26)
 patch_margin_left = 9
 patch_margin_top = 9
 patch_margin_right = 9
@@ -196,8 +242,8 @@ show_percentage = false
 layout_mode = 0
 offset_left = 2.75
 offset_top = 3.0
-offset_right = 93.75
-offset_bottom = 46.25
+offset_right = 88.0
+offset_bottom = 47.0
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = ExtResource("4_spspg")
@@ -221,4 +267,81 @@ patch_margin_top = 16
 patch_margin_right = 5
 patch_margin_bottom = 16
 
+[node name="EffectDrawer" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = 2.0
+offset_top = 48.0
+offset_right = 90.0
+offset_bottom = 64.0
+
+[node name="Background2" type="NinePatchRect" parent="EffectDrawer"]
+z_index = -3
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.9999962
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_spspg")
+region_rect = Rect2(68, 68, 24, 24)
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 4
+
+[node name="Health_Icon" type="TextureRect" parent="EffectDrawer"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 11.0
+offset_bottom = 12.0
+texture = SubResource("AtlasTexture_5oovn")
+stretch_mode = 3
+
+[node name="Health_Icon2" type="TextureRect" parent="EffectDrawer"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 19.0
+offset_bottom = 12.0
+texture = SubResource("AtlasTexture_5oovn")
+stretch_mode = 3
+
+[node name="Health_Icon3" type="TextureRect" parent="EffectDrawer"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 5.0
+offset_right = 27.0
+offset_bottom = 12.0
+texture = SubResource("AtlasTexture_5oovn")
+stretch_mode = 3
+
+[node name="OC EffectDrawer" type="Button" parent="."]
+layout_mode = 0
+offset_left = 77.0
+offset_top = 42.0
+offset_right = 84.0
+offset_bottom = 51.0
+theme_override_styles/normal = ExtResource("6_khx38")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_vvpmc")
+theme_override_styles/hover = SubResource("StyleBoxTexture_1nmp8")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_1hefv")
+theme_override_styles/focus = SubResource("StyleBoxTexture_4hkds")
+
+[node name="OC_ED_Icon" type="TextureRect" parent="OC EffectDrawer"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 3.0
+offset_right = -2.0
+offset_bottom = -4.0
+texture = SubResource("AtlasTexture_khx38")
+
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="OC EffectDrawer" to="." method="_on_oc_effect_drawer_pressed"]
