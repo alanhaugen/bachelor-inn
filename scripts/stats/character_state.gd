@@ -100,16 +100,19 @@ func get_sanity_state() -> SanityState:
 func apply_skill_effect(skill: Skill) -> void:
 	if skill == null:
 		return
-
 	if skill.duration_turns <= 0:
 		return
-
-	# Check if effect already exists + refresh duration
-	for e in active_effects:
-		if e.get("id") == skill.skill_id:
+	if skill.effect_mods == null or skill.effect_mods.is_empty():
+		return
+		
+	## Check if effect already exists + refresh duration
+	for i in range(active_effects.size()):
+		var e: Dictionary = active_effects[i]
+		if str(e.get("id", "")) == skill.skill_id:
 			e["rounds"] = max(int(e.get("rounds", 0)), skill.duration_turns)
 			e["mods"] = skill.effect_mods.duplicate(true)
 			e["source"] = skill.skill_id
+			active_effects[i] = e
 			return
 			
 	active_effects.append({
@@ -133,18 +136,12 @@ func get_effective_movement() -> int:
 func tick_effects_end_round() -> void:
 	for i in range(active_effects.size() - 1, -1, -1):
 		var e: Dictionary = active_effects[i]
-
-		# Missing rounds? Treat as expired.
-		if not e.has("rounds"):
-			active_effects.remove_at(i)
-			continue
-
 		var r: int = int(e.get("rounds", 0)) - 1
 		if r <= 0:
 			active_effects.remove_at(i)
 		else:
 			e["rounds"] = r
-			active_effects[i] = e 
+			active_effects[i] = e
 
 
 static func make_active_effect(skill: Skill, caster: Object) -> Dictionary:

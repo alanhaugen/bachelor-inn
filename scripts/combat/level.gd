@@ -246,6 +246,8 @@ func _unhandled_input(event: InputEvent) -> void:
 				print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
 				# TODO: apply the skill effect (next step)
 				# target.state.apply_skill_effect(active_skill)
+				target.state.apply_skill_effect(active_skill)
+				print("Lucy effective movement now:", target.state.get_effective_movement())
 				_exit_skill_target_mode()
 			else:
 				# click elsewhere cancels
