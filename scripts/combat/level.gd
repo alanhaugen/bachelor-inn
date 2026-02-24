@@ -240,12 +240,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		## SKILL TARGETING MODE
 		if is_choosing_skill_target == true:
-			if valid_skill_target_tiles.has(pos):
-				var target: Character = get_unit(pos)
-				print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+			var target: Character = get_unit(pos)
 			
-			# TODO: apply the skill effect (next step)
-			# target.state.apply_skill_effect(active_skill)
+			if valid_skill_target_tiles.has(pos) and _is_valid_target(target, active_skill, skill_caster):
+				print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+				# TODO: apply the skill effect (next step)
+				# target.state.apply_skill_effect(active_skill)
 				_exit_skill_target_mode()
 			else:
 				# click elsewhere cancels
@@ -258,7 +258,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			active_skill = null
 			skill_caster = null
 			return
-		
 		
 		if state == States.CHOOSING_ATTACK:
 			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
@@ -652,7 +651,6 @@ func tick_all_units_end_round() -> void:
 		if not (c is Character):
 			continue
 
-		# Optional: skip dead units if you use is_alive properly
 		if c.state and c.state.is_alive == false:
 			continue
 
@@ -675,34 +673,13 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	valid_skill_target_tiles.clear()
-	path_map.clear()  # or whichever overlay you want to use
+	path_map.clear() 
 
 	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
-
 		var unit: Character = get_unit(t)
-
-		if unit == null:
-			continue
-
-		var is_valid_target := false
-
-		match skill.target_faction:
-
-			Skill.TargetFaction.FRIENDLY:
-				is_valid_target = (unit.state.faction == CharacterState.Faction.PLAYER)
-
-			Skill.TargetFaction.ENEMY:
-				is_valid_target = (unit.state.faction == CharacterState.Faction.ENEMY)
-
-			Skill.TargetFaction.BOTH:
-				is_valid_target = true
-
-			Skill.TargetFaction.SELF:
-				is_valid_target = (unit == skill_caster)
-
-		if is_valid_target:
+		if _is_valid_target(unit, skill, skill_caster):
 			valid_skill_target_tiles[t] = true
 			path_map.set_cell_item(t, skill_target_code)
 
@@ -726,6 +703,22 @@ func _exit_skill_target_mode() -> void:
 	skill_caster = null
 	valid_skill_target_tiles.clear()
 	path_map.clear()
+
+
+func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
+	if unit == null:
+		return false
+
+	match skill.target_faction:
+		Skill.TargetFaction.FRIENDLY:
+			return unit.state.faction == caster.state.faction
+		Skill.TargetFaction.ENEMY:
+			return unit.state.faction != caster.state.faction
+		Skill.TargetFaction.BOTH:
+			return true
+		Skill.TargetFaction.SELF:
+			return unit == caster
+	return false
 
 
 func _process(delta: float) -> void:
