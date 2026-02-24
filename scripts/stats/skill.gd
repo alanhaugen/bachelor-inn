@@ -1,6 +1,13 @@
 extends Resource
 class_name Skill
 
+enum TargetFaction
+{
+	FRIENDLY, ## Will use friendly as both friendly and self first
+	ENEMY,
+	BOTH,
+	SELF
+}
 
 ## ID
 @export var skill_id : String
@@ -15,14 +22,14 @@ var max_level : int = 5
 ## Stat effects are now stored in a dictionary per spell/ability
 ## Add new Dict -> New Key: StringName, New Value: Int
 ## Key names MUST match the variable name inside character_state.gd, or variable name used in runtime!!!
-@export var effect_mods : Dictionary = {} ## 
-#@export var damage_amount: int = 0;
-#@export var heal_amount: int = 0;
-#@export var heal_sanity_amount: int = 0;
+@export var effect_mods : Dictionary = {}
 @export var min_range: int = 1;
-@export var max_range: int = 1;
-#@export var speed_bonus: int = 0        ## #how many tiles extra
+@export var max_range: int = 3;
 @export var duration_turns: int = 0     ## how long it lasts
+@export var target_faction: TargetFaction = TargetFaction.FRIENDLY
+#@export var cast_on_friendly_ability: bool = true
+#@export var cast_on_enemy_ability: bool = false
+
 
 
 # BOOLS / REQUIREMENTS

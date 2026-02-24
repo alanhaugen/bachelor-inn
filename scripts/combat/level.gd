@@ -680,9 +680,29 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
-		# only highlight units (targets), not empty tiles
-		if get_unit_name(t) == CharacterStates.Player or get_unit_name(t) == CharacterStates.PlayerDone:
-			# you can add extra filters here (alive, etc.)
+
+		var unit: Character = get_unit(t)
+
+		if unit == null:
+			continue
+
+		var is_valid_target := false
+
+		match skill.target_faction:
+
+			Skill.TargetFaction.FRIENDLY:
+				is_valid_target = (unit.state.faction == CharacterState.Faction.PLAYER)
+
+			Skill.TargetFaction.ENEMY:
+				is_valid_target = (unit.state.faction == CharacterState.Faction.ENEMY)
+
+			Skill.TargetFaction.BOTH:
+				is_valid_target = true
+
+			Skill.TargetFaction.SELF:
+				is_valid_target = (unit == skill_caster)
+
+		if is_valid_target:
 			valid_skill_target_tiles[t] = true
 			path_map.set_cell_item(t, skill_target_code)
 

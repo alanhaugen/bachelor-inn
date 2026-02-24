@@ -14,5 +14,6 @@ command = SubResource("Resource_11pje")
 effect_mods = {
 &"damage": 4
 }
-max_range = 3
+max_range = 4
+target_faction = 1
 metadata/_custom_type_script = "uid://c3p07am3ababr"
