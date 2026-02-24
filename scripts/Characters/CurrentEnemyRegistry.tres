@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="EnemyRegistry" load_steps=6 format=3 uid="uid://3e8c6c2tibdc"]
+
+[ext_resource type="Script" uid="uid://de2j0apfdotrf" path="res://scripts/Characters/EnemyDefinition.gd" id="1_lfbu5"]
+[ext_resource type="Resource" uid="uid://getxkg8s4ipo" path="res://scripts/Characters/Def_E_Bird.tres" id="2_35r6v"]
+[ext_resource type="Resource" uid="uid://dwdv66whcx6l1" path="res://scripts/Characters/Def_E_Ghost.tres" id="3_xxwlr"]
+[ext_resource type="Resource" uid="uid://bwnw6eadglsog" path="res://scripts/Characters/Def_E_Horror.tres" id="4_qgjmr"]
+[ext_resource type="Script" uid="uid://d4ft2cb3naum4" path="res://scripts/Characters/EnemyRegistry.gd" id="5_4dqx0"]
+
+[resource]
+script = ExtResource("5_4dqx0")
+enemies = Dictionary[String, ExtResource("1_lfbu5")]({
+"04_EnemyBird": ExtResource("2_35r6v"),
+"05_EnemyGhost": ExtResource("3_xxwlr"),
+"06_EnemyMonster": ExtResource("4_qgjmr")
+})
+metadata/_custom_type_script = "uid://d4ft2cb3naum4"

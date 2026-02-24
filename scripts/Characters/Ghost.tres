@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="EnemyDefinition" load_steps=2 format=3 uid="uid://dwdv66whcx6l1"]
-
-[ext_resource type="Script" uid="uid://de2j0apfdotrf" path="res://scripts/Characters/EnemyDefinitions.gd" id="1_81hco"]
-
-[resource]
-script = ExtResource("1_81hco")
-metadata/_custom_type_script = "uid://de2j0apfdotrf"

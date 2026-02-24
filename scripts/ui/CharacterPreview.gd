@@ -37,4 +37,4 @@ func _on_oc_effect_drawer_pressed() -> void:
 	if effectDrawer.visible:
 		custom_minimum_size = Vector2(0,64)
 	elif not effectDrawer.visible:
-		custom_minimum_size = Vector2(0,48)
+		custom_minimum_size = Vector2(0,46)
