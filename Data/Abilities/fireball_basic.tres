@@ -10,10 +10,15 @@ metadata/_custom_type_script = "uid://drewwlgvyo2q5"
 [resource]
 script = ExtResource("1_u21qa")
 skill_id = "fireball_basic"
+skill_name = "Fireball"
+tooltip = "A fireball that deals initial damage, and burns the victim for 2 rounds."
 command = SubResource("Resource_11pje")
 effect_mods = {
-&"damage": 4
+&"damage": 4,
+&"dot_tick_damage": 1
 }
+min_range = 2
 max_range = 4
+duration_turns = 2
 target_faction = 1
 metadata/_custom_type_script = "uid://c3p07am3ababr"
