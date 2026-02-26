@@ -51,7 +51,10 @@ func create_new_save_data() -> void:
 
 	var state1 := CharacterState.new()
 	state1.weapon = WeaponRegistry.get_weapon("scepter_basic")
-	state1.skills = [SkillRegistry.get_skill("haste_basic")]
+	state1.skills = [
+					SkillRegistry.get_skill("haste_basic"),
+					SkillRegistry.get_skill("fireball_basic")
+					]
 	
 	var char1 := Character.new()
 	char1.data = data1
@@ -65,7 +68,7 @@ func create_new_save_data() -> void:
 
 	var state2 := CharacterState.new()
 	state2.weapon = WeaponRegistry.get_weapon("sword_basic")
-	state2.skills = [SkillRegistry.get_skill("defence_basic")]
+	#state2.skills = [SkillRegistry.get_skill("defence_basic")]
 	state2.skills = [
 					SkillRegistry.get_skill("defence_basic"),
 					SkillRegistry.get_skill("trap_basic")

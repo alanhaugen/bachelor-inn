@@ -104,7 +104,6 @@ func apply_skill_effect(skill: Skill) -> void:
 	var mods: Dictionary = {}
 	if skill.effect_mods != null:
 		for k:String in skill.effect_mods.keys():
-			# ignore non-passive keys we treat as special
 			if k in ["damage", "dot_tick_damage"]:
 				continue
 			mods[k] = skill.effect_mods[k]
@@ -118,7 +117,7 @@ func apply_skill_effect(skill: Skill) -> void:
 		}
 		active_effects.append(effect)
 
-	## DoT effect if skill have
+	## DoT effect if skill have one
 	if skill.effect_mods != null and skill.effect_mods.has("dot_tick_damage"):
 		var dot := {
 			"id": str(skill.skill_id) + "_dot",
@@ -127,7 +126,7 @@ func apply_skill_effect(skill: Skill) -> void:
 		}
 
 		
-		## If we want stacking instead of refresh, uncomment this:
+		## If we want stacking effects instead of refresh duration, uncomment this:
 		for i in range(active_effects.size() - 1, -1, -1):
 			if active_effects[i].get("id", "") == dot["id"]:
 				active_effects.remove_at(i)
@@ -156,15 +155,20 @@ func get_effective_movement() -> int:
 	# if hp == 0: is_dead = true
 
 ## This tics down spells and effects that lasts for more than 1 round.
-func tick_effects_end_round() -> void:
+func tick_effects_end_round(owner: Character) -> void:
 	for i in range(active_effects.size() - 1, -1, -1):
-		var e: Dictionary = active_effects[i]
-		var r: int = int(e.get("rounds", 0)) - 1
-		if r <= 0:
+		var effect: Dictionary = active_effects[i]
+		
+		if effect.has("tick"):
+			var tick: Dictionary = effect["tick"]
+			if tick.has("damage"):
+				owner.apply_damage(int(tick["damage"]), false, null, "DoT")
+
+		effect["rounds"] = int(effect.get("rounds", 0)) - 1
+		active_effects[i] = effect
+
+		if int(effect["rounds"]) <= 0:
 			active_effects.remove_at(i)
-		else:
-			e["rounds"] = r
-			active_effects[i] = e
 
 
 static func make_active_effect(skill: Skill, caster: Object) -> Dictionary:

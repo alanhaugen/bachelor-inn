@@ -59,14 +59,20 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 			result.was_critical = true;
 			attack_strength *= 2;
 	
-	victim.state.current_health -= attack_strength;
+	#victim.state.current_health -= attack_strength;
+	#result.damage = attack_strength
+	#result.killed = victim.state.current_health <= 0
 	result.damage = attack_strength
-	result.killed = victim.state.current_health <= 0
-	
+	## Using attack from character.gd so we can use the units abilities
+	result.killed = victim.apply_damage(attack_strength, simulate_only, aggressor, "Attack")
+	if result.killed:
+		if aggressor.state.is_playable() and simulate_only == false:
+			aggressor.state.experience += victim.data.strength
+
 	
 	if simulate_only == false:
 		aggressor.update_health_bar();
-		victim.update_health_bar();
+		#victim.update_health_bar(); ## Victim health bar updated in apply_damage() in char.gd
 		
 		#Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " + str(attack_strength) + " damage.\n") + Main.battle_log.text;
 		Main.battle_log.text = (aggressor.data.unit_name + " attacks " + victim.data.unit_name + " and does " +  str(attack_strength) + " damage. " + str(aggressor.data.strength) + 
@@ -80,7 +86,7 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	else:
 		@warning_ignore("integer_division")
 		victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
-	if victim.state.current_health <= 0:
-		victim.die(simulate_only);
-		if aggressor.state.is_playable() and simulate_only == false:
-			aggressor.state.experience += victim.data.strength;
+	#if victim.state.current_health <= 0:
+	#	victim.die(simulate_only);
+	#	if aggressor.state.is_playable() and simulate_only == false:
+	#		aggressor.state.experience += victim.data.strength;

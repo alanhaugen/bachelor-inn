@@ -324,6 +324,24 @@ func reset() -> void:
 	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)
 
+
+## Importing this to attack.gd
+func apply_damage(amount: int, simulate_only: bool = false, 
+					source: Character = null, label: String = "") -> bool:
+	amount = int(amount)
+	if amount <= 0:
+		return false
+	
+	## Health reduced here 
+	state.current_health = max(0, state.current_health - amount)
+	var killed := state.current_health <= 0
+	if not simulate_only and not killed:
+		update_health_bar()
+	if killed:
+		die(simulate_only)
+
+	return killed
+
 func flash_hit(crit : bool) -> void:
 	if my_material == null:
 		return

@@ -239,28 +239,54 @@ func _unhandled_input(event: InputEvent) -> void:
 		print (pos);
 		
 		## SKILL TARGETING MODE
-		if is_choosing_skill_target == true:
-			var target: Character = get_unit(pos)
-			
-			if valid_skill_target_tiles.has(pos) and _is_valid_target(target, active_skill, skill_caster):
-				print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-				# TODO: apply the skill effect (next step)
-				# target.state.apply_skill_effect(active_skill)
-				target.state.apply_skill_effect(active_skill)
-				print("Lucy effective movement now:", target.state.get_effective_movement())
-				_exit_skill_target_mode()
-			else:
-				# click elsewhere cancels
-				_exit_skill_target_mode()
-			return
-
-			# click anywhere else: cancel targeting (optional but recommended)
-			print("Cancelled skill targeting.")
-			is_choosing_skill_target = false
-			active_skill = null
-			skill_caster = null
-			return
+		#if is_choosing_skill_target == true: 
+			#var target: Character = get_unit(pos) 
+			#
+			#if valid_skill_target_tiles.has(pos) and _is_valid_target(target, active_skill, skill_caster): 
+				#print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name) 
+				#target.state.apply_skill_effect(active_skill) 
+				#print("Lucy effective movement now:", target.state.get_effective_movement()) 
+				#_exit_skill_target_mode() 
+		#else: ## click elsewhere to cancels _exit_skill_target_mode() return
+			#print("Cancelled skill targeting.")
+			#is_choosing_skill_target = false
+			#active_skill = null
+			#skill_caster = null
+			#return
 		
+		if is_choosing_skill_target == true:
+			# Normalize to same plane your maps/skills use
+			var p := Vector3i(pos.x, 0, pos.z)
+
+			var target: Character = get_unit(p)
+
+			print("SKILL CLICK p=", p,
+				" in_valid=", valid_skill_target_tiles.has(p),
+				" target=", target)
+
+			if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
+				_exit_skill_target_mode()
+				return
+
+			print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+
+			## Impact damage (Fireball)
+			if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
+				target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
+
+			## DoT's
+			target.state.apply_skill_effect(active_skill)
+
+			_exit_skill_target_mode()
+			return
+#
+		## click anywhere else: cancel targeting (optional but recommended)
+		#print("Cancelled skill targeting.")
+		#is_choosing_skill_target = false
+		#active_skill = null
+		#skill_caster = null
+		#return
+		#
 		if state == States.CHOOSING_ATTACK:
 			if path_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				active_move.end_pos = pos;
@@ -645,18 +671,20 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	#)
 	camera_controller.set_pivot_target_transform(target_transform);
 
-
+#func tick_all_units_end_round(owner: Character) -> void:
 func tick_all_units_end_round() -> void:
-	for c in characters:
+	## Iterate over duplicates, to avoid null values if units die
+	var dupe := characters.duplicate()
+
+	for c:Character in dupe:
 		if not is_instance_valid(c):
 			continue
 		if not (c is Character):
 			continue
-
 		if c.state and c.state.is_alive == false:
 			continue
 
-		c.state.tick_effects_end_round()
+		c.state.tick_effects_end_round(c)
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:

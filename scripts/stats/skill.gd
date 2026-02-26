@@ -27,8 +27,8 @@ var max_level : int = 5
 @export var max_range: int = 3;
 @export var duration_turns: int = 0     ## how long it lasts
 @export var target_faction: TargetFaction = TargetFaction.FRIENDLY
-#@export var cast_on_friendly_ability: bool = true
-#@export var cast_on_enemy_ability: bool = false
+## Key names:
+## DoT = &dot_tick_damage
 
 
 
