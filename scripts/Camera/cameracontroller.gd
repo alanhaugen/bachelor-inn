@@ -4,6 +4,8 @@
 ## Design is to set a destination to the
 class_name CameraController extends Node3D
 
+@onready var _pre_drag_mouse_pos : Vector2 = get_viewport().get_mouse_position()
+
 #region Components
 @onready var springarm : Node3D = %Springarm
 @onready var camera : Camera3D = %Camera
@@ -74,10 +76,13 @@ func _input_dragging(event: InputEvent) -> void:
 	#this statement may cause a bug on phones.
 	#Figure out how to enable input mapping for phones
 	if Input.is_action_just_released("enable_dragging"):
-		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_VISIBLE
+		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_HIDDEN
+		_stop_drag.call_deferred()
 	if !Input.is_action_pressed("enable_dragging"):
 		return
-	Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
+	if(Input.mouse_mode != Input.MouseMode.MOUSE_MODE_CAPTURED):
+		_pre_drag_mouse_pos = get_viewport().get_mouse_position()
+		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
 	
 	var checkMouseDragging:bool = event is InputEventMouseMotion
 	var checkScreenDragging:bool = false
@@ -109,6 +114,9 @@ func _input_zoom(event: InputEvent) -> void:
 		
 	_zoom_factor += zoomStrength*zoomDirection*mouse_scroll_sensitivity
 
+func _stop_drag() -> void:
+	Input.warp_mouse(_pre_drag_mouse_pos)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 #endregion
 
 
