@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://c8qah7yiks0t"]
+
+[ext_resource type="Texture2D" uid="uid://dqhu0ikikn81h" path="res://Data/Abilities/UI_Icon_Heal_Basic.png" id="1_bj1s2"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_wxe0v"]
+
+[resource]
+script = ExtResource("1_wxe0v")
+skill_id = "heal_basic"
+skill_name = "heal basic"
+tooltip = "Heals the target units health."
+icon = ExtResource("1_bj1s2")
+effect_mods = {
+&"current_health": 3
+}
+metadata/_custom_type_script = "uid://c3p07am3ababr"

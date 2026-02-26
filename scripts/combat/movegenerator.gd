@@ -23,7 +23,10 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	frontier.append([start_pos, 0])
 	cost_so_far[start_pos] = 0
 
-	var movement_range: int = unit.state.movement
+	#var movement_range: int = unit.state.movement
+	var movement_range: int = unit.state.get_effective_movement() 
+	## TODO: Spells/Abilities - add an effect checker for buffs/debuffs
+	## This TODO is kind of done.
 	if unit.state.is_moved:
 		movement_range = 0
 
@@ -96,6 +99,8 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	#    (Temporary rule: weapon range == movement_range)
 	#    (Temporary rule: enemy must be on same y as origin)
 	# -------------------------
+	
+	## TODO: Get attack origins per selected enemy, not all enemies.
 	if not unit.state.is_ability_used:
 		# Include "attack from current position"
 		var attack_origins: Array[Vector3i] = [start_pos]

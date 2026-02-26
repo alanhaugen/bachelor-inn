@@ -1,12 +1,13 @@
 extends Control
 class_name ui_controller
 
+const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 @onready var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/CharacterPreview.tscn")
 @onready var preview_container := %Characters_VBOX
 @onready var player_stats: PlayerStatsUI = %Player_Stats
 @onready var enemy_stats: EnemyStatsUI = %Enemy_Stats
 var previews: Dictionary[Character, CharacterPreview] = {}
-
+@onready var ribbon: Ribbon = %Ribbon
 
 
 #build all stats into a dictionary for use in the sub UI items
@@ -50,7 +51,7 @@ func build_enemy_Stats(character: Character) -> Dictionary:
 func _ready() -> void:
 	#var level := get_tree().get_first_node_in_group("level")
 	add_to_group("ui_controller")
-
+	
 
 
 
@@ -84,8 +85,10 @@ func _connect_to_level(level: Node) -> void:
 	level.character_stats_changed.connect(_on_character_stats_changed)
 	level.party_updated.connect(_on_party_updated)
 	level.enemy_selected.connect(_on_enemy_selected)
+	ribbon.skill_pressed.connect(level._on_ribbon_skill_pressed)
 	#level.enemy_deselected.connect(_on_enemy_deselected)
 	_on_party_updated(level.characters)
+	ribbon.hide()
 #adds character preview scene to Vbox
 func add_character_preview(character: Character) -> void:
 	if previews.has(character):
@@ -108,7 +111,9 @@ func add_character_preview(character: Character) -> void:
 func _on_character_selected(character: Character) -> void:
 	player_stats.apply_stats(build_character_stats(character))
 	player_stats.show()
-
+	ribbon.show()
+	ribbon.set_skills(character.state.skills)
+	print("DEBUG SELECT:", character.data.unit_name, "skills:", character.state.skills.size())
 	for c: Character in previews.keys():
 		##This is a quickfix, instead the character should be removed from the dictionary when its 
 		##corresponding character dies
@@ -126,7 +131,7 @@ func _on_enemy_selected(enemy: Character) -> void:
 	
 func _on_character_deselected() -> void:
 	#player_stats.hide()
-
+	ribbon.hide()
 	for preview: CharacterPreview in previews.values():
 		preview.is_selected = false
 		

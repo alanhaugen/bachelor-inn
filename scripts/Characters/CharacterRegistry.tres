@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="1_far1n"]
 [ext_resource type="Resource" uid="uid://dhdymgaw357sb" path="res://scripts/Characters/Def_Alfred.tres" id="2_far1n"]
 [ext_resource type="Resource" uid="uid://dbkk31say6g4i" path="res://scripts/Characters/Def_Lucy.tres" id="3_440dy"]
-[ext_resource type="Resource" uid="uid://bc2h11fdxqmbc" path="res://scripts/Characters/Def_Emil.tres" id="4_440dy"]
+[ext_resource type="Resource" uid="uid://siymcuydsw30" path="res://scripts/Characters/Def_Emil.tres" id="4_440dy"]
 [ext_resource type="Script" uid="uid://ds4wpawmu15iw" path="res://scripts/Characters/character_registry.gd" id="4_qg64p"]
 
 [resource]

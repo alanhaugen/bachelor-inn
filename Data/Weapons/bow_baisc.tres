@@ -4,5 +4,9 @@
 
 [resource]
 script = ExtResource("1_e3fg3")
+weapon_id = "bow_basic"
+weapon_name = "Wooden Bow"
 damage_modifier = 3
+min_range = 2
+max_range = 5
 metadata/_custom_type_script = "uid://hhe2ydney01y"

@@ -163,9 +163,20 @@ func read(save_slot: int) -> bool:
 		state.current_health = state_dict["current_health"]
 		state.current_sanity = state_dict["current_sanity"]
 		state.weapon = WeaponRegistry.get_weapon(state_dict["weapon_id"])
+		state.skills.clear()
+		var ids: Array = state_dict.get("skill_ids", [])
+		for id_any: String in ids:
+			var id: String = str(id_any)
+			var s: Skill = SkillRegistry.get_skill(id)
+			if s != null:
+				state.skills.append(s)
 		
 		character.data = data
 		character.state = state
+		
+		print("DEBUG LOADED unit:", data.unit_name, " skills:", state.skills.size(), " ids:", state_dict.get("skill_ids", []))
+		print("LOADED ", data.unit_name, " skill_ids=", state_dict.get("skill_ids", []))
+		print("RESOLVED ", data.unit_name, " skills=", state.skills.map(func(s: Skill) -> String: return s.skill_id if s else "NULL"))
 		
 		Main.characters.append(character)
 

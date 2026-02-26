@@ -3,11 +3,12 @@ extends Node
 
 const W_UNARMED: Weapon = preload("res://Data/Weapons/unarmed.tres")
 const W_AXE_BASIC: Weapon = preload("res://Data/Weapons/axe_basic.tres")
-#const W_BOW: Weapon = preload()
+const W_BOW_BASIC: Weapon = preload("res://Data/Weapons/bow_baisc.tres")
 const W_SCEPTER_BASIC: Weapon = preload("res://Data/Weapons/scepter_basic.tres")
 const W_SWORD_BASIC: Weapon = preload("res://Data/Weapons/sword_basic.tres")
-#const W_SWORD_ELITE: Weapon = preload("res://Data/Weapons/sword_elite.tres")
+const W_SWORD_ELITE: Weapon = preload("res://Data/Weapons/sword_elite.tres")
 const W_SWORD_ADVANCED: Weapon = preload("res://Data/Weapons/sword_advanced.tres")
+const W_SPEAR_BASIC: Weapon = preload("res://Data/Weapons/spear_basic.tres")
 
 
 var _by_id: Dictionary = {}
@@ -19,9 +20,10 @@ func _ready() -> void:
 	_register(W_AXE_BASIC)
 	_register(W_SWORD_BASIC)
 	_register(W_SCEPTER_BASIC)
-	#_register(W_SWORD_ELITE)
+	_register(W_SPEAR_BASIC)
 	_register(W_SWORD_ADVANCED)
-	#_register(W_AXE)
+	_register(W_SWORD_ELITE)
+	_register(W_BOW_BASIC)
 
 
 func _register(w: Weapon) -> void:

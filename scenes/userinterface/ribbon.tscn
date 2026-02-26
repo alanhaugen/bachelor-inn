@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqxnj06jaw6ps"]
+[gd_scene format=3 uid="uid://bqxnj06jaw6ps"]
 
 [ext_resource type="Script" uid="uid://d3jhky6totysk" path="res://scripts/ui/ribbon.gd" id="1_aveyg"]
 
@@ -36,3 +36,54 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 mouse_filter = 0
+
+[node name="Ability1" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 0
+
+[node name="Ability2" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 0
+
+[node name="Ability3" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 0
+
+[node name="Ability4" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 0
+
+[node name="Ability5" type="TextureButton" parent="VBoxContainer/VBoxContainer/Skills"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer2"]
+layout_mode = 2
+text = "Abilities"
+
+[node name="Abilities" type="HBoxContainer" parent="VBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TextureButton" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities"]
+layout_mode = 2
+
+[node name="TextureButton2" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities"]
+layout_mode = 2
+
+[node name="TextureButton3" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities"]
+layout_mode = 2
+
+[node name="TextureButton4" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities"]
+layout_mode = 2
+
+[node name="TextureButton5" type="TextureButton" parent="VBoxContainer/VBoxContainer2/Abilities"]
+layout_mode = 2

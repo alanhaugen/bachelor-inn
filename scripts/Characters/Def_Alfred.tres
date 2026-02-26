@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=9 format=3 uid="uid://dhdymgaw357sb"]
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=10 format=3 uid="uid://dhdymgaw357sb"]
 
 [ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="1_x7ja3"]
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_yq722"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_wyhbc"]
 [ext_resource type="Resource" uid="uid://b3csctruxawhd" path="res://Data/Weapons/scepter_basic.tres" id="4_wqqik"]
+[ext_resource type="Resource" uid="uid://x7mbefo655v8" path="res://Data/Abilities/fireball_basic.tres" id="4_yq722"]
 [ext_resource type="PackedScene" uid="uid://b10bf6hwaqddg" path="res://scenes/Characters/alfred.tscn" id="5_24i4n"]
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="6_gimyl"]
 
@@ -20,6 +21,7 @@ metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 [sub_resource type="Resource" id="Resource_p06qf"]
 script = ExtResource("2_yq722")
 weapon = ExtResource("4_wqqik")
+skills = Array[ExtResource("3_wyhbc")]([ExtResource("4_yq722")])
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [resource]

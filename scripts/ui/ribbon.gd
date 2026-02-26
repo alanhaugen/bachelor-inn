@@ -1,33 +1,62 @@
 extends Control
 class_name Ribbon
 
+signal skill_pressed(skill: Skill)
+
 @onready var skills: HBoxContainer = %Skills
 
-func set_skills(in_skills : Array[Skill]) -> void:
-	for node in skills.get_children():
-		node.queue_free()
-	
-	for skill in in_skills:
-		var button := TextureButton.new()
-		button.texture_normal = skill.icon
-		button.tooltip_text = skill.skill_name + "\n" + skill.tooltip
-		button.custom_minimum_size = Vector2(100, 100)
-		button.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
-		button.pressed.connect(_on_skill_pressed.bind(skill))
-		
-		skills.add_child(button)
+var _skill_buttons: Array[TextureButton] = []
 
+func _ready() -> void:
+	_skill_buttons = _collect_buttons(skills)
+	_connect_group(_skill_buttons, _on_skill_button_pressed)
+	_debug_print_buttons()
+	set_skills([])
 
-func _on_skill_pressed(skill: Skill) -> void:
-	print("Pressed skill " + skill.skill_name)
-	#emit_signal("skill_pressed", skill)
-	var commands: Array[Command]
-	var selected_unit := Main.level.selected_unit
-	if selected_unit:
-		for unit: Character in Main.level.game_state.units:
-			if unit.state.is_ally():
-				commands.append(Heal.new(selected_unit.state.grid_position, unit.state.grid_position, selected_unit.data.mind))
-		Main.level.path_map.clear()
-		Main.level.current_moves = commands
-		Main.level.movement_grid.fill_from_commands(commands, Main.level.game_state)
-		Main.level.is_using_ability = true
+func set_skills(in_skills: Array[Skill]) -> void:
+	for i in range(_skill_buttons.size()):
+		var b: TextureButton = _skill_buttons[i]
+
+		if i < in_skills.size() and in_skills[i] != null:
+			var s: Skill = in_skills[i]
+			b.show()
+			b.disabled = false
+
+			b.texture_normal = s.icon
+			b.tooltip_text = "%s\n%s" % [s.skill_name, s.tooltip]
+
+			b.set_meta("skill", s)
+		else:
+			b.hide()
+			b.disabled = true
+			b.texture_normal = null
+			b.tooltip_text = ""
+			b.set_meta("skill", null)
+
+func _collect_buttons(bar: HBoxContainer) -> Array[TextureButton]:
+	var out: Array[TextureButton] = []
+	for child in bar.get_children():
+		var b := child as TextureButton
+		if b:
+			out.append(b)
+	return out
+
+func _connect_group(buttons: Array[TextureButton], handler: Callable) -> void:
+	for b in buttons:
+		if not b.pressed.is_connected(handler):
+			b.pressed.connect(handler.bind(b))
+
+func _on_skill_button_pressed(button: TextureButton) -> void:
+	print("Skill button pressed.")
+	var s: Skill = button.get_meta("skill") as Skill
+	if s != null:
+		skill_pressed.emit(s)
+
+func _debug_print_buttons() -> void:
+	print("=== Ribbon Debug ===")
+	print("Skills buttons found:", _skill_buttons.size())
+	for i in range(_skill_buttons.size()):
+		print("  Skill slot", i, "->", _skill_buttons[i].name)
+	if _skill_buttons.size() != 5:
+		push_warning("Expected 5 skill buttons but found %d" % _skill_buttons.size())
+	print("====================")

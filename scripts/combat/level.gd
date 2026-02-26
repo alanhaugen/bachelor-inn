@@ -56,6 +56,10 @@ var movement_weights_grid : Grid
 
 var selected_unit: Character = null
 var selected_enemy_unit: Character = null
+var active_skill: Skill = null
+var skill_caster: Character = null ## The one using ability
+var is_choosing_skill_target: bool = false
+var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
 var move_popup: Control;
 #var stat_popup_player: Control;
 #var side_bar_array : Array[SideBar];
@@ -70,7 +74,6 @@ const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
-#const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
 const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn");
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
@@ -100,9 +103,8 @@ var enemy_code: int = 1
 var attack_code: int = 0
 var move_code: int = 1
 
-var is_using_ability: bool = false
-
 var is_enemy_turn: bool = false
+var skill_target_code: int = 0
 
 #region Camera
 var camera_controller : CameraController
@@ -292,7 +294,6 @@ func show_attack_tiles(pos: Vector3i) -> void:
 	for tile: Vector3i in tiles:
 		path_map.set_cell_item(tile, 0)
 
-
 func _can_handle_input(event: InputEvent) -> bool:
 	##old
 	#if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
@@ -330,6 +331,32 @@ func _update_cursor(pos: Vector3i) -> void:
 	cursor.position = Vector3(world_pos.x, world_pos.y + 0.1, world_pos.z)
 	cursor.show()
 
+func _handle_skill(pos : Vector3i) -> void:
+	# Normalize to same plane your maps/skills use
+	##TODO make _handle_skill use height
+	var p := Vector3i(pos.x, 0, pos.z)
+		
+	var target: Character = get_unit(p)
+		
+	print("SKILL CLICK p=", p,
+			" in_valid=", valid_skill_target_tiles.has(p),
+			" target=", target)
+
+	if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
+		_exit_skill_target_mode()
+		return
+
+	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+
+	## Impact damage (Fireball)
+	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
+		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
+
+	## DoT's
+	target.state.apply_skill_effect(active_skill)
+
+	_exit_skill_target_mode()
+	
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
@@ -368,6 +395,7 @@ func select_unit(unit: Character) -> void:
 	_clear_selection()
 
 	selected_unit = unit
+	
 	unit_pos = unit.state.grid_position
 	_update_cursor(unit.state.grid_position)
 	emit_signal("character_selected", selected_unit)
@@ -430,20 +458,6 @@ func _clear_selection() -> void:
 	path_map.clear()
 	selected_unit = null
 
-
-func _handle_abilities(pos: Vector3i) -> bool:
-	if is_using_ability:
-		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			for cmd: Heal in current_moves:
-				if cmd.end_pos == pos:
-					cmd.execute(game_state)
-					is_using_ability = false
-					selected_unit.state.is_moved = true
-					get_unit(pos).update_health_bar()
-					movement_map.clear()
-					return true
-	return false
-
 #_input is always handled first, then UI, then Unhandled input
 #(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! always remember to change these on UI nodes when they are created)
 func _input(event: InputEvent) -> void:
@@ -459,12 +473,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	var pos: Vector3i = get_grid_cell_from_mouse()
 	print(pos)
-	
-	if _handle_abilities(pos):
-		return
 
 	_update_cursor(pos)
-
+	
+	if is_choosing_skill_target == true:
+		_handle_skill(pos)
+		return;
+	
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
 		_handle_attack_choice(pos)
@@ -512,11 +527,11 @@ func _ready() -> void:
 	movement_weights_grid = Grid.new(movement_weights_map)
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
-
-	if level_name == "first":
-		Dialogic.start(level_name + "Level")
-		is_in_menu = true
-	elif level_name == "Fen":
+	
+	if (level_name == "first"):
+		Dialogic.start(str(level_name) + "Level");
+		is_in_menu = true;
+	elif (level_name == "Fen"):
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 
@@ -734,6 +749,107 @@ func _on_character_sanity_flipped(character: Character) -> void:
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform)
 
+#func tick_all_units_end_round(owner: Character) -> void:
+func tick_all_units_end_round() -> void:
+	## Iterate over duplicates, to avoid null values if units die
+	#var dupe := characters.duplicate()
+	var c:Character = null
+	for index : int in range(characters.size()):
+		if(characters.get(index) == null):
+			push_warning("Character with index %d in characters array was null at end of tick" % index)
+			continue
+		c = characters.get(index)
+		if not is_instance_valid(c):
+			continue
+		if not (c is Character):
+			continue
+		if c.state and c.state.is_alive == false:
+			continue
+
+		c.state.tick_effects_end_round(c)
+
+
+func _on_ribbon_skill_pressed(skill: Skill) -> void:
+	_exit_skill_target_mode()
+	movement_grid.clear()
+	
+	if selected_unit == null:
+		print("Pressed skill: ", skill.skill_id, " but no unit selected. This should never happen!")
+		return
+	
+	active_skill = skill
+	skill_caster = selected_unit
+	is_choosing_skill_target = true
+	
+	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
+	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
+
+func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
+	#valid_skill_target_tiles.clear()
+	#path_map.clear() 
+#
+	#var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
+#
+	#for t in tiles_in_range:
+		#var unit: Character = get_unit(t)
+		#if _is_valid_target(unit, skill, skill_caster):
+			#valid_skill_target_tiles[t] = true
+			#path_map.set_cell_item(t, skill_target_code)
+	#
+	#valid_skill_target_tiles.clear()
+	#path_map.clear()
+
+	var o := Vector3i(origin.x, 0, origin.z)
+	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
+
+	for t in tiles_in_range:
+		var p := Vector3i(t.x, 0, t.z)
+		var unit: Character = get_unit(p)
+
+		if unit == null:
+			continue
+
+		if _is_valid_target(unit, skill, skill_caster):
+			valid_skill_target_tiles[p] = true
+			path_map.set_cell_item(p, skill_target_code)
+
+func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int) -> Array[Vector3i]:
+	var out: Array[Vector3i] = []
+	min_r = max(min_r, 0)
+	max_r = max(max_r, 0)
+
+	for dx in range(-max_r, max_r + 1):
+		var rem:int = max_r - abs(dx)
+		for dz in range(-rem, rem + 1):
+			var dist :int = abs(dx) + abs(dz)
+			if dist < min_r or dist > max_r:
+				continue
+			out.append(Vector3i(origin.x + dx, origin.y, origin.z + dz))
+	return out
+
+func _exit_skill_target_mode() -> void:
+	is_choosing_skill_target = false
+	active_skill = null
+	skill_caster = null
+	valid_skill_target_tiles.clear()
+	path_map.clear()
+
+
+func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
+	if unit == null or skill == null or caster == null:
+		return false
+
+	match skill.target_faction:
+		Skill.TargetFaction.FRIENDLY:
+			return unit.state.faction == caster.state.faction
+		Skill.TargetFaction.ENEMY:
+			return unit.state.faction != caster.state.faction
+		Skill.TargetFaction.BOTH:
+			return true
+		Skill.TargetFaction.SELF:
+			return unit == caster
+	return false
+
 
 func _process(delta: float) -> void:
 	_process_old(delta)
@@ -794,9 +910,6 @@ func _process_old(delta: float) -> void:
 			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
 			for point in points:
 				path_map.set_cell_item(point, 0)
-			#a_star(selected_unit.state.grid_position, pos); # a-star for drawing arrow
-			#if get_unit(pos) is Character and get_unit(pos).state.is_enemy():
-			#	update_stat(get_unit(pos), stat_popup_enemy);
 	
 	if (is_in_menu):
 		return;
@@ -821,7 +934,8 @@ func _process_old(delta: float) -> void:
 				enemy_label.show();
 				player_label.hide();
 		else:
-			reset_all_units();
+			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
+			#reset_all_units();   ## this reset can clear states etc before enemy does their thing. 
 			#MoveAI();
 			MoveSingleAI()
 	elif (state == States.ANIMATING):
@@ -829,10 +943,16 @@ func _process_old(delta: float) -> void:
 		if (moves_stack.is_empty()):
 			state = States.PLAYING;
 			movement_map.clear()
+			
 			if (is_player_turn == false):
+				## END OF ROUND - RESET POINT
+				## Going from enemy phase to player phase
 				is_animation_just_finished = true;
+				tick_all_units_end_round(); ## Decay effects
+				reset_all_units();
 				is_player_turn = true;
 		# Done with one move, execute it and start on next
+		
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
 			#if get_trigger_name(active_move.end_pos) == "Victory":
@@ -879,7 +999,7 @@ func _process_old(delta: float) -> void:
 					timer.start(post_enemy_move_wait)
 					await timer.timeout
 					wait_for_camera = false
-				MoveSingleAI()
+				MoveSingleAI() ## called after an enemy is done moving
 				for character in Main.characters:
 					if characters == null: 
 						return
@@ -887,13 +1007,13 @@ func _process_old(delta: float) -> void:
 
 			
 			if (moves_stack.is_empty() == false):
-				#called after any enemy except the final enemy is done moving
+				## called after any enemy except the final enemy is done moving
 				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
-				#called after any enemy except the final enemy is done moving
+				## called after any enemy except the final enemy is done moving
 				selected_unit.position = animation_path.pop_front();
-		# Process animation
+		## Process animation
 		else:
 			var movement_speed := 8.0 # units per second
 			var target : Vector3 = animation_path.front()

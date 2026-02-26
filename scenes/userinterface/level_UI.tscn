@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://csv3482xf34ay" path="res://scenes/userinterface/health_bar.tscn" id="1_u2joq"]
 [ext_resource type="PackedScene" uid="uid://c7ihgs3168ojs" path="res://scenes/userinterface/sidebar.tscn" id="2_b5cm8"]
 [ext_resource type="PackedScene" uid="uid://qp38bshnyq3h" path="res://scenes/userinterface/skill_choose.tscn" id="3_0bx5w"]
-[ext_resource type="PackedScene" uid="uid://crtk4ey1dcsr4" path="res://scenes/userinterface/pop_up.tscn" id="4_f576u"]
+[ext_resource type="PackedScene" uid="uid://b32liypq0vy0h" path="res://scenes/userinterface/pop_up.tscn" id="4_f576u"]
 [ext_resource type="PackedScene" uid="uid://cswysjv240iry" path="res://scenes/userinterface/move_popup.tscn" id="5_3v1x8"]
 [ext_resource type="PackedScene" uid="uid://dglwehopt2m4y" path="res://scenes/userinterface/health_bar_enemy.tscn" id="6_u6dcv"]
 [ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="7_b5cm8"]

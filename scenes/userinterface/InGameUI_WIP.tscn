@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4b8f02hyixcc"]
+[gd_scene load_steps=7 format=3 uid="uid://c4b8f02hyixcc"]
 
 [ext_resource type="Script" uid="uid://ml4dennnbf1u" path="res://scripts/ui/in_game_ui.gd" id="1_aljfs"]
 [ext_resource type="PackedScene" uid="uid://cogf2xkkqlmrb" path="res://scenes/userinterface/player_stats.tscn" id="2_3kd8n"]
 [ext_resource type="PackedScene" uid="uid://3dh3t2j28eq1" path="res://scenes/userinterface/Enemy_Stats.tscn" id="3_5uqut"]
-[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_yi42x"]
+[ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="5_aljfs"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_yi42x"]
 [ext_resource type="PackedScene" uid="uid://dokhyh7eo4mwv" path="res://scenes/userinterface/CharacterPreview.tscn" id="6_aljfs"]
 
 [node name="GUI" type="Control"]
@@ -64,6 +65,11 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Ribbon" parent="Scale" instance=ExtResource("5_aljfs")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
 
 [node name="Background" type="NinePatchRect" parent="."]
 z_index = -3

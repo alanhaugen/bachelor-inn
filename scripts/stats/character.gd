@@ -240,6 +240,7 @@ func _ready() -> void:
 	
 	calc_derived_stats()
 	
+	## Skill aquirement commented out for now
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
 	state.skills.append(get_random_unaquired_skill());
@@ -320,7 +321,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	state.is_moved = true;
 	
 	if simulate_only == false:
-		var grid_code := Main.level.player_code;
+		var grid_code : int = Main.level.player_code;
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
@@ -338,6 +339,24 @@ func reset() -> void:
 	show();
 	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)
+
+
+## Importing this to attack.gd
+func apply_damage(amount: int, simulate_only: bool = false, 
+					source: Character = null, label: String = "") -> bool:
+	amount = int(amount)
+	if amount <= 0:
+		return false
+	
+	## Health reduced here 
+	state.current_health = max(0, state.current_health - amount)
+	var killed := state.current_health <= 0
+	if not simulate_only and not killed:
+		Main.level.emit_signal("character_stats_changed", self)
+	if killed:
+		die(simulate_only)
+
+	return killed
 
 func flash_hit(crit : bool) -> void:
 	if my_material == null:
