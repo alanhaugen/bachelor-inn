@@ -688,6 +688,7 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
+	_exit_skill_target_mode()
 	movement_grid.clear()
 	
 	if selected_unit == null:
@@ -702,16 +703,33 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
 
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
-	valid_skill_target_tiles.clear()
-	path_map.clear() 
+	#valid_skill_target_tiles.clear()
+	#path_map.clear() 
+#
+	#var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
+#
+	#for t in tiles_in_range:
+		#var unit: Character = get_unit(t)
+		#if _is_valid_target(unit, skill, skill_caster):
+			#valid_skill_target_tiles[t] = true
+			#path_map.set_cell_item(t, skill_target_code)
+	#
+	#valid_skill_target_tiles.clear()
+	#path_map.clear()
 
-	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
+	var o := Vector3i(origin.x, 0, origin.z)
+	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
-		var unit: Character = get_unit(t)
+		var p := Vector3i(t.x, 0, t.z)
+		var unit: Character = get_unit(p)
+
+		if unit == null:
+			continue
+
 		if _is_valid_target(unit, skill, skill_caster):
-			valid_skill_target_tiles[t] = true
-			path_map.set_cell_item(t, skill_target_code)
+			valid_skill_target_tiles[p] = true
+			path_map.set_cell_item(p, skill_target_code)
 
 func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int) -> Array[Vector3i]:
 	var out: Array[Vector3i] = []
@@ -736,7 +754,7 @@ func _exit_skill_target_mode() -> void:
 
 
 func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
-	if unit == null:
+	if unit == null or skill == null or caster == null:
 		return false
 
 	match skill.target_faction:
