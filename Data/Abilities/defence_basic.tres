@@ -1,7 +1,8 @@
-[gd_resource type="Resource" script_class="Skill" load_steps=6 format=3 uid="uid://213btyk7kq4i"]
+[gd_resource type="Resource" script_class="Skill" load_steps=7 format=3 uid="uid://213btyk7kq4i"]
 
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_hkrdj"]
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_wynyv"]
+[ext_resource type="PackedScene" uid="uid://dfsmc8ca3qmeb" path="res://scenes/Development/Particles/Shield_fx_particle.tscn" id="1_kd7ka"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_wynyv"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hkrdj"]
 load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
@@ -20,6 +21,7 @@ script = ExtResource("1_hkrdj")
 skill_id = "defence_basic"
 skill_name = "Basic Defence"
 icon = SubResource("AtlasTexture_wynyv")
+Vfx_Scene = ExtResource("1_kd7ka")
 effect_mods = {
 &"defence": 5
 }

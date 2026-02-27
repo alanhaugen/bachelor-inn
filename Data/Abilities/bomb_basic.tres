@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Skill" load_steps=5 format=3 uid="uid://cokhndg82vc8h"]
 
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="1_5gfw7"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="1_5gfw7"]
 [ext_resource type="PackedScene" uid="uid://ddvscfqfihmwr" path="res://scenes/Development/Particles/hit_particle.tscn" id="1_6h6qg"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_nw1w7"]
 
