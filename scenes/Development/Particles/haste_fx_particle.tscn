@@ -1,0 +1,109 @@
+[gd_scene load_steps=14 format=4 uid="uid://cypyoqyclfkrf"]
+
+[ext_resource type="Script" uid="uid://cdje4jdvfxffu" path="res://scenes/Development/Particles/hit_particle.gd" id="1_4etf0"]
+[ext_resource type="Texture2D" uid="uid://bb1qbxirp4mrj" path="res://art/textures/ParticleTex/VFX_Speed.png" id="2_6osqv"]
+[ext_resource type="Shader" uid="uid://bgo5knrvp425f" path="res://art/meshes/Vfx_Gradient.gdshader" id="3_fqmcd"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yegfy"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 90, 1)
+emission_ring_height = 0.5
+emission_ring_radius = 0.9
+emission_ring_inner_radius = 0.7
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.19999999
+initial_velocity_max = 0.29999998
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = -2.2351742e-05
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -2.2351742e-06
+radial_accel_max = -2.2351742e-06
+scale_min = 0.59999996
+scale_max = 0.79999995
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eoptp"]
+transparency = 1
+albedo_texture = ExtResource("2_6osqv")
+texture_filter = 0
+disable_receive_shadows = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_whuyr"]
+material = SubResource("StandardMaterial3D_eoptp")
+
+[sub_resource type="Curve" id="Curve_7o33c"]
+_data = [Vector2(0.012722641, 0.0039292574), 0.0, 0.0, 0, 0, Vector2(0.5038167, 0.9489194), 0.0, 0.0, 0, 0, Vector2(0.98982173, 0.010314345), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_fcy1q"]
+curve = SubResource("Curve_7o33c")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2si8l"]
+gravity = Vector3(0, 0, 0)
+alpha_curve = SubResource("CurveTexture_fcy1q")
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_reqco"]
+load_path = "res://.godot/imported/VFX_Texture_Noise_Idk.png-e3c91c051a602a0c464c011ec0a503fc.s3tc.ctex"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ir2dg"]
+render_priority = 0
+shader = ExtResource("3_fqmcd")
+shader_parameter/noiseTex = SubResource("CompressedTexture2D_reqco")
+shader_parameter/colorTint = Color(0, 1.4603144, 2.8818533, 1)
+shader_parameter/timeMovement = Vector2(1, 0)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_mwivj"]
+_surfaces = [{
+"aabb": AABB(-1, -0.25, -1, 2, 1, 2),
+"format": 34359742465,
+"index_count": 54,
+"index_data": PackedByteArray("AAABAAIAAwABAAAAAgAEAAAABAACAAUABQADAAYAAAAGAAMABgAHAAUABQAHAAQACAAGAAAABgAIAAkACQAHAAYABwAJAAoACgAEAAcAAAALAAgABAAKAAsABAAKAAsACwAAAAQACwAAAAQA"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray("AACAPwAAgL4AAIA/AACAPwAAQD8AAIA/AACAPwAAQD8AAIC/AACAvwAAQD8AAIA/AACAPwAAgL4AAIC/AACAvwAAQD8AAIC/AACAvwAAgL4AAIA/AACAvwAAgL4AAIC/AABwvwAAgL4AAHA/AABwvwAAgL4AAHC/AABwPwAAgL4AAHC/AABwPwAAgL4AAHA/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ujy7i"]
+resource_name = "mesh"
+_surfaces = [{
+"aabb": AABB(-1, -0.25, -1, 2, 1, 2),
+"attribute_data": PackedByteArray("AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAAAAAACAPwAAAAAAAAAAAACAPwAAAAAAAIA/AACAPwAAAAAAAIA/AAAAAAAAgD8AAAAAAAAAAAAAgD8AAAAAAACAPwAAgD8AAIA/AAB4PwAAgD8AAIA/AAAAAAAAgD8AAAAAAAB4PwAAgD8AAIA+AACAPwAAkD4AAAAAAACQPgAAAAAAAIA+AACAPwAAeD8AAIA/AACAPwAAAAAAAIA/AAAAAAAAeD8AAIA/AAB4PwAAgD8AAIA/AAAAAAAAgD8AAAAAAAB4PwAAgD8AAHg/AACAPwAAgD8AAAAAAACAPwAAAAAAAHg/"),
+"format": 34359742487,
+"index_count": 54,
+"index_data": PackedByteArray("AAABAAIAAgADAAAABAAFAAYABgAHAAQACAAJAAoACgALAAgADAANAA4ADgAPAAwAEAARABIAEgATABAAFAAVABYAFgAXABQAGAAZABoAGgAbABgAHAAdAB4AHgAfABwAIAAhACIAIgAjACAA"),
+"material": SubResource("ShaderMaterial_ir2dg"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 36,
+"vertex_data": PackedByteArray("AACAPwAAgL4AAIA/AACAPwAAQD8AAIA/AACAPwAAQD8AAIC/AACAPwAAgL4AAIC/AACAvwAAQD8AAIC/AACAvwAAQD8AAIA/AACAvwAAgL4AAIA/AACAvwAAgL4AAIC/AACAvwAAQD8AAIA/AACAPwAAQD8AAIA/AACAPwAAgL4AAIA/AACAvwAAgL4AAIA/AACAPwAAgL4AAIC/AACAPwAAQD8AAIC/AACAvwAAQD8AAIC/AACAvwAAgL4AAIC/AACAPwAAgL4AAIC/AABwPwAAgL4AAHC/AABwPwAAgL4AAHA/AACAPwAAgL4AAIA/AACAPwAAgL4AAIC/AABwPwAAgL4AAHC/AABwPwAAgL4AAHA/AACAPwAAgL4AAIA/AACAvwAAgL4AAIC/AABwvwAAgL4AAHC/AABwPwAAgL4AAHC/AACAPwAAgL4AAIC/AACAvwAAgL4AAIA/AABwvwAAgL4AAHA/AABwvwAAgL4AAHC/AACAvwAAgL4AAIC/AACAPwAAgL4AAIA/AABwPwAAgL4AAHA/AABwvwAAgL4AAHA/AACAvwAAgL4AAIA/////f/////////9//////////3//////////f/////8AAP9//3//vwAA/3//f/+/AAD/f/9//78AAP9//3//v/9//3////+//3//f////7//f/9/////v/9//3////+//////wAA/7//////AAD/v/////8AAP+//////wAA/7//fwAA//////9/AAD//////38AAP//////fwAA//////9/AAD//////38AAP//////fwAA//////9/AAD//////38AAAAA/7//fwAAAAD/v/9/AAAAAP+//38AAAAA/7//fwAA/3//v/9/AAD/f/+//38AAP9//7//fwAA/3//v/9/AAD///+//38AAP///7//fwAA////v/9/AAD///+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_mwivj")
+
+[node name="Shield_FX" type="Node3D"]
+script = ExtResource("1_4etf0")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37026274, 0.041459322)
+emitting = false
+amount = 4
+one_shot = true
+explosiveness = 0.54
+process_material = SubResource("ParticleProcessMaterial_yegfy")
+draw_pass_1 = SubResource("QuadMesh_whuyr")
+
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.291265, 0)
+emitting = false
+amount = 1
+one_shot = true
+process_material = SubResource("ParticleProcessMaterial_2si8l")
+draw_pass_1 = SubResource("ArrayMesh_ujy7i")

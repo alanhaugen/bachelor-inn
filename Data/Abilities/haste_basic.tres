@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Skill" load_steps=6 format=3 uid="uid://lvhavkk1vueb"]
+[gd_resource type="Resource" script_class="Skill" load_steps=7 format=3 uid="uid://lvhavkk1vueb"]
 
+[ext_resource type="PackedScene" uid="uid://cypyoqyclfkrf" path="res://scenes/Development/Particles/haste_fx_particle.tscn" id="1_udv1o"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_xcv5g"]
 [ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_7cx8k"]
 
@@ -20,6 +21,7 @@ skill_id = "haste_basic"
 skill_name = "haste_basic"
 tooltip = "Increases the movement range of a target unit."
 icon = SubResource("AtlasTexture_7cx8k")
+Vfx_Scene = ExtResource("1_udv1o")
 effect_mods = {
 &"movement": 2
 }

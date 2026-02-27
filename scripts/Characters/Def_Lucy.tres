@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=13 format=3 uid="uid://dbkk31say6g4i"]
+[gd_resource type="Resource" script_class="CharacterDefinition" load_steps=14 format=3 uid="uid://dbkk31say6g4i"]
 
 [ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="1_y7k22"]
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_hddl4"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="6_fn0ls"]
 [ext_resource type="Resource" uid="uid://lvhavkk1vueb" path="res://Data/Abilities/haste_basic.tres" id="6_q2wk4"]
 [ext_resource type="Resource" uid="uid://cokhndg82vc8h" path="res://Data/Abilities/bomb_basic.tres" id="7_3rmn0"]
+[ext_resource type="Resource" uid="uid://c8qah7yiks0t" path="res://Data/Abilities/heal_basic.tres" id="8_q2wk4"]
 
 [sub_resource type="Resource" id="Resource_dg3df"]
 script = ExtResource("1_y7k22")
@@ -24,7 +25,7 @@ metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 [sub_resource type="Resource" id="Resource_g0ljv"]
 script = ExtResource("2_hddl4")
 weapon = ExtResource("4_q1xy4")
-skills = Array[ExtResource("3_jcmjn")]([ExtResource("4_uua2q"), ExtResource("5_yi62y"), ExtResource("6_q2wk4"), ExtResource("7_3rmn0")])
+skills = Array[ExtResource("3_jcmjn")]([ExtResource("4_uua2q"), ExtResource("5_yi62y"), ExtResource("6_q2wk4"), ExtResource("7_3rmn0"), ExtResource("8_q2wk4")])
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [resource]

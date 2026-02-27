@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="Skill" load_steps=6 format=3 uid="uid://c8qah7yiks0t"]
+[gd_resource type="Resource" script_class="Skill" load_steps=7 format=3 uid="uid://c8qah7yiks0t"]
 
+[ext_resource type="PackedScene" uid="uid://bqfgq7vek2sty" path="res://scenes/Development/Particles/heal_fx_particle.tscn" id="1_bj1s2"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_wxe0v"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wxe0v"]
@@ -22,6 +23,7 @@ skill_id = "heal_basic"
 skill_name = "heal basic"
 tooltip = "Heals the target units health."
 icon = SubResource("AtlasTexture_bj1s2")
+Vfx_Scene = ExtResource("1_bj1s2")
 effect_mods = {
 &"current_health": 3
 }
