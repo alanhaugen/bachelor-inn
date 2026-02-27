@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Skill" load_steps=6 format=3 uid="uid://lvhavkk1vueb"]
 
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_xcv5g"]
-[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_7cx8k"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_7cx8k"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xcv5g"]
 load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"

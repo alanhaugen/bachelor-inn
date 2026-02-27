@@ -124,14 +124,23 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 		#health_bar_ally.hide()
 		#health_bar_enemy.show()
 		
-	#todo:
-	#Create an enemy character instance based of this character
-	#Then delete this character instance
+		#todo:
+		#Create an enemy character instance based of this character
+		var CorruptedChar : Character = load("res://scenes/Characters/Horror_Scene.tscn").instantiate();
+		
+		#State
+		CorruptedChar.state = state;
+		CorruptedChar.state.current_health = CorruptedChar.state.max_health
+		CorruptedChar.state.faction = 1;
+		#Data
+		CorruptedChar.data = data;
+		
+		
+		Main.level.characters.append(CorruptedChar)
+		#Then delete this character instance
+		die(false);
+	
 
-		emit_signal("sanity_flipped", self)
-
-	#if health_bar:
-		#update_health_bar()
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -372,8 +381,8 @@ func die(simulate_only : bool) -> void:
 	state.is_alive = false
 	
 	if simulate_only == false:
+		Main.level.emit_signal("character_stats_changed", self)
 		if state.is_playable():
-			Main.level.emit_signal("character_stats_changed", self)
 			Main.characters.erase(self)
 		Main.level.game_state.units.erase(self)
 		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
