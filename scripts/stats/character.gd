@@ -131,12 +131,22 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 		#State
 		CorruptedChar.state = state;
 		CorruptedChar.state.current_health = CorruptedChar.state.max_health
-		CorruptedChar.state.faction = 1;
+		CorruptedChar.state.faction = CorruptedChar.state.Faction.ENEMY;
+		CorruptedChar.state.is_moved = true;
+		CorruptedChar.state.is_ability_used = false;
+		CorruptedChar.state.is_alive = true;
 		#Data
 		CorruptedChar.data = data;
 		
-		
+		if CorruptedChar.get_parent() != Main.world:
+			Main.world.add_child(CorruptedChar)
 		Main.level.characters.append(CorruptedChar)
+		Main.level.game_state.units.append(CorruptedChar)
+		
+		CorruptedChar.position = position
+		
+		Main.level.occupancy_map.set_cell_item(state.grid_position, 6)
+
 		#Then delete this character instance
 		die(false);
 	
@@ -385,7 +395,8 @@ func die(simulate_only : bool) -> void:
 		if state.is_playable():
 			Main.characters.erase(self)
 		Main.level.game_state.units.erase(self)
-		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
+		if state.current_health < 0 :
+			Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
 		queue_free()
 
 
