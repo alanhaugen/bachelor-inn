@@ -575,18 +575,13 @@ func _ready() -> void:
 				else:
 					occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
-			"01_Enemy", "04_EnemyBird", "05_EnemyGhost", "06_EnemyMonster":
-				new_unit = (
-					BIRD_ENEMY.instantiate() if get_unit_name(pos) == "04_EnemyBird"
-					else GHOST_ENEMY.instantiate() if get_unit_name(pos) == "05_EnemyGhost"
-					else HORROR_ENEMY.instantiate() if get_unit_name(pos) == "06_EnemyMonster"
-					else PLAYER.instantiate()
-				)
-
+			"01_Enemy":
+				new_unit = PLAYER.instantiate()
+				
 				var data := CharacterData.new()
 				var c_state := CharacterState.new()
 				c_state.faction = CharacterState.Faction.ENEMY
-
+				
 				new_unit.data = data
 				new_unit.state = c_state
 				new_unit.data.unit_name = monster_names.pick_random()
@@ -595,6 +590,41 @@ func _ready() -> void:
 				var chest := CHEST.instantiate()
 				chest.position = grid_to_world(pos)
 				add_child(chest)
+
+			"04_EnemyBird":
+				new_unit = BIRD_ENEMY.instantiate()
+				var data := CharacterData.new()
+				data.speed += 4;
+				var c_state := CharacterState.new()
+				c_state.faction = CharacterState.Faction.ENEMY
+				
+				new_unit.data = data
+				new_unit.state = c_state
+				new_unit.data.unit_name = monster_names.pick_random()
+
+			"05_EnemyGhost":
+				new_unit = GHOST_ENEMY.instantiate()
+				var data := CharacterData.new()
+				var c_state := CharacterState.new()
+				c_state.faction = CharacterState.Faction.ENEMY
+				
+				new_unit.data = data
+				new_unit.state = c_state
+				new_unit.data.unit_name = monster_names.pick_random()
+
+			"06_EnemyMonster":
+				new_unit = HORROR_ENEMY.instantiate()
+				var data := CharacterData.new()
+				data.endurance += 6;
+				data.strength += 6;
+				var c_state := CharacterState.new()
+				c_state.faction = CharacterState.Faction.ENEMY
+				
+				new_unit.data = data
+				new_unit.state = c_state
+				new_unit.data.unit_name = monster_names.pick_random()
+
+
 
 
 			_:
