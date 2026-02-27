@@ -90,21 +90,15 @@ func play(anim : SpriteAnim) -> void:
 	my_material.set_shader_parameter("diffuse_atlas", current_animation.diffuse_atlas)
 	my_material.set_shader_parameter("normal_atlas", current_animation.normal_atlas)
 	my_material.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
-
 	my_material.set_shader_parameter("frame_index", 0)
 	my_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
 	my_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
 	
 	# Outlines behind meshes
 	my_outline_material.set_shader_parameter("mask_atlas", current_animation.mask_atlas)
-	
 	my_outline_material.set_shader_parameter("frame_index", 0)
 	my_outline_material.set_shader_parameter("frame_columns", current_animation.frame_columns)
 	my_outline_material.set_shader_parameter("frame_rows", current_animation.frame_rows)
-	#debug:::
-	#print("Outline shader params:")
-	#for p: Dictionary in my_outline_material.shader.get_shader_uniform_list():
-		#print(" - ", p["name"])
 
 
 func pause_anim() -> void:
@@ -240,13 +234,13 @@ func _ready() -> void:
 	
 	calc_derived_stats()
 	
-	## Skill aquirement commented out for now
+	# Skill aquirement commented out for now
 	#if personality == Personality.Zealot:
 	#	skills.append(generic_skills[0]);
-	state.skills.append(get_random_unaquired_skill());
+	#state.skills.append(get_random_unaquired_skill()); #No longer gets random skill from skill list, should rather use the new skill system!
 	
-	if data.speciality == CharacterData.Speciality.Scholar:
-		state.skills.append(SkillRegistry.get_skill("heal_basic"));
+	#if data.speciality == CharacterData.Speciality.Scholar:
+		#state.skills.append(SkillRegistry.get_skill("heal_basic"));
 	#abilities.append(abilites[0]);
 	
 	if not state.is_playable():
@@ -254,7 +248,7 @@ func _ready() -> void:
 	#else:
 		#health_bar = health_bar_enemy;
 		state.faction = CharacterState.Faction.ENEMY;
-	
+	# should remake the entire level up 
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
 	add_child(level_up_popup);
 	level_up_popup.hide();
@@ -273,8 +267,7 @@ func _ready() -> void:
 	#outline.translatsprite.translatee(Vector3(0.3,1.0,-0.1))
 	#outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
 	#outline.scale = Vector3(4,4,4)
-	play(run_down_animation)
-	stop_anim = true
+	play(idle_animation)
 	
 	camera = get_viewport().get_camera_3d()
 	#update_health_bar()

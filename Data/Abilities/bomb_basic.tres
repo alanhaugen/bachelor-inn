@@ -1,13 +1,17 @@
-[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://cokhndg82vc8h"]
+[gd_resource type="Resource" script_class="Skill" load_steps=4 format=3 uid="uid://cokhndg82vc8h"]
 
-[ext_resource type="Texture2D" uid="uid://b8caajapxn6ks" path="res://Data/Abilities/UI_Icon_Bomb_Basic.png" id="1_5gfw7"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="1_5gfw7"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_nw1w7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6h6qg"]
+atlas = ExtResource("1_5gfw7")
+region = Rect2(241, 80, 15, 16)
 
 [resource]
 script = ExtResource("1_nw1w7")
 skill_id = "bomb_basic"
 skill_name = "Bomb"
-icon = ExtResource("1_5gfw7")
+icon = SubResource("AtlasTexture_6h6qg")
 effect_mods = {
 &"damage": 5
 }

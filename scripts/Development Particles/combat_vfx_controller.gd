@@ -14,7 +14,7 @@ func play_attack(result : AttackResult) -> void:
 	
 	var attacker : Character= result.aggressor
 	if attacker and attacker.state and attacker.state.weapon:
-		if attacker.state.weapon.is_melee():
+		if attacker.state.weapon.is_melee:
 			await _spawn_melee_attack(attacker, result.victim, result)
 		else:
 			await _spawn_ranged_attack(attacker, result.victim, result)

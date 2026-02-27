@@ -20,12 +20,8 @@ class_name Weapon
 @export var uses_action: bool = true;
 @export var requires_wep_skill: bool = false; ## Feks. polearm training etc.
 @export var requires_skill_tag: bool = false; ## Må ikke være skill. Kan være class specific etc. 
-#@export var is_melee: bool = false;
+@export var is_melee: bool = false;
 
-
-## FUNCTIONS
-func is_melee() -> bool:
-	return max_range <= 1;
 
 
 func in_range(distance: int) -> bool:

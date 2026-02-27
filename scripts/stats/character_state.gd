@@ -117,7 +117,9 @@ func apply_skill_effect(skill: Skill) -> void:
 		var effect := {
 			"id": skill.skill_id,
 			"rounds": int(skill.duration_turns),
-			"mods": mods
+			"mods": mods,
+			"icon": skill.smallIcon,
+			"tooltip" : skill.effect_tooltip
 		}
 		active_effects.append(effect)
 

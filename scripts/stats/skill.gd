@@ -14,7 +14,9 @@ enum TargetFaction
 @export var skill_name : String
 @export var tooltip : String
 @export var icon : Texture2D
+
 @export var current_level : int = 1
+
 var max_level : int = 5
 @export var command : Command
 
@@ -25,12 +27,15 @@ var max_level : int = 5
 @export var effect_mods : Dictionary = {}
 @export var min_range: int = 1;
 @export var max_range: int = 3;
-@export var duration_turns: int = 0     ## how long it lasts
+
 @export var target_faction: TargetFaction = TargetFaction.FRIENDLY
 ## Key names:
 ## DoT = &dot_tick_damage
 
-
+## Lingering effects
+@export var duration_turns: int = 0     ## how long it lasts
+@export var smallIcon : Texture2D
+@export var effect_tooltip : String
 
 # BOOLS / REQUIREMENTS
 @export var uses_action: bool = true;

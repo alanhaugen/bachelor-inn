@@ -11,12 +11,25 @@ signal preview_selected(character: Character)
 @onready var effectDrawer: Control = %EffectDrawer
 @onready var OC_ED_ICON: TextureRect = %OC_ED_Icon
 
+@onready var effectContainer: HBoxContainer = %EffectHbox
+
+var ActiveEffectUI: PackedScene = preload("res://scenes/userinterface/active_effect_scene.tscn")
+
 var character: Character
 var is_selected: bool = false : set =_set_is_selected;
 
 func _set_is_selected(in_is_selected: bool) -> void:
 	selected_indicator.visible = in_is_selected
+
+func update_effects_ui(in_character: Character) -> void:
+	for child in effectContainer.get_children():
+		child.queue_free()
 	
+	for effect in character.state.active_effects:
+		var ui : Control =ActiveEffectUI.instantiate()
+		ui.set_visuals(effect)
+		effectContainer.add_child(ui)
+
 func apply_stats(stats: Dictionary, in_character: Character) -> void:
 	character = in_character
 	character_name.text = stats.name
@@ -25,6 +38,7 @@ func apply_stats(stats: Dictionary, in_character: Character) -> void:
 	health_bar.value = stats.health
 	sanity_bar.max_value = stats.max_sanity
 	sanity_bar.value = stats.sanity
+
 
 func _on_button_pressed() -> void:
 	emit_signal("preview_selected", character)

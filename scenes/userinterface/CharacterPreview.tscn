@@ -1,10 +1,11 @@
-[gd_scene load_steps=27 format=3 uid="uid://dokhyh7eo4mwv"]
+[gd_scene load_steps=28 format=3 uid="uid://dokhyh7eo4mwv"]
 
 [ext_resource type="Script" uid="uid://23wrdfc0atd" path="res://scripts/ui/CharacterPreview.gd" id="1_4hx64"]
 [ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="3_st0te"]
 [ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="4_bxick"]
 [ext_resource type="StyleBox" uid="uid://dly7gpxmaudqk" path="res://scenes/userinterface/Invisible_Button.tres" id="4_spspg"]
+[ext_resource type="PackedScene" uid="uid://06n4b7bhx05r" path="res://scenes/userinterface/active_effect_scene.tscn" id="6_8i0es"]
 [ext_resource type="StyleBox" uid="uid://cv04fi2snp0rd" path="res://scenes/userinterface/CharacterPreviewOCEffectDrawer.tres" id="6_khx38"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5oovn"]
@@ -109,6 +110,7 @@ metadata/_edit_lock_ = true
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
+anchors_preset = 0
 offset_right = 90.0
 offset_bottom = 46.0
 size_flags_vertical = 3
@@ -271,6 +273,7 @@ patch_margin_bottom = 16
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+anchors_preset = 0
 offset_left = 2.0
 offset_top = 48.0
 offset_right = 90.0
@@ -283,6 +286,7 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_top = 0.9999962
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_spspg")
@@ -292,32 +296,18 @@ patch_margin_top = 5
 patch_margin_right = 5
 patch_margin_bottom = 4
 
-[node name="Health_Icon" type="TextureRect" parent="EffectDrawer"]
+[node name="EffectHbox" type="HBoxContainer" parent="EffectDrawer"]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 5.0
-offset_right = 11.0
-offset_bottom = 12.0
-texture = SubResource("AtlasTexture_5oovn")
-stretch_mode = 3
+offset_right = 85.0
+offset_bottom = 13.0
+theme_override_constants/separation = 14
 
-[node name="Health_Icon2" type="TextureRect" parent="EffectDrawer"]
-layout_mode = 0
-offset_left = 12.0
-offset_top = 5.0
-offset_right = 19.0
-offset_bottom = 12.0
-texture = SubResource("AtlasTexture_5oovn")
-stretch_mode = 3
-
-[node name="Health_Icon3" type="TextureRect" parent="EffectDrawer"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 5.0
-offset_right = 27.0
-offset_bottom = 12.0
-texture = SubResource("AtlasTexture_5oovn")
-stretch_mode = 3
+[node name="ActiveEffect" parent="EffectDrawer/EffectHbox" instance=ExtResource("6_8i0es")]
+visible = false
+layout_mode = 2
 
 [node name="OC EffectDrawer" type="Button" parent="."]
 layout_mode = 0
@@ -342,6 +332,8 @@ offset_left = 2.0
 offset_top = 3.0
 offset_right = -2.0
 offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = SubResource("AtlasTexture_khx38")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

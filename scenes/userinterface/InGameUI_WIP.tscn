@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://c4b8f02hyixcc"]
+[gd_scene load_steps=6 format=3 uid="uid://c4b8f02hyixcc"]
 
 [ext_resource type="Script" uid="uid://ml4dennnbf1u" path="res://scripts/ui/in_game_ui.gd" id="1_aljfs"]
 [ext_resource type="PackedScene" uid="uid://cogf2xkkqlmrb" path="res://scenes/userinterface/player_stats.tscn" id="2_3kd8n"]
 [ext_resource type="PackedScene" uid="uid://3dh3t2j28eq1" path="res://scenes/userinterface/Enemy_Stats.tscn" id="3_5uqut"]
 [ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="5_aljfs"]
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_yi42x"]
 [ext_resource type="PackedScene" uid="uid://dokhyh7eo4mwv" path="res://scenes/userinterface/CharacterPreview.tscn" id="6_aljfs"]
 
 [node name="GUI" type="Control"]
@@ -70,22 +69,7 @@ offset_bottom = 40.0
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
-
-[node name="Background" type="NinePatchRect" parent="."]
-z_index = -3
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 736.0
-offset_top = -114.0
-offset_right = 951.75
-offset_bottom = -79.0
-grow_vertical = 0
-scale = Vector2(3, 3)
-texture = ExtResource("5_yi42x")
-region_rect = Rect2(0, 43, 32, 18)
-patch_margin_left = 9
-patch_margin_top = 9
-patch_margin_right = 9
-patch_margin_bottom = 4
+offset_left = 9.0
+offset_top = -297.99994
+offset_right = 9.0
+offset_bottom = -297.99994

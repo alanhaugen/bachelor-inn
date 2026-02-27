@@ -5,9 +5,9 @@
 [ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
 [ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
-[ext_resource type="Texture2D" uid="uid://7t6w4fwhg0q6" path="res://art/textures/NobleNightsLogo_BorderBluePink.png" id="4_fj817"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
-[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
+[ext_resource type="Texture2D" uid="uid://cft6wh327wv2r" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_xr6vh"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
@@ -223,13 +223,14 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
-custom_minimum_size = Vector2(6.66, 163.395)
+custom_minimum_size = Vector2(6.66, 150.96)
 layout_mode = 1
-offset_left = -109.674
-offset_top = -93.112
-offset_right = 110.65931
-offset_bottom = 70.283035
-texture = ExtResource("4_fj817")
+offset_left = -108.8925
+offset_top = -82.02874
+offset_right = 216.1075
+offset_bottom = 157.97125
+scale = Vector2(0.685, 0.685)
+texture = ExtResource("4_xr6vh")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu"]
 layout_mode = 0

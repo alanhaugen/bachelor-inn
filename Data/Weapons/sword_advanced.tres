@@ -7,4 +7,5 @@ script = ExtResource("1_jprid")
 weapon_id = "sword_advanced"
 weapon_name = "A strong longsword."
 damage_modifier = 6
+is_melee = true
 metadata/_custom_type_script = "uid://hhe2ydney01y"

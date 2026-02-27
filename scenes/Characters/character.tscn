@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://wo1fe0qm5jjk"]
+[gd_scene load_steps=12 format=3 uid="uid://wo1fe0qm5jjk"]
 
 [ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/stats/character.gd" id="1_dg0vw"]
 [ext_resource type="Shader" uid="uid://dv1u0vifov2kh" path="res://shaders/Stencilp2.gdshader" id="2_lrf8u"]
@@ -21,6 +21,18 @@ shader_parameter/normal_tilt = 4.0
 shader_parameter/normal_sensitivity = 1.0
 shader_parameter/flip_normal_y = true
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kldy1"]
+shading_mode = 0
+
+[sub_resource type="QuadMesh" id="QuadMesh_tylj4"]
+material = SubResource("StandardMaterial3D_kldy1")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_goyo8"]
+albedo_color = Color(1, 0.24705882, 0.30980393, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_kldy1"]
+material = SubResource("StandardMaterial3D_goyo8")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_lrf8u"]
 render_priority = 0
 shader = ExtResource("2_lrf8u")
@@ -36,6 +48,20 @@ script = ExtResource("1_dg0vw")
 transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.67509294, -0.53662795)
 material_override = SubResource("ShaderMaterial_8sm5s")
 texture = ExtResource("3_8sm5s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sprite"]
+transform = Transform3D(0.20679888, 0, 0, 0, 0.028750006, 0, 0, 0, 0.25, 3.3770338e-08, -0.27837902, 0.023429513)
+visible = false
+cast_shadow = 0
+mesh = SubResource("QuadMesh_tylj4")
+skeleton = NodePath("../..")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Sprite"]
+transform = Transform3D(0.13470255, 0, 0, 0, 0.03125, 0, 0, 0, 0.25, -0.034075428, -0.28156736, 0.027051896)
+visible = false
+cast_shadow = 0
+mesh = SubResource("QuadMesh_kldy1")
+skeleton = NodePath("../..")
 
 [node name="Outline" type="Sprite3D" parent="."]
 transform = Transform3D(7.06, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.67509294, -0.53662795)

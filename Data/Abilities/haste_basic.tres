@@ -1,16 +1,29 @@
-[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://lvhavkk1vueb"]
+[gd_resource type="Resource" script_class="Skill" load_steps=6 format=3 uid="uid://lvhavkk1vueb"]
 
-[ext_resource type="Texture2D" uid="uid://cucofljj0yug7" path="res://Data/Abilities/UI_Icon_Haste_Basic.png" id="1_7cx8k"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_xcv5g"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_7cx8k"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_xcv5g"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7cx8k"]
+atlas = SubResource("CompressedTexture2D_xcv5g")
+region = Rect2(192, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_udv1o"]
+atlas = ExtResource("2_7cx8k")
+region = Rect2(200, 48, 8, 7)
 
 [resource]
 script = ExtResource("1_xcv5g")
 skill_id = "haste_basic"
 skill_name = "haste_basic"
 tooltip = "Increases the movement range of a target unit."
-icon = ExtResource("1_7cx8k")
+icon = SubResource("AtlasTexture_7cx8k")
 effect_mods = {
 &"movement": 2
 }
 duration_turns = 2
+smallIcon = SubResource("AtlasTexture_udv1o")
+effect_tooltip = "Increases movement range"
 metadata/_custom_type_script = "uid://c3p07am3ababr"

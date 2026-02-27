@@ -1,16 +1,21 @@
-[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://m1x2ggydf67a"]
+[gd_resource type="Resource" script_class="Skill" load_steps=4 format=3 uid="uid://m1x2ggydf67a"]
 
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_38qb6"]
-[ext_resource type="Texture2D" uid="uid://dii1khd871ejl" path="res://Data/Abilities/UI_Icon_Heal_Sanity_Basic.png" id="1_fjjpb"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_38qb6"]
+load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fjjpb"]
+atlas = SubResource("CompressedTexture2D_38qb6")
+region = Rect2(192, 32, 16, 16)
 
 [resource]
 script = ExtResource("1_38qb6")
 skill_id = "heal_sanity_basic"
 skill_name = "heal sanity basic"
 tooltip = "Heals the target units sanity."
-icon = ExtResource("1_fjjpb")
+icon = SubResource("AtlasTexture_fjjpb")
 effect_mods = {
 &"current_sanity": 5
 }
-max_range = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"

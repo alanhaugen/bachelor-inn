@@ -347,14 +347,15 @@ func _handle_skill(pos : Vector3i) -> void:
 		return
 
 	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-
+	
+	
 	## Impact damage (Fireball)
 	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
 		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
 
 	## DoT's
 	target.state.apply_skill_effect(active_skill)
-
+	emit_signal("character_stats_changed", target)
 	_exit_skill_target_mode()
 	
 
@@ -753,6 +754,7 @@ func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 func tick_all_units_end_round() -> void:
 	## Iterate over duplicates, to avoid null values if units die
 	#var dupe := characters.duplicate()
+	
 	var c:Character = null
 	for index : int in range(characters.size()):
 		if(characters.get(index) == null):
@@ -841,13 +843,14 @@ func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
 
 	match skill.target_faction:
 		Skill.TargetFaction.FRIENDLY:
-			return unit.state.faction == caster.state.faction
+			return unit.state.faction == caster.state.faction or unit == caster
 		Skill.TargetFaction.ENEMY:
 			return unit.state.faction != caster.state.faction
 		Skill.TargetFaction.BOTH:
 			return true
 		Skill.TargetFaction.SELF:
 			return unit == caster
+		
 	return false
 
 
@@ -949,6 +952,11 @@ func _process_old(delta: float) -> void:
 				## Going from enemy phase to player phase
 				is_animation_just_finished = true;
 				tick_all_units_end_round(); ## Decay effects
+				for c in Main.characters:
+					if c == null:
+						continue
+					emit_signal("character_stats_changed", c)
+				
 				reset_all_units();
 				is_player_turn = true;
 		# Done with one move, execute it and start on next

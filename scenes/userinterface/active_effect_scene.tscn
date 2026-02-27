@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://06n4b7bhx05r"]
+
+[ext_resource type="Script" uid="uid://drxj3bwx5x02r" path="res://scripts/ui/active_effect_script.gd" id="1_3dbqt"]
+[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="1_wounf"]
+[ext_resource type="FontFile" uid="uid://ctd5pba6pfiqk" path="res://art/Fonts/Monocraft.ttc" id="2_3dbqt"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5oovn"]
+atlas = ExtResource("1_wounf")
+region = Rect2(176, 0, 7, 7)
+
+[node name="ActiveEffect" type="Control"]
+custom_minimum_size = Vector2(13, 7)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 14.0
+offset_bottom = 8.0
+tooltip_text = "NO TOOLTIP HEHE SHHHH"
+script = ExtResource("1_3dbqt")
+
+[node name="ActiveEffectIcon" type="TextureRect" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+texture = SubResource("AtlasTexture_5oovn")
+stretch_mode = 2
+
+[node name="ActiveEffectLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 9.0
+offset_top = -1.0
+offset_right = 15.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("2_3dbqt")
+theme_override_font_sizes/font_size = 9
+text = "9"
+visible_characters = 1

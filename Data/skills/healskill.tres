@@ -10,8 +10,8 @@ metadata/_custom_type_script = "uid://dujsv356f3fvb"
 
 [resource]
 script = ExtResource("3_rij6h")
-skill_name = "Heal"
 skill_id = "heal_basic"
+skill_name = "Heal"
 tooltip = "This will heal your allies"
 icon = ExtResource("2_7cy7j")
 command = SubResource("Resource_w6rda")

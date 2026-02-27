@@ -8,4 +8,5 @@ weapon_id = "sword_basic"
 weapon_name = "Basic Training Sword"
 weapon_tooltip = "A fairly ok sword that fits ok in the hand."
 damage_modifier = 4
+is_melee = true
 metadata/_custom_type_script = "uid://hhe2ydney01y"
