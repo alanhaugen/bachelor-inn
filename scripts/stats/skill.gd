@@ -10,37 +10,47 @@ enum TargetFaction
 }
 
 ## ID
+@export_subgroup("Visuals")
 @export var skill_id : String
 @export var skill_name : String
 @export var tooltip : String
 @export var icon : Texture2D
 
-@export var current_level : int = 1
+@export_subgroup("Vfx")
 
+@export var should_play_vfx : bool = true
+@export var Vfx_Scene : PackedScene
+
+
+@export_subgroup("Stats")
+@export var current_level : int = 1
 var max_level : int = 5
 @export var command : Command
-
 ## STATS
 ## Stat effects are now stored in a dictionary per spell/ability
 ## Add new Dict -> New Key: StringName, New Value: Int
 ## Key names MUST match the variable name inside character_state.gd, or variable name used in runtime!!!
+
 @export var effect_mods : Dictionary = {}
-@export var min_range: int = 1;
-@export var max_range: int = 3;
+
+@export_range(0,100) var min_range: int = 1;
+@export_range(0,100) var max_range: int = 3;
 
 @export var target_faction: TargetFaction = TargetFaction.FRIENDLY
 ## Key names:
 ## DoT = &dot_tick_damage
-
+@export_subgroup("Lingering effects")
 ## Lingering effects
 @export var duration_turns: int = 0     ## how long it lasts
-@export var smallIcon : Texture2D
-@export var effect_tooltip : String
+@export var smallIcon : Texture2D       ## The icon for the lingering effect
+@export var effect_tooltip : String     ## the tooltip for the lingering effect
 
+@export_subgroup("bools")
 # BOOLS / REQUIREMENTS
 @export var uses_action: bool = true;
 @export var requires_speciality: bool = false; ## Feks. polearm training etc.
 @export var has_requirement: bool = false; ## Må ikke være skill. Kan være class specific etc. 
+
 
 func _init(inName : String = "", inTooltip : String = "", inIcon : Texture2D = null, inLevel : int = 1, inMaxLevel : int = 1, inCommand : Command = null) -> void:
 	skill_name = inName

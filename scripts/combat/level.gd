@@ -347,12 +347,22 @@ func _handle_skill(pos : Vector3i) -> void:
 		return
 
 	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-	
-	
+	#THIS IS WHERE IT SHOULD TELL VFX CONTROLLER THAT IT SHOULD SPAWN THE SKILLS VFX AT TARGET
+
 	## Impact damage (Fireball)
 	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
 		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
-
+		
+	## Take all the stuff and compile a list of the results as AttackResult! 
+	var result: AttackResult = AttackResult.new()
+	result.aggressor = skill_caster
+	result.victim = target
+	result.vfx_scene =  active_skill.Vfx_Scene
+	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
+		result.damage = active_skill.effect_mods.get("damage", null)
+	
+	combat_vfx.play_skill(result)
+	
 	## DoT's
 	target.state.apply_skill_effect(active_skill)
 	emit_signal("character_stats_changed", target)
@@ -966,14 +976,13 @@ func _process_old(delta: float) -> void:
 			#if get_trigger_name(active_move.end_pos) == "Victory":
 				#next_level();
 				##Dialogic.start(level_name + "LevelVictory")
-
-
-
+			
 			active_move.prepare(game_state)
 			await combat_vfx.play_attack(active_move.result)
 			active_move.apply_damage(game_state)
 			
 			#looks like this is end of player turn! 
+			
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
 				show_move_popup(get_screen_position(selected_unit.sprite))
@@ -1008,6 +1017,7 @@ func _process_old(delta: float) -> void:
 					await timer.timeout
 					wait_for_camera = false
 				MoveSingleAI() ## called after an enemy is done moving
+				## Update all character ui at the end of enemy turn, to update tickable ui elements
 				for character in Main.characters:
 					if characters == null: 
 						return

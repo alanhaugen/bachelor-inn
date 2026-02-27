@@ -7,3 +7,4 @@ var damage : int = 0
 var was_miss : bool = false
 var was_critical : bool = false
 var killed : bool = false
+var vfx_scene : PackedScene 

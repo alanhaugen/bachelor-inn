@@ -22,8 +22,8 @@ skill_id = "heal_basic"
 skill_name = "heal basic"
 tooltip = "Heals the target units health."
 icon = SubResource("AtlasTexture_bj1s2")
-smallIcon = SubResource("AtlasTexture_07c11")
 effect_mods = {
 &"current_health": 3
 }
+smallIcon = SubResource("AtlasTexture_07c11")
 metadata/_custom_type_script = "uid://c3p07am3ababr"

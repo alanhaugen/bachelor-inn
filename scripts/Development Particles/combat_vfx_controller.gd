@@ -19,11 +19,25 @@ func play_attack(result : AttackResult) -> void:
 		else:
 			await _spawn_ranged_attack(attacker, result.victim, result)
 
+func play_skill(result : AttackResult) -> void:
+	var target : Character = result.victim
+	var effect : PackedScene = result.vfx_scene
+	var dmg : int = result.damage if result.damage != null else 0
 	
+	if dmg >= 1:
+		_spawn_dmg_number_scene(result)
+	if effect == null:
+		return
+		
+	var vfx : Node3D = effect.instantiate()
 	
+	add_child(vfx)
+	vfx.global_position = result.victim.global_position
 	
-	
-	
+	if vfx.has_method("play"):
+		vfx.play()
+
+
 func _spawn_dmg_number_scene(result : AttackResult) -> void:
 	if not damage_number_scene:
 		return
