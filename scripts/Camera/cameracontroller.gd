@@ -31,6 +31,12 @@ var _unlock_camera_mode : CameraStates = _camera_mode
 ## Used by the Tutorial
 var freeze_camera_mode : bool = false
 
+#region ractical view
+var _tactical_view : bool = false
+var _stored_angle : Vector3 = Vector3(0.0, 0.0, 0.0)
+const _TACTICAL_ANGLE : Vector3 = Vector3(deg_to_rad(-90), 0, 0)
+#endregion
+
 #region Springarm Length
 @export var _springarm_target_length : float;
 @export_range(0, 20, 0.1, "or_greater") var springarm_length_maximum : float = 3
@@ -70,7 +76,9 @@ func _input(event: InputEvent) -> void:
 	if _camera_mode == CameraStates.FREE:
 		_input_dragging(event)
 		_input_zoom(event)
-
+		_toggle_tactical_view(event)
+	if _camera_mode == CameraStates.FOCUS_UNIT:
+		_toggle_tactical_view(event)
 
 func _input_dragging(event: InputEvent) -> void:
 	#this statement may cause a bug on phones.
@@ -117,6 +125,18 @@ func _input_zoom(event: InputEvent) -> void:
 func _stop_drag() -> void:
 	Input.warp_mouse(_pre_drag_mouse_pos)
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func _toggle_tactical_view(event: InputEvent) -> void:
+	if(!event.is_action_pressed("toggle_tactical_view", false)):
+		return
+	
+	if(_tactical_view):
+		_tactical_view = false
+		_pivot_target_transform.basis = Basis.from_euler(_stored_angle)
+	else:
+		_tactical_view = true
+		_stored_angle = pivot.rotation
+		_pivot_target_transform.basis = Basis.from_euler(_TACTICAL_ANGLE)
 #endregion
 
 
