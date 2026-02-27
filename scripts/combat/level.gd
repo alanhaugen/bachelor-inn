@@ -688,8 +688,8 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
-	_exit_skill_target_mode()
-	movement_grid.clear()
+	_exit_skill_target_mode() 	## Clear highlight grid
+	movement_grid.clear()		## Clear movement grid
 	
 	if selected_unit == null:
 		print("Pressed skill: ", skill.skill_id, " but no unit selected. This should never happen!")
