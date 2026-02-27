@@ -140,7 +140,7 @@ func _on_character_deselected() -> void:
 
 func _on_character_stats_changed(character: Character) -> void:
 	
-	if character.state.current_health <= 0 \
+	if !character.state.is_alive \
 	or character.state.faction != CharacterState.Faction.PLAYER:
 		remove_character_preview(character)
 		return
