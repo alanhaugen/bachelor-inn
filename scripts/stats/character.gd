@@ -117,38 +117,39 @@ func clone() -> Character:
 
 
 func _on_sanity_changed(_in_sanity : int) -> void:
-	if state.current_sanity <= 0 and state.current_health >= 0:
-		state.faction = CharacterState.Faction.ENEMY
-		data.unit_name = data.unit_name + "'thulhu"
-		#health_bar = health_bar_enemy
-		#health_bar_ally.hide()
-		#health_bar_enemy.show()
+	if !(state.current_sanity <= 0 and state.is_alive):
+		return
+	state.faction = CharacterState.Faction.ENEMY
+	data.unit_name = data.unit_name + "'thulhu"
+	#health_bar = health_bar_enemy
+	#health_bar_ally.hide()
+	#health_bar_enemy.show()
 		
-		#todo:
-		#Create an enemy character instance based of this character
-		var CorruptedChar : Character = load("res://scenes/Characters/Horror_Scene.tscn").instantiate();
+	#todo:
+	#Create an enemy character instance based of this character
+	var CorruptedChar : Character = load("res://scenes/Characters/Horror_Scene.tscn").instantiate();
 		
-		#State
-		CorruptedChar.state = state;
-		CorruptedChar.state.current_health = CorruptedChar.state.max_health
-		CorruptedChar.state.faction = CorruptedChar.state.Faction.ENEMY;
-		CorruptedChar.state.is_moved = true;
-		CorruptedChar.state.is_ability_used = false;
-		CorruptedChar.state.is_alive = true;
-		#Data
-		CorruptedChar.data = data;
+	#State
+	CorruptedChar.state = state;
+	CorruptedChar.state.current_health = CorruptedChar.state.max_health
+	CorruptedChar.state.faction = CorruptedChar.state.Faction.ENEMY;
+	CorruptedChar.state.is_moved = true;
+	CorruptedChar.state.is_ability_used = false;
+	CorruptedChar.state.is_alive = true;
+	#Data
+	CorruptedChar.data = data;
 		
-		if CorruptedChar.get_parent() != Main.world:
-			Main.world.add_child(CorruptedChar)
-		Main.level.characters.append(CorruptedChar)
-		Main.level.game_state.units.append(CorruptedChar)
+	if CorruptedChar.get_parent() != Main.world:
+		Main.world.add_child(CorruptedChar)
+	Main.level.characters.append(CorruptedChar)
+	Main.level.game_state.units.append(CorruptedChar)
 		
-		CorruptedChar.position = position
+	CorruptedChar.position = position
 		
-		Main.level.occupancy_map.set_cell_item(state.grid_position, 6)
+	Main.level.occupancy_map.set_cell_item(state.grid_position, 6)
 
-		#Then delete this character instance
-		die(false);
+	#Then delete this character instance
+	die(false);
 	
 
 
