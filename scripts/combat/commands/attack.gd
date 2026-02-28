@@ -80,6 +80,8 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	if result.killed:
 		if aggressor.state.is_playable() and simulate_only == false:
 			aggressor.state.experience += victim.data.strength
+	Main.level.emit_signal("character_stats_changed", self)
+	
 
 #old, replaced by Prepare and Apply
 #func execute(state : GameState, simulate_only : bool = false) -> void:
