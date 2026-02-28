@@ -186,6 +186,7 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 
 func _on_experience_changed(in_experience: int) -> void:
 	#data.experience += in_experience;
+	return
 	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
 	if (state.experience > state.next_level_experience):
 		print("Level up!");
