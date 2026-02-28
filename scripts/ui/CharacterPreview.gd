@@ -13,11 +13,27 @@ signal preview_selected(character: Character)
 
 @onready var effectContainer: HBoxContainer = %EffectHbox
 
+@onready var notMoved: TextureRect = %NotMoved
+@onready var notAction: TextureRect = %NotAction
+@onready var Moved: TextureRect = %Moved
+@onready var Action: TextureRect = %Action 
+
+var has_moved: bool = false : set =_set_has_moved
+var has_used_ability: bool = false : set =_set_has_used_ability
+
 var ActiveEffectUI: PackedScene = preload("res://scenes/userinterface/active_effect_scene.tscn")
 
 var character: Character
 var is_selected: bool = false : set =_set_is_selected;
 
+func _set_has_moved(in_has_moved: bool) -> void:
+	notMoved.visible = !in_has_moved
+	Moved.visible = in_has_moved
+
+func _set_has_used_ability(in_has_used_ability: bool) -> void:
+	notAction.visible = !in_has_used_ability
+	Action.visible = in_has_used_ability
+	
 func _set_is_selected(in_is_selected: bool) -> void:
 	selected_indicator.visible = in_is_selected
 
@@ -38,7 +54,8 @@ func apply_stats(stats: Dictionary, in_character: Character) -> void:
 	health_bar.value = stats.health
 	sanity_bar.max_value = stats.max_sanity
 	sanity_bar.value = stats.sanity
-
+	has_moved = character.state.is_moved 
+	has_used_ability = character.state.is_ability_used
 
 func _on_button_pressed() -> void:
 	emit_signal("preview_selected", character)

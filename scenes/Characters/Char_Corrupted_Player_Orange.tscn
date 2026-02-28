@@ -1,0 +1,17 @@
+[gd_scene load_steps=8 format=3 uid="uid://bs1hqh7h7dsx3"]
+
+[ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_u35kx"]
+[ext_resource type="Resource" uid="uid://60b3hehe73bs" path="res://art/Animations/Enemies/InsaneCharacter/Red/Insane_Red_Walk_L.tres" id="2_b5yt4"]
+[ext_resource type="Resource" uid="uid://btxw3rqu00edo" path="res://art/Animations/Enemies/InsaneCharacter/Red/Insane_Red_Walk_R.tres" id="3_hvuby"]
+[ext_resource type="Resource" uid="uid://bj4qosri74plj" path="res://art/Animations/Enemies/InsaneCharacter/Red/Insane_Red_Walk_U.tres" id="4_ha2fo"]
+[ext_resource type="Resource" uid="uid://cry1w6lsfdowk" path="res://art/Animations/Enemies/InsaneCharacter/Red/Insane_Red_Walk_D.tres" id="5_dkmug"]
+[ext_resource type="Resource" uid="uid://csdkgd5qdoqhl" path="res://art/Animations/Enemies/InsaneCharacter/Red/Insane_Red_Idle.tres" id="6_iues6"]
+[ext_resource type="Texture2D" uid="uid://b31dt4x52xsby" path="res://art/Animations/Enemies/InsaneCharacter/Red/Files/RedInsane_portrait_wip1.png" id="7_3sbec"]
+
+[node name="Character2" instance=ExtResource("1_u35kx")]
+run_left_animation = ExtResource("2_b5yt4")
+run_right_animation = ExtResource("3_hvuby")
+run_up_animation = ExtResource("4_ha2fo")
+run_down_animation = ExtResource("5_dkmug")
+idle_animation = ExtResource("6_iues6")
+portrait = ExtResource("7_3sbec")

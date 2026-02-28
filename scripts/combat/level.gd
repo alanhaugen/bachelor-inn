@@ -78,6 +78,7 @@ const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn");
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
+const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -651,7 +652,19 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.data = data
 			new_enemy.state = c_state
 			new_enemy.data.unit_name = monster_names.pick_random()
-
+			
+		"07_InsaneCharacter":
+			new_enemy = CORRUPTED_PLAYER_RED.instantiate()
+			var data := CharacterData.new()
+			data.endurance += 6;
+			data.strength += 6;
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY
+			
+			new_enemy.data = data
+			new_enemy.state = c_state
+			new_enemy.data.unit_name = monster_names.pick_random()
+			
 		_:
 			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 

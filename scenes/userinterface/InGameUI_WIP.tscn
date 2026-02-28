@@ -64,10 +64,14 @@ scale = Vector2(3, 3)
 [node name="Enemy_Stats" parent="Scale" instance=ExtResource("3_5uqut")]
 unique_name_in_owner = true
 layout_mode = 1
-offset_left = 1553.0
+anchors_preset = 3
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -367.0
 offset_top = 11.0
-offset_right = 1553.0
+offset_right = -367.0
 offset_bottom = 11.0
+grow_horizontal = 0
 scale = Vector2(3, 3)
 
 [node name="Characters_VBOX" type="VBoxContainer" parent="Scale"]
@@ -99,16 +103,24 @@ offset_bottom = -297.99994
 
 [node name="End_Turn_Button" type="Button" parent="Scale"]
 unique_name_in_owner = true
-layout_mode = 0
-offset_left = 1661.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -259.0
 offset_top = 18.0
-offset_right = 1740.3334
+offset_right = -179.66663
 offset_bottom = 42.0
+grow_horizontal = 0
 scale = Vector2(3, 3)
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("6_dln7y")
 theme_override_colors/font_color = Color(0.20459601, 0.19122118, 0.25484505, 1)
+theme_override_colors/font_focus_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
+theme_override_colors/font_pressed_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
+theme_override_colors/font_hover_color = Color(0.30959404, 0.29366162, 0.37918672, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
 theme_override_fonts/font = ExtResource("7_i81te")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_b706j")

@@ -154,7 +154,7 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 	var pre_corrupted_data : CharacterData = data
 	var pre_corrupted_state : CharacterState = state
 	die(false);
-	var CorruptedChar : Character = Main.level.spawn_enemy(pos, "06_EnemyMonster")
+	var CorruptedChar : Character = Main.level.spawn_enemy(pos, "07_InsaneCharacter")
 	CorruptedChar.data = pre_corrupted_data
 	CorruptedChar.state = pre_corrupted_state
 	CorruptedChar.state.current_health = CorruptedChar.state.max_health

@@ -42,16 +42,10 @@ func build_enemy_Stats(character: Character) -> Dictionary:
 		"max_health": character.state.max_health,
 	}
 
-#Update the player stats to send it to the Player_Stats, gets set in its own script
-#func update_playerStats(character: Character, popup: StatPopUp) -> void:
-	#popup.apply_stats(build_character_stats(character))
-	#popup.show();
-
 
 func _ready() -> void:
-	#var level := get_tree().get_first_node_in_group("level")
 	add_to_group("ui_controller")
-	
+
 
 
 
@@ -61,16 +55,15 @@ func _clear_previews() -> void:
 		if is_instance_valid(p):
 			p.queue_free()
 	previews.clear()
-	
+
 	for child in preview_container.get_children():
 		child.queue_free()
-		
-		
-		
+
 func _on_preview_selected(character: Character) -> void:
 	var level := get_tree().get_first_node_in_group("level")
 	if level:
 		level.try_select_unit(character) 
+		ribbon.show()
 
 
 func _connect_to_level(level: Node) -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dokhyh7eo4mwv"]
+[gd_scene load_steps=32 format=3 uid="uid://dokhyh7eo4mwv"]
 
 [ext_resource type="Script" uid="uid://23wrdfc0atd" path="res://scripts/ui/CharacterPreview.gd" id="1_4hx64"]
 [ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="2_spspg"]
@@ -99,11 +99,27 @@ texture = SubResource("AtlasTexture_xqxqi")
 atlas = ExtResource("2_spspg")
 region = Rect2(177, 67, 3, 2)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_8i0es"]
+atlas = ExtResource("2_spspg")
+region = Rect2(224, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vvpmc"]
+atlas = ExtResource("2_spspg")
+region = Rect2(224, 240, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0dpo"]
+atlas = ExtResource("2_spspg")
+region = Rect2(240, 224, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nmp8"]
+atlas = ExtResource("2_spspg")
+region = Rect2(240, 240, 16, 16)
+
 [node name="CharacterPreview" type="Control"]
 custom_minimum_size = Vector2(0, 46)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 92.08
+offset_right = 110.0
 offset_bottom = 64.235
 script = ExtResource("1_4hx64")
 metadata/_edit_lock_ = true
@@ -111,7 +127,7 @@ metadata/_edit_lock_ = true
 [node name="Control" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 0
-offset_right = 90.0
+offset_right = 110.0
 offset_bottom = 46.0
 size_flags_vertical = 3
 
@@ -121,7 +137,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 2.0
 offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -135,13 +150,10 @@ patch_margin_bottom = 4
 [node name="Icon" type="NinePatchRect" parent="Control"]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.075
-anchor_top = 0.147
-anchor_right = 0.075
-anchor_bottom = 0.147
-offset_top = -0.012000084
-offset_right = 34.0
-offset_bottom = 34.988
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 41.0
+offset_bottom = 42.0
 grow_vertical = 2
 texture = ExtResource("2_spspg")
 region_rect = Rect2(132, 4, 24, 24)
@@ -149,6 +161,7 @@ patch_margin_left = 3
 patch_margin_top = 3
 patch_margin_right = 3
 patch_margin_bottom = 3
+metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="Control/Icon"]
 clip_contents = true
@@ -244,7 +257,7 @@ show_percentage = false
 layout_mode = 0
 offset_left = 2.75
 offset_top = 3.0
-offset_right = 88.0
+offset_right = 108.0
 offset_bottom = 47.0
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
@@ -253,15 +266,16 @@ theme_override_styles/pressed = ExtResource("4_spspg")
 theme_override_styles/hover = ExtResource("4_spspg")
 theme_override_styles/disabled = ExtResource("4_spspg")
 theme_override_styles/focus = SubResource("StyleBoxFlat_st0te")
+metadata/_edit_lock_ = true
 
 [node name="SelectedUnit" type="NinePatchRect" parent="."]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
-offset_left = 98.25
-offset_top = 8.5
-offset_right = 107.25
-offset_bottom = 40.5
+offset_left = 113.0
+offset_top = 9.0
+offset_right = 122.0
+offset_bottom = 41.0
 texture = ExtResource("2_spspg")
 region_rect = Rect2(99, 32, 9, 32)
 patch_margin_left = 4
@@ -276,7 +290,7 @@ layout_mode = 1
 anchors_preset = 0
 offset_left = 2.0
 offset_top = 48.0
-offset_right = 90.0
+offset_right = 108.0
 offset_bottom = 64.0
 
 [node name="Background2" type="NinePatchRect" parent="EffectDrawer"]
@@ -301,7 +315,7 @@ unique_name_in_owner = true
 layout_mode = 0
 offset_left = 4.0
 offset_top = 5.0
-offset_right = 85.0
+offset_right = 102.0
 offset_bottom = 13.0
 theme_override_constants/separation = 3
 
@@ -336,6 +350,49 @@ offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = SubResource("AtlasTexture_khx38")
+
+[node name="Movement actions" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 87.0
+offset_top = 7.0
+offset_right = 102.0
+offset_bottom = 42.0
+
+[node name="NotMoved" type="TextureRect" parent="Movement actions"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+texture = SubResource("AtlasTexture_8i0es")
+
+[node name="NotAction" type="TextureRect" parent="Movement actions"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = 16.0
+texture = SubResource("AtlasTexture_vvpmc")
+
+[node name="Moved" type="TextureRect" parent="Movement actions"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+tooltip_text = "You have moved"
+texture = SubResource("AtlasTexture_f0dpo")
+
+[node name="Action" type="TextureRect" parent="Movement actions"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = 16.0
+tooltip_text = "Action used"
+texture = SubResource("AtlasTexture_1nmp8")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="OC EffectDrawer" to="." method="_on_oc_effect_drawer_pressed"]

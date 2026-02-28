@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=2 format=3 uid="uid://bmlyd8nkbe4t3"]
+
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_5g22b"]
+
+[resource]
+script = ExtResource("1_5g22b")
+metadata/_custom_type_script = "uid://c876dul20yd5j"

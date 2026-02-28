@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://cry1w6lsfdowk"]
+
+[ext_resource type="Texture2D" uid="uid://deylfaakeitwa" path="res://art/Animations/Enemies/InsaneCharacter/Red/Files/D_Anim_RedInsanewalk_basecolour.png" id="1_8pxx2"]
+[ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_451xj"]
+[ext_resource type="Texture2D" uid="uid://73utmwon8c2y" path="res://art/Animations/Enemies/InsaneCharacter/Red/Files/D_Anim_RedInsanewalk_edge4.png" id="2_ctxu4"]
+[ext_resource type="Texture2D" uid="uid://v3e5aagco3qg" path="res://art/Animations/Enemies/InsaneCharacter/Red/Files/D_Anim_RedInsanewalk_normal.png" id="3_aiywp"]
+
+[resource]
+script = ExtResource("1_451xj")
+diffuse_atlas = ExtResource("1_8pxx2")
+normal_atlas = ExtResource("3_aiywp")
+mask_atlas = ExtResource("2_ctxu4")
+metadata/_custom_type_script = "uid://c876dul20yd5j"
