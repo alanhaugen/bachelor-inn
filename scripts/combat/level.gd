@@ -883,7 +883,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 			valid_skill_target_tiles[p] = true
 			path_map.set_cell_item(p, skill_target_code)
 
-func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int) -> Array[Vector3i]:
+func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int, min_y : int = 0, max_y : int = 0) -> Array[Vector3i]:
 	var out: Array[Vector3i] = []
 	min_r = max(min_r, 0)
 	max_r = max(max_r, 0)
@@ -891,10 +891,11 @@ func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int) -> 
 	for dx in range(-max_r, max_r + 1):
 		var rem:int = max_r - abs(dx)
 		for dz in range(-rem, rem + 1):
-			var dist :int = abs(dx) + abs(dz)
-			if dist < min_r or dist > max_r:
-				continue
-			out.append(Vector3i(origin.x + dx, origin.y, origin.z + dz))
+			for dy in range(min_y, max_y):
+				var dist :int = abs(dx) + abs(dz)
+				if dist < min_r or dist > max_r:
+					continue
+				out.append(Vector3i(origin.x + dx, origin.y+dy, origin.z + dz))
 	return out
 
 func _exit_skill_target_mode() -> void:
