@@ -181,4 +181,5 @@ func remove_character_preview(character: Character) -> void:
 
 
 func _on_end_turn_button_pressed() -> void:
+	Main.level.end_player_turn()
 	print("end_turn")
