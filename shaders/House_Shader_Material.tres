@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://drdmruwej4k1e"]
+
+[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_bbyxw"]
+[ext_resource type="Texture2D" uid="uid://h35np5bhg2ry" path="res://art/textures/HouseTextureMain.png" id="2_euha8"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bbyxw")
+shader_parameter/diffuse_tex = ExtResource("2_euha8")
+shader_parameter/colorTint = Color(1, 1, 1, 1)

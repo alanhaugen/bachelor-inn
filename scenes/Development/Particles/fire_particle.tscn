@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://mygy28ayev5c" path="res://art/textures/ParticleTex/Particle_Flame_Fire.png" id="1_fi51v"]
 [ext_resource type="Texture2D" uid="uid://dgegi0mqpjjvt" path="res://art/textures/ParticleTex/Particle_Sparks_Fire.png" id="2_6eywn"]
 [ext_resource type="Texture2D" uid="uid://b513xhhq6qeqo" path="res://art/textures/ParticleTex/Particle_Smoke_Fire.png" id="3_lju8x"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="4_ee6vb"]
+[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="4_ee6vb"]
 [ext_resource type="Script" uid="uid://b05ngj76eogl7" path="res://scripts/Development Particles/FlickerLight.gd" id="5_6eywn"]
 
 [sub_resource type="Curve" id="Curve_kuu7e"]
@@ -190,8 +190,8 @@ draw_pass_1 = SubResource("QuadMesh_xs0r7")
 
 [node name="FireLight" type="OmniLight3D" parent="."]
 process_mode = 3
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08203614, 1.2036659, 0.019399524)
-light_color = Color(1, 0.6627451, 0.08235294, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.08203614, 1.2636375, 0.019399524)
+light_color = Color(1.179842, 0.7850964, 0.10576699, 1)
 light_indirect_energy = 6.128
 shadow_enabled = true
 omni_range = 9.575

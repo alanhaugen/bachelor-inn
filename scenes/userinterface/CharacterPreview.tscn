@@ -298,15 +298,16 @@ patch_margin_bottom = 4
 
 [node name="EffectHbox" type="HBoxContainer" parent="EffectDrawer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 0
 offset_left = 4.0
 offset_top = 5.0
 offset_right = 85.0
 offset_bottom = 13.0
-theme_override_constants/separation = 14
+theme_override_constants/separation = 3
 
 [node name="ActiveEffect" parent="EffectDrawer/EffectHbox" instance=ExtResource("6_8i0es")]
-visible = false
+custom_minimum_size = Vector2(14, 7)
 layout_mode = 2
 
 [node name="OC EffectDrawer" type="Button" parent="."]
