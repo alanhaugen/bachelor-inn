@@ -178,3 +178,7 @@ func remove_character_preview(character: Character) -> void:
 	if enemy_stats.current_enemy == character:
 		enemy_stats.hide()
 	
+
+
+func _on_end_turn_button_pressed() -> void:
+	print("end_turn")

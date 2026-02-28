@@ -336,7 +336,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	##TODO make _handle_skill use height
 	#var p := Vector3i(pos.x, 0, pos.z)
 	
-	var p := grid_to_world(pos)
+	var p := Vector3i(pos)
 	var target: Character = get_unit(p)
 		
 	print("SKILL CLICK p=", p,
@@ -871,12 +871,12 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	#path_map.clear()
 
 	#var o := Vector3i(origin.x, 0, origin.z)
-	var o := grid_to_world(origin)
+	var o := Vector3i(origin)
 	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
 		#var p := Vector3i(t.x, 0, t.z)
-		var p := grid_to_world(t)
+		var p := Vector3i(t)
 		var unit: Character = get_unit(p)
 
 		if unit == null:
@@ -886,7 +886,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 			valid_skill_target_tiles[p] = true
 			path_map.set_cell_item(p, skill_target_code)
 
-func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int, min_y : int = 0, max_y : int = 0) -> Array[Vector3i]:
+func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int, min_y : int = -1, max_y : int = 5) -> Array[Vector3i]:
 	var out: Array[Vector3i] = []
 	min_r = max(min_r, 0)
 	max_r = max(max_r, 0)

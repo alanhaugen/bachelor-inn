@@ -1,10 +1,37 @@
-[gd_scene load_steps=6 format=3 uid="uid://c4b8f02hyixcc"]
+[gd_scene load_steps=12 format=3 uid="uid://c4b8f02hyixcc"]
 
 [ext_resource type="Script" uid="uid://ml4dennnbf1u" path="res://scripts/ui/in_game_ui.gd" id="1_aljfs"]
 [ext_resource type="PackedScene" uid="uid://cogf2xkkqlmrb" path="res://scenes/userinterface/player_stats.tscn" id="2_3kd8n"]
 [ext_resource type="PackedScene" uid="uid://3dh3t2j28eq1" path="res://scenes/userinterface/Enemy_Stats.tscn" id="3_5uqut"]
 [ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/ribbon.tscn" id="5_aljfs"]
 [ext_resource type="PackedScene" uid="uid://dokhyh7eo4mwv" path="res://scenes/userinterface/CharacterPreview.tscn" id="6_aljfs"]
+[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/userinterface/button_theme.tres" id="6_dln7y"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="7_i81te"]
+[ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="8_5oovn"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b706j"]
+texture = ExtResource("8_5oovn")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(228, 68, 24, 24)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_len0o"]
+texture = ExtResource("8_5oovn")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(228, 68, 24, 24)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_owq5w"]
+texture = ExtResource("8_5oovn")
+texture_margin_left = 6.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(227, 67, 26, 26)
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -27,7 +54,6 @@ mouse_filter = 2
 
 [node name="Player_Stats" parent="Scale" instance=ExtResource("2_3kd8n")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 offset_left = 48.0
 offset_top = -87.99994
@@ -37,7 +63,6 @@ scale = Vector2(3, 3)
 
 [node name="Enemy_Stats" parent="Scale" instance=ExtResource("3_5uqut")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 offset_left = 1553.0
 offset_top = 11.0
@@ -57,7 +82,6 @@ mouse_filter = 2
 theme_override_constants/separation = 4
 
 [node name="CharacterPreview" parent="Scale/Characters_VBOX" instance=ExtResource("6_aljfs")]
-visible = false
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Scale"]
@@ -67,9 +91,31 @@ offset_bottom = 40.0
 
 [node name="Ribbon" parent="Scale" instance=ExtResource("5_aljfs")]
 unique_name_in_owner = true
-visible = false
 layout_mode = 1
 offset_left = 9.0
 offset_top = -297.99994
 offset_right = 9.0
 offset_bottom = -297.99994
+
+[node name="End_Turn_Button" type="Button" parent="Scale"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 1661.0
+offset_top = 18.0
+offset_right = 1740.3334
+offset_bottom = 42.0
+scale = Vector2(3, 3)
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("6_dln7y")
+theme_override_colors/font_color = Color(0.20459601, 0.19122118, 0.25484505, 1)
+theme_override_fonts/font = ExtResource("7_i81te")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_b706j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_len0o")
+theme_override_styles/hover = SubResource("StyleBoxTexture_owq5w")
+text = "End Turn"
+icon_alignment = 1
+metadata/_edit_group_ = true
+
+[connection signal="pressed" from="Scale/End_Turn_Button" to="." method="_on_end_turn_button_pressed"]
