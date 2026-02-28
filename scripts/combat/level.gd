@@ -92,7 +92,7 @@ var game_state : GameState;
 
 var is_in_menu: bool = false
 var active_move: Command
-var moves_stack: Array
+var moves_stack: Array[Command]
 
 var current_moves: Array[Command]
 var is_player_turn: bool = true
@@ -557,90 +557,37 @@ func _ready() -> void:
 		var pos: Vector3i = units[i]
 		var new_unit: Character = null
 
-		match get_unit_name(pos):
-			"00_Unit":
-				if characters_placed < Main.characters.size():
-					new_unit = Main.characters[characters_placed]
-					new_unit.state.is_moved = false
-					new_unit.camera = get_viewport().get_camera_3d()
-					characters_placed += 1
+		var unit_type : String = get_unit_name(pos)
+		if(unit_type == "00_Unit"):
+			if characters_placed < Main.characters.size():
+				new_unit = Main.characters[characters_placed]
+				new_unit.state.is_moved = false
+				new_unit.camera = get_viewport().get_camera_3d()
+				characters_placed += 1
 
-					var health := new_unit.state.current_health
-					print(
-						"This character exists: ",
-						new_unit.data.unit_name,
-						" health: ",
-						health if health > 0 else "fresh unit"
-					)
-				else:
-					occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-
-			"01_Enemy":
-				new_unit = PLAYER.instantiate()
-				
-				var data := CharacterData.new()
-				var c_state := CharacterState.new()
-				c_state.faction = CharacterState.Faction.ENEMY
-				
-				new_unit.data = data
-				new_unit.state = c_state
-				new_unit.data.unit_name = monster_names.pick_random()
-
-			"02_Chest":
-				var chest := CHEST.instantiate()
-				chest.position = grid_to_world(pos)
-				add_child(chest)
-
-			"04_EnemyBird":
-				new_unit = BIRD_ENEMY.instantiate()
-				var data := CharacterData.new()
-				data.speed += 4;
-				var c_state := CharacterState.new()
-				c_state.faction = CharacterState.Faction.ENEMY
-				
-				new_unit.data = data
-				new_unit.state = c_state
-				new_unit.data.unit_name = monster_names.pick_random()
-
-			"05_EnemyGhost":
-				new_unit = GHOST_ENEMY.instantiate()
-				var data := CharacterData.new()
-				var c_state := CharacterState.new()
-				c_state.faction = CharacterState.Faction.ENEMY
-				
-				new_unit.data = data
-				new_unit.state = c_state
-				new_unit.data.unit_name = monster_names.pick_random()
-
-			"06_EnemyMonster":
-				new_unit = HORROR_ENEMY.instantiate()
-				var data := CharacterData.new()
-				data.endurance += 6;
-				data.strength += 6;
-				var c_state := CharacterState.new()
-				c_state.faction = CharacterState.Faction.ENEMY
-				
-				new_unit.data = data
-				new_unit.state = c_state
-				new_unit.data.unit_name = monster_names.pick_random()
-
-
-
-
-			_:
+				var health := new_unit.state.current_health
+				print(
+					"This character exists: ",
+					new_unit.data.unit_name,
+					" health: ",
+					health if health > 0 else "fresh unit"
+				)
+			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+			if new_unit:
+				new_unit.position = grid_to_world(pos)
 
-		if new_unit:
-			new_unit.position = grid_to_world(pos)
+				if new_unit.get_parent() != Main.world:
+					Main.world.add_child(new_unit)
 
-			if new_unit.get_parent() != Main.world:
-				Main.world.add_child(new_unit)
+				characters.append(new_unit)
 
-			characters.append(new_unit)
-
-			if new_unit is Character:
-				new_unit.state.grid_position = pos
-				new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
+				if new_unit is Character:
+					new_unit.state.grid_position = pos
+					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
+		else:
+			spawn_enemy(pos, unit_type, true)
+		
 
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
@@ -650,6 +597,78 @@ func _ready() -> void:
 	
 	turn_transition_animation_player.play()
 	add_to_group("level")
+
+func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
+	var new_enemy: Character = null
+
+	match unit_id:
+		"01_Enemy":
+			new_enemy = PLAYER.instantiate()
+			
+			var data := CharacterData.new()
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY
+			
+			new_enemy.data = data
+			new_enemy.state = c_state
+			new_enemy.data.unit_name = monster_names.pick_random()
+
+		"02_Chest":
+			var chest := CHEST.instantiate()
+			chest.position = grid_to_world(pos)
+			add_child(chest)
+
+		"04_EnemyBird":
+			new_enemy = BIRD_ENEMY.instantiate()
+			var data := CharacterData.new()
+			data.speed += 4;
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY
+			
+			new_enemy.data = data
+			new_enemy.state = c_state
+			new_enemy.data.unit_name = monster_names.pick_random()
+
+		"05_EnemyGhost":
+			new_enemy = GHOST_ENEMY.instantiate()
+			var data := CharacterData.new()
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY
+			
+			new_enemy.data = data
+			new_enemy.state = c_state
+			new_enemy.data.unit_name = monster_names.pick_random()
+
+		"06_EnemyMonster":
+			new_enemy = HORROR_ENEMY.instantiate()
+			var data := CharacterData.new()
+			data.endurance += 6;
+			data.strength += 6;
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.ENEMY
+			
+			new_enemy.data = data
+			new_enemy.state = c_state
+			new_enemy.data.unit_name = monster_names.pick_random()
+
+		_:
+			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+
+	if new_enemy:
+		new_enemy.position = grid_to_world(pos)
+
+		if new_enemy.get_parent() != Main.world:
+			Main.world.add_child(new_enemy)
+
+		characters.append(new_enemy)
+		if(!_on_ready):
+			game_state.units.append(new_enemy)
+			occupancy_map.set_cell_item(pos, 6)
+
+		if new_enemy is Character:
+			new_enemy.state.grid_position = pos
+			new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
+	return new_enemy
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
@@ -664,7 +683,13 @@ func get_unit(pos: Vector3i) -> Character:
 func create_path(start : Vector3i, end : Vector3i) -> void:
 	animation_path.clear()
 	path_map.clear()
-	movement_grid.fill_from_commands(MoveGenerator.generate(game_state.get_unit(moves_stack.front().start_pos), game_state), game_state)
+	var foo0 : Command = moves_stack.front()
+	var foo1 : Vector3i = foo0.start_pos
+	var foo2 : Character = game_state.get_unit(foo1)
+	if(foo2.data.unit_name == "Tucy"):
+		pass
+	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
+	movement_grid.fill_from_commands(foo3, game_state)
 	
 	var path := movement_grid.get_path(start, end)
 
@@ -738,8 +763,11 @@ func MoveSingleAI() -> void:
 		await timer.timeout
 		wait_for_camera = false
 	else:
-		camera_controller.set_pivot_target_translate(get_selectable_characters().front().position)
+		var pivot_chara : Node3D = get_selectable_characters().front()
+		if(pivot_chara == null):
+			return
 		camera_controller.free_camera()
+		camera_controller.set_pivot_target_translate(pivot_chara.position)
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
