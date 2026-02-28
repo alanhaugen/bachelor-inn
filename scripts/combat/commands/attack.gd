@@ -6,9 +6,6 @@ class_name Attack
 var attack_pos : Vector3i;
 
 
-var start_pos : Vector3i
-var end_pos : Vector3i
-
 func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -> void:
 	start_pos = inStartPos;
 	end_pos = inNeighbour;
@@ -68,13 +65,16 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	result.killed = victim.apply_damage(result.damage, simulate_only, aggressor, "Attack")
 	
 	#sanity
-	if aggressor.state.is_playable():
-		if victim.state.current_health > 0:
+	if(!simulate_only):
+		pass
+		if aggressor.state.is_playable():
+			pass
+			#if victim.state.current_health > 0:
+				#@warning_ignore("integer_division")
+				#aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
+		else:
 			@warning_ignore("integer_division")
-			aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
-	else:
-		@warning_ignore("integer_division")
-		victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
+			victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
 	
 	#death
 	if result.killed:

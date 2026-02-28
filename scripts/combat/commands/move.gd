@@ -5,9 +5,6 @@ class_name Move
 ## The game consists of commands like move played
 ## in a queue
 
-var start_pos : Vector3i
-var end_pos : Vector3i
-
 
 func save() -> Dictionary:
 	var state := {"start_pos": start_pos,
