@@ -54,6 +54,7 @@ mouse_filter = 2
 
 [node name="Player_Stats" parent="Scale" instance=ExtResource("2_3kd8n")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 offset_left = 48.0
 offset_top = -87.99994
@@ -63,6 +64,7 @@ scale = Vector2(3, 3)
 
 [node name="Enemy_Stats" parent="Scale" instance=ExtResource("3_5uqut")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -86,6 +88,7 @@ mouse_filter = 2
 theme_override_constants/separation = 4
 
 [node name="CharacterPreview" parent="Scale/Characters_VBOX" instance=ExtResource("6_aljfs")]
+visible = false
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Scale"]
@@ -95,6 +98,7 @@ offset_bottom = 40.0
 
 [node name="Ribbon" parent="Scale" instance=ExtResource("5_aljfs")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 offset_left = 9.0
 offset_top = -297.99994

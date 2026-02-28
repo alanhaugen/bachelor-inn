@@ -727,6 +727,7 @@ func reset_all_units() -> void:
 		if character is Character:
 			var character_script: Character = character;
 			character_script.reset();
+		
 
 
 func MoveAI() -> void:
@@ -1056,6 +1057,7 @@ func _process_old(delta: float) -> void:
 			active_move.prepare(game_state)
 			await combat_vfx.play_attack(active_move.result)
 			active_move.apply_damage(game_state)
+			
 			
 			#looks like this is end of player turn! 
 			

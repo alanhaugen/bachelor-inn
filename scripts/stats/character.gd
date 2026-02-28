@@ -350,6 +350,7 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		if state.is_enemy():
 			grid_code = Main.level.enemy_code;
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
+		Main.level.emit_signal("character_stats_changed", self)
 		#if state.is_playable():
 			#my_material.set_shader_parameter("grey_tint", true)
 
@@ -364,6 +365,7 @@ func reset() -> void:
 	show();
 	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)
+	Main.level.emit_signal("character_stats_changed", self)
 
 
 ## Importing this to attack.gd
