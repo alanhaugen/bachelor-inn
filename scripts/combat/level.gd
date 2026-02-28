@@ -146,6 +146,7 @@ var monster_names := [
 
 
 func show_move_popup(window_pos :Vector2) -> void:
+	return
 	move_popup.show();
 	is_in_menu = true;
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
@@ -1130,3 +1131,27 @@ func _process_old(delta: float) -> void:
 					selected_unit.play(selected_unit.run_right_animation)
 				elif (dir.x < 0):
 					selected_unit.play(selected_unit.run_left_animation)
+
+func end_player_turn() -> bool:
+	if !is_player_turn:
+		return false
+	if (turn_transition_animation_player.is_playing()):
+		return false
+	if(!combat_vfx.is_finished()):
+		return false
+	if wait_for_camera:
+		return false
+	if (is_in_menu):
+		return false
+	if state != States.PLAYING:
+		return false
+	var units :Array[Vector3i] = occupancy_map.get_used_cells();
+	for i in units.size():
+		var pos :Vector3i = units[i];
+		if (occupancy_map.get_cell_item(pos) == player_code):
+			active_move = Wait.new(pos)
+			active_move.execute(game_state);
+			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
+	return true
+	
