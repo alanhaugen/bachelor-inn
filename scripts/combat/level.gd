@@ -145,6 +145,7 @@ var monster_names := [
 
 
 func show_move_popup(window_pos :Vector2) -> void:
+	return
 	move_popup.show();
 	is_in_menu = true;
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
