@@ -545,7 +545,7 @@ func _ready() -> void:
 	if (level_name == "first"):
 		Dialogic.start(str(level_name) + "Level");
 		is_in_menu = true;
-	elif (level_name == "Fen"):
+	elif (level_name == "fen"):
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 

@@ -4,4 +4,4 @@
 
 [resource]
 script = ExtResource("1_tnguu")
-levels = Array[String](["Fen", "fento", "Showcase"])
+levels = Array[String](["fen", "fento", "Showcase"])
