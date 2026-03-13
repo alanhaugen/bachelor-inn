@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b8j8ahxio3wsf"]
+
+[ext_resource type="Material" uid="uid://bi6jnyqi35hnl" path="res://shaders/WaterMaterial.tres" id="1_gb0ak"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_th8k1"]
+
+[node name="Water" type="MeshInstance3D"]
+transform = Transform3D(49.708862, 0, 0, 0, 0.6568207, 0, 0, 0, 22.674746, 0, 0, 0)
+mesh = SubResource("PlaneMesh_th8k1")
+skeleton = NodePath("../Level")
+surface_material_override/0 = ExtResource("1_gb0ak")

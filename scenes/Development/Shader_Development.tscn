@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://bidc8ytas6r4o"]
+
+[ext_resource type="Shader" uid="uid://byk4kcnwfcn7m" path="res://art/WIP/ParticleFloor.gdshader" id="1_bexta"]
+[ext_resource type="Texture2D" uid="uid://ej0v7g61aq83" path="res://art/textures/WorkingGround_Tex.png" id="2_fcxjm"]
+[ext_resource type="Environment" uid="uid://bptw2s8sfbjfe" path="res://art/Environment/WE_NewDefault.tres" id="3_fcxjm"]
+[ext_resource type="MeshLibrary" uid="uid://dx6f14m4tsaxf" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="4_p3xhw"]
+[ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="5_bexta"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q0lo1"]
+render_priority = 0
+shader = ExtResource("1_bexta")
+shader_parameter/albedo = ExtResource("2_fcxjm")
+shader_parameter/tile_scale = Vector2(0.256, 0.256)
+shader_parameter/fade_dist = 16.255
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_c65kh"]
+material = SubResource("ShaderMaterial_q0lo1")
+size = Vector2(100, 100)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(7.989109, 0, 0, 0, 1, 0, 0, 0, -7.80489, 0, 0.010031581, 0)
+mesh = SubResource("PlaneMesh_c65kh")
+metadata/_edit_lock_ = true
+
+[node name="Lamp" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5687718, 6.057957, -0.44316483)
+light_color = Color(1, 0.9254902, 0.92156863, 1)
+light_energy = 5.356
+light_indirect_energy = 6.128
+shadow_enabled = true
+omni_range = 9.575
+omni_attenuation = 1.027
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("3_fcxjm")
+
+[node name="Level" type="GridMap" parent="."]
+mesh_library = ExtResource("4_p3xhw")
+cell_size = Vector3(2, 1, 2)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(-131069, 5, 1441805, 0, 2, 1048588, 0, 1, 1048578, 0, 0, 1048578, 0, 65535, 1048578, 0, 65534, 1048578, 0, 65533, 1048578, 0, 65532, 12, 1, 65532, 2, 2, 65532, 1441804, 2, 65533, 1441792, 3, 65533, 23, 4, 65533, 23, 3, 65532, 23, 4, 65532, 23, 5, 65534, 1441794, 5, 65535, 655372, 4, 65535, 655360, 4, 0, 1441794, 4, 1, 1441794, 4, 2, 655372, 3, 2, 655362, 2, 2, 655362, 1, 2, 655362, 5, 65532, 4, 5, 65533, 23, 5, 0, 4, 5, 1, 4, 5, 2, 4, 65538, 65535, 22, 131074, 65535, 21, 1, 3, 2, 2, 3, 2, 3, 3, 2, 4, 3, 2, 5, 3, 2, 0, 3, 2, 65535, 2, 1441794, 65535, 65533, 1441794, 65535, 65534, 1441794, 65535, 65535, 1441794, 65535, 0, 1441794, 65535, 1, 1441794, 6, 65533, 1048578, 6, 65534, 1048578, 6, 65535, 1048578, 6, 0, 1048588, 6, 1, 12, 6, 2, 1048578, 6, 65532, 1048578, 65535, 65532, 1441794, 0, 65531, 655362, 1, 65531, 655362, 2, 65531, 655362, 3, 65531, 23, 4, 65531, 655362, 5, 65531, 655362, 6, 65531, 1048576, 65535, 65531, 655360, 65535, 3, 1441792, 6, 3, 0, 65541, 65532, 30, 65538, 65531, 1441824, 2, 0, 1441810, 1, 1, 1441816, 3, 1, 1441810, 1, 65534, 1441810, 3, 0, 1441816, 1, 0, 1441810, 2, 1, 655402, 9, 3, 21, 7, 1, 2, 7, 0, 655362, 8, 0, 655362, 9, 0, 655362, 10, 0, 655362, 11, 0, 655362, 12, 0, 655362, 13, 0, 655362, 14, 0, 655362, 8, 1, 2, 9, 1, 2, 10, 1, 2, 11, 1, 1441804, 12, 1, 1441796, 13, 1, 1441796, 11, 2, 1441794, 11, 3, 1441794, 11, 4, 1441794, 11, 5, 1441794, 11, 6, 1441794, 12, 2, 1441796, 12, 3, 1441796, 12, 4, 1441796, 12, 5, 1441796, 12, 6, 1441796, 14, 1, 1441796, 13, 2, 1441796, 13, 3, 1441796, 13, 4, 1441796, 13, 5, 1441796, 14, 5, 1441796, 14, 6, 1441796, 13, 6, 1441796, 14, 4, 1441796, 14, 3, 1441796, 14, 2, 1441796, 7, 4, 1441822, 10, 6, 655390, 65533, 3, 30, 65534, 4, 1441823, 0, 4, 1441824, 6, 5, 1441824, 8, 5, 1441823, 9, 5, 1441820)
+}
+metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Water" parent="." instance=ExtResource("5_bexta")]
+transform = Transform3D(49.708862, 0, 0, 0, 0.6568207, 0, 0, 0, 22.674746, 5.786262, 0.72024035, -0.9427678)
+
+[node name="Lamp2" type="OmniLight3D" parent="."]
+transform = Transform3D(0.57825536, 0.20389149, -0.7899678, 0.3533027, 0.81019, 0.46772793, 0.7353897, -0.5495639, 0.3964613, 1.9332676, 5.2173405, -4.9419928)
+light_color = Color(1, 0.8392157, 0.5529412, 1)
+light_energy = 2.049
+shadow_enabled = true
+omni_range = 27.256
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.57825536, 0.20389156, -0.7899678, 0.35330263, 0.81019, 0.467728, 0.73538977, -0.5495639, 0.39646125, 8.183081, 16.736057, -0.9140688)
+light_color = Color(1, 0.84705883, 0.75686276, 1)
+light_energy = 1.354
+light_indirect_energy = 0.352
+light_volumetric_fog_energy = 0.0
+shadow_enabled = true
+directional_shadow_mode = 0
+sky_mode = 1
