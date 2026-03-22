@@ -421,6 +421,8 @@ func select_unit(unit: Character) -> void:
 
 
 func _handle_player_click(pos: Vector3i) -> void:
+	if is_choosing_skill_target:
+		return
 	# Heal execution shortcut
 	if selected_unit == null:
 		Tutorial.tutorial_unit_selected()
@@ -919,11 +921,15 @@ func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int, min
 	return out
 
 func _exit_skill_target_mode() -> void:
+	var caster := skill_caster
 	is_choosing_skill_target = false
 	active_skill = null
 	skill_caster = null
 	valid_skill_target_tiles.clear()
 	path_map.clear()
+	if caster != null and caster.state.is_moved == false:
+		print("reselecting caster")
+		select_unit(caster)
 
 
 func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
