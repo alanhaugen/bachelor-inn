@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="DialogicStyle" load_steps=12 format=3 uid="uid://ce8uw6ujqd648"]
+[gd_resource type="Resource" script_class="DialogicStyle" format=3 uid="uid://ce8uw6ujqd648"]
 
 [ext_resource type="Resource" uid="uid://dd2fmncvea87f" path="res://dialogue/CustomDialogicStyle.tres" id="1_ikf5s"]
 [ext_resource type="Script" uid="uid://bwg6yncmh2cml" path="res://addons/dialogic/Resources/dialogic_style_layer.gd" id="2_fcktc"]

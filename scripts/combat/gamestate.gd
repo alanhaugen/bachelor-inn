@@ -52,6 +52,7 @@ func clone() -> GameState:
 func reset_moves() -> void:
 	for unit in units:
 		unit.state.is_moved = false;
+		unit.state.is_ability_used = false;
 
 
 func apply_move(move : Command, simulate_only : bool = false) -> GameState:
@@ -75,14 +76,13 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 func no_units_remaining(specific_unit : Character = null) -> bool:
 	if( specific_unit == null):
 		for unit in units:
-			if unit.state.is_moved == false and unit.state.is_enemy() == is_current_player_enemy:
+			if (unit.state.is_moved == false or unit.state.is_ability_used == false) and unit.state.is_enemy() == is_current_player_enemy:
 				return false;
 		return true;
 	else:
-		if specific_unit.state.is_moved == false and specific_unit.state.is_enemy() == is_current_player_enemy:
+		if (specific_unit.state.is_moved == false or specific_unit.state.is_ability_used == false) and specific_unit.state.is_enemy() == is_current_player_enemy:
 			return false;
-		else:
-			return true
+		return true
 
 
 func end_turn() -> void:
@@ -95,7 +95,7 @@ func get_legal_moves(charaPos : NullablePosition = null) -> Array[Command]:
 	
 	if( charaPos == null):
 		for unit in units:
-			if unit.state.is_moved:
+			if unit.state.is_moved and unit.state.is_ability_used:
 				continue;
 			if unit.state.is_alive == false:
 				continue;

@@ -1,18 +1,18 @@
-[gd_scene load_steps=52 format=3 uid="uid://kkgvyut22uqr"]
+[gd_scene format=3 uid="uid://kkgvyut22uqr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
-[ext_resource type="Texture2D" uid="uid://c71u0xag6oy8m" path="res://art/textures/GoboLightShaftPixelated.png" id="2_6llwq"]
+[ext_resource type="Texture2D" uid="uid://dmcbnskjep5hp" path="res://art/textures/GoboLightShaftPixelated.png" id="2_6llwq"]
 [ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
-[ext_resource type="Texture2D" uid="uid://dlvyg06sf3knk" path="res://art/textures/ParticleTex/Star_Particle.png" id="3_kofws"]
-[ext_resource type="Texture2D" uid="uid://dx4okdnxovpw7" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
-[ext_resource type="Texture2D" uid="uid://0ix3km6aok00" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
+[ext_resource type="Texture2D" uid="uid://c2jmrtd0xpgf5" path="res://art/textures/ParticleTex/Star_Particle.png" id="3_kofws"]
+[ext_resource type="Texture2D" uid="uid://covs0kphmr6l8" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
+[ext_resource type="Texture2D" uid="uid://buwpoipddaleb" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
 [ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dymrh6kcwr4do" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
+[ext_resource type="Texture2D" uid="uid://6bk2vjlp6232" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
 [ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
-[ext_resource type="Texture2D" uid="uid://cgkap28wqvqrv" path="res://art/textures/Orb.png" id="9_ovtcx"]
-[ext_resource type="Texture2D" uid="uid://ctjugol0c3xdn" path="res://art/textures/M_Orb.png" id="10_nxa0q"]
-[ext_resource type="Texture2D" uid="uid://dcxh0b4oye7tb" path="res://art/textures/No_Orb.png" id="11_h5d6a"]
+[ext_resource type="Texture2D" uid="uid://bhnm4vonv5x7w" path="res://art/textures/Orb.png" id="9_ovtcx"]
+[ext_resource type="Texture2D" uid="uid://ik0uv2r63vke" path="res://art/textures/M_Orb.png" id="10_nxa0q"]
+[ext_resource type="Texture2D" uid="uid://b8y27c3cmjpyj" path="res://art/textures/No_Orb.png" id="11_h5d6a"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="12_roefr"]
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="16_xnnr5"]
 [ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="17_ovtcx"]
@@ -243,7 +243,7 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
-[node name="Map3d" instance=ExtResource("1_xwjaq")]
+[node name="Map3d" unique_id=1364062222 instance=ExtResource("1_xwjaq")]
 level_name = "first fen edition"
 
 [node name="TerrainGrid" parent="." index="0"]
@@ -306,21 +306,21 @@ light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
 light_energy = 1.207
 omni_range = 5.179
 
-[node name="Lamp4" type="OmniLight3D" parent="Lights" index="3"]
+[node name="Lamp4" type="OmniLight3D" parent="Lights" index="3" unique_id=163796801]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74.79294, -0.79151535, -4.5395775)
 light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
 light_energy = 1.207
 shadow_enabled = true
 omni_range = 8.426303
 
-[node name="Lamp5" type="OmniLight3D" parent="Lights" index="4"]
+[node name="Lamp5" type="OmniLight3D" parent="Lights" index="4" unique_id=625134905]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.423065, -0.79151535, 0.16459882)
 light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
 light_energy = 3.169
 shadow_enabled = true
 omni_range = 6.3741245
 
-[node name="Lamp6" type="OmniLight3D" parent="Lights" index="5"]
+[node name="Lamp6" type="OmniLight3D" parent="Lights" index="5" unique_id=1335007754]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 79.34454, -1.3571138, 0.15665781)
 light_color = Color(0.29411766, 0.9529412, 0.8392157, 1)
 light_energy = 2.415
@@ -339,7 +339,7 @@ visible = true
 light_color = Color(0.40784314, 1, 0.7019608, 1)
 light_energy = 0.335
 
-[node name="SpotLight3D" type="SpotLight3D" parent="Lights" index="8"]
+[node name="SpotLight3D" type="SpotLight3D" parent="Lights" index="8" unique_id=831386861]
 transform = Transform3D(0.88069093, -0.28864285, 0.3755913, -0.46665257, -0.6648541, 0.58327043, 0.081356585, -0.6889516, -0.72022694, 83.65387, 7.1872287, -14.387323)
 light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
 light_energy = 3.322
@@ -355,7 +355,7 @@ shadow_blur = 10.0
 spot_range = 40.353317
 spot_angle = 15.399274
 
-[node name="SpotLight3D3" type="SpotLight3D" parent="Lights" index="9"]
+[node name="SpotLight3D3" type="SpotLight3D" parent="Lights" index="9" unique_id=1351865475]
 transform = Transform3D(0.86585367, -0.3918906, 0.3109969, -0.40388793, -0.18068801, 0.89678663, -0.29524887, -0.90209395, -0.31472924, 49.10742, 12.01437, -8.958551)
 light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
 light_energy = 1.282
@@ -371,40 +371,40 @@ shadow_blur = 10.0
 spot_range = 31.77924
 spot_angle = 12.943185
 
-[node name="Fog WIP" type="FogVolume" parent="Particles" index="0"]
+[node name="Fog WIP" type="FogVolume" parent="Particles" index="0" unique_id=1603484009]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.440939, 6.2290134, -5.168091)
 size = Vector3(2.2007446, 14.72998, 19.014404)
 material = SubResource("FogMaterial_2ubu0")
 
-[node name="Fog WIP2" type="FogVolume" parent="Particles" index="1"]
+[node name="Fog WIP2" type="FogVolume" parent="Particles" index="1" unique_id=1052371422]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 82.91118, 6.2290134, -0.8623657)
 size = Vector3(4.32428, 14.72998, 23.24768)
 material = SubResource("FogMaterial_2ubu0")
 
-[node name="Orb" type="Node3D" parent="Particles" index="2"]
+[node name="Orb" type="Node3D" parent="Particles" index="2" unique_id=1255116978]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66.940125, 4.171556, 1.0068703)
 
-[node name="Stars" type="GPUParticles3D" parent="Particles/Orb" index="0"]
+[node name="Stars" type="GPUParticles3D" parent="Particles/Orb" index="0" unique_id=1691420688]
 amount = 20
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_mhi0x")
 draw_pass_1 = SubResource("QuadMesh_k4gwo")
 
-[node name="LightShafts" type="GPUParticles3D" parent="Particles/Orb" index="1"]
+[node name="LightShafts" type="GPUParticles3D" parent="Particles/Orb" index="1" unique_id=1052905011]
 process_material = SubResource("ParticleProcessMaterial_crfyk")
 draw_pass_1 = SubResource("QuadMesh_crtgh")
 
-[node name="GlowCIrcle" type="GPUParticles3D" parent="Particles/Orb" index="2"]
+[node name="GlowCIrcle" type="GPUParticles3D" parent="Particles/Orb" index="2" unique_id=22039361]
 visible = false
 amount = 1
 lifetime = 3.0
 process_material = SubResource("ParticleProcessMaterial_6k23p")
 draw_pass_1 = SubResource("QuadMesh_1cwsm")
 
-[node name="Orb_Intro" type="Node3D" parent="Particles/Orb" index="3"]
+[node name="Orb_Intro" type="Node3D" parent="Particles/Orb" index="3" unique_id=1133769455]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7640228, -3.1157837, -0.767671)
 
-[node name="Orb" type="MeshInstance3D" parent="Particles/Orb/Orb_Intro" index="0"]
+[node name="Orb" type="MeshInstance3D" parent="Particles/Orb/Orb_Intro" index="0" unique_id=86021843]
 transform = Transform3D(1, 0, 0, 0, 0.6226785, 0.7824778, 0, -0.7824778, 0.6226785, -0.7192459, 2.9517221, 0.6498735)
 sorting_offset = 1.1
 cast_shadow = 0
@@ -413,72 +413,72 @@ mesh = SubResource("QuadMesh_vg5tu")
 skeleton = NodePath("")
 script = ExtResource("12_roefr")
 
-[node name="Fireflies" type="Node3D" parent="Particles" index="3"]
+[node name="Fireflies" type="Node3D" parent="Particles" index="3" unique_id=704946536]
 
-[node name="Particles" type="Node3D" parent="Particles/Fireflies" index="0"]
+[node name="Particles" type="Node3D" parent="Particles/Fireflies" index="0" unique_id=1909966985]
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles" index="0" unique_id=1328775216]
 transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
 amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles3" type="Node3D" parent="Particles/Fireflies" index="1"]
+[node name="Particles3" type="Node3D" parent="Particles/Fireflies" index="1" unique_id=962720396]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.432861, 9.536743e-07, -3.6942549)
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles3" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles3" index="0" unique_id=1775468001]
 transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
 amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles4" type="Node3D" parent="Particles/Fireflies" index="2"]
+[node name="Particles4" type="Node3D" parent="Particles/Fireflies" index="2" unique_id=4696037]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.431442, 9.536743e-07, 3.803968)
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles4" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles4" index="0" unique_id=1532474286]
 transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
 amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles5" type="Node3D" parent="Particles/Fireflies" index="3"]
+[node name="Particles5" type="Node3D" parent="Particles/Fireflies" index="3" unique_id=1811259652]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.64444, 1.7684164, -0.5853262)
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles5" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles5" index="0" unique_id=1087185298]
 transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -1.5849228, 3.0587149, -2.6563263)
 amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles6" type="Node3D" parent="Particles/Fireflies" index="4"]
+[node name="Particles6" type="Node3D" parent="Particles/Fireflies" index="4" unique_id=286867312]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 77.13668, 2.5801983, 8.03256)
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles6" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles6" index="0" unique_id=560017570]
 transform = Transform3D(1.1802061, 0, 0, 0, 1.7086179, 0, 0, 0, 1.1114507, -6.235619, 3.0587149, -2.6563263)
 amount = 15
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_s3ueo")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Particles2" type="Node3D" parent="Particles/Fireflies" index="5"]
+[node name="Particles2" type="Node3D" parent="Particles/Fireflies" index="5" unique_id=1885587541]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.402056, 0, -1.3699706)
 
-[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles2" index="0"]
+[node name="Firefly" type="GPUParticles3D" parent="Particles/Fireflies/Particles2" index="0" unique_id=1145603597]
 transform = Transform3D(7.4664516, 0, 0, 0, 3.324031, 0, 0, 0, 4.780184, 16.025671, 4.2721586, 0.034071445)
 amount = 30
 lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_c8buq")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Smog" parent="Particles" index="4" instance=ExtResource("8_kofws")]
+[node name="Smog" parent="Particles" index="4" unique_id=649702611 instance=ExtResource("8_kofws")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4099474, 1.3807526, -8.951434)
 visible = false
 
-[node name="Smog2" parent="Particles" index="5" instance=ExtResource("8_kofws")]
+[node name="Smog2" parent="Particles" index="5" unique_id=1186449705 instance=ExtResource("8_kofws")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
 
@@ -486,53 +486,53 @@ visible = false
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34202012, 33, 0, -1)
 
-[node name="Scatterables" type="Node3D" parent="." index="17"]
+[node name="Scatterables" type="Node3D" parent="." index="17" unique_id=1148957787]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)
 
-[node name="GrassMesh" type="MeshInstance3D" parent="Scatterables" index="0"]
+[node name="GrassMesh" type="MeshInstance3D" parent="Scatterables" index="0" unique_id=520157100]
 mesh = ExtResource("16_xnnr5")
 skeleton = NodePath("../..")
 
-[node name="GrassMesh2" type="MeshInstance3D" parent="Scatterables" index="1"]
+[node name="GrassMesh2" type="MeshInstance3D" parent="Scatterables" index="1" unique_id=30563469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.840391, 0, 3.223936)
 mesh = ExtResource("16_xnnr5")
 skeleton = NodePath("../..")
 
-[node name="GrassMesh3" type="MeshInstance3D" parent="Scatterables" index="2"]
+[node name="GrassMesh3" type="MeshInstance3D" parent="Scatterables" index="2" unique_id=737184689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.296736, 0, -5.3271265)
 mesh = ExtResource("16_xnnr5")
 skeleton = NodePath("../..")
 
-[node name="GrassMesh4" type="MeshInstance3D" parent="Scatterables" index="3"]
+[node name="GrassMesh4" type="MeshInstance3D" parent="Scatterables" index="3" unique_id=806798373]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.026525, 0, 0.5633981)
 mesh = ExtResource("16_xnnr5")
 skeleton = NodePath("../..")
 
-[node name="GrassMesh5" type="MeshInstance3D" parent="Scatterables" index="4"]
+[node name="GrassMesh5" type="MeshInstance3D" parent="Scatterables" index="4" unique_id=2010107748]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.65063, 1, -4.369963)
 mesh = ExtResource("16_xnnr5")
 
-[node name="GrassMesh6" type="MeshInstance3D" parent="Scatterables" index="5"]
+[node name="GrassMesh6" type="MeshInstance3D" parent="Scatterables" index="5" unique_id=1578190292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.380703, 1, -3.4117384)
 mesh = ExtResource("16_xnnr5")
 
-[node name="GrassMesh7" type="MeshInstance3D" parent="Scatterables" index="6"]
+[node name="GrassMesh7" type="MeshInstance3D" parent="Scatterables" index="6" unique_id=60414192]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.10535, 1, -10.215845)
 mesh = ExtResource("16_xnnr5")
 
-[node name="GrassMesh8" type="MeshInstance3D" parent="Scatterables" index="7"]
+[node name="GrassMesh8" type="MeshInstance3D" parent="Scatterables" index="7" unique_id=787058879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.71364, 0.99999905, -12.248171)
 mesh = ExtResource("16_xnnr5")
 
-[node name="Vine2Mesh" type="MeshInstance3D" parent="Scatterables" index="8"]
+[node name="Vine2Mesh" type="MeshInstance3D" parent="Scatterables" index="8" unique_id=1028594411]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.750145, 0.9395361, 1.2234058)
 mesh = ExtResource("17_ovtcx")
 
-[node name="Vine2Mesh2" type="MeshInstance3D" parent="Scatterables" index="9"]
+[node name="Vine2Mesh2" type="MeshInstance3D" parent="Scatterables" index="9" unique_id=1542865816]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -59.724022, 1.0681987, 2.2893815)
 mesh = ExtResource("17_ovtcx")
 
-[node name="Vine1Mesh" type="MeshInstance3D" parent="Scatterables" index="10"]
+[node name="Vine1Mesh" type="MeshInstance3D" parent="Scatterables" index="10" unique_id=1843563376]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.233303, 0.7964392, 3.263589)
 mesh = ExtResource("18_nxa0q")
 skeleton = NodePath("../..")

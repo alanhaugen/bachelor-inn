@@ -369,6 +369,8 @@ func _handle_skill(pos : Vector3i) -> void:
 	## DoT's
 	target.state.apply_skill_effect(active_skill)
 	emit_signal("character_stats_changed", target)
+	if active_skill.uses_action:
+		skill_caster.state.is_ability_used = true
 	_exit_skill_target_mode()
 	
 

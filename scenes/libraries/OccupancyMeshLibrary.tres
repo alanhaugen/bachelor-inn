@@ -1,6 +1,6 @@
-[gd_resource type="MeshLibrary" load_steps=31 format=4 uid="uid://bqe8w1f2rn5eb"]
+[gd_resource type="MeshLibrary" format=4 uid="uid://bqe8w1f2rn5eb"]
 
-[ext_resource type="Texture2D" uid="uid://cnbsbknrh5hx2" path="res://art/gltf/Chest_0.png" id="1_w06hx"]
+[ext_resource type="Texture2D" uid="uid://c6ap6ahbp3be1" path="res://art/gltf/Chest_0.png" id="1_w06hx"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dbywx"]
 albedo_color = Color(0, 1, 1, 1)
