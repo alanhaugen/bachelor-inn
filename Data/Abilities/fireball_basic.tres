@@ -1,11 +1,6 @@
 [gd_resource type="Resource" script_class="Skill" format=3 uid="uid://x7mbefo655v8"]
 
-[ext_resource type="Script" uid="uid://drewwlgvyo2q5" path="res://scripts/combat/commands/attack.gd" id="1_sxwr3"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_u21qa"]
-
-[sub_resource type="Resource" id="Resource_sxwr3"]
-script = ExtResource("1_sxwr3")
-metadata/_custom_type_script = "uid://drewwlgvyo2q5"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sxwr3"]
 load_path = "res://.godot/imported/GUI_Assets.png-fb06711353850da2dfdd4a114970627a.ctex"
@@ -20,6 +15,8 @@ skill_id = "fireball_basic"
 skill_name = "Fireball"
 tooltip = "A fireball that deals initial damage, and burns the victim for 2 rounds."
 icon = SubResource("AtlasTexture_11pje")
-command = SubResource("Resource_sxwr3")
+effect_mods = {
+&"damage": 4
+}
 target_faction = 1
 metadata/_custom_type_script = "uid://c3p07am3ababr"
