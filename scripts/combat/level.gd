@@ -369,10 +369,15 @@ func _handle_skill(pos : Vector3i) -> void:
 	## DoT's
 	target.state.apply_skill_effect(active_skill)
 	emit_signal("character_stats_changed", target)
-	if active_skill.uses_action:
-		skill_caster.state.is_ability_used = true
-	_exit_skill_target_mode()
 	
+	var used_action := active_skill.uses_action
+	var caster := skill_caster
+	if used_action:
+		caster.state.is_ability_used = true
+		print("Flag set, is_ability_used: ", caster.state.is_ability_used)
+
+	_exit_skill_target_mode()
+	print("is_ability_used after exit: ", caster.state.is_ability_used)
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
@@ -860,6 +865,10 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
+	print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
+	if selected_unit != null and selected_unit.state.is_ability_used:
+		print("Unit has already used their ability this turn.")
+		return
 	_exit_skill_target_mode()
 	movement_grid.clear()
 	
@@ -927,8 +936,8 @@ func _exit_skill_target_mode() -> void:
 	skill_caster = null
 	valid_skill_target_tiles.clear()
 	path_map.clear()
+	print("caster is_moved: ", caster.state.is_moved if caster else "null")
 	if caster != null and caster.state.is_moved == false:
-		print("reselecting caster")
 		select_unit(caster)
 
 
