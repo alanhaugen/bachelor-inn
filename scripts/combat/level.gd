@@ -15,7 +15,7 @@ signal character_selected(character: Character)
 signal character_deselected
 signal enemy_selected(enemy: Character)
 signal enemy_deselected
-
+signal ability_used
 signal character_stats_changed(character: Character)
 signal party_updated(characters: Array[Character])
 
@@ -374,7 +374,9 @@ func _handle_skill(pos : Vector3i) -> void:
 	var caster := skill_caster
 	if used_action:
 		caster.state.is_ability_used = true
-		print("Flag set, is_ability_used: ", caster.state.is_ability_used)
+		# cast a signal to Ribbon here to gray out ability bar
+		emit_signal("ability_used")
+		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
 
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)

@@ -14,6 +14,8 @@ func _ready() -> void:
 	set_skills([])
 
 func set_skills(in_skills: Array[Skill]) -> void:
+	gray_out_abilities_used(false)
+	
 	for i in range(_skill_buttons.size()):
 		var b: TextureButton = _skill_buttons[i]
 
@@ -42,7 +44,7 @@ func _collect_buttons(bar: HBoxContainer) -> Array[TextureButton]:
 	return out
 
 func _connect_group(buttons: Array[TextureButton], handler: Callable) -> void:
-	for b in buttons:
+	for b in buttons	:
 		if not b.pressed.is_connected(handler):
 			b.pressed.connect(handler.bind(b))
 
@@ -51,6 +53,17 @@ func _on_skill_button_pressed(button: TextureButton) -> void:
 	var s: Skill = button.get_meta("skill") as Skill
 	if s != null:
 		skill_pressed.emit(s)
+
+
+func _on_ability_used() -> void:
+	gray_out_abilities_used(true)
+
+## Faied attempt to gray out ability buttons after use
+func gray_out_abilities_used(used: bool) -> void:
+	for b in _skill_buttons:
+		if b.visible:
+			b.disabled = used
+			b.modulate = Color(0.4, 0.4, 0.4, 1.0) if used else Color(1, 1, 1, 1)
 
 func _debug_print_buttons() -> void:
 	print("=== Ribbon Debug ===")
