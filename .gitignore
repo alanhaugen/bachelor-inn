@@ -1,5 +1,7 @@
 # Godot 4+ specific ignores
 .idea/
+.ai/
+.junie/
 .godot/
 /android/
 .DS_Store
