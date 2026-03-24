@@ -4,6 +4,10 @@ class_name MoveGenerator
 
 #region methods
 static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
+	if unit.state.is_ability_used:
+		return []
+	if unit.state.is_moved:
+		return [Wait.new(unit.state.grid_position)]
 	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
 	return moves;
 
@@ -98,7 +102,6 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	# -------------------------
 	# 3) Build ALL ATTACK commands
 	#    (Temporary rule: weapon range == movement_range)
-	#    (Temporary rule: enemy must be on same y as origin)
 	# -------------------------
 	if !exclude_attacks:
 		## TODO: Get attack origins per selected enemy, not all enemies.
@@ -130,7 +133,8 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 							continue
 
 						for t: Vector3i in tiles_here:
-							if t.y != origin.y:
+							# Allow vertical difference of up to 1 for attacks
+							if abs(t.y - origin.y) > 1:
 								continue
 							if not state.is_enemy(t):
 								continue
@@ -164,41 +168,46 @@ static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	return false
 
 
-static func get_attack_origins(unit: Character, state: GameState, start_pos: Vector3i, reachable: Array[Vector3i]) -> Array[Vector3i]:
-	# Include "attack from current position"
-	var origins: Array[Vector3i] = [start_pos]
+static func get_attack_origins(unit: Character, state: GameState, target_pos: Vector3i, reachable: Array[Vector3i]) -> Array[Vector3i]:
+	# Possible origins for selected_unit to attack target_pos
+	var origins: Array[Vector3i] = []
+	
+	# Current position
+	var current_pos := unit.state.grid_position
+	if _is_target_in_range_from_origin(current_pos, target_pos, unit):
+		origins.append(current_pos)
+
+	# Reachable destinations
 	for r in reachable:
-		origins.append(r)
+		if _is_target_in_range_from_origin(r, target_pos, unit):
+			origins.append(r)
 
-	# Temporary rule: enemy must share same height as origin
-	# Weapon range from registry
-	var w: Weapon = WeaponRegistry.get_weapon(unit.state.weapon.weapon_id)
-	var min_r: int = w.min_range
-	var max_r: int = w.max_range
+	return origins
 
-	var valid: Array[Vector3i] = []
-	var seen: Dictionary = {} # de-dupe by position
 
-	for origin in origins:
-		var origin_key := str(origin.x) + "," + str(origin.y) + "," + str(origin.z)
-		if seen.has(origin_key):
-			continue
-		seen[origin_key] = true
-
-		if _has_enemy_in_range_from_origin(origin, min_r, max_r, unit, state):
-			valid.append(origin)
-
-	return valid
+static func _is_target_in_range_from_origin(origin: Vector3i, target: Vector3i, unit: Character) -> bool:
+	var min_r: int = unit.state.weapon.min_range
+	var max_r: int = unit.state.weapon.max_range
+	
+	var dist : int = abs(target.x - origin.x) + abs(target.z - origin.z)
+	if dist < min_r or dist > max_r:
+		return false
+	
+	# Allow vertical difference of up to 1 for attacks
+	if abs(target.y - origin.y) > 1:
+		return false
+		
+	return true
 
 
 static func _has_enemy_in_range_from_origin(
 	origin: Vector3i,
 	min_r: int,
 	max_r: int,
-	unit: Character,
+	_unit: Character,
 	state: GameState
 ) -> bool:
-	# Manhattan distance in XZ, height must match (for now)
+	# Manhattan distance in XZ, height within +/- 1
 	for dx in range(-max_r, max_r + 1):
 		for dz in range(-max_r, max_r + 1):
 			var dist : int = abs(dx) + abs(dz)
@@ -212,7 +221,7 @@ static func _has_enemy_in_range_from_origin(
 				continue
 
 			for t in tiles_here:
-				if t.y != origin.y:
+				if abs(t.y - origin.y) > 1:
 					continue
 				if state.is_enemy(t):
 					return true

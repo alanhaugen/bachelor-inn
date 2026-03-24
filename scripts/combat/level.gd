@@ -170,8 +170,8 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
 	
 	if active_move is Wait:
-		move_popup.wait_button.show()
 		move_popup.pass_button.show()
+		move_popup.undo_button.show()
 	else:
 		move_popup.move_button.show()
 		move_popup.wait_button.show()
@@ -205,6 +205,8 @@ func get_selectable_characters() -> Array[Character]:
 		if not is_instance_valid(c):
 			continue
 		if c.state.faction != CharacterState.Faction.PLAYER:
+			continue
+		if c.state.is_ability_used:
 			continue
 		#if c.state.is_dead:
 			#continue
@@ -516,6 +518,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# Player unit clicked
 	if get_unit_name(pos) == CharacterStates.Player:
+		var clicked_unit := game_state.get_unit(pos)
+		if clicked_unit and (clicked_unit.state.is_ability_used or (clicked_unit.state.is_moved and selected_unit != clicked_unit)):
+			return
 		_handle_player_click(pos)
 		return
 
@@ -523,8 +528,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	_clear_selection()
 
 	# Enemy clicked (for info panel)
-	if get_unit_name(pos) == CharacterStates.Enemy:
+	var unit_type := get_unit_name(pos)
+	if unit_type.contains("Enemy") or unit_type.contains("Character") or unit_type.contains("Chest"):
 		selected_enemy_unit = get_unit(pos)
+		if selected_enemy_unit:
+			enemy_selected.emit(selected_enemy_unit)
 
 
 
@@ -599,7 +607,7 @@ func _parse_layout() -> Layout:
 			layout.player_spawn_points.append(pos)
 		elif unit_type == "02_Chest":
 			layout.chest_spawn_points.append(pos)
-		elif unit_type.contains("Enemy") or unit_type.contains("Character"):
+		elif unit_type.contains("Enemy") or unit_type.contains("Character") or unit_type.contains("Chest"):
 			layout.enemy_spawn_points.append(pos)
 	
 	return layout
@@ -1090,9 +1098,15 @@ func _start_next_move_animation() -> void:
 	
 	# Execute VFX
 	await combat_vfx.play_attack(active_move.result)
+	
+	# Actual damage
 	active_move.apply_damage(game_state)
 	
-	# Update occupancy map
+	# Ensure victims that died are removed from occupancy
+	if active_move.result and active_move.result.killed:
+		occupancy_overlay.set_cell_item(active_move.result.victim.state.grid_position, GridMap.INVALID_CELL_ITEM)
+	
+	# Update occupancy map for mover
 	var code := enemy_code if not is_player_turn else player_code_done
 	occupancy_overlay.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM)
 	occupancy_overlay.set_cell_item(active_move.end_pos, code)
@@ -1112,9 +1126,14 @@ func _start_next_move_animation() -> void:
 	
 	if is_player_turn:
 		# If it was a move, maybe show popup?
-		# Currently original code does:
 		if (active_move is Move or active_move is Wait) and selected_unit != null and is_instance_valid(selected_unit):
 			show_move_popup(get_screen_position(selected_unit.sprite))
+		elif active_move is Attack:
+			# After attack animation, turn might end or continue.
+			# If the unit can still move, we'd show popup, but attack usually ends turn.
+			# The current logic seems to end turn via _on_animation_finished -> States.PLAYING
+			# and then process_playing checks _has_available_player_moves.
+			pass
 
 func _update_movement_animation(delta: float) -> void:
 	if selected_unit == null or not is_instance_valid(selected_unit):

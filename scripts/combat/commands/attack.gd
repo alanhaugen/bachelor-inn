@@ -22,12 +22,15 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 	result.aggressor = aggressor
 	result.victim = victim
 	
-	if aggressor.state.is_playable():
+	if not aggressor or not victim:
+		return
+
+	if aggressor.state.is_playable() and not simulate_only:
 		aggressor.state.is_ability_used = true
-	aggressor.state.is_moved = true;
+	if not simulate_only:
+		aggressor.state.is_moved = true;
 	
-	
-		#weapons
+	# Weapons
 	var weapon_damage : int;
 	var weapon_crit : int;
 	var weapon_name : String;
@@ -56,17 +59,17 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 
 
 func apply_damage(state: GameState , simulate_only: bool = false) -> void:
+	if not result or not result.aggressor or not result.victim:
+		return
+
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
-	#victim.state.current_health -= attack_strength;
-	#result.damage = attack_strength
-	#result.killed = victim.state.current_health <= 0
-	## Using attack from character.gd so we can use the units abilities
+	
+	# result.damage is already calculated in prepare()
 	result.killed = victim.apply_damage(result.damage, simulate_only, aggressor, "Attack")
 	
-	#sanity
-	if(!simulate_only):
-		pass
+	# sanity
+	if not simulate_only:
 		if aggressor.state.is_playable():
 			pass
 			#if victim.state.current_health > 0:
@@ -76,11 +79,14 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 			@warning_ignore("integer_division")
 			victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
 	
-	#death
+	# death
 	if result.killed:
-		if aggressor.state.is_playable() and simulate_only == false:
+		if aggressor.state.is_playable() and not simulate_only:
 			aggressor.state.experience += victim.data.strength
-	Main.level.emit_signal("character_stats_changed", self)
+	
+	if not simulate_only:
+		Main.level.emit_signal("character_stats_changed", aggressor)
+		Main.level.emit_signal("character_stats_changed", victim)
 	
 
 #old, replaced by Prepare and Apply

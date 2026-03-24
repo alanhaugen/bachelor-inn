@@ -11,6 +11,7 @@ class_name Character
 @export var run_up_animation : SpriteAnim
 @export var run_down_animation : SpriteAnim
 @export var idle_animation : SpriteAnim
+@export var attack_animation : SpriteAnim
 
 @export_category("UI")
 @export var portrait : Texture2D
