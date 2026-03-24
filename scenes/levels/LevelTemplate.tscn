@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bu3kvc2qxcq2w"]
+[gd_scene format=3 uid="uid://bu3kvc2qxcq2w"]
 
 [ext_resource type="Script" uid="uid://uw563shloq3m" path="res://scripts/combat/level.gd" id="1_yuxmn"]
 [ext_resource type="MeshLibrary" uid="uid://c2m4bduhp1odo" path="res://scenes/libraries/LIB_GridMapMeshLibrary.gltf" id="2_cx077"]
@@ -15,17 +15,17 @@
 [ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="12_vltbs"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
 
-[node name="Map3d2" type="Node3D"]
+[node name="Map3d2" type="Node3D" unique_id=656823534]
 script = ExtResource("1_yuxmn")
 
-[node name="TerrainGrid" type="GridMap" parent="."]
+[node name="TerrainGrid" type="GridMap" parent="." unique_id=1846160155]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh_library = ExtResource("2_cx077")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, -2, 0)
 
-[node name="MovementWeightsGrid" type="GridMap" parent="."]
+[node name="MovementWeightsGrid" type="GridMap" parent="." unique_id=1499977434]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 mesh_library = ExtResource("3_ks0nw")
@@ -34,21 +34,21 @@ collision_layer = 2
 collision_mask = 2
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="OccupancyOverlay" type="GridMap" parent="."]
+[node name="OccupancyOverlay" type="GridMap" parent="." unique_id=1662628409]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh_library = ExtResource("3_cx077")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="TriggerOverlay" type="GridMap" parent="."]
+[node name="TriggerOverlay" type="GridMap" parent="." unique_id=1471713088]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
 mesh_library = ExtResource("4_cx077")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
-[node name="MovementOverlay" type="GridMap" parent="."]
+[node name="MovementOverlay" type="GridMap" parent="." unique_id=1093741866]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.085, 0)
 mesh_library = ExtResource("4_dypiu")
@@ -58,21 +58,21 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="PathOverlay" type="GridMap" parent="."]
+[node name="PathOverlay" type="GridMap" parent="." unique_id=87067290]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="FogOverlay" type="GridMap" parent="."]
+[node name="FogOverlay" type="GridMap" parent="." unique_id=1928054166]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
 mesh_library = ExtResource("4_dypiu")
 cell_size = Vector3(2, 1, 2)
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Cursor" type="Sprite3D" parent="."]
+[node name="Cursor" type="Sprite3D" parent="." unique_id=791973269]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4.908, 0.06, -1.017)
 visible = false
 no_depth_test = true
@@ -81,10 +81,10 @@ texture = ExtResource("6_8a3vg")
 region_enabled = true
 region_rect = Rect2(0, 0, 32, 32)
 
-[node name="TurnTransition" parent="." instance=ExtResource("7_ygto3")]
+[node name="TurnTransition" parent="." unique_id=2040840352 instance=ExtResource("7_ygto3")]
 mouse_filter = 2
 
-[node name="BattleLog" type="Label" parent="."]
+[node name="BattleLog" type="Label" parent="." unique_id=840436049]
 offset_left = 902.0
 offset_top = 20.0
 offset_right = 1144.0
@@ -93,10 +93,10 @@ text = "Objective: Defeat all enemies
 "
 autowrap_mode = 2
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1468916992]
 environment = ExtResource("9_85lyy")
 
-[node name="Level" type="GridMap" parent="."]
+[node name="Level" type="GridMap" parent="." unique_id=463039335]
 visible = false
 cell_size = Vector3(2, 1, 2)
 cell_center_y = false
@@ -105,51 +105,51 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
-[node name="Lights" type="Node3D" parent="."]
+[node name="Lights" type="Node3D" parent="." unique_id=38605441]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.183081, 6.232548, 0.9140688)
 
-[node name="Lamp" type="OmniLight3D" parent="Lights"]
+[node name="Lamp" type="OmniLight3D" parent="Lights" unique_id=286206317]
 visible = false
 light_energy = 15.602
 shadow_enabled = true
 omni_range = 27.256
 
-[node name="Lamp2" type="OmniLight3D" parent="Lights"]
+[node name="Lamp2" type="OmniLight3D" parent="Lights" unique_id=1926863076]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.443085, 1.1100497, 3.0443535)
 visible = false
 light_energy = 15.602
 shadow_enabled = true
 omni_range = 27.256
 
-[node name="Lamp3" type="OmniLight3D" parent="Lights"]
+[node name="Lamp3" type="OmniLight3D" parent="Lights" unique_id=792911881]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.761314, 5.381786, 8.605048)
 visible = false
 light_energy = 15.602
 shadow_enabled = true
 omni_range = 27.256
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lights"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lights" unique_id=1646267771]
 transform = Transform3D(0.57825536, 0.20389156, -0.7899678, 0.35330263, 0.81019, 0.467728, 0.73538977, -0.5495639, 0.39646125, 8.183081, 16.736057, -0.9140688)
 shadow_enabled = true
 directional_shadow_mode = 0
 sky_mode = 1
 
-[node name="OmniLight3D" type="OmniLight3D" parent="Lights"]
+[node name="OmniLight3D" type="OmniLight3D" parent="Lights" unique_id=377580884]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75.23863, -2.744268, -1.8749512)
 visible = false
 light_energy = 0.7
 light_specular = 3.335
 
-[node name="Particles" type="Node3D" parent="."]
+[node name="Particles" type="Node3D" parent="." unique_id=194722830]
 
-[node name="CombatVFXController" parent="." instance=ExtResource("22_dypiu")]
+[node name="CombatVFXController" parent="." unique_id=1575126150 instance=ExtResource("22_dypiu")]
 ranged_attack_scene = ExtResource("11_85lyy")
 melee_attack_scene = ExtResource("12_vltbs")
 
-[node name="GUI" parent="." instance=ExtResource("11_06w7e")]
+[node name="GUI" parent="." unique_id=33842839 instance=ExtResource("11_06w7e")]
 
-[node name="CameraSettings" parent="." instance=ExtResource("12_2iq81")]
+[node name="CameraSettings" parent="." unique_id=2146881514 instance=ExtResource("12_2iq81")]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0)
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." unique_id=1648285695]
 one_shot = true

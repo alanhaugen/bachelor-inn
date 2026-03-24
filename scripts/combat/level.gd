@@ -997,6 +997,14 @@ func get_screen_position(sprite: Sprite3D) -> Vector2:
 
 	return camera.unproject_position(sprite.global_position)
 
+func _draw_path_arrow() -> void:
+	if state == States.PLAYING and selected_unit and is_in_menu == false:
+		var pos :Vector3i = get_grid_cell_from_mouse();
+		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+			path_map.clear()
+			var points : Array[Vector3i] = movement_grid.get_path(selected_unit.state.grid_position, pos)
+			for point : Vector3i in points:
+				path_map.set_cell_item(point, 0)
 
 func _process_old(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
@@ -1013,13 +1021,7 @@ func _process_old(delta: float) -> void:
 	turn_transition.hide();
 	camera_controller.unlock_camera()
 	
-	if state == States.PLAYING and selected_unit and is_in_menu == false:
-		var pos :Vector3i = get_grid_cell_from_mouse();
-		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			path_map.clear()
-			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
-			for point in points:
-				path_map.set_cell_item(point, 0)
+	_draw_path_arrow()
 	
 	if (is_in_menu):
 		return;
