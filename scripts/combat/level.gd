@@ -768,6 +768,7 @@ func create_path(start: Vector3i, end: Vector3i) -> void:
 
 
 func reset_all_units() -> void:
+	print("[AI_DEBUG] reset_all_units() called")
 	var units :Array[Vector3i] = occupancy_overlay.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
@@ -776,6 +777,7 @@ func reset_all_units() -> void:
 		var character: Character = get_unit(pos);
 		if character is Character:
 			var character_script: Character = character;
+			print("[AI_DEBUG] Resetting unit '", character_script.data.unit_name, "' at ", pos)
 			character_script.reset();
 		
 
@@ -786,21 +788,26 @@ func MoveSingleAI() -> void:
 
 func _on_turn_changed(is_player: bool) -> void:
 	_clear_selection()
-	
+
 	if is_player:
+		print("[AI_DEBUG] === Player Turn Starting ===")
 		tick_all_units_end_round()
 		reset_all_units()
 		for c in characters:
 			if c: emit_signal("character_stats_changed", c)
-		
+
 		camera_controller.free_camera()
 		var pivot: Character = get_selectable_characters().front()
 		if pivot:
 			camera_controller.set_pivot_target_translate(pivot.position)
 	else:
 		# Enemy turn specific setup
-		pass
-	
+		print("[AI_DEBUG] === Enemy Turn Starting ===")
+		# BUG FIX: Also reset units at the start of enemy turn
+		reset_all_units()
+		for c in characters:
+			if c: emit_signal("character_stats_changed", c)
+
 	state = States.TRANSITION
 
 func CheckVictoryConditions() -> void:
@@ -821,27 +828,44 @@ func CheckVictoryConditions() -> void:
 
 
 func MoveAI() -> void:
+	print("[AI_DEBUG] === MoveAI() called ===")
 	var ai := MinimaxAI.new()
 	var current_simulation := GameState.from_level(self)
-	
+
 	var current_enemy: Character = null
+	print("[AI_DEBUG] Searching for next enemy to act...")
 	for unit in characters:
-		if unit and is_instance_valid(unit) and unit.state.is_enemy() and not unit.state.is_moved:
-			current_enemy = unit
-			break
-	
+		if unit and is_instance_valid(unit) and unit.state.is_enemy():
+			print("[AI_DEBUG] Enemy '", unit.data.unit_name, "' at ", unit.state.grid_position, ": moved=", unit.state.is_moved, ", ability_used=", unit.state.is_ability_used)
+			# BUG FIX: Check both flags - enemy can still act if only one flag is set
+			if not unit.state.is_moved or not unit.state.is_ability_used:
+				current_enemy = unit
+				print("[AI_DEBUG] Selected enemy: ", unit.data.unit_name, " at ", unit.state.grid_position)
+				break
+
 	if current_enemy != null:
 		var pos := NullablePosition.new(current_enemy.state.grid_position)
+		print("[AI_DEBUG] Checking if enemy has legal moves...")
 		if current_simulation.has_enemy_moves(pos):
+			print("[AI_DEBUG] Enemy has moves, choosing best move...")
 			var move : Command = ai.choose_best_move(current_simulation, 2, current_enemy)
 			if move != null:
+				print("[AI_DEBUG] AI chose move: ", move.get_class(), " from ", move.start_pos, " to ", move.end_pos)
 				moves_stack.append(move)
 			else:
+				print("[AI_DEBUG] WARNING: has_enemy_moves returned true but choose_best_move returned null!")
 				# Force end turn for this enemy if it can't find a move but thought it had one
 				current_enemy.state.is_moved = true
 				current_enemy.state.is_ability_used = true
-	
+		else:
+			print("[AI_DEBUG] Enemy at ", pos.position, " has no legal moves, marking as done")
+			current_enemy.state.is_moved = true
+			current_enemy.state.is_ability_used = true
+	else:
+		print("[AI_DEBUG] No more enemies can act")
+
 	if not moves_stack.is_empty():
+		print("[AI_DEBUG] Executing AI move, transitioning to ANIMATING state")
 		state = States.ANIMATING
 		camera_controller.focus_camera(current_enemy)
 		wait_for_camera = true
@@ -850,6 +874,7 @@ func MoveAI() -> void:
 		wait_for_camera = false
 	else:
 		# No more enemies can move, switch back to player turn
+		print("[AI_DEBUG] No moves in stack, ending enemy turn")
 		is_player_turn = true
 		_on_turn_changed(true)
 
@@ -1148,8 +1173,11 @@ func _start_next_move_animation() -> void:
 	# If the unit actually moved, ensure its state is updated
 	if selected_unit != null:
 		selected_unit.state.grid_position = active_move.end_pos
+		print("[AI_DEBUG] Setting is_moved=true for '", selected_unit.data.unit_name, "' at ", active_move.end_pos)
 		selected_unit.state.is_moved = true
-		if active_move is Attack:
+		# BUG FIX: Both Attack and Wait should set is_ability_used = true
+		if active_move is Attack or active_move is Wait:
+			print("[AI_DEBUG] Setting is_ability_used=true for '", selected_unit.data.unit_name, "' (", active_move.get_class(), ")")
 			selected_unit.state.is_ability_used = true
 		emit_signal("character_stats_changed", selected_unit)
 	
@@ -1201,16 +1229,19 @@ func _play_run_animation(dir: Vector3) -> void:
 		else: selected_unit.play(selected_unit.run_up_animation)
 
 func _on_animation_finished() -> void:
+	print("[AI_DEBUG] Animation finished, is_player_turn=", is_player_turn)
 	if is_player_turn:
+		print("[AI_DEBUG] Transitioning to PLAYING state")
 		state = States.PLAYING
 	else:
+		print("[AI_DEBUG] Transitioning to AI_TURN state")
 		state = States.AI_TURN
-		
+
 	movement_map.clear()
 	path_map.clear()
 	_clear_selection()
 	camera_controller.free_camera()
-	
+
 	for c in characters:
 		if is_instance_valid(c): emit_signal("character_stats_changed", c)
 

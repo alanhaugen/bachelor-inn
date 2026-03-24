@@ -363,10 +363,15 @@ func reset() -> void:
 	# slowly heal sanity
 	if state.is_playable():
 		state.current_sanity += 1;
-		state.is_ability_used = false
+
+	# BUG FIX: Reset flags for ALL units, not just playable ones
+	state.is_ability_used = false
+	state.is_moved = false;
+
+	print("[AI_DEBUG] Character.reset() called for '", data.unit_name, "': moved=", state.is_moved, ", ability_used=", state.is_ability_used)
+
 	#hide_ui();
 	show();
-	state.is_moved = false;
 	#my_material.set_shader_parameter("grey_tint", false)
 	Main.level.emit_signal("character_stats_changed", self)
 

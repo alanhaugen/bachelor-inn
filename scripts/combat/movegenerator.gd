@@ -5,8 +5,10 @@ class_name MoveGenerator
 #region methods
 static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
 	if unit.state.is_ability_used:
+		print("[AI_DEBUG] MoveGenerator.generate: Unit '", unit.data.unit_name, "' has ability_used=true, returning empty moves")
 		return []
 	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
+	print("[AI_DEBUG] MoveGenerator.generate: Generated ", moves.size(), " moves for '", unit.data.unit_name, "'")
 	return moves;
 
 
@@ -112,6 +114,8 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 			var min_r := unit.state.weapon.min_range
 			var max_r := unit.state.weapon.max_range
 
+			print("[AI_DEBUG] Building attacks for '", unit.data.unit_name, "': ", attack_origins.size(), " origins, range ", min_r, "-", max_r)
+
 			# de-dupe origin->target pairs
 			var seen_pairs: Dictionary = {}
 
@@ -148,11 +152,14 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 							seen_pairs[key] = true
 
 							commands.append(Attack.new(start_pos, t, origin))
-	
+
+	print("[AI_DEBUG] Built ", commands.size(), " attack commands")
+
 	# -------------------------
 	# 4) Always allow WAIT
 	# -------------------------
 	commands.append(Wait.new(start_pos))
+	print("[AI_DEBUG] Total commands (with Wait): ", commands.size())
 	return commands
 
 

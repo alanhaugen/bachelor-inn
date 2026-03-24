@@ -108,14 +108,21 @@ func get_legal_moves(charaPos : NullablePosition = null) -> Array[Command]:
 		var is_dead : bool = false
 		var isEnemy: bool  = false
 		var chara : Character = get_unit(charaPos.position)
-		if chara.state.is_moved:
+
+		# BUG FIX: Check BOTH flags, not just is_moved
+		# A unit can still act if it moved but hasn't used its ability, or vice versa
+		if chara.state.is_moved and chara.state.is_ability_used:
 			has_moved = true;
+			print("[AI_DEBUG] Unit at ", charaPos.position, " has completed all actions (moved=", chara.state.is_moved, ", ability_used=", chara.state.is_ability_used, ")")
 		if chara.state.is_alive == false:
 			is_dead = true;
+			print("[AI_DEBUG] Unit at ", charaPos.position, " is dead")
 		if chara.state.is_enemy() != is_current_player_enemy:
 			isEnemy = true;
-		
+			print("[AI_DEBUG] Unit at ", charaPos.position, " is wrong faction (is_enemy=", chara.state.is_enemy(), ", current_player_enemy=", is_current_player_enemy, ")")
+
 		if(!(has_moved || is_dead || isEnemy)):
+			print("[AI_DEBUG] Generating moves for unit at ", charaPos.position, " (moved=", chara.state.is_moved, ", ability_used=", chara.state.is_ability_used, ")")
 			moves += MoveGenerator.generate(chara, self);
 
 	return moves
