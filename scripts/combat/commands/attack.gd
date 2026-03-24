@@ -12,11 +12,12 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -
 	attack_pos = inEndPos;
 
 
-
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var unit := state.get_unit(start_pos)
 	if unit:
 		unit.move_to(end_pos, simulate_only)
+		unit.state.is_moved = true
+		unit.state.is_ability_used = true
 
 
 func prepare(state : GameState, simulate_only: bool = false) -> void:
@@ -41,11 +42,6 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 		return
 	print("[DEBUG_LOG] Attack prepare SUCCESS: ", aggressor.data.unit_name, " vs ", victim.data.unit_name)
 
-	if aggressor.state.is_playable() and not simulate_only:
-		aggressor.state.is_ability_used = true
-	if not simulate_only:
-		aggressor.state.is_moved = true;
-	
 	# Weapons
 	var weapon_damage : int;
 	var weapon_crit : int;
@@ -64,8 +60,6 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 	if simulate_only == false:
 		@warning_ignore("integer_division")
 		if (randi_range(0,100) < (aggressor.data.focus / 2) + weapon_crit):
-			Main.battle_log.text = ("Critical hit!\n") + Main.battle_log.text;
-			print("Critical hit!");
 			result.was_critical = true;
 			attack_strength *= 2;
 	
@@ -82,6 +76,17 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
+	
+	if simulate_only == false:
+		if result.was_critical:
+			print("Critical hit!");
+		
+		var weapon_name : String = ""
+		var weapon_damage : int = 0
+		if aggressor.state.weapon:
+			weapon_name = aggressor.state.weapon.weapon_name
+			weapon_damage = aggressor.state.weapon.damage_modifier
+			
 	
 	# result.damage is already calculated in prepare()
 	print("[DEBUG_LOG] Attack applying damage: ", result.damage, " to ", victim.data.unit_name)

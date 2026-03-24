@@ -9,7 +9,10 @@ func _init(inStartPos :Vector3i) -> void:
 
 func execute(state : GameState, simulate_only : bool = false) -> void:
 	var unit := state.get_unit(start_pos)
-	unit.move_to(end_pos, simulate_only)
+	if unit:
+		unit.move_to(end_pos, simulate_only)
+		unit.state.is_moved = true
+		unit.state.is_ability_used = true
 
 
 func undo(state : GameState, _simulate_only : bool = false) -> void:

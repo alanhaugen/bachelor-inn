@@ -43,6 +43,8 @@ func _on_attack_button_pressed() -> void:
 func _on_wait_button_pressed() -> void:
 	if map.selected_unit:
 		map.selected_unit.state.is_moved = true
+		map.selected_unit.state.is_ability_used = true
+		map.occupancy_overlay.set_cell_item(map.selected_unit.state.grid_position, map.player_code_done)
 		map.emit_signal("character_stats_changed", map.selected_unit)
 	HidePopup()
 
