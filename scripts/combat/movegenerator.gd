@@ -150,14 +150,13 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 
 static func basic_dijkstra
 (
-	state : GameState,
-	start : Vector3i, max_depth : int, consider_terrain_cost : bool = false, 
+	game_state : GameState, start : Vector3i, max_depth : int, 
+	consider_terrain_cost : bool = false, include_start_in_output : bool = false,
 	go_through_heroes : bool = false, go_through_monsters : bool = false,
 	include_hero_tiles_in_output : bool = false, include_monster_tiles_in_output : bool = false,
 	go_through_empty_tiles : bool = true, include_empty_tiles_in_output : bool = true
 ) -> Array[Vector3i]:
 	var level : Level = Main.level
-	var occupancy_map : GridMap = level.occupancy_map
 	# Priority queue: [pos, cost]
 	var frontier: Array = []
 	var cost_so_far: Dictionary = {}
@@ -167,7 +166,6 @@ static func basic_dijkstra
 
 	frontier.append([start, 0])
 	cost_so_far[start] = 0
-
 	# -------------------------
 	# 1) Dijkstra for reachables
 	# -------------------------
@@ -185,8 +183,10 @@ static func basic_dijkstra
 			continue
 		visited[pos] = true
 
-		if pos != start and not reachable.has(pos):
-			var unit : Character = state.get_unit(pos)
+		if not reachable.has(pos):
+			if pos == start && !include_start_in_output:
+				continue
+			var unit : Character = game_state.get_unit(pos)
 			if(unit != null):
 				match unit.state.faction:
 					CharacterState.Faction.PLAYER:
@@ -208,48 +208,62 @@ static func basic_dijkstra
 		for offset: Vector3i in offsets:
 			var neighbor_xz: Vector3i = Vector3i(pos.x + offset.x, 0, pos.z + offset.z)
 			var found : bool = false
-			var candidate : Vector3i
+			var neighbor : Vector3i
 			
 			if level.movement_weights_map.get_cell_item(neighbor_xz + Vector3i(0, 1, 0)) != GridMap.INVALID_CELL_ITEM:
-				candidate = neighbor_xz + Vector3i(0, 1, 0)
-				found = true
+				if level.movement_weights_map.get_cell_item(neighbor_xz + Vector3i(0, 2, 0)) == GridMap.INVALID_CELL_ITEM:
+					neighbor = neighbor_xz + Vector3i(0, 1, 0)
+					found = true
 			elif level.movement_weights_map.get_cell_item(neighbor_xz) != GridMap.INVALID_CELL_ITEM:
-				candidate = neighbor_xz
+				neighbor = neighbor_xz
 				found = true
 			elif level.movement_weights_map.get_cell_item(neighbor_xz + Vector3i(0, -1, 0)) != GridMap.INVALID_CELL_ITEM:
-				candidate = neighbor_xz + Vector3i(0, -1, 0)
+				neighbor = neighbor_xz + Vector3i(0, -1, 0)
 				found = true
 			
 			if !found:
 				continue
-
-			# Find topmost WALKABLE tile at this XZ
-			var best_walkable: Vector3i = Vector3i()
-			var has_walkable := false
-			for t: Vector3i in candidates:
-				if state.is_free(t):
-					if not has_walkable or t.y > best_walkable.y:
-						best_walkable = t
-						has_walkable = true
-
-			if not has_walkable:
+			
+			var passable : bool = false
+			
+			## test if unit is blocking search
+			var blocking_unit : Character = game_state.get_unit(neighbor)
+			if blocking_unit == null:
+				if go_through_empty_tiles:
+					passable = true
+			else:
+				match blocking_unit.state.faction:
+					CharacterState.Faction.PLAYER:
+						if go_through_heroes:
+							passable = true
+					CharacterState.Faction.ENEMY:
+						if go_through_monsters:
+							passable = true
+					_:
+						passable = false
+			
+			if !passable:
 				continue
 
-			var neighbor: Vector3i = best_walkable
-
 			# Vertical step limit
+			# TODO: useless code? test and remove
 			if abs(neighbor.y - pos.y) > 1:
 				continue
 
-			var tile_cost: int = state.get_tile_cost(neighbor)
+			var tile_cost: int = 1
+			if consider_terrain_cost:
+				var weight_id : int = level.movement_weights_map.get_cell_item(neighbor);
+				var weight_type : String = level.movement_weights_map.mesh_library.get_item_name(weight_id);
+				tile_cost = Terrain.get_weight(weight_type)
 			var new_cost: int = current_cost + tile_cost
 
-			if new_cost > movement_range:
+			if new_cost > max_depth:
 				continue
 
 			if not cost_so_far.has(neighbor) or new_cost < int(cost_so_far[neighbor]):
 				cost_so_far[neighbor] = new_cost
 				frontier.append([neighbor, new_cost])
+	return reachable
 
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	var directions := [
