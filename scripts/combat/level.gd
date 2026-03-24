@@ -375,6 +375,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	if used_action:
 		caster.state.is_ability_used = true
 		# cast a signal to Ribbon here to gray out ability bar
+		print("emitting ability_used signal")
 		emit_signal("ability_used")
 		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
 

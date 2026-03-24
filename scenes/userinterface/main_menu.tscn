@@ -1,18 +1,18 @@
-[gd_scene load_steps=35 format=3 uid="uid://cm02uehw506nt"]
+[gd_scene format=3 uid="uid://cm02uehw506nt"]
 
-[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
+[ext_resource type="FontFile" uid="uid://bfqlefgx6a6cn" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
 [ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
-[ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
+[ext_resource type="Texture2D" uid="uid://dy62l7318dj5i" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
-[ext_resource type="Texture2D" uid="uid://cft6wh327wv2r" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_xr6vh"]
-[ext_resource type="Texture2D" uid="uid://b5gb1wu4vrfhq" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
+[ext_resource type="Texture2D" uid="uid://buf3kgfqhh4g2" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_xr6vh"]
+[ext_resource type="Texture2D" uid="uid://c76ndp3wwb2mw" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
-[ext_resource type="AudioStream" uid="uid://b67e003o351lb" path="res://audio/Music/260216themeWIP.wav" id="12_xr6vh"]
+[ext_resource type="AudioStream" uid="uid://bhivca6gwnfph" path="res://audio/Music/260216themeWIP.wav" id="12_xr6vh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")
@@ -181,11 +181,11 @@ texture_margin_right = 8.0
 texture_margin_bottom = 8.0
 region_rect = Rect2(64, 128, 32, 32)
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=1793110786]
 script = ExtResource("3_wxwbn")
 levels_order = ExtResource("2_d233l")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=361496965]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -202,7 +202,7 @@ scale = Vector2(4, 4)
 size_flags_horizontal = 6
 mouse_filter = 2
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=1668691928]
 material = SubResource("ShaderMaterial_gkqwp")
 layout_mode = 1
 anchors_preset = -1
@@ -217,12 +217,12 @@ offset_bottom = 0.8314209
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MainMenu" type="Control" parent="UI"]
+[node name="MainMenu" type="Control" parent="UI" unique_id=1305474824]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="TextureRect" type="TextureRect" parent="UI/MainMenu"]
+[node name="TextureRect" type="TextureRect" parent="UI/MainMenu" unique_id=1322253278]
 custom_minimum_size = Vector2(6.66, 150.96)
 layout_mode = 1
 offset_left = -108.8925
@@ -232,7 +232,7 @@ offset_bottom = 157.97125
 scale = Vector2(0.685, 0.685)
 texture = ExtResource("4_xr6vh")
 
-[node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu"]
+[node name="NinePatchRect" type="NinePatchRect" parent="UI/MainMenu" unique_id=1861031398]
 layout_mode = 0
 offset_left = -237.8925
 offset_top = 116.22125
@@ -245,16 +245,17 @@ patch_margin_top = 7
 patch_margin_right = 8
 patch_margin_bottom = 4
 
-[node name="Selector" type="HBoxContainer" parent="UI/MainMenu"]
+[node name="Selector" type="HBoxContainer" parent="UI/MainMenu" unique_id=624363842]
 layout_mode = 0
 offset_left = -231.3925
 offset_top = 101.47125
 offset_right = 229.8575
 offset_bottom = 145.47127
 
-[node name="StartGameButton" type="Button" parent="UI/MainMenu/Selector"]
+[node name="StartGameButton" type="Button" parent="UI/MainMenu/Selector" unique_id=1122985759]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_4hx67")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_snox8")
@@ -262,9 +263,10 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_vus0j")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Start Game"
 
-[node name="OptionsButton" type="Button" parent="UI/MainMenu/Selector"]
+[node name="OptionsButton" type="Button" parent="UI/MainMenu/Selector" unique_id=2023256768]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_4y25g")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_iy0in")
@@ -272,9 +274,10 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_jcc73")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "											Options"
 
-[node name="CreditsButton" type="Button" parent="UI/MainMenu/Selector"]
+[node name="CreditsButton" type="Button" parent="UI/MainMenu/Selector" unique_id=485916395]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_6srpe")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_8o0t5")
@@ -282,9 +285,10 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_6cb08")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Credits"
 
-[node name="QuitButton" type="Button" parent="UI/MainMenu/Selector"]
+[node name="QuitButton" type="Button" parent="UI/MainMenu/Selector" unique_id=14013478]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_cix78")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_0ui2e")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_negop")
@@ -292,13 +296,13 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_5vttb")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Quit"
 
-[node name="LevelSelect" type="Control" parent="UI"]
+[node name="LevelSelect" type="Control" parent="UI" unique_id=1554843361]
 visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="LevelSelectVBOX" type="VBoxContainer" parent="UI/LevelSelect"]
+[node name="LevelSelectVBOX" type="VBoxContainer" parent="UI/LevelSelect" unique_id=48463805]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -312,7 +316,7 @@ offset_bottom = 100.021614
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LoadMap0" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
+[node name="Start Tutorial" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=828055749]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -325,7 +329,20 @@ theme_override_styles/hover = ExtResource("6_8g5eo")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 1"
 
-[node name="LoadMap1" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
+[node name="LoadMap0" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=1811495681]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("4_wb0q5")
+theme_override_styles/pressed = ExtResource("5_q85j6")
+theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Load save 1"
+
+[node name="LoadMap1" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=113700098]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -338,7 +355,7 @@ theme_override_styles/hover = ExtResource("6_8g5eo")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 2"
 
-[node name="LoadMap2" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
+[node name="LoadMap2" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=2022578839]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -351,7 +368,7 @@ theme_override_styles/hover = ExtResource("6_8g5eo")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Load save 3"
 
-[node name="BackButton" type="Button" parent="UI/LevelSelect/LevelSelectVBOX"]
+[node name="BackButton" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=1613961083]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -364,16 +381,17 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Back"
 
-[node name="World" type="Node3D" parent="."]
+[node name="World" type="Node3D" parent="." unique_id=1857862226]
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World"]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="World" unique_id=904918254]
 stream = ExtResource("12_xr6vh")
 autoplay = true
 
-[node name="CameraScene" parent="World" instance=ExtResource("10_0a1r8")]
+[node name="CameraScene" parent="World" unique_id=1082997309 instance=ExtResource("10_0a1r8")]
 
 [connection signal="pressed" from="UI/MainMenu/Selector/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Selector/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/Start Tutorial" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap1" to="." method="_on_load_map_1_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap2" to="." method="_on_load_map_2_pressed"]

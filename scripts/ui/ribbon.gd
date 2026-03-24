@@ -8,6 +8,8 @@ signal skill_pressed(skill: Skill)
 var _skill_buttons: Array[TextureButton] = []
 
 func _ready() -> void:
+	print("Main.level: ", Main.level)
+	Main.level.ability_used.connect(_on_ability_used)
 	_skill_buttons = _collect_buttons(skills)
 	_connect_group(_skill_buttons, _on_skill_button_pressed)
 	_debug_print_buttons()
@@ -56,14 +58,14 @@ func _on_skill_button_pressed(button: TextureButton) -> void:
 
 
 func _on_ability_used() -> void:
+	print("ability_used signal received in ribbon")
 	gray_out_abilities_used(true)
 
 ## Faied attempt to gray out ability buttons after use
 func gray_out_abilities_used(used: bool) -> void:
 	for b in _skill_buttons:
-		if b.visible:
-			b.disabled = used
-			b.modulate = Color(0.4, 0.4, 0.4, 1.0) if used else Color(1, 1, 1, 1)
+		b.disabled = used
+		b.modulate = Color(0.4, 0.4, 0.4, 1.0) if used else Color(1, 1, 1, 1)
 
 func _debug_print_buttons() -> void:
 	print("=== Ribbon Debug ===")
