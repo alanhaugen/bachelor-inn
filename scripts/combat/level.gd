@@ -174,7 +174,7 @@ func show_move_popup(window_pos :Vector2) -> void:
 		move_popup.pass_button.show()
 		move_popup.undo_button.show()
 	else:
-		move_popup.move_button.show()
+		#move_popup.move_button.show()
 		move_popup.wait_button.show()
 		move_popup.undo_button.show()
 		if active_move is Attack:
