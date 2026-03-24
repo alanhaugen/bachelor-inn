@@ -167,7 +167,7 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 			var consider_terrain_cost : bool = false
 			var include_start_in_output : bool = false
 			var go_through_heroes : bool = true
-			var go_through_monsters : bool = true
+			var go_through_monsters : bool = false
 			var include_hero_tiles_in_output : bool = false
 			var include_monster_tiles_in_output : bool = true
 			var go_through_empty_tiles : bool = true
@@ -183,7 +183,7 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 			
 			var consider_terrain_cost : bool = false
 			var include_start_in_output : bool = false
-			var go_through_heroes : bool = true
+			var go_through_heroes : bool = false
 			var go_through_monsters : bool = true
 			var include_hero_tiles_in_output : bool = true
 			var include_monster_tiles_in_output : bool = false
@@ -201,6 +201,62 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 	
 	for target : Vector3i in targets:
 		moves.append(Attack.new(start, target, start))
+	
+	return moves;
+
+static func generate_move(unit : Character, game_state : GameState) -> Array[Move]:
+	var moves : Array[Move]
+	if unit == null:
+		return moves
+	if unit.state.is_moved:
+		return moves
+	
+	var targets : Array[Vector3i]
+	
+	var start : Vector3i = unit.state.grid_position
+	var max_depth : int = unit.state.movement
+	var min_depth : int = 0
+	
+	match unit.state.faction:
+		CharacterState.Faction.PLAYER:
+			
+			var consider_terrain_cost : bool = false
+			var include_start_in_output : bool = true
+			var go_through_heroes : bool = true
+			var go_through_monsters : bool = false
+			var include_hero_tiles_in_output : bool = false
+			var include_monster_tiles_in_output : bool = false
+			var go_through_empty_tiles : bool = true
+			var include_empty_tiles_in_output : bool = true
+			
+			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
+				consider_terrain_cost, include_start_in_output,
+				go_through_heroes, go_through_monsters,
+				include_hero_tiles_in_output, include_monster_tiles_in_output,
+				go_through_empty_tiles, include_empty_tiles_in_output)
+			
+		CharacterState.Faction.ENEMY:
+			
+			var consider_terrain_cost : bool = false
+			var include_start_in_output : bool = true
+			var go_through_heroes : bool = false
+			var go_through_monsters : bool = true
+			var include_hero_tiles_in_output : bool = false
+			var include_monster_tiles_in_output : bool = false
+			var go_through_empty_tiles : bool = true
+			var include_empty_tiles_in_output : bool = true
+			
+			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
+				consider_terrain_cost, include_start_in_output,
+				go_through_heroes, go_through_monsters,
+				include_hero_tiles_in_output, include_monster_tiles_in_output,
+				go_through_empty_tiles, include_empty_tiles_in_output)
+			
+		_:
+			return moves
+	
+	for target : Vector3i in targets:
+		moves.append(Move.new(start, target))
 	
 	return moves;
 
@@ -223,9 +279,10 @@ static func basic_dijkstra
 
 	frontier.append([start, 0])
 	cost_so_far[start] = 0
-	# -------------------------
-	# 1) Dijkstra for reachables
-	# -------------------------
+	
+	if include_start_in_output:
+		reachable.append(start)
+	
 	while frontier.size() > 0:
 		# lowest cost first
 		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
@@ -240,9 +297,7 @@ static func basic_dijkstra
 			continue
 		visited[pos] = true
 
-		if not reachable.has(pos):
-			if pos == start && !include_start_in_output:
-				continue
+		if pos != start && not reachable.has(pos):
 			var unit : Character = game_state.get_unit(pos)
 			if(unit != null):
 				match unit.state.faction:
