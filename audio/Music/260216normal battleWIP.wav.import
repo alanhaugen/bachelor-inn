@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://ykxw12si1on5"
+path="res://.godot/imported/260216normal battleWIP.wav-d58af582f9853bf4207a5f5d55f48074.sample"
+
+[deps]
+
+source_file="res://audio/Music/260216normal battleWIP.wav"
+dest_files=["res://.godot/imported/260216normal battleWIP.wav-d58af582f9853bf4207a5f5d55f48074.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

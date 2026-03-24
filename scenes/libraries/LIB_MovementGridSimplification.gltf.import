@@ -1,0 +1,18 @@
+[remap]
+
+importer="zincles.gltf2meshlib"
+type="MeshLibrary"
+uid="uid://cf7mu0h5aey6v"
+path="res://.godot/imported/LIB_MovementGridSimplification.gltf-c3b634bad731d9f487beb4fe8b5a5e27.meshlib"
+
+[deps]
+
+source_file="res://scenes/libraries/LIB_MovementGridSimplification.gltf"
+dest_files=["res://.godot/imported/LIB_MovementGridSimplification.gltf-c3b634bad731d9f487beb4fe8b5a5e27.meshlib"]
+
+[params]
+
+generate_collision_shape_by_mesh=true
+generate_preview=true
+model_offset=Vector3(0, 0, 0)
+sort_by_name=true
