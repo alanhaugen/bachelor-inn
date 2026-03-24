@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0e9429dc-252c-4c97-91dd-23a4abe67c05" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/Development Particles/combat_vfx_controller.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/Development Particles/combat_vfx_controller.gd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/commands/attack.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/commands/attack.gd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/gamestate.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/gamestate.gd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/level.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/level.gd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/combat/minimax.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/minimax.gd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/combat/movegenerator.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/combat/movegenerator.gd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/stats/character.gd" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/stats/character.gd" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -99,6 +99,7 @@ var game_state: GameState
 var is_in_menu: bool = false
 var active_move: Command
 var moves_stack: Array[Command]
+var _is_processing_move: bool = false
 
 var current_moves: Array[Command]
 var unit_pos: Vector3
@@ -405,11 +406,7 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	active_move.end_pos = pos
 	moves_stack.append(active_move)
 
-	create_path(
-		moves_stack.front().start_pos,
-		moves_stack.front().end_pos
-	)
-
+	# Start the animation sequence
 	state = States.ANIMATING
 
 
@@ -464,13 +461,15 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 	if found_move != null:
 		active_move = found_move
 
+		moves_stack.clear()
 		moves_stack.append(active_move)
 		state = CampaignState.LevelState.ANIMATING
-		create_path(unit_pos, pos)
+		# We don't need to call create_path here, it will be called in _start_next_move_animation
 		path_map.clear()
 
 	elif found_attack != null:
 		active_move = found_attack
+		moves_stack.clear()
 
 		show_attack_tiles(pos)
 		state = States.CHOOSING_ATTACK
@@ -506,6 +505,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
 		_handle_attack_choice(pos)
+		# Clear moves_stack here after it's been used or before it's used?
+		# Actually _handle_attack_choice appends to it.
 		return
 
 	if _is_invalid_tile(pos):
@@ -519,8 +520,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Player unit clicked
 	if get_unit_name(pos) == CharacterStates.Player:
 		var clicked_unit := game_state.get_unit(pos)
-		if clicked_unit and (clicked_unit.state.is_ability_used or (clicked_unit.state.is_moved and selected_unit != clicked_unit)):
-			return
+		if clicked_unit:
+			if clicked_unit.state.is_ability_used:
+				return
+			if clicked_unit.state.is_moved and selected_unit != clicked_unit:
+				# Allow re-selecting the ALREADY selected unit even if it moved (to see attack origins)
+				# but don't allow selecting a DIFFERENT unit that has already moved.
+				return
 		_handle_player_click(pos)
 		return
 
@@ -776,31 +782,7 @@ func reset_all_units() -> void:
 
 
 func MoveSingleAI() -> void:
-	var ai := MinimaxAI.new()
-	var current_simulation := GameState.from_level(self)
-	
-	var current_enemy: Character = null
-	for unit in characters:
-		if unit and unit.state.is_enemy() and not unit.state.is_moved:
-			current_enemy = unit
-			break
-	
-	if current_enemy != null:
-		var pos := NullablePosition.new(current_enemy.state.grid_position)
-		if current_simulation.has_enemy_moves(pos):
-			var move : Command = ai.choose_best_move(current_simulation, 3, current_enemy)
-			moves_stack.append(move)
-	
-	if not moves_stack.is_empty():
-		state = CampaignState.LevelState.ANIMATING
-		camera_controller.focus_camera(current_enemy)
-		wait_for_camera = true
-		timer.start(pre_enemy_turn_wait)
-		await timer.timeout
-		wait_for_camera = false
-	else:
-		is_player_turn = true
-		_on_turn_changed(true)
+	MoveAI()
 
 func _on_turn_changed(is_player: bool) -> void:
 	_clear_selection()
@@ -822,11 +804,20 @@ func _on_turn_changed(is_player: bool) -> void:
 	state = States.TRANSITION
 
 func CheckVictoryConditions() -> void:
-	if game_state.get_legal_moves().is_empty():
-		if game_state.is_current_player_enemy:
-			get_tree().change_scene_to_file("res://scenes/states/gameover.tscn")
-		else:
-			get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
+	var player_alive := false
+	var enemy_alive := false
+	
+	for character in characters:
+		if is_instance_valid(character) and character.state and character.state.is_alive:
+			if character.state.is_enemy():
+				enemy_alive = true
+			else:
+				player_alive = true
+				
+	if not player_alive:
+		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn")
+	elif not enemy_alive:
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
 
 
 func MoveAI() -> void:
@@ -835,15 +826,20 @@ func MoveAI() -> void:
 	
 	var current_enemy: Character = null
 	for unit in characters:
-		if unit and unit.state.is_enemy() and not unit.state.is_moved:
+		if unit and is_instance_valid(unit) and unit.state.is_enemy() and not unit.state.is_moved:
 			current_enemy = unit
 			break
 	
 	if current_enemy != null:
 		var pos := NullablePosition.new(current_enemy.state.grid_position)
 		if current_simulation.has_enemy_moves(pos):
-			var move : Command = ai.choose_best_move(current_simulation, 3, current_enemy)
-			moves_stack.append(move)
+			var move : Command = ai.choose_best_move(current_simulation, 2, current_enemy)
+			if move != null:
+				moves_stack.append(move)
+			else:
+				# Force end turn for this enemy if it can't find a move but thought it had one
+				current_enemy.state.is_moved = true
+				current_enemy.state.is_ability_used = true
 	
 	if not moves_stack.is_empty():
 		state = States.ANIMATING
@@ -1056,13 +1052,13 @@ func process_playing(_delta: float) -> void:
 
 
 func process_animating(delta: float) -> void:
-	if moves_stack.is_empty() and animation_path.is_empty():
+	if moves_stack.is_empty() and animation_path.is_empty() and not _is_processing_move:
 		_on_animation_finished()
 		return
 	
-	if animation_path.is_empty():
+	if animation_path.is_empty() and not _is_processing_move and not moves_stack.is_empty():
 		_start_next_move_animation()
-	else:
+	elif not animation_path.is_empty():
 		_update_movement_animation(delta)
 
 
@@ -1093,13 +1089,51 @@ func _start_turn_transition_anim() -> void:
 		enemy_label.show()
 
 func _start_next_move_animation() -> void:
+	if moves_stack.is_empty():
+		return
+	
+	_is_processing_move = true
 	active_move = moves_stack.pop_front()
+	
+	# RE-INITIALIZE GAME STATE to ensure it's in sync with units
+	game_state = GameState.from_level(self)
 	active_move.prepare(game_state)
 	
+	# Start physical movement FIRST
+	print("[DEBUG_LOG] Animation Start: move from ", active_move.start_pos, " to ", active_move.end_pos)
+	create_path(active_move.start_pos, active_move.end_pos)
+	# Fallback: if create_path failed to set selected_unit, try to recover
+	if selected_unit == null:
+		selected_unit = game_state.get_unit(active_move.start_pos)
+		if selected_unit == null:
+			selected_unit = game_state.get_unit(active_move.end_pos)
+	
+	print("[DEBUG_LOG] Selected unit for animation: ", selected_unit.data.unit_name if selected_unit else "NULL")
+	
+	if animation_path.is_empty():
+		# Instant move if no path
+		if selected_unit != null:
+			print("[DEBUG_LOG] Instant move to ", active_move.end_pos)
+			selected_unit.move_to(active_move.end_pos)
+	else:
+		print("[DEBUG_LOG] Movement path size: ", animation_path.size())
+		pass
+
+	# If it's an attack, we need to wait for physical movement to reach end_pos 
+	# before showing VFX.
+	if not animation_path.is_empty():
+		# We'll let _update_movement_animation handle it and trigger VFX when done.
+		await _wait_for_movement()
+	elif active_move.start_pos != active_move.end_pos:
+		# If no path but start != end, it's an instant move that should be finished
+		pass
+
+	print("[DEBUG_LOG] Physical movement finished. Playing VFX for result: ", active_move.result)
 	# Execute VFX
 	await combat_vfx.play_attack(active_move.result)
 	
 	# Actual damage
+	print("[DEBUG_LOG] Applying damage via active_move")
 	active_move.apply_damage(game_state)
 	
 	# Ensure victims that died are removed from occupancy
@@ -1111,29 +1145,28 @@ func _start_next_move_animation() -> void:
 	occupancy_overlay.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM)
 	occupancy_overlay.set_cell_item(active_move.end_pos, code)
 	
-	# Start physical movement if needed
-	create_path(active_move.start_pos, active_move.end_pos)
-	# Fallback: if create_path failed to set selected_unit, try to recover
-	if selected_unit == null:
-		selected_unit = game_state.get_unit(active_move.start_pos)
-		if selected_unit == null:
-			selected_unit = game_state.get_unit(active_move.end_pos)
-	
-	if animation_path.is_empty():
-		# Instant move if no path
-		if selected_unit != null:
-			selected_unit.move_to(active_move.end_pos)
+	# If the unit actually moved, ensure its state is updated
+	if selected_unit != null:
+		selected_unit.state.grid_position = active_move.end_pos
+		selected_unit.state.is_moved = true
+		if active_move is Attack:
+			selected_unit.state.is_ability_used = true
+		emit_signal("character_stats_changed", selected_unit)
 	
 	if is_player_turn:
 		# If it was a move, maybe show popup?
 		if (active_move is Move or active_move is Wait) and selected_unit != null and is_instance_valid(selected_unit):
 			show_move_popup(get_screen_position(selected_unit.sprite))
 		elif active_move is Attack:
-			# After attack animation, turn might end or continue.
-			# If the unit can still move, we'd show popup, but attack usually ends turn.
-			# The current logic seems to end turn via _on_animation_finished -> States.PLAYING
-			# and then process_playing checks _has_available_player_moves.
-			pass
+			_is_processing_move = false # Must clear BEFORE finished
+			_on_animation_finished()
+			return
+
+	_is_processing_move = false
+
+func _wait_for_movement() -> void:
+	while not animation_path.is_empty():
+		await get_tree().process_frame
 
 func _update_movement_animation(delta: float) -> void:
 	if selected_unit == null or not is_instance_valid(selected_unit):

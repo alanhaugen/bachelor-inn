@@ -13,17 +13,33 @@ func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -
 
 
 
+func execute(state : GameState, simulate_only : bool = false) -> void:
+	var unit := state.get_unit(start_pos)
+	if unit:
+		unit.move_to(end_pos, simulate_only)
+
+
 func prepare(state : GameState, simulate_only: bool = false) -> void:
 	result = AttackResult.new()
 
-	var aggressor : Character = state.get_unit(start_pos);
+	print("[DEBUG_LOG] Attack prepare: aggressor moving from ", start_pos, " to ", end_pos, " victim at ", attack_pos)
+	# The unit should have just moved to end_pos in execute()
+	var aggressor : Character = state.get_unit(end_pos);
 	var victim : Character = state.get_unit(attack_pos);
 	
+	if not aggressor:
+		# Fallback: maybe it didn't move yet in this state?
+		aggressor = state.get_unit(start_pos)
+		if aggressor:
+			print("[DEBUG_LOG] Attack prepare: found aggressor at start_pos ", start_pos, " instead of end_pos ", end_pos)
+
 	result.aggressor = aggressor
 	result.victim = victim
 	
 	if not aggressor or not victim:
+		print("[DEBUG_LOG] Attack prepare FAILED: aggressor found: ", aggressor != null, " victim found: ", victim != null, " at ", attack_pos)
 		return
+	print("[DEBUG_LOG] Attack prepare SUCCESS: ", aggressor.data.unit_name, " vs ", victim.data.unit_name)
 
 	if aggressor.state.is_playable() and not simulate_only:
 		aggressor.state.is_ability_used = true
@@ -59,14 +75,18 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 
 
 func apply_damage(state: GameState , simulate_only: bool = false) -> void:
+	print("[DEBUG_LOG] Attack apply_damage: result valid: ", result != null)
 	if not result or not result.aggressor or not result.victim:
+		print("[DEBUG_LOG] Attack apply_damage FAILED: missing result or units")
 		return
 
 	var aggressor : Character = result.aggressor;
 	var victim : Character = result.victim;
 	
 	# result.damage is already calculated in prepare()
+	print("[DEBUG_LOG] Attack applying damage: ", result.damage, " to ", victim.data.unit_name)
 	result.killed = victim.apply_damage(result.damage, simulate_only, aggressor, "Attack")
+	print("[DEBUG_LOG] Attack applied damage. Victim killed: ", result.killed)
 	
 	# sanity
 	if not simulate_only:

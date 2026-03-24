@@ -3,67 +3,65 @@ extends RefCounted
 
 func minimax(state : GameState, depth : int, specific_character_pos : NullablePosition = null) -> float:
 	if depth == 0:
-		return evaluate(state)
+		return evaluate(state) * 1.0
 
 	var moves : Array[Command] = state.get_legal_moves(specific_character_pos)
 	if moves.is_empty():
-		return evaluate(state)
+		return evaluate(state) * 1.0
 
 	var enemy_turn := state.is_current_player_enemy
 	
 	
 	if enemy_turn:
-		var best := -INF
+		var best_enemy : float = -999999.0
 		for move : Command in moves:
 			var end_pos : NullablePosition = null
 			if specific_character_pos != null:
 				if move is Attack:
-					end_pos = NullablePosition.new(move.attack_pos)
+					end_pos = NullablePosition.new(move.end_pos)
 				elif move is Move:
 					end_pos = NullablePosition.new(move.end_pos)
 				else:
 					push_error("UNHANDLED COMMAND TYPE")
-			best = max(best, minimax(state.apply_move(move, true), depth - 1, end_pos))
-		return best
+			best_enemy = max(best_enemy, minimax(state.apply_move(move, true), depth - 1, end_pos))
+		return best_enemy
 	else:
-		var best := INF
+		var best_player : float = 999999.0
 		for move : Command in moves:
 			var end_pos : NullablePosition = null
 			if specific_character_pos != null:
 				if move is Attack:
-					end_pos = NullablePosition.new(move.attack_pos)
+					end_pos = NullablePosition.new(move.end_pos)
 				elif move is Move:
 					end_pos = NullablePosition.new(move.end_pos)
 				else:
 					push_error("UNHANDLED COMMAND TYPE")
-			best = min(best, minimax(state.apply_move(move, true), depth - 1, end_pos))
-		return best
+			best_player = min(best_player, minimax(state.apply_move(move, true), depth - 1, end_pos))
+		return best_player
 
 
 func evaluate(state : GameState) -> int:
 	var score := 0
 	
 	# Collect all player units and their positions
-	var player_units := []
-	var player_positions := []
+	var player_units : Array[Character] = []
 	for unit in state.units:
-		if not unit.state.is_enemy():
+		if unit.state.is_alive and not unit.state.is_enemy():
 			player_units.append(unit)
-			player_positions.append(unit.state.grid_position)
 	
 	for unit : Character in state.units:
+		if not unit.state.is_alive:
+			continue
+
 		var unit_value := unit.state.current_health * 10
 
 		if unit.state.is_enemy():
 			# Basic value
 			score += unit_value
-			
-			# Mobility bonus
-			if not unit.state.is_moved:
-				score += 5
+			score += 50 # Bonus for being alive
 			
 			# Find closest player
-			var closest_dist := INF
+			var closest_dist := 999
 			var closest_player : Character = null
 			for player : Character in player_units:
 				var dist : int = abs(player.state.grid_position.x - unit.state.grid_position.x) + abs(player.state.grid_position.z - unit.state.grid_position.z)
@@ -72,30 +70,24 @@ func evaluate(state : GameState) -> int:
 					closest_player = player
 			
 			# Distance incentive: closer to player = better
-			score += max(0, 10 - closest_dist)
-			
-			# Big bonus for being able to attack next turn
-			if closest_dist <= unit.state.movement:
-				score += 100  # strong incentive to attack
+			if closest_player:
+				score += max(0, 20 - closest_dist)
 				
-				# Bonus for finishing off low-health target
-				if closest_player:
-					score += max(0, 20 - closest_player.state.current_health)
+				# If we can attack THIS turn (dist <= weapon range from CURRENT pos)
+				if unit.state.weapon:
+					if closest_dist <= unit.state.weapon.max_range:
+						score += 50
 			
-			# Slight penalty for moving away from closest player
-			score -= closest_dist * 2
-
 		else:
 			# Player units reduce total score
 			score -= unit_value
-			if not unit.state.is_moved:
-				score -= 2
+			score -= 50 # Penalty for players being alive
 
 	return score
 
 
 func choose_best_move(state : GameState, depth : int, specific_character : Character = null) -> Command:
-	var best_score := -INF
+	var best_score : float = -999999.0
 	var best_move : Command = null
 	var start_pos : NullablePosition = null
 	
@@ -106,14 +98,14 @@ func choose_best_move(state : GameState, depth : int, specific_character : Chara
 		var end_pos : NullablePosition = null
 		if(specific_character != null):
 			if move is Attack:
-				end_pos = NullablePosition.new(move.attack_pos)
+				end_pos = NullablePosition.new(move.end_pos)
 			elif move is Move:
 				end_pos = NullablePosition.new(move.end_pos)
 			else:
 				push_error("UNHANDLED COMMAND TYPE")
 			
 		var move_state : GameState = state.apply_move(move, true)
-		var score : float = minimax(move_state, depth - 1, end_pos)
+		var score : float = minimax(move_state, depth, end_pos)
 
 		if score > best_score:
 			best_score = score

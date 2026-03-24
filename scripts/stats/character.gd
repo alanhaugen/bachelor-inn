@@ -345,7 +345,6 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 	
 	state.is_alive = true;
 	state.grid_position = pos;
-	state.is_moved = true;
 	
 	if simulate_only == false:
 		var grid_code : int = Main.level.player_code;
@@ -357,8 +356,6 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 		position = Main.level.grid_to_world(pos)
 		
 		Main.level.emit_signal("character_stats_changed", self)
-		#if state.is_playable():
-			#my_material.set_shader_parameter("grey_tint", true)
 
 
 func reset() -> void:

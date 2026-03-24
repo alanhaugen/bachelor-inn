@@ -12,17 +12,23 @@ func play_attack(result : AttackResult) -> void:
 	if result == null:
 		return
 	
-	var attacker : Character= result.aggressor
-	if attacker and attacker.state and attacker.state.weapon:
-		if attacker.has_method("play") and attacker.attack_animation:
+	var attacker : Character = result.aggressor
+	var victim : Character = result.victim
+	
+	if attacker and attacker.state and victim:
+		if attacker.has_method(&"play") and attacker.attack_animation:
 			attacker.play(attacker.attack_animation)
 		
-		if attacker.state.weapon.is_melee:
-			await _spawn_melee_attack(attacker, result.victim, result)
-		else:
-			await _spawn_ranged_attack(attacker, result.victim, result)
+		var is_melee: bool = true
+		if attacker.state.weapon:
+			is_melee = attacker.state.weapon.is_melee
 		
-		if attacker.has_method("pause_anim"):
+		if is_melee:
+			await _spawn_melee_attack(attacker, victim, result)
+		else:
+			await _spawn_ranged_attack(attacker, victim, result)
+		
+		if attacker.has_method(&"pause_anim"):
 			attacker.pause_anim()
 
 func play_skill(result : AttackResult) -> void:

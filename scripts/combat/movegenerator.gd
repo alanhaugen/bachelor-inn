@@ -6,8 +6,6 @@ class_name MoveGenerator
 static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
 	if unit.state.is_ability_used:
 		return []
-	if unit.state.is_moved:
-		return [Wait.new(unit.state.grid_position)]
 	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
 	return moves;
 
@@ -58,8 +56,9 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 		var offsets := [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,0,1), Vector3i(0,0,-1)]
 
 		for offset: Vector3i in offsets:
-			var neighbor_xz: Vector3i = Vector3i(pos.x + offset.x, 0, pos.z + offset.z)
-			var candidates: Array[Vector3i] = state.get_tiles_at_xz(neighbor_xz.x, neighbor_xz.z)
+			var neighbor_xz_x : int = pos.x + offset.x
+			var neighbor_xz_z : int = pos.z + offset.z
+			var candidates: Array[Vector3i] = state.get_tiles_at_xz(neighbor_xz_x, neighbor_xz_z)
 			if candidates.is_empty():
 				continue
 
@@ -87,17 +86,16 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 			if new_cost > movement_range:
 				continue
 
-			if not cost_so_far.has(neighbor) or new_cost < int(cost_so_far[neighbor]):
+			if !cost_so_far.has(neighbor) or new_cost < cost_so_far[neighbor]:
 				cost_so_far[neighbor] = new_cost
 				frontier.append([neighbor, new_cost])
 
 	# -------------------------
 	# 2) Build MOVE commands
 	# -------------------------
-	if !exclude_move:
-		if not unit.state.is_moved:
-			for tile: Vector3i in reachable:
-				commands.append(Move.new(start_pos, tile))
+	if !exclude_move and not unit.state.is_moved:
+		for tile: Vector3i in reachable:
+			commands.append(Move.new(start_pos, tile))
 
 	# -------------------------
 	# 3) Build ALL ATTACK commands
@@ -136,7 +134,11 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 							# Allow vertical difference of up to 1 for attacks
 							if abs(t.y - origin.y) > 1:
 								continue
-							if not state.is_enemy(t):
+							
+							var target_unit := state.get_unit(t)
+							if not target_unit or target_unit.state.faction == unit.state.faction:
+								continue
+							if target_unit.state.faction == CharacterState.Faction.NEUTRAL:
 								continue
 
 							# De-dupe by origin and target (XZ+Y as chosen)
@@ -155,11 +157,11 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 
 
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
-	var directions := [
-			Vector3i(pos.x, 0, pos.z - 1),
-			Vector3i(pos.x, 0, pos.z + 1),
-			Vector3i(pos.x + 1, 0, pos.z),
-			Vector3i(pos.x - 1, 0, pos.z)
+	var directions : Array[Vector3i] = [
+			Vector3i(pos.x, pos.y, pos.z - 1),
+			Vector3i(pos.x, pos.y, pos.z + 1),
+			Vector3i(pos.x + 1, pos.y, pos.z),
+			Vector3i(pos.x - 1, pos.y, pos.z)
 		]
 	
 	if end_pos in directions:
@@ -223,18 +225,20 @@ static func _has_enemy_in_range_from_origin(
 			for t in tiles_here:
 				if abs(t.y - origin.y) > 1:
 					continue
-				if state.is_enemy(t):
+				
+				var target_unit := state.get_unit(t)
+				if target_unit and target_unit.state.faction != _unit.state.faction and target_unit.state.faction != CharacterState.Faction.NEUTRAL:
 					return true
 
 	return false
 
 
 static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> Vector3i:
-	var directions := [
-			Vector3i(pos.x, 0, pos.z - 1),
-			Vector3i(pos.x, 0, pos.z + 1),
-			Vector3i(pos.x + 1, 0, pos.z),
-			Vector3i(pos.x - 1, 0, pos.z)
+	var directions : Array[Vector3i] = [
+			Vector3i(pos.x, pos.y, pos.z - 1),
+			Vector3i(pos.x, pos.y, pos.z + 1),
+			Vector3i(pos.x + 1, pos.y, pos.z),
+			Vector3i(pos.x - 1, pos.y, pos.z)
 		]
 	
 	for tile in reachable:
@@ -245,11 +249,11 @@ static func get_valid_neighbour(pos : Vector3i, reachable : Array[Vector3i]) -> 
 
 
 static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) -> Array[Vector3i]:
-	var directions := [
-			Vector3i(pos.x, 0, pos.z - 1),
-			Vector3i(pos.x, 0, pos.z + 1),
-			Vector3i(pos.x + 1, 0, pos.z),
-			Vector3i(pos.x - 1, 0, pos.z)
+	var directions : Array[Vector3i] = [
+			Vector3i(pos.x, pos.y, pos.z - 1),
+			Vector3i(pos.x, pos.y, pos.z + 1),
+			Vector3i(pos.x + 1, pos.y, pos.z),
+			Vector3i(pos.x - 1, pos.y, pos.z)
 		]
 	
 	var valid : Array[Vector3i] = []
