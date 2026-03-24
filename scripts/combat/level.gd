@@ -504,14 +504,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _is_invalid_tile(pos):
 		return
 
-	# Player unit clicked
-	if get_unit_name(pos) == CharacterStates.Player:
-		_handle_player_click(pos)
-		return
-
 	# Clicked on movement/attack tile
 	if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 		_handle_action_tile_click(pos)
+		return
+
+	# Player unit clicked
+	if get_unit_name(pos) == CharacterStates.Player:
+		_handle_player_click(pos)
 		return
 
 	# Clicked empty tile
@@ -1108,7 +1108,7 @@ func _start_next_move_animation() -> void:
 	if is_player_turn:
 		# If it was a move, maybe show popup?
 		# Currently original code does:
-		if active_move is Move and selected_unit != null and is_instance_valid(selected_unit):
+		if (active_move is Move or active_move is Wait) and selected_unit != null and is_instance_valid(selected_unit):
 			show_move_popup(get_screen_position(selected_unit.sprite))
 
 func _update_movement_animation(delta: float) -> void:
