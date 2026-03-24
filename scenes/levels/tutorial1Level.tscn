@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_gwuxj"]
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="2_lik2v"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]
+[ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
@@ -51,3 +52,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.91478, 2.5466533, 3.031575
 
 [node name="Water" parent="." index="19" unique_id=1125413424 instance=ExtResource("3_8b5cb")]
 transform = Transform3D(49.708862, 0, 0, 0, 0.6568207, 0, 0, 0, 22.674746, -0.16525126, 0.3528986, 9.04665)
+
+[node name="Fireflies" parent="." index="20" unique_id=949192376 instance=ExtResource("4_digyo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2636974, 0.647439, 2.7913103)
