@@ -1,7 +1,6 @@
 extends RefCounted
 class_name MoveGenerator
 
-
 #region methods
 static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
@@ -149,6 +148,108 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	commands.append(Wait.new(start_pos))
 	return commands
 
+static func basic_dijkstra
+(
+	state : GameState,
+	start : Vector3i, max_depth : int, consider_terrain_cost : bool = false, 
+	go_through_heroes : bool = false, go_through_monsters : bool = false,
+	include_hero_tiles_in_output : bool = false, include_monster_tiles_in_output : bool = false,
+	go_through_empty_tiles : bool = true, include_empty_tiles_in_output : bool = true
+) -> Array[Vector3i]:
+	var level : Level = Main.level
+	var occupancy_map : GridMap = level.occupancy_map
+	# Priority queue: [pos, cost]
+	var frontier: Array = []
+	var cost_so_far: Dictionary = {}
+	var visited: Dictionary = {}
+
+	var reachable: Array[Vector3i] = []
+
+	frontier.append([start, 0])
+	cost_so_far[start] = 0
+
+	# -------------------------
+	# 1) Dijkstra for reachables
+	# -------------------------
+	while frontier.size() > 0:
+		# lowest cost first
+		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
+		var current: Array = frontier.pop_front()
+		var pos: Vector3i = current[0]
+		var current_cost: int = current[1]
+
+		if current_cost > max_depth:
+			continue
+
+		if visited.has(pos):
+			continue
+		visited[pos] = true
+
+		if pos != start and not reachable.has(pos):
+			var unit : Character = state.get_unit(pos)
+			if(unit != null):
+				match unit.state.faction:
+					CharacterState.Faction.PLAYER:
+						if !include_hero_tiles_in_output:
+							continue
+					CharacterState.Faction.ENEMY:
+						if !include_monster_tiles_in_output:
+							continue
+					_:
+						continue
+			else:
+				if(!include_empty_tiles_in_output):
+					continue
+			reachable.append(pos)
+
+		# Explore neighbors in XZ plane (keep your elevation logic)
+		var offsets : Array[Vector3i] = [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,0,1), Vector3i(0,0,-1)]
+
+		for offset: Vector3i in offsets:
+			var neighbor_xz: Vector3i = Vector3i(pos.x + offset.x, 0, pos.z + offset.z)
+			var found : bool = false
+			var candidate : Vector3i
+			
+			if level.movement_weights_map.get_cell_item(neighbor_xz + Vector3i(0, 1, 0)) != GridMap.INVALID_CELL_ITEM:
+				candidate = neighbor_xz + Vector3i(0, 1, 0)
+				found = true
+			elif level.movement_weights_map.get_cell_item(neighbor_xz) != GridMap.INVALID_CELL_ITEM:
+				candidate = neighbor_xz
+				found = true
+			elif level.movement_weights_map.get_cell_item(neighbor_xz + Vector3i(0, -1, 0)) != GridMap.INVALID_CELL_ITEM:
+				candidate = neighbor_xz + Vector3i(0, -1, 0)
+				found = true
+			
+			if !found:
+				continue
+
+			# Find topmost WALKABLE tile at this XZ
+			var best_walkable: Vector3i = Vector3i()
+			var has_walkable := false
+			for t: Vector3i in candidates:
+				if state.is_free(t):
+					if not has_walkable or t.y > best_walkable.y:
+						best_walkable = t
+						has_walkable = true
+
+			if not has_walkable:
+				continue
+
+			var neighbor: Vector3i = best_walkable
+
+			# Vertical step limit
+			if abs(neighbor.y - pos.y) > 1:
+				continue
+
+			var tile_cost: int = state.get_tile_cost(neighbor)
+			var new_cost: int = current_cost + tile_cost
+
+			if new_cost > movement_range:
+				continue
+
+			if not cost_so_far.has(neighbor) or new_cost < int(cost_so_far[neighbor]):
+				cost_so_far[neighbor] = new_cost
+				frontier.append([neighbor, new_cost])
 
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	var directions := [
