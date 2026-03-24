@@ -168,11 +168,16 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.show()
 	is_in_menu = true
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
-	move_popup.move_button.show()
-	move_popup.wait_button.show()
-	move_popup.undo_button.show()
-	if active_move is Attack:
-		move_popup.attack_button.show()
+	
+	if active_move is Wait:
+		move_popup.wait_button.show()
+		move_popup.pass_button.show()
+	else:
+		move_popup.move_button.show()
+		move_popup.wait_button.show()
+		move_popup.undo_button.show()
+		if active_move is Attack:
+			move_popup.attack_button.show()
 
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:

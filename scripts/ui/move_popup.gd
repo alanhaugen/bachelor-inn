@@ -4,6 +4,7 @@ extends Control
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
+@onready var pass_button: Button = $VBoxContainer/PassButton
 @onready var undo_button: Button = $VBoxContainer/UndoButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
 
@@ -11,7 +12,6 @@ extends Control
 
 func _ready() -> void:
 	map = Main.level;
-	wait_button.text = "Pass"
 
 
 func HidePopup() -> void:
@@ -20,6 +20,7 @@ func HidePopup() -> void:
 	move_button.hide();
 	attack_button.hide();
 	wait_button.hide();
+	pass_button.hide();
 	undo_button.hide();
 	hide();
 
@@ -40,6 +41,13 @@ func _on_attack_button_pressed() -> void:
 
 
 func _on_wait_button_pressed() -> void:
+	if map.selected_unit:
+		map.selected_unit.state.is_moved = true
+		map.emit_signal("character_stats_changed", map.selected_unit)
+	HidePopup()
+
+
+func _on_pass_button_pressed() -> void:
 	if map.selected_unit:
 		map.selected_unit.state.is_moved = true
 		map.selected_unit.state.is_ability_used = true
