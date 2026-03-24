@@ -327,7 +327,7 @@ theme_override_styles/normal = ExtResource("4_wb0q5")
 theme_override_styles/pressed = ExtResource("5_q85j6")
 theme_override_styles/hover = ExtResource("6_8g5eo")
 theme_override_styles/focus = ExtResource("7_fj817")
-text = "Load save 1"
+text = "Start Tutorial"
 
 [node name="LoadMap0" type="Button" parent="UI/LevelSelect/LevelSelectVBOX" unique_id=1811495681]
 custom_minimum_size = Vector2(32, 32)
