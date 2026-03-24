@@ -3,13 +3,13 @@ class_name MoveGenerator
 
 
 #region methods
-static func generate(unit : Character, state : GameState) -> Array[Command]:
-	var moves : Array[Command] = dijkstra(unit, state);
+static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
+	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
 	return moves;
 
 
 
-static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
+static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
 	var start_pos: Vector3i = unit.state.grid_position
 
 	# Priority queue: [pos, cost]
@@ -90,57 +90,58 @@ static func dijkstra(unit : Character, state : GameState) -> Array[Command]:
 	# -------------------------
 	# 2) Build MOVE commands
 	# -------------------------
-	if not unit.state.is_moved:
-		for tile: Vector3i in reachable:
-			commands.append(Move.new(start_pos, tile))
+	if !exclude_move:
+		if not unit.state.is_moved:
+			for tile: Vector3i in reachable:
+				commands.append(Move.new(start_pos, tile))
 
 	# -------------------------
 	# 3) Build ALL ATTACK commands
 	#    (Temporary rule: weapon range == movement_range)
 	#    (Temporary rule: enemy must be on same y as origin)
 	# -------------------------
-	
-	## TODO: Get attack origins per selected enemy, not all enemies.
-	if not unit.state.is_ability_used:
-		# Include "attack from current position"
-		var attack_origins: Array[Vector3i] = [start_pos]
-		for r: Vector3i in reachable:
-			attack_origins.append(r)
+	if !exclude_attacks:
+		## TODO: Get attack origins per selected enemy, not all enemies.
+		if not unit.state.is_ability_used:
+			# Include "attack from current position"
+			var attack_origins: Array[Vector3i] = [start_pos]
+			for r: Vector3i in reachable:
+				attack_origins.append(r)
 
-		var min_r := unit.state.weapon.min_range
-		var max_r := unit.state.weapon.max_range
+			var min_r := unit.state.weapon.min_range
+			var max_r := unit.state.weapon.max_range
 
-		# de-dupe origin->target pairs
-		var seen_pairs: Dictionary = {}
+			# de-dupe origin->target pairs
+			var seen_pairs: Dictionary = {}
 
-		for origin: Vector3i in attack_origins:
-			for dx in range(-max_r, max_r + 1):
-				for dz in range(-max_r, max_r + 1):
-					var dist : int = abs(dx) + abs(dz)
-					if dist < min_r or dist > max_r:
-						continue
-
-					var x := origin.x + dx
-					var z := origin.z + dz
-
-					# Check all tiles at this XZ and pick enemies that match origin height (y)
-					var tiles_here: Array[Vector3i] = state.get_tiles_at_xz(x, z)
-					if tiles_here.is_empty():
-						continue
-
-					for t: Vector3i in tiles_here:
-						if t.y != origin.y:
-							continue
-						if not state.is_enemy(t):
+			for origin: Vector3i in attack_origins:
+				for dx in range(-max_r, max_r + 1):
+					for dz in range(-max_r, max_r + 1):
+						var dist : int = abs(dx) + abs(dz)
+						if dist < min_r or dist > max_r:
 							continue
 
-						# De-dupe by origin and target (XZ+Y as chosen)
-						var key := str(origin.x)+","+str(origin.y)+","+str(origin.z)+"->"+str(t.x)+","+str(t.y)+","+str(t.z)
-						if seen_pairs.has(key):
-							continue
-						seen_pairs[key] = true
+						var x := origin.x + dx
+						var z := origin.z + dz
 
-						commands.append(Attack.new(start_pos, t, origin))
+						# Check all tiles at this XZ and pick enemies that match origin height (y)
+						var tiles_here: Array[Vector3i] = state.get_tiles_at_xz(x, z)
+						if tiles_here.is_empty():
+							continue
+
+						for t: Vector3i in tiles_here:
+							if t.y != origin.y:
+								continue
+							if not state.is_enemy(t):
+								continue
+
+							# De-dupe by origin and target (XZ+Y as chosen)
+							var key := str(origin.x)+","+str(origin.y)+","+str(origin.z)+"->"+str(t.x)+","+str(t.y)+","+str(t.z)
+							if seen_pairs.has(key):
+								continue
+							seen_pairs[key] = true
+
+							commands.append(Attack.new(start_pos, t, origin))
 	
 	# -------------------------
 	# 4) Always allow WAIT

@@ -424,7 +424,7 @@ func select_unit(unit: Character) -> void:
 	_update_cursor(unit.state.grid_position)
 	emit_signal("character_selected", selected_unit)
 
-	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 
 
