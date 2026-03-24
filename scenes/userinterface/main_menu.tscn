@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://cm02uehw506nt"]
 
-[ext_resource type="FontFile" uid="uid://bfqlefgx6a6cn" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="2_cix78"]
 [ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_d233l"]
 [ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_0a1r8"]
-[ext_resource type="Texture2D" uid="uid://dy62l7318dj5i" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
+[ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="3_v8ire"]
 [ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="3_wxwbn"]
 [ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="4_wb0q5"]
-[ext_resource type="Texture2D" uid="uid://buf3kgfqhh4g2" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_xr6vh"]
-[ext_resource type="Texture2D" uid="uid://c76ndp3wwb2mw" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
+[ext_resource type="Texture2D" uid="uid://cft6wh327wv2r" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_xr6vh"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_gkqwp"]
 [ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="5_q85j6"]
 [ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="6_8g5eo"]
 [ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="7_fj817"]
 [ext_resource type="PackedScene" uid="uid://cnagni7ikbg16" path="res://scenes/utilities/CameraScene.tscn" id="10_0a1r8"]
-[ext_resource type="AudioStream" uid="uid://bhivca6gwnfph" path="res://audio/Music/260216themeWIP.wav" id="12_xr6vh"]
+[ext_resource type="AudioStream" uid="uid://b67e003o351lb" path="res://audio/Music/260216themeWIP.wav" id="12_xr6vh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gkqwp"]
 shader = ExtResource("3_0a1r8")

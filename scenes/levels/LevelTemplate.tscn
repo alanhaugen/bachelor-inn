@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://d4b4a1hbdjh6j" path="res://scenes/utilities/CameraSettings.tscn" id="12_2iq81"]
 [ext_resource type="PackedScene" uid="uid://m0k4yhcqcfss" path="res://scenes/Development/Particles/melee_attack_particle.tscn" id="12_vltbs"]
 [ext_resource type="PackedScene" uid="uid://cxrc33gqig64w" path="res://scripts/Other/CombatVFXController.tscn" id="22_dypiu"]
+[ext_resource type="PackedScene" path="res://scenes/userinterface/pause_menu.tscn" id="23_pause"]
 
 [node name="Map3d2" type="Node3D" unique_id=656823534]
 script = ExtResource("1_yuxmn")
@@ -153,3 +154,5 @@ transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.3420
 
 [node name="Timer" type="Timer" parent="." unique_id=1648285695]
 one_shot = true
+
+[node name="PauseMenu" parent="." instance=ExtResource("23_pause")]
