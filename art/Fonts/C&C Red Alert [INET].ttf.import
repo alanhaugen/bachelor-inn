@@ -1,0 +1,36 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://bf45w2g3p6pyy"
+path="res://.godot/imported/C&C Red Alert [INET].ttf-73028e4ac3a3b7df17ff7f620a7d9bb1.fontdata"
+
+[deps]
+
+source_file="res://art/Fonts/C&C Red Alert [INET].ttf"
+dest_files=["res://.godot/imported/C&C Red Alert [INET].ttf-73028e4ac3a3b7df17ff7f620a7d9bb1.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=1
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+modulate_color_glyphs=false
+hinting=1
+subpixel_positioning=4
+keep_rounding_remainders=true
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[]
+language_support={}
+script_support={}
+opentype_features={}
