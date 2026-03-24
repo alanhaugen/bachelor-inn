@@ -12,6 +12,10 @@ func execute(state : GameState, simulate_only : bool = false) -> void:
 	unit.move_to(end_pos, simulate_only)
 
 
-func undo(state : GameState, simulate_only : bool = false) -> void:
+func undo(state : GameState, _simulate_only : bool = false) -> void:
 	var unit := state.get_unit(end_pos)
-	unit.move_to(start_pos, simulate_only)
+	if unit:
+		unit.move_to(start_pos, _simulate_only)
+		if not _simulate_only:
+			unit.state.is_moved = false
+			unit.state.is_ability_used = false

@@ -11,7 +11,7 @@ var is_current_player_enemy := true;
 static func from_level(level : Level) -> GameState:
 	var state : GameState = GameState.new();
 	
-	var level_units :Array[Vector3i] = level.occupancy_map.get_used_cells();
+	var level_units :Array[Vector3i] = level.occupancy_overlay.get_used_cells();
 	for i in range(level_units.size()):
 		var pos : Vector3i = level_units[i];
 		var character : Character = level.get_unit(pos);
@@ -19,9 +19,9 @@ static func from_level(level : Level) -> GameState:
 		if character is Character:
 			state.units.append(character);
 		else:
-			# Interactables will be considered terrain, but is in the units_map
-			var id : int = level.units_map.get_cell_item(pos);
-			var type : String = level.units_map.mesh_library.get_item_name(id);
+			# Interactables will be considered terrain, but is in the occupancy_overlay
+			var id : int = level.occupancy_overlay.get_cell_item(pos);
+			var type : String = level.occupancy_overlay.mesh_library.get_item_name(id);
 			state.terrain.append(Terrain.new(pos, type));
 	
 	var level_terrain :Array[Vector3i] = level.movement_weights_map.get_used_cells();

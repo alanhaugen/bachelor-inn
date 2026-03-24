@@ -1,5 +1,6 @@
 extends Node3D
 class_name Level
+
 ## Map logic for combat levels.
 ##
 ## All state and animation logic is found here,
@@ -39,8 +40,8 @@ var movement_weights_grid : Grid
 
 
 @onready var cursor: Sprite3D = $Cursor
-@onready var terrain_map: GridMap = %TerrainGrid
-@onready var occupancy_map: GridMap = %OccupancyOverlay
+@onready var ui_overlay: GridMap = %TerrainGrid
+@onready var occupancy_overlay: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
 @onready var movement_weights_map: GridMap = %MovementWeightsGrid
 @onready var trigger_map: GridMap = %TriggerOverlay
@@ -83,20 +84,23 @@ const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 
-enum States {
-	PLAYING,
-	ANIMATING,
-	TRANSITION,
-	CHOOSING_ATTACK };
-var state :int = States.PLAYING;
-var game_state : GameState;
+const States = CampaignState.LevelState
+
+var state: States:
+	get: return Main.campaign.level_state
+	set(v): Main.campaign.level_state = v
+
+var is_player_turn: bool:
+	get: return Main.campaign.is_player_turn
+	set(v): Main.campaign.is_player_turn = v
+
+var game_state: GameState
 
 var is_in_menu: bool = false
 var active_move: Command
 var moves_stack: Array[Command]
 
 var current_moves: Array[Command]
-var is_player_turn: bool = true
 var unit_pos: Vector3
 var player_code: int = 0
 var player_code_done: int = 3
@@ -145,17 +149,30 @@ var monster_names := [
 ]
 
 
+func animate_diff(a: GameState, b: GameState) -> void:
+	for unit_a in a.units:
+		var unit_b := b.get_unit(unit_a.state.id)
+		if unit_a.state.grid_position != unit_b.state.grid_position:
+			animate_move(unit_b)
+
+
+func animate_move(unit: Character) -> void:
+	# Start movement animation for the unit to its new position
+	var start := unit.state.grid_position # This is old pos if unit_b has new pos? 
+	# Wait, unit_b in animate_diff is the unit from state b.
+	# If I want to animate from a to b, I need the positions.
+	pass
+
+
 func show_move_popup(window_pos :Vector2) -> void:
-	return
-	move_popup.show();
-	is_in_menu = true;
-	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
+	move_popup.show()
+	is_in_menu = true
+	move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
+	move_popup.move_button.show()
+	move_popup.wait_button.show()
+	move_popup.undo_button.show()
 	if active_move is Attack:
-		move_popup.attack_button.show();
-	elif (active_move is Wait):
-		move_popup.wait_button.show();
-	else:
-		move_popup.move_button.show();
+		move_popup.attack_button.show()
 
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
@@ -173,7 +190,7 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 
 #fens kinda wonky grid to world transform that might be crap
 func grid_to_world(pos: Vector3i) -> Vector3:
-	var world:= terrain_map.map_to_local(pos)
+	var world:= ui_overlay.map_to_local(pos)
 	return world
 
 
@@ -216,7 +233,7 @@ func get_grid_cell_from_mouse() -> Vector3i:
 	var step: float = 0.1
 	var distance: float = 0.0
 
-	var cell_size: Vector3 = movement_weights_map.cell_size
+	var cell_size: Vector3 = movement_weights_grid.cell_size
 	var best_cell: Vector3i
 	var is_best_cell := false
 
@@ -229,37 +246,36 @@ func get_grid_cell_from_mouse() -> Vector3i:
 		var z: int = int(floor(check_pos.z / cell_size.z))
 		var candidate: Vector3i = Vector3i(x, y, z)
 
-		if movement_weights_map.get_used_cells().has(candidate):
+		if movement_weights_grid.get_used_cells().has(candidate):
 			best_cell = candidate
 			is_best_cell = true
 			break
 
 		distance += step
 
-	
 	if is_best_cell != false:
 		return best_cell
 
-	return Vector3i(-999,-999,-999)  # fallback
+	return Vector3i(2147483647, 2147483647, 2147483647)  # fallback
 
 
 func get_tile_name(pos: Vector3) -> String:
-	if terrain_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+	if ui_overlay.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return "null";
-	return terrain_map.mesh_library.get_item_name(terrain_map.get_cell_item(pos));
+	return ui_overlay.mesh_library.get_item_name(ui_overlay.get_cell_item(pos));
 
 
 # Expanded the function to do some error searching
 func get_unit_name(pos : Vector3) -> String:
-	var item_id: int = occupancy_map.get_cell_item(pos)
+	var item_id: int = occupancy_overlay.get_cell_item(pos)
 	if item_id == GridMap.INVALID_CELL_ITEM:
 		return "null"
 		
-	if item_id >= occupancy_map.mesh_library.get_item_list().size():
+	if item_id >= occupancy_overlay.mesh_library.get_item_list().size():
 		push_warning("Invalid Unit MeshLibrary item: " + str(item_id) + " at position: " + str(pos))
 		return "null"
 	
-	return occupancy_map.mesh_library.get_item_name(item_id)
+	return occupancy_overlay.mesh_library.get_item_name(item_id)
 
 func get_trigger_name(pos : Vector3) -> String:
 	var trigger_id: int = trigger_map.get_cell_item(pos)
@@ -288,7 +304,7 @@ func show_attack_tiles(pos: Vector3i) -> void:
 	# Generate attack tiles
 	var tiles := MoveGenerator.get_attack_origins(
 		selected_unit,
-		game_state,
+			game_state,
 		pos,
 		reachable
 	)
@@ -297,10 +313,7 @@ func show_attack_tiles(pos: Vector3i) -> void:
 		path_map.set_cell_item(tile, 0)
 
 func _can_handle_input(event: InputEvent) -> bool:
-	##old
-	#if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
-		#return false
-	if not is_player_turn:
+	if get_grid_cell_from_mouse() == Vector3i(2147483647, 2147483647, 2147483647):
 		return false
 	
 	if state == States.ANIMATING:
@@ -319,10 +332,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 		return false
 
 	if Input.is_action_pressed("enable_dragging"):
-		return false
-	
-	if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
-		_clear_selection();
 		return false
 
 	return true
@@ -417,34 +426,19 @@ func try_select_unit(unit: Character) -> void:
 func select_unit(unit: Character) -> void:
 	# Switching unit
 	_clear_selection()
-
-	selected_unit = unit
 	
-	unit_pos = unit.state.grid_position
+	selected_unit = unit
 	_update_cursor(unit.state.grid_position)
-	emit_signal("character_selected", selected_unit)
+	emit_signal("character_selected", unit)
 
-	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	current_moves = MoveGenerator.generate(unit, game_state)
 	movement_grid.fill_from_commands(current_moves, game_state)
+	unit_pos = unit.state.grid_position
 
 
 func _handle_player_click(pos: Vector3i) -> void:
-	if is_choosing_skill_target:
-		return
-	# Heal execution shortcut
-	if selected_unit == null:
-		Tutorial.tutorial_unit_selected()
-
-	unit_pos = pos
-	movement_map.clear()
-
-	# Same unit clicked again
-	if selected_unit == get_unit(pos):
-		active_move = Wait.new(pos)
-		show_move_popup(get_viewport().get_mouse_position())
-		return
-
-	select_unit(get_unit(pos))
+	Tutorial.tutorial_unit_selected()
+	select_unit(game_state.get_unit(pos))
 
 
 func _handle_action_tile_click(pos: Vector3i) -> void:
@@ -464,7 +458,7 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 		active_move = found_move
 
 		moves_stack.append(active_move)
-		state = States.ANIMATING
+		state = CampaignState.LevelState.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
 
@@ -501,11 +495,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	print(pos)
 
 	_update_cursor(pos)
-	
-	if is_choosing_skill_target == true:
-		_handle_skill(pos)
-		return;
-	
+
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
 		_handle_attack_choice(pos)
@@ -528,90 +518,116 @@ func _unhandled_input(event: InputEvent) -> void:
 	_clear_selection()
 
 	# Enemy clicked (for info panel)
-	if get_unit(pos) and get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
+	if get_unit_name(pos) == CharacterStates.Enemy:
 		selected_enemy_unit = get_unit(pos)
-		emit_signal("enemy_selected", selected_enemy_unit)
-		print("hey an enemy has been selected ")
 
 
-func _ready() -> void:
+
+
+func _setup_environment() -> void:
 	camera_controller = Main.camera_controller
 	
-
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
 	movement_weights_map.hide()
-	occupancy_map.hide()
+	occupancy_overlay.hide()
 	path_map.clear()
 	fog_map.clear()
 
-	terrain_grid = Grid.new(terrain_map)
+	terrain_grid = Grid.new(ui_overlay)
 	occupancy_grid = Grid.new(movement_map)
 	trigger_grid = Grid.new(movement_map)
 	movement_grid = MovementGrid.new(movement_map)
 	movement_weights_grid = Grid.new(movement_weights_map)
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
-	
+
 	if (level_name == "first"):
-		Dialogic.start(str(level_name) + "Level");
-		is_in_menu = true;
+		Dialogic.start(str(level_name) + "Level")
+		is_in_menu = true
 	elif (level_name == "fen"):
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 
 	Main.battle_log = battle_log
 
-	var units: Array[Vector3i] = occupancy_map.get_used_cells()
+
+func _spawn_players(layout : Layout) -> void:
 	var characters_placed := 0
+	for pos: Vector3i in layout.player_spawn_points:
+		if characters_placed < Main.characters.size():
+			var new_unit: Character = Main.characters[characters_placed]
+			new_unit.state.is_moved = false
+			new_unit.camera = get_viewport().get_camera_3d()
+			characters_placed += 1
 
-	print("Loading new level, number of playable characters: ", Main.characters.size())
+			new_unit.position = grid_to_world(pos)
+			if new_unit.get_parent() != Main.world:
+				Main.world.add_child(new_unit)
 
-	for i in range(units.size()):
-		var pos: Vector3i = units[i]
-		var new_unit: Character = null
-
-		var unit_type : String = get_unit_name(pos)
-		if(unit_type == "00_Unit"):
-			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed]
-				new_unit.state.is_moved = false
-				new_unit.camera = get_viewport().get_camera_3d()
-				characters_placed += 1
-
-				var health := new_unit.state.current_health
-				print(
-					"This character exists: ",
-					new_unit.data.unit_name,
-					" health: ",
-					health if health > 0 else "fresh unit"
-				)
-			else:
-				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-			if new_unit:
-				new_unit.position = grid_to_world(pos)
-
-				if new_unit.get_parent() != Main.world:
-					Main.world.add_child(new_unit)
-
-				characters.append(new_unit)
-
-				if new_unit is Character:
-					new_unit.state.grid_position = pos
-					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
+			characters.append(new_unit)
+			new_unit.state.grid_position = pos
+			new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		else:
-			spawn_enemy(pos, unit_type, true)
-		
+			occupancy_overlay.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
+
+func _spawn_enemies(layout : Layout) -> void:
+	for pos: Vector3i in layout.enemy_spawn_points:
+		var unit_type := get_unit_name(pos)
+		spawn_enemy(pos, unit_type, true)
+
+
+func _spawn_chests(layout : Layout) -> void:
+	for pos: Vector3i in layout.chest_spawn_points:
+		spawn_enemy(pos, "02_Chest", true)
+
+
+func _parse_layout() -> Layout:
+	var layout := Layout.new()
+	var units: Array[Vector3i] = occupancy_overlay.get_used_cells()
+	
+	for pos: Vector3i in units:
+		var unit_type : String = get_unit_name(pos)
+		if unit_type == "00_Unit":
+			layout.player_spawn_points.append(pos)
+		elif unit_type == "02_Chest":
+			layout.chest_spawn_points.append(pos)
+		elif unit_type.contains("Enemy") or unit_type.contains("Character"):
+			layout.enemy_spawn_points.append(pos)
+	
+	return layout
+
+
+func _spawn_from_layout(layout : Layout) -> void:
+	_spawn_players(layout)
+	_spawn_enemies(layout)
+	_spawn_chests(layout)
+
+
+func _initialize_game_state() -> void:
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
 	
+	Main.campaign.game_status = CampaignState.GameStatus.PLAYING
+	Main.campaign.level_state = States.PLAYING
+	
+	Main.campaign.level_state_changed.connect(_on_level_state_changed)
+	Main.campaign.turn_changed.connect(_on_turn_changed)
+
 	game_state = GameState.from_level(self)
 	
 	turn_transition_animation_player.play()
 	add_to_group("level")
+
+
+func _ready() -> void:
+	_setup_environment()
+	var layout : Layout = _parse_layout()
+	_spawn_from_layout(layout)
+	_initialize_game_state()
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -679,7 +695,7 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.data.unit_name = monster_names.pick_random()
 			
 		_:
-			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+			occupancy_overlay.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 
 	if new_enemy:
 		new_enemy.position = grid_to_world(pos)
@@ -690,7 +706,7 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 		characters.append(new_enemy)
 		if(!_on_ready):
 			game_state.units.append(new_enemy)
-			occupancy_map.set_cell_item(pos, 6)
+			occupancy_overlay.set_cell_item(pos, 6)
 
 		if new_enemy is Character:
 			new_enemy.state.grid_position = pos
@@ -707,34 +723,37 @@ func get_unit(pos: Vector3i) -> Character:
 	return null;
 
 
-func create_path(start : Vector3i, end : Vector3i) -> void:
+func create_path(start: Vector3i, end: Vector3i) -> void:
 	animation_path.clear()
 	path_map.clear()
-	var foo0 : Command = moves_stack.front()
-	var foo1 : Vector3i = foo0.start_pos
-	var foo2 : Character = game_state.get_unit(foo1)
-	if(foo2.data.unit_name == "Tucy"):
-		pass
-	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
-	movement_grid.fill_from_commands(foo3, game_state)
 	
-	var path := movement_grid.get_path(start, end)
-
+	# Identify the moving unit at the start position
+	var mover: Character = game_state.get_unit(start)
+	if mover == null:
+		selected_unit = null
+		return
+	
+	# Build movement grid for this unit in the current simulation snapshot
+	var possible_moves: Array[Command] = MoveGenerator.generate(mover, game_state)
+	movement_grid.fill_from_commands(possible_moves, game_state)
+	
+	# Compute grid path and convert to world-space waypoints for animation
+	var path: Array[Vector3i] = movement_grid.get_path(start, end)
 	for p in path:
-		var anim_pos := grid_to_world(p)
-		animation_path.append(anim_pos)
-
-	selected_unit = get_unit(start)
+		animation_path.append(grid_to_world(p))
+	
+	# Cache the unit for animation helpers
+	selected_unit = mover
 
 
 
 
 func reset_all_units() -> void:
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
+	var units :Array[Vector3i] = occupancy_overlay.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code_done):
-			occupancy_map.set_cell_item(pos, player_code);
+		if (occupancy_overlay.get_cell_item(pos) == player_code_done):
+			occupancy_overlay.set_cell_item(pos, player_code);
 		var character: Character = get_unit(pos);
 		if character is Character:
 			var character_script: Character = character;
@@ -742,99 +761,88 @@ func reset_all_units() -> void:
 		
 
 
-func MoveAI() -> void:
-	var ai := MinimaxAI.new();
-	var current_state := GameState.from_level(self);
-	
-	
-	if current_state.has_enemy_moves():
-		var move : Command = ai.choose_best_move(current_state, 1);
-		moves_stack.append(move);
-		current_state = current_state.apply_move(move, true);
-	
-	if (moves_stack.is_empty() == false):
-		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		state = States.ANIMATING;
-		camera_controller.focus_camera(selected_unit)
-	else:
-		camera_controller.set_pivot_target_translate(Main.characters.front().position)
-		camera_controller.free_camera()
 
 func MoveSingleAI() -> void:
-	var ai := MinimaxAI.new();
-	var current_state := GameState.from_level(self);
+	var ai := MinimaxAI.new()
+	var current_simulation := GameState.from_level(self)
 	
-	var currentEnemy : Character = null
+	var current_enemy: Character = null
 	for unit in characters:
-		if unit == null:
-			continue
-		if !unit.state.is_enemy():
-			continue
-		if unit.state.is_moved:
-			continue
-		currentEnemy = unit
-		break
+		if unit and unit.state.is_enemy() and not unit.state.is_moved:
+			current_enemy = unit
+			break
 	
-	if currentEnemy != null:
-		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
-		if current_state.has_enemy_moves(curEnemyPos):
-			var move : Command = ai.choose_best_move(current_state, 3, currentEnemy);
-			moves_stack.append(move);
-			current_state = current_state.apply_move(move, true);
+	if current_enemy != null:
+		var pos := NullablePosition.new(current_enemy.state.grid_position)
+		if current_simulation.has_enemy_moves(pos):
+			var move : Command = ai.choose_best_move(current_simulation, 3, current_enemy)
+			moves_stack.append(move)
 	
-	if (moves_stack.is_empty() == false):
-		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		state = States.ANIMATING;
-		camera_controller.focus_camera(selected_unit)
+	if not moves_stack.is_empty():
+		state = CampaignState.LevelState.ANIMATING
+		camera_controller.focus_camera(current_enemy)
 		wait_for_camera = true
 		timer.start(pre_enemy_turn_wait)
 		await timer.timeout
 		wait_for_camera = false
 	else:
-		var pivot_chara : Node3D = get_selectable_characters().front()
-		if(pivot_chara == null):
-			return
+		is_player_turn = true
+		_on_turn_changed(true)
+
+func _on_turn_changed(is_player: bool) -> void:
+	_clear_selection()
+	
+	if is_player:
+		tick_all_units_end_round()
+		reset_all_units()
+		for c in characters:
+			if c: emit_signal("character_stats_changed", c)
+		
 		camera_controller.free_camera()
-		camera_controller.set_pivot_target_translate(pivot_chara.position)
+		var pivot: Character = get_selectable_characters().front()
+		if pivot:
+			camera_controller.set_pivot_target_translate(pivot.position)
+	else:
+		# Enemy turn specific setup
+		pass
+	
+	state = States.TRANSITION
 
 func CheckVictoryConditions() -> void:
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
-	var numberOfPlayerUnits :int = 0;
-	var numberOfEnemyUnits  :int = 0;
-	
-	for i in units.size():
-		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
-			if get_trigger_name(pos) == "00_Victory":
-				is_player_turn = true;
-				next_level();
-				return;
-			numberOfPlayerUnits += 1;
-			
-		elif (occupancy_map.get_cell_item(pos) >= enemy_code):
-			numberOfEnemyUnits += 1;
-	
-	if (numberOfPlayerUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
-	elif (numberOfEnemyUnits == 0):
-		is_player_turn = true;
-		next_level();
-		return;
-
-##Removing unwanted occupants and resetting movement of characters
-func next_level() -> void:
-	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
-	for i in positions.size():
-		##occupancy_map 0 == Unit, 3 == UnitDone
-		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
-			get_unit(positions[i]).reset();
-			get_unit(positions[i]).state.grid_position = Vector3i(0, 0, 0)
-
-		##Remove all other occupants, since they should not be in the next level
+	if game_state.get_legal_moves().is_empty():
+		if game_state.is_current_player_enemy:
+			get_tree().change_scene_to_file("res://scenes/states/gameover.tscn")
 		else:
-			get_unit(positions[i]).die(false)
+			get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
+
+
+func MoveAI() -> void:
+	var ai := MinimaxAI.new()
+	var current_simulation := GameState.from_level(self)
 	
-	Main.next_level()
+	var current_enemy: Character = null
+	for unit in characters:
+		if unit and unit.state.is_enemy() and not unit.state.is_moved:
+			current_enemy = unit
+			break
+	
+	if current_enemy != null:
+		var pos := NullablePosition.new(current_enemy.state.grid_position)
+		if current_simulation.has_enemy_moves(pos):
+			var move : Command = ai.choose_best_move(current_simulation, 3, current_enemy)
+			moves_stack.append(move)
+	
+	if not moves_stack.is_empty():
+		state = States.ANIMATING
+		camera_controller.focus_camera(current_enemy)
+		wait_for_camera = true
+		timer.start(pre_enemy_turn_wait)
+		await timer.timeout
+		wait_for_camera = false
+	else:
+		# No more enemies can move, switch back to player turn
+		is_player_turn = true
+		_on_turn_changed(true)
 
 func _on_character_sanity_flipped(character: Character) -> void:
 	print("heyaaa, we just flipped sanity")
@@ -961,32 +969,6 @@ func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
 	return false
 
 
-func _process(delta: float) -> void:
-	_process_old(delta)
-	return
-	
-	# FUTURE:
-	match state:
-		States.PLAYING:
-			process_playing(delta)
-		States.ANIMATING:
-			process_animating(delta)
-		States.TRANSITION:
-			process_transition(delta)
-
-
-func process_playing(delta: float) -> void:
-	pass
-
-
-func process_animating(delta: float) -> void:
-	pass
-
-
-func process_transition(delta: float) -> void:
-	pass
-
-
 func get_screen_position(sprite: Sprite3D) -> Vector2:
 	var camera := get_viewport().get_camera_3d()
 	if not camera:
@@ -998,161 +980,187 @@ func get_screen_position(sprite: Sprite3D) -> Vector2:
 	return camera.unproject_position(sprite.global_position)
 
 
-func _process_old(delta: float) -> void:
-	if (turn_transition_animation_player.is_playing()):
+func _update_ui_elements(_delta: float) -> void:
+	if turn_transition_animation_player.is_playing():
 		turn_transition.show()
 		camera_controller.lock_camera()
-		return;
-	if(!combat_vfx.is_finished()):
+	else:
+		turn_transition.hide()
+		camera_controller.unlock_camera()
+
+
+func _process(delta: float) -> void:
+	if Main.campaign.game_status != CampaignState.GameStatus.PLAYING:
 		return
+	
+	_update_ui_elements(delta)
+	
+	if turn_transition_animation_player.is_playing():
+		return
+	
+	if !combat_vfx.is_finished():
+		return
+	
 	if wait_for_camera:
 		return
-	#for i in Main.characters.size():
-		#update_side_bar(Main.characters[i], side_bar_array[i]);
-		
-	turn_transition.hide();
-	camera_controller.unlock_camera()
 	
-	if state == States.PLAYING and selected_unit and is_in_menu == false:
-		var pos :Vector3i = get_grid_cell_from_mouse();
-		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-			path_map.clear()
-			var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
-			for point in points:
-				path_map.set_cell_item(point, 0)
-	
-	if (is_in_menu):
-		return;
-	
-	CheckVictoryConditions();
-	
-	if (state == States.PLAYING):
-		if (is_animation_just_finished):
-			is_animation_just_finished = false;
-			turn_transition_animation_player.play();
-			enemy_label.hide();
-			player_label.show();
-		if (is_player_turn):
-			is_player_turn = false;
-			var units :Array[Vector3i] = occupancy_map.get_used_cells();
-			for i in units.size():
-				var pos :Vector3i = units[i];
-				if (occupancy_map.get_cell_item(pos) == player_code):
-					is_player_turn = true;
-			if (is_player_turn == false):
-				turn_transition_animation_player.play();
-				enemy_label.show();
-				player_label.hide();
-		else:
-			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
-			#reset_all_units();   ## this reset can clear states etc before enemy does their thing. 
-			#MoveAI();
-			MoveSingleAI()
-	elif (state == States.ANIMATING):
-		# Animations done: stop animating
-		if (moves_stack.is_empty()):
-			state = States.PLAYING;
-			movement_map.clear()
-			
-			if (is_player_turn == false):
-				## END OF ROUND - RESET POINT
-				## Going from enemy phase to player phase
-				is_animation_just_finished = true;
-				tick_all_units_end_round(); ## Decay effects
-				for c in Main.characters:
-					if c == null:
-						continue
-					emit_signal("character_stats_changed", c)
-				
-				reset_all_units();
-				is_player_turn = true;
-		# Done with one move, execute it and start on next
-		
-		elif (animation_path.is_empty()):
-			active_move = moves_stack.pop_front();
-			#if get_trigger_name(active_move.end_pos) == "Victory":
-				#next_level();
-				##Dialogic.start(level_name + "LevelVictory")
-			
-			active_move.prepare(game_state)
-			await combat_vfx.play_attack(active_move.result)
-			active_move.apply_damage(game_state)
-			
-			
-			#looks like this is end of player turn! 
-			
-			if is_player_turn:
-				active_move = Wait.new(active_move.end_pos)
-				show_move_popup(get_screen_position(selected_unit.sprite))
-				for character in characters:
-					if characters == null: 
-						return
-					emit_signal("character_stats_changed", character)
-			
-			var code := enemy_code;
-			if is_player_turn:
-				code = player_code_done;
-			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-			occupancy_map.set_cell_item(active_move.end_pos, code);
-			selected_unit.move_to(active_move.end_pos);
-			selected_unit.pause_anim()
-			camera_controller.free_camera()
-			_clear_selection()
+	match state:
+		States.PLAYING:
+			process_playing(delta)
+		States.ANIMATING:
+			process_animating(delta)
+		States.TRANSITION:
+			process_transition(delta)
+		States.AI_TURN:
+			MoveAI()
 
-			completed_moves.append(active_move);
-			Tutorial.tutorial_unit_moved();
-			
-			if is_player_turn == false:
-				#MoveAI(); # called after an enemy is done moving
-				if(active_move is Attack):
-					wait_for_camera = true
-					timer.start(post_enemy_attack_wait)
-					await timer.timeout
-					wait_for_camera = false
-				elif active_move is Move:
-					wait_for_camera = true
-					timer.start(post_enemy_move_wait)
-					await timer.timeout
-					wait_for_camera = false
-				MoveSingleAI() ## called after an enemy is done moving
-				## Update all character ui at the end of enemy turn, to update tickable ui elements
-				for character in Main.characters:
-					if characters == null: 
-						return
-					emit_signal("character_stats_changed", character)
 
-			
-			if (moves_stack.is_empty() == false):
-				## called after any enemy except the final enemy is done moving
-				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
-			
-			if (animation_path.is_empty() == false):
-				## called after any enemy except the final enemy is done moving
-				selected_unit.position = animation_path.pop_front();
-		## Process animation
-		else:
-			var movement_speed := 8.0 # units per second
-			var target : Vector3 = animation_path.front()
-			var dir : Vector3 = target - selected_unit.position
-			var step := movement_speed * delta
-			
-			#if the unit is very close to their next footstep in animation
-			if dir.length() <= step:
-				selected_unit.position = target
-				animation_path.pop_front()
-			#if the unit is more than a footstep away from the animation target
-			#position: move closer and move back to the if statement above
+func process_playing(_delta: float) -> void:
+	CheckVictoryConditions()
+	
+	if is_player_turn:
+		if is_in_menu:
+			return
+		
+		# Pathfinding visualization for selected unit
+		if selected_unit and not is_in_menu:
+			var pos := get_grid_cell_from_mouse()
+			if pos != Vector3i(2147483647, 2147483647, 2147483647) and movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+				path_map.clear()
+				var points := movement_grid.get_path(selected_unit.state.grid_position, pos)
+				for point in points:
+					path_map.set_cell_item(point, 0)
 			else:
-				selected_unit.position += dir.normalized() * step
-				
-				if (dir.z > 0):
-					selected_unit.play(selected_unit.run_down_animation)
-				elif (dir.z < 0):
-					selected_unit.play(selected_unit.run_up_animation)
-				elif (dir.x > 0):
-					selected_unit.play(selected_unit.run_right_animation)
-				elif (dir.x < 0):
-					selected_unit.play(selected_unit.run_left_animation)
+				path_map.clear()
+		
+		# Turn end check
+		if not _has_available_player_moves():
+			is_player_turn = false
+			_on_turn_changed(false)
+	else:
+		# AI Turn
+		MoveAI()
+
+
+func process_animating(delta: float) -> void:
+	if moves_stack.is_empty() and animation_path.is_empty():
+		_on_animation_finished()
+		return
+	
+	if animation_path.is_empty():
+		_start_next_move_animation()
+	else:
+		_update_movement_animation(delta)
+
+
+func process_transition(_delta: float) -> void:
+	if not turn_transition_animation_player.is_playing():
+		if is_player_turn:
+			state = States.PLAYING
+		else:
+			state = States.AI_TURN # Wait, AI_TURN is a separate state?
+			# If I rename AI_TURN to match the snippet, it's confusing.
+			# But I'll keep the logic as it was in my _process_transition.
+
+func _has_available_player_moves() -> bool:
+	for c in characters:
+		if not is_instance_valid(c): continue
+		if c.state.faction == CharacterState.Faction.PLAYER and c.state.is_alive:
+			if not c.state.is_moved or not c.state.is_ability_used:
+				return true
+	return false
+
+func _start_turn_transition_anim() -> void:
+	turn_transition_animation_player.play()
+	if is_player_turn:
+		player_label.show()
+		enemy_label.hide()
+	else:
+		player_label.hide()
+		enemy_label.show()
+
+func _start_next_move_animation() -> void:
+	active_move = moves_stack.pop_front()
+	active_move.prepare(game_state)
+	
+	# Execute VFX
+	await combat_vfx.play_attack(active_move.result)
+	active_move.apply_damage(game_state)
+	
+	# Update occupancy map
+	var code := enemy_code if not is_player_turn else player_code_done
+	occupancy_overlay.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM)
+	occupancy_overlay.set_cell_item(active_move.end_pos, code)
+	
+	# Start physical movement if needed
+	create_path(active_move.start_pos, active_move.end_pos)
+	# Fallback: if create_path failed to set selected_unit, try to recover
+	if selected_unit == null:
+		selected_unit = game_state.get_unit(active_move.start_pos)
+		if selected_unit == null:
+			selected_unit = game_state.get_unit(active_move.end_pos)
+	
+	if animation_path.is_empty():
+		# Instant move if no path
+		if selected_unit != null:
+			selected_unit.move_to(active_move.end_pos)
+	
+	if is_player_turn:
+		# If it was a move, maybe show popup?
+		# Currently original code does:
+		if active_move is Move and selected_unit != null and is_instance_valid(selected_unit):
+			show_move_popup(get_screen_position(selected_unit.sprite))
+
+func _update_movement_animation(delta: float) -> void:
+	if selected_unit == null or not is_instance_valid(selected_unit):
+		# Cannot continue animation safely, finish up
+		animation_path.clear()
+		_on_animation_finished()
+		return
+	
+	var movement_speed := 8.0
+	var target : Vector3 = animation_path.front()
+	var dir : Vector3 = target - selected_unit.position
+	var step := movement_speed * delta
+	
+	if dir.length() <= step:
+		selected_unit.position = target
+		animation_path.pop_front()
+		if animation_path.is_empty():
+			selected_unit.move_to(active_move.end_pos)
+			selected_unit.pause_anim()
+	else:
+		selected_unit.position += dir.normalized() * step
+		_play_run_animation(dir)
+
+func _play_run_animation(dir: Vector3) -> void:
+	if selected_unit == null or not is_instance_valid(selected_unit):
+		return
+	if abs(dir.x) > abs(dir.z):
+		if dir.x > 0: selected_unit.play(selected_unit.run_right_animation)
+		else: selected_unit.play(selected_unit.run_left_animation)
+	else:
+		if dir.z > 0: selected_unit.play(selected_unit.run_down_animation)
+		else: selected_unit.play(selected_unit.run_up_animation)
+
+func _on_animation_finished() -> void:
+	if is_player_turn:
+		state = States.PLAYING
+	else:
+		state = States.AI_TURN
+		
+	movement_map.clear()
+	path_map.clear()
+	_clear_selection()
+	camera_controller.free_camera()
+	
+	for c in characters:
+		if is_instance_valid(c): emit_signal("character_stats_changed", c)
+
+func _on_level_state_changed(_new_state: States) -> void:
+	match _new_state:
+		States.TRANSITION:
+			_start_turn_transition_anim()
 
 func end_player_turn() -> bool:
 	if !is_player_turn:
@@ -1167,13 +1175,15 @@ func end_player_turn() -> bool:
 		return false
 	if state != States.PLAYING:
 		return false
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
+	var units :Array[Vector3i] = occupancy_overlay.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code):
+		if (occupancy_overlay.get_cell_item(pos) == player_code):
 			active_move = Wait.new(pos)
 			active_move.execute(game_state);
-			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
+			occupancy_overlay.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+			occupancy_overlay.set_cell_item(active_move.end_pos, player_code_done);
+	is_player_turn = false
+	_on_turn_changed(false)
 	return true
 	

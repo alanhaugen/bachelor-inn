@@ -53,7 +53,16 @@ theme_override_fonts/font = ExtResource("2_yxb3c")
 theme_override_font_sizes/font_size = 72
 text = "Wait"
 
+[node name="UndoButton" type="Button" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_yxb3c")
+theme_override_font_sizes/font_size = 72
+text = "Undo"
+
 [connection signal="pressed" from="VBoxContainer/ItemsButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/AttackButton" to="." method="_on_attack_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/WaitButton" to="." method="_on_wait_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/UndoButton" to="." method="_on_undo_button_pressed"]

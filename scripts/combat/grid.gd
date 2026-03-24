@@ -3,6 +3,13 @@ class_name Grid
 
 var grid : GridMap
 
+var cell_size: Vector3:
+	get: return grid.cell_size
+
+
+func get_used_cells() -> Array[Vector3i]:
+	return grid.get_used_cells()
+
 
 func _init(grid_map : GridMap) -> void:
 	grid = grid_map

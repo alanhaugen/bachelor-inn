@@ -156,3 +156,30 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 		#victim.die(simulate_only);
 		#if aggressor.state.is_playable() and simulate_only == false:
 			#aggressor.state.experience += victim.data.strength;
+
+
+func undo(state : GameState, _simulate_only : bool = false) -> void:
+	# Undoing an attack move mostly means returning the unit to its original position
+	# if the player undoes from the popup.
+	var unit := state.get_unit(end_pos)
+	if unit:
+		unit.move_to(start_pos, _simulate_only)
+		if not _simulate_only:
+			unit.state.is_moved = false
+			unit.state.is_ability_used = false
+	else:
+		# Maybe it's at the start_pos still (if it hasn't moved yet)?
+		unit = state.get_unit(start_pos)
+		if unit and not _simulate_only:
+			unit.state.is_moved = false
+			unit.state.is_ability_used = false
+
+	# If the attack was already executed (damage applied), we would need to revert it.
+	# Currently, Undo in move_popup is called BEFORE execute(), so only movement needs reverting.
+	# However, if we want to support undoing a full action later:
+	if result and result.victim:
+		result.victim.state.current_health += result.damage
+		if result.killed:
+			# Re-adding a dead unit is complex because it was queue_free'd.
+			# For now, this undo is intended for the pre-action movement.
+			pass

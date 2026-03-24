@@ -4,12 +4,14 @@ extends Control
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
+@onready var undo_button: Button = $VBoxContainer/UndoButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
 
 # TODO: remove
 
 func _ready() -> void:
 	map = Main.level;
+	wait_button.text = "Pass"
 
 
 func HidePopup() -> void:
@@ -18,6 +20,7 @@ func HidePopup() -> void:
 	move_button.hide();
 	attack_button.hide();
 	wait_button.hide();
+	undo_button.hide();
 	hide();
 
 
@@ -37,9 +40,19 @@ func _on_attack_button_pressed() -> void:
 
 
 func _on_wait_button_pressed() -> void:
-	map.active_move.execute(map.game_state);
-	map.occupancy_map.set_cell_item(map.active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-	map.occupancy_map.set_cell_item(map.active_move.end_pos, map.player_code_done);
+	if map.selected_unit:
+		map.selected_unit.state.is_moved = true
+		map.selected_unit.state.is_ability_used = true
+		map.occupancy_overlay.set_cell_item(map.selected_unit.state.grid_position, map.player_code_done)
+		map.emit_signal("character_stats_changed", map.selected_unit)
+	HidePopup()
+
+
+func _on_undo_button_pressed() -> void:
+	if map.active_move:
+		map.active_move.undo(map.game_state)
+		map._clear_selection()
+		map.active_move = null
 	HidePopup()
 
 
@@ -54,6 +67,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_cancel_button_pressed() -> void:
+	if map.active_move:
+		map.active_move.undo(map.game_state)
+		map._clear_selection()
+		map.active_move = null
 	HidePopup();
-	#map.selected_unit.reset();
-	map.selected_unit = null;
