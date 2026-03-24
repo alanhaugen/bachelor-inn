@@ -6,10 +6,10 @@ class_name Attack
 var attack_pos : Vector3i;
 
 
-func _init(inStartPos : Vector3i, inEndPos : Vector3i, inNeighbour : Vector3i) -> void:
+func _init(inStartPos : Vector3i, victimPos : Vector3i, attackFromPos : Vector3i) -> void:
 	start_pos = inStartPos;
-	end_pos = inNeighbour;
-	attack_pos = inEndPos;
+	end_pos = attackFromPos;
+	attack_pos = victimPos;
 
 
 

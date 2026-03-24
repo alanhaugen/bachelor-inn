@@ -34,8 +34,19 @@ gdscript/warnings/untyped_declaration=2
 
 [dialogic]
 
-directories/dch_directory={}
-directories/dtl_directory={}
+directories/dch_directory={
+"WipGroup13": "res://dialogue/Characters/WipGroup13.dch",
+"character": "res://dialogue/character.dch"
+}
+directories/dtl_directory={
+"Showcase_Intro": "res://dialogue/Showcase_Intro.dtl",
+"firstLevel": "res://dialogue/firstLevel.dtl",
+"firstLevelVictory": "res://dialogue/firstLevelVictory.dtl",
+"tutorial1": "res://dialogue/tutorial1.dtl",
+"tutorial2": "res://dialogue/tutorial2.dtl",
+"tutorial3": "res://dialogue/tutorial3.dtl",
+"tutorial4": "res://dialogue/tutorial4.dtl"
+}
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",
 "CustomDialogicStyle": "res://dialogue/CustomDialogicStyle.tres",

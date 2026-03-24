@@ -148,9 +148,66 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	commands.append(Wait.new(start_pos))
 	return commands
 
+static func generate_attack(unit : Character, game_state : GameState) -> Array[Attack]:
+	var moves : Array[Attack]
+	if unit == null:
+		return moves
+	if unit.state.is_ability_used:
+		return moves
+	
+	var targets : Array[Vector3i]
+	
+	var start : Vector3i = unit.state.grid_position
+	var max_depth : int = unit.state.weapon.max_range
+	var min_depth : int = unit.state.weapon.min_range
+	
+	match unit.state.faction:
+		CharacterState.Faction.PLAYER:
+			
+			var consider_terrain_cost : bool = false
+			var include_start_in_output : bool = false
+			var go_through_heroes : bool = true
+			var go_through_monsters : bool = true
+			var include_hero_tiles_in_output : bool = false
+			var include_monster_tiles_in_output : bool = true
+			var go_through_empty_tiles : bool = true
+			var include_empty_tiles_in_output : bool = false
+			
+			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
+				consider_terrain_cost, include_start_in_output,
+				go_through_heroes, go_through_monsters,
+				include_hero_tiles_in_output, include_monster_tiles_in_output,
+				go_through_empty_tiles, include_empty_tiles_in_output)
+			
+		CharacterState.Faction.ENEMY:
+			
+			var consider_terrain_cost : bool = false
+			var include_start_in_output : bool = false
+			var go_through_heroes : bool = true
+			var go_through_monsters : bool = true
+			var include_hero_tiles_in_output : bool = true
+			var include_monster_tiles_in_output : bool = false
+			var go_through_empty_tiles : bool = true
+			var include_empty_tiles_in_output : bool = false
+			
+			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
+				consider_terrain_cost, include_start_in_output,
+				go_through_heroes, go_through_monsters,
+				include_hero_tiles_in_output, include_monster_tiles_in_output,
+				go_through_empty_tiles, include_empty_tiles_in_output)
+			
+		_:
+			return moves
+	
+	for target : Vector3i in targets:
+		moves.append(Attack.new(start, target, start))
+	
+	return moves;
+
 static func basic_dijkstra
 (
-	game_state : GameState, start : Vector3i, max_depth : int, 
+	game_state : GameState, start : Vector3i,
+	max_depth : int, min_depth : int = 0,
 	consider_terrain_cost : bool = false, include_start_in_output : bool = false,
 	go_through_heroes : bool = false, go_through_monsters : bool = false,
 	include_hero_tiles_in_output : bool = false, include_monster_tiles_in_output : bool = false,
@@ -200,6 +257,8 @@ static func basic_dijkstra
 			else:
 				if(!include_empty_tiles_in_output):
 					continue
+			if current_cost < min_depth:
+				continue
 			reachable.append(pos)
 
 		# Explore neighbors in XZ plane (keep your elevation logic)
