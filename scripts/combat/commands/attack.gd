@@ -93,6 +93,10 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	result.killed = victim.apply_damage(result.damage, simulate_only, aggressor, "Attack")
 	print("[DEBUG_LOG] Attack applied damage. Victim killed: ", result.killed)
 	
+	# Play SFX on result (only in real execution)
+	if not simulate_only and is_instance_valid(Main.level):
+		Main.level.play_attack_sfx(result.damage > 0)
+	
 	# sanity
 	if not simulate_only:
 		if aggressor.state.is_playable():

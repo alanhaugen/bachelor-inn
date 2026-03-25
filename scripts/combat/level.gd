@@ -81,6 +81,32 @@ const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.t
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
 
+# Sound effects
+const SFX_FOOTSTEPS: AudioStream = preload("res://audio/Effects/260214footsteps.wav")
+const SFX_SWORD_HIT: AudioStream = preload("res://audio/Effects/260214sword clash.wav")
+const SFX_MISS: AudioStream = preload("res://audio/Effects/260214misswhoosh.wav")
+const SFX_TURNSTART: AudioStream = preload("res://audio/Effects/260216Turnstart.wav")
+
+# Play a one-shot SFX
+func _play_sfx(stream: AudioStream, volume_db: float = 0.0) -> void:
+	if stream == null:
+		return
+	var p: AudioStreamPlayer = AudioStreamPlayer.new()
+	p.stream = stream
+	p.volume_db = volume_db
+	add_child(p)
+	p.finished.connect(func() -> void: p.queue_free())
+	p.play()
+
+func play_attack_sfx(hit: bool) -> void:
+	_play_sfx(SFX_SWORD_HIT if hit else SFX_MISS)
+
+func play_footsteps_sfx() -> void:
+	_play_sfx(SFX_FOOTSTEPS, -3.0)
+
+func play_turn_start_sfx() -> void:
+	_play_sfx(SFX_TURNSTART)
+
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 
@@ -375,7 +401,8 @@ func _handle_skill(pos : Vector3i) -> void:
 			" target=", target)
 
 	if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
-		_exit_skill_target_mode()
+		# Only exit if the user right-clicked (handled in _unhandled_input)
+		# Clicking an invalid tile should just do nothing, allowing the user to try again
 		return
 
 	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
@@ -573,13 +600,27 @@ func _input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		if is_choosing_skill_target:
+			_exit_skill_target_mode()
+			get_viewport().set_input_as_handled()
+			return
+		elif state == States.CHOOSING_ATTACK or state == States.CHOOSING_ENEMY:
+			state = States.PLAYING
+			path_map.clear()
+			get_viewport().set_input_as_handled()
+			return
+
+	var pos: Vector3i = get_grid_cell_from_mouse()
+	if pos != Vector3i(2147483647, 2147483647, 2147483647):
+		_update_cursor(pos)
+
 	if not _can_handle_input(event):
 		return
 	
-	var pos: Vector3i = get_grid_cell_from_mouse()
-	print(pos)
-
-	_update_cursor(pos)
+	if is_choosing_skill_target:
+		_handle_skill(pos)
+		return
 
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
@@ -1168,7 +1209,7 @@ func process_playing(_delta: float) -> void:
 			return
 		
 		# Pathfinding visualization for selected unit
-		if selected_unit and not is_in_menu:
+		if selected_unit and not is_in_menu and not is_choosing_skill_target:
 			var pos := get_grid_cell_from_mouse()
 			if pos != Vector3i(2147483647, 2147483647, 2147483647) and movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				path_map.clear()
@@ -1219,6 +1260,7 @@ func _has_available_player_moves() -> bool:
 
 func _start_turn_transition_anim() -> void:
 	turn_transition_animation_player.play()
+	play_turn_start_sfx()
 	if is_player_turn:
 		player_label.show()
 		enemy_label.hide()
@@ -1255,7 +1297,7 @@ func _start_next_move_animation() -> void:
 			selected_unit.move_to(active_move.end_pos)
 	else:
 		print("[DEBUG_LOG] Movement path size: ", animation_path.size())
-		pass
+		play_footsteps_sfx()
 
 	# If it's an attack, we need to wait for physical movement to reach end_pos 
 	# before showing VFX.
