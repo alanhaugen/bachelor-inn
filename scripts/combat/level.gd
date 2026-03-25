@@ -171,23 +171,23 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
 	
 	if active_move is Wait:
-		move_popup.pass_button.show()
-		move_popup.undo_button.show()
+		move_popup.get_node(^"VBoxContainer/PassButton").show()
+		move_popup.get_node(^"VBoxContainer/UndoButton").show()
 	else:
-		#move_popup.move_button.show()
-		move_popup.wait_button.show()
-		move_popup.undo_button.show()
+		#move_popup.get_node(^"VBoxContainer/MoveButton").show()
+		move_popup.get_node(^"VBoxContainer/WaitButton").show()
+		move_popup.get_node(^"VBoxContainer/UndoButton").show()
 		
 		# Show attack button if there is an enemy in range from current position
 		if selected_unit and selected_unit.state.weapon:
 			var min_r := selected_unit.state.weapon.min_range
 			var max_r := selected_unit.state.weapon.max_range
 			if MoveGenerator._has_enemy_in_range_from_origin(selected_unit.state.grid_position, min_r, max_r, selected_unit, game_state):
-				move_popup.attack_button.show()
+				move_popup.get_node(^"VBoxContainer/AttackButton").show()
 			else:
-				move_popup.attack_button.hide()
+				move_popup.get_node(^"VBoxContainer/AttackButton").hide()
 		else:
-			move_popup.attack_button.hide()
+			move_popup.get_node(^"VBoxContainer/AttackButton").hide()
 
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
@@ -421,28 +421,34 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 func initiate_attack_selection() -> void:
 	is_in_menu = false
 	path_map.clear()
+	movement_map.clear()
 	
 	var unit := selected_unit
-	if not unit: return
+	if not unit: 
+		print("[DEBUG_LOG] initiate_attack_selection: No unit selected!")
+		return
 	
-	var origin := unit.state.grid_position
-	var min_r := unit.state.weapon.min_range
-	var max_r := unit.state.weapon.max_range
+	var reachable: Array[Vector3i] = []
+	if not unit.state.is_moved:
+		for cmd in current_moves:
+			if cmd is Move:
+				reachable.append(cmd.end_pos)
 	
-	# Highlight all tiles containing enemies in range
-	for dx in range(-max_r, max_r + 1):
-		for dz in range(-max_r, max_r + 1):
-			var dist : int = abs(dx) + abs(dz)
-			if dist < min_r or dist > max_r:
-				continue
-			
-			var target_pos := origin + Vector3i(dx, 0, dz)
-			var tiles := game_state.get_tiles_at_xz(target_pos.x, target_pos.z)
-			for t in tiles:
-				if abs(t.y - origin.y) <= 1:
-					var target_unit := game_state.get_unit(t)
-					if target_unit and target_unit.state.faction != unit.state.faction and target_unit.state.faction != CharacterState.Faction.NEUTRAL:
-						path_map.set_cell_item(t, 0) # Highlighting the enemy tile
+	# Include current position as a reachable origin for attack range calculation
+	var range_tiles := MoveGenerator.get_attack_range_tiles(unit, game_state, reachable)
+	
+	# Highlight ONLY tiles with enemies
+	var found_targets := false
+	for t in range_tiles:
+		var target_unit := game_state.get_unit(t)
+		if target_unit and target_unit.state.faction != unit.state.faction and target_unit.state.faction != CharacterState.Faction.NEUTRAL:
+			path_map.set_cell_item(t, 0) # Highlighting the enemy tile
+			found_targets = true
+	
+	if not found_targets:
+		print("[DEBUG_LOG] No enemies in range.")
+		# If no enemies, maybe we should go back? 
+		# But the UI button shouldn't have been shown if no enemies.
 	
 	state = States.CHOOSING_ENEMY
 
@@ -454,14 +460,21 @@ func _handle_enemy_choice(pos: Vector3i) -> void:
 	if not victim:
 		return
 
-	# Already moved to selected_unit.state.grid_position
-	var current_pos := selected_unit.state.grid_position
-	var new_attack := Attack.new(current_pos, pos, current_pos)
-	
-	moves_stack.clear()
-	moves_stack.append(new_attack)
-	state = States.ANIMATING
+	# If the unit already moved, execute the attack immediately from current position
+	if selected_unit.state.is_moved:
+		active_move = Attack.new(selected_unit.state.grid_position, pos, selected_unit.state.grid_position)
+		moves_stack.clear()
+		moves_stack.append(active_move)
+		state = States.ANIMATING
+		path_map.clear()
+		return
+
+	# Otherwise, we allow choosing an origin tile (the "attack move" logic)
+	# Set an active move for the attack to hold the target
+	active_move = Attack.new(selected_unit.state.grid_position, pos, selected_unit.state.grid_position)
 	path_map.clear()
+	show_attack_tiles(pos)
+	state = States.CHOOSING_ATTACK
 
 
 func _is_invalid_tile(pos: Vector3i) -> bool:
@@ -976,6 +989,14 @@ func tick_all_units_end_round() -> void:
 		c.state.tick_effects_end_round(c)
 
 
+func _on_ribbon_attack_pressed() -> void:
+	if selected_unit != null and selected_unit.state.has_preformed_action:
+		print("Unit has already performed an action this turn.")
+		return
+	
+	movement_map.clear()
+	initiate_attack_selection()
+
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
 	if selected_unit != null and selected_unit.state.is_ability_used:
@@ -1145,6 +1166,8 @@ func process_playing(_delta: float) -> void:
 
 func process_animating(delta: float) -> void:
 	if moves_stack.is_empty() and animation_path.is_empty() and not _is_processing_move:
+		if is_in_menu:
+			return # Wait for the popup menu to be closed
 		_on_animation_finished()
 		return
 	
