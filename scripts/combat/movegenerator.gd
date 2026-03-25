@@ -34,8 +34,8 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	# -------------------------
 	while frontier.size() > 0:
 		# lowest cost first
-		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
-		var current: Array = frontier.pop_front()
+		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] > b[1])
+		var current: Array = frontier.pop_back()
 		var pos: Vector3i = current[0]
 		var current_cost: int = current[1]
 
