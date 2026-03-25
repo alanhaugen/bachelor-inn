@@ -32,7 +32,7 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 4, 0)
 
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.909786, -4.7879806, 1.962799)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.909786, -4.216239, 1.3894602)
 visible = true
 light_color = Color(0.6176543, 0.65415645, 0.9665578, 1)
 light_energy = 4.354
@@ -55,13 +55,13 @@ shadow_enabled = true
 omni_range = 27.256
 
 [node name="Water" parent="." index="18" unique_id=108789974 instance=ExtResource("2_baqsr")]
-transform = Transform3D(163.91537, 0, 0, 0, 0.6568207, 0, 0, 0, 98.5357, 18.326813, 0.09487867, 16.482395)
+transform = Transform3D(43.37941, 0, 0, 0, 0.6568207, 0, 0, 0, 21.911087, 18.326813, 0.09487867, 16.482395)
 
 [node name="FireParticle" parent="." index="19" unique_id=845713826 instance=ExtResource("3_baqsr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.043982, 0.8930712, 6.983325)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.043982, 0.60743, 6.983325)
 
 [node name="Fireflies" parent="." index="20" unique_id=445268096 instance=ExtResource("4_034s2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.87152, 2.1831207, 2.9822345)
 
 [node name="Waterfall_Smoke" parent="." index="21" unique_id=511753639 instance=ExtResource("5_0oyyt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.225813, 0.4672637, 1.7820354)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.225813, 0.4353149, 1.7820354)
