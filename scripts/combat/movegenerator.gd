@@ -204,7 +204,7 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 	
 	return moves;
 
-static func generate_move(unit : Character, game_state : GameState) -> Array[Move]:
+static func generate_move(unit : Character, game_state : GameState, store_path : bool = false) -> Array[Move]:
 	var moves : Array[Move]
 	if unit == null:
 		return moves
@@ -233,7 +233,8 @@ static func generate_move(unit : Character, game_state : GameState) -> Array[Mov
 				consider_terrain_cost, include_start_in_output,
 				go_through_heroes, go_through_monsters,
 				include_hero_tiles_in_output, include_monster_tiles_in_output,
-				go_through_empty_tiles, include_empty_tiles_in_output)
+				go_through_empty_tiles, include_empty_tiles_in_output,
+				store_path)
 			
 		CharacterState.Faction.ENEMY:
 			
@@ -260,6 +261,27 @@ static func generate_move(unit : Character, game_state : GameState) -> Array[Mov
 	
 	return moves;
 
+## a dictionary of positions, where the value is the previous position to get to a position.
+## The initial position has itself as parent
+static var movement_path : Dictionary[Vector3i, Vector3i] = {}
+
+## returns an array of positiond. order is from to_pos to root node.
+## array is empty if no path was found
+static func get_movement_path_array(to_pos : Vector3i) -> Array[Vector3i]:
+	var path : Array[Vector3i] = []
+	if !movement_path.has(to_pos):
+		return path
+	var visited : Dictionary[Vector3i, bool] = {}
+	var current : Vector3i = to_pos
+	
+	while true:
+		if visited.has(current):
+			break
+		visited[current] = true
+		path.append(current)
+		current = movement_path[current]
+	return path
+
 static func basic_dijkstra
 (
 	game_state : GameState, start : Vector3i,
@@ -267,7 +289,8 @@ static func basic_dijkstra
 	consider_terrain_cost : bool = false, include_start_in_output : bool = false,
 	go_through_heroes : bool = false, go_through_monsters : bool = false,
 	include_hero_tiles_in_output : bool = false, include_monster_tiles_in_output : bool = false,
-	go_through_empty_tiles : bool = true, include_empty_tiles_in_output : bool = true
+	go_through_empty_tiles : bool = true, include_empty_tiles_in_output : bool = true,
+	store_path : bool = false
 ) -> Array[Vector3i]:
 	var level : Level = Main.level
 	# Priority queue: [pos, cost]
@@ -279,6 +302,10 @@ static func basic_dijkstra
 
 	frontier.append([start, 0])
 	cost_so_far[start] = 0
+	
+	if store_path:
+		movement_path.clear()
+		movement_path[start] = start
 	
 	if include_start_in_output:
 		reachable.append(start)
@@ -377,6 +404,8 @@ static func basic_dijkstra
 			if not cost_so_far.has(neighbor) or new_cost < int(cost_so_far[neighbor]):
 				cost_so_far[neighbor] = new_cost
 				frontier.append([neighbor, new_cost])
+				if store_path:
+					movement_path[neighbor] = pos
 	return reachable
 
 static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
