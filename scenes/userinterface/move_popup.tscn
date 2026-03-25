@@ -45,6 +45,14 @@ theme_override_fonts/font = ExtResource("2_yxb3c")
 theme_override_font_sizes/font_size = 72
 text = "Attack"
 
+[node name="AbilitiesButton" type="Button" parent="VBoxContainer" unique_id=1291921703]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_yxb3c")
+theme_override_font_sizes/font_size = 72
+text = "Abilities"
+
 [node name="WaitButton" type="Button" parent="VBoxContainer" unique_id=91999673]
 visible = false
 layout_mode = 2
@@ -69,9 +77,24 @@ theme_override_fonts/font = ExtResource("2_yxb3c")
 theme_override_font_sizes/font_size = 72
 text = "Undo"
 
+[node name="AbilitiesVBox" type="VBoxContainer" parent="." unique_id=597825819]
+visible = false
+layout_mode = 0
+offset_right = 58.0
+offset_bottom = 101.0
+
+[node name="BackButton" type="Button" parent="AbilitiesVBox" unique_id=1291921704]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_fonts/font = ExtResource("2_yxb3c")
+theme_override_font_sizes/font_size = 72
+text = "Back"
+
 [connection signal="pressed" from="VBoxContainer/ItemsButton" to="." method="_on_cancel_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/MoveButton" to="." method="_on_move_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/AttackButton" to="." method="_on_attack_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/AbilitiesButton" to="." method="_on_abilities_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/WaitButton" to="." method="_on_wait_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/PassButton" to="." method="_on_pass_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/UndoButton" to="." method="_on_undo_button_pressed"]
+[connection signal="pressed" from="AbilitiesVBox/BackButton" to="." method="_on_back_button_pressed"]

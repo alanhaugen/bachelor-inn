@@ -61,7 +61,7 @@ var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
 var is_choosing_skill_target: bool = false
 var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
-var move_popup: Control;
+var move_popup: MovePopup;
 #var stat_popup_player: Control;
 #var side_bar_array : Array[SideBar];
 #var stat_popup_enemy: Control;
@@ -169,6 +169,9 @@ func show_move_popup(window_pos :Vector2) -> void:
 	move_popup.show()
 	is_in_menu = true
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y)
+	
+	if selected_unit:
+		move_popup.add_abilities(selected_unit)
 	
 	if active_move is Wait:
 		move_popup.get_node(^"VBoxContainer/PassButton").show()
@@ -1015,6 +1018,26 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	
 	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
+
+
+func can_use_skill(caster: Character, skill: Skill) -> bool:
+	if caster == null or skill == null:
+		return false
+	
+	var origin := caster.state.grid_position
+	for unit in characters:
+		if not is_instance_valid(unit) or not unit.state.is_alive:
+			continue
+		
+		var pos := unit.state.grid_position
+		var dist : int = abs(pos.x - origin.x) + abs(pos.z - origin.z)
+		var dy := pos.y - origin.y
+		
+		# Matching _get_tiles_in_manhattan_range default y range
+		if dist >= skill.min_range and dist <= skill.max_range and dy >= -1 and dy < 5:
+			if _is_valid_target(unit, skill, caster):
+				return true
+	return false
 
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	#valid_skill_target_tiles.clear()
