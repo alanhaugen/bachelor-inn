@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct4w2k1pi2opv"
-path.s3tc="res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.s3tc.ctex"
-path.etc2="res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.etc2.ctex"
+uid="uid://dc088xexytxy7"
+path.s3tc="res://.godot/imported/SmallFlame.png-3508ad97717101aaa461df9ef7fbfc73.s3tc.ctex"
+path.etc2="res://.godot/imported/SmallFlame.png-3508ad97717101aaa461df9ef7fbfc73.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://art/textures/ParticleTex/LightShaft_Particle.png"
-dest_files=["res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.s3tc.ctex", "res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.etc2.ctex"]
+source_file="res://art/textures/ParticleTex/SmallFlame.png"
+dest_files=["res://.godot/imported/SmallFlame.png-3508ad97717101aaa461df9ef7fbfc73.s3tc.ctex", "res://.godot/imported/SmallFlame.png-3508ad97717101aaa461df9ef7fbfc73.etc2.ctex"]
 
 [params]
 

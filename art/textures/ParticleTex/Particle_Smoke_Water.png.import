@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ct4w2k1pi2opv"
-path.s3tc="res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.s3tc.ctex"
-path.etc2="res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.etc2.ctex"
+uid="uid://c72j30qgh4sni"
+path.s3tc="res://.godot/imported/Particle_Smoke_Water.png-da7b78dc80c757cd949f42de307ac959.s3tc.ctex"
+path.etc2="res://.godot/imported/Particle_Smoke_Water.png-da7b78dc80c757cd949f42de307ac959.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://art/textures/ParticleTex/LightShaft_Particle.png"
-dest_files=["res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.s3tc.ctex", "res://.godot/imported/LightShaft_Particle.png-95250ff9fca734e96bc3575b4a8bd6b0.etc2.ctex"]
+source_file="res://art/textures/ParticleTex/Particle_Smoke_Water.png"
+dest_files=["res://.godot/imported/Particle_Smoke_Water.png-da7b78dc80c757cd949f42de307ac959.s3tc.ctex", "res://.godot/imported/Particle_Smoke_Water.png-da7b78dc80c757cd949f42de307ac959.etc2.ctex"]
 
 [params]
 

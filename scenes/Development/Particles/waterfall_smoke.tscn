@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://b8jbk4xcnx6wf"]
+
+[ext_resource type="Texture2D" uid="uid://c72j30qgh4sni" path="res://art/textures/ParticleTex/Particle_Smoke_Water.png" id="1_e2138"]
+[ext_resource type="Shader" uid="uid://8rc6wbexjdu5" path="res://scenes/Development/Particles/waterfall_smoke.gdshader" id="2_y5ktk"]
+
+[sub_resource type="Curve" id="Curve_wkorp"]
+_limits = [0.0, 4.0, 0.0, 1.0]
+_data = [Vector2(0, 1.90625), 0.0, 0.0, 0, 0, Vector2(1, 2.59375), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8onu1"]
+curve = SubResource("Curve_wkorp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ft1en"]
+emission_shape = 3
+emission_box_extents = Vector3(3, 0.035, 0.43)
+direction = Vector3(0, 1, 0)
+spread = 29.024
+initial_velocity_min = 0.19999999
+initial_velocity_max = 0.5
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_8onu1")
+anim_speed_min = 0.45
+anim_speed_max = 0.81
+anim_offset_max = 0.2704
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0jnfi"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_e2138")
+texture_filter = 2
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 5
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_en7r1"]
+material = SubResource("StandardMaterial3D_0jnfi")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fmr10"]
+render_priority = 3
+shader = ExtResource("2_y5ktk")
+
+[sub_resource type="QuadMesh" id="QuadMesh_6bcfb"]
+material = SubResource("ShaderMaterial_fmr10")
+
+[node name="Waterfall_Smoke" type="Node3D" unique_id=511753639]
+
+[node name="Smoke" type="GPUParticles3D" parent="." unique_id=1882407499]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43167627, 0)
+cast_shadow = 0
+amount = 12
+process_material = SubResource("ParticleProcessMaterial_ft1en")
+draw_pass_1 = SubResource("QuadMesh_en7r1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1329981037]
+transform = Transform3D(6.136019, 0, 0, 0, 1.7436428, 0, 0, 0, 1, 0, 0.53844666, -0.74429214)
+mesh = SubResource("QuadMesh_6bcfb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=552450859]
+transform = Transform3D(-6.136019, 6.663106e-15, 8.742278e-08, 5.364278e-07, 7.621705e-08, 1, 0, 1.7436428, -4.371139e-08, 0, -0.28722763, 0.13570386)
+mesh = SubResource("QuadMesh_6bcfb")
