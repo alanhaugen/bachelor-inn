@@ -9,7 +9,8 @@ var start_pos : Vector3i
 var end_pos : Vector3i
 
 func execute(_state : GameState, _simulate_only : bool = false) -> void:
-	pass;
+	prepare(_state, _simulate_only)
+	apply_damage(_state, _simulate_only)
 
 func prepare(_state: GameState, _simulate_only : bool = false) -> void:
 	pass;

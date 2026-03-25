@@ -95,9 +95,12 @@ var game_state : GameState;
 enum Character_Turn_Stage {
 	NONE,
 	SELECT_MOVE,
+	ACTION_MENU,
 	SELECT_ATTACK_TARGET
 }
 var character_turn_stage : Character_Turn_Stage = Character_Turn_Stage.NONE
+var previous_action : Command = null
+var undo : bool = false
 #endregion
 
 var is_in_menu: bool = false
@@ -166,7 +169,8 @@ func show_move_popup(window_pos :Vector2) -> void:
 		move_popup.wait_button.show();
 	else:
 		move_popup.move_button.show();
-
+	if previous_action is Move:
+		move_popup.undo_button.show()
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 	var space_state: PhysicsDirectSpaceState3D = get_world_3d().direct_space_state;
@@ -460,6 +464,7 @@ func _handle_player_click_old(pos: Vector3i) -> void:
 
 	# Same unit clicked again
 	if selected_unit == get_unit(pos):
+		previous_action = active_move
 		active_move = Wait.new(pos)
 		show_move_popup(get_viewport().get_mouse_position())
 		return
@@ -507,6 +512,7 @@ func _handle_action_tile_click_old(pos: Vector3i) -> void:
 	movement_map.clear()
 
 func _handle_action_tile_click(pos: Vector3i) -> void:
+	previous_action = active_move
 	active_move = null
 
 	var found_move : Move = null
@@ -555,6 +561,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		Character_Turn_Stage.SELECT_MOVE:
 			if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 				_handle_action_tile_click(pos)
+				character_turn_stage = Character_Turn_Stage.ACTION_MENU
+		Character_Turn_Stage.ACTION_MENU:
+			pass
 
 func _unhandles_input_old(event: InputEvent) -> void:
 	if not _can_handle_input(event):
@@ -744,7 +753,8 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 		new_enemy.position = grid_to_world(pos)
 
 		if new_enemy.get_parent() != Main.world:
-			Main.world.add_child(new_enemy)
+			#Main.world.add_child(new_enemy)
+			add_child(new_enemy)
 
 		characters.append(new_enemy)
 		if(!_on_ready):
@@ -1115,9 +1125,9 @@ func _process_old(delta: float) -> void:
 			#reset_all_units();   ## this reset can clear states etc before enemy does their thing. 
 			#MoveAI();
 			MoveSingleAI()
-	elif (state == States.ANIMATING):
+	elif state == States.ANIMATING:
 		# Animations done: stop animating
-		if (moves_stack.is_empty()):
+		if moves_stack.is_empty():
 			state = States.PLAYING;
 			movement_map.clear()
 			
@@ -1134,9 +1144,11 @@ func _process_old(delta: float) -> void:
 				reset_all_units();
 				is_player_turn = true;
 				character_turn_stage = Character_Turn_Stage.NONE
+				previous_action = null
 		# Done with one move, execute it and start on next
 		
-		elif (animation_path.is_empty()):
+		elif animation_path.is_empty():
+			previous_action = active_move
 			active_move = moves_stack.pop_front();
 			#if get_trigger_name(active_move.end_pos) == "Victory":
 				#next_level();
@@ -1147,7 +1159,7 @@ func _process_old(delta: float) -> void:
 			active_move.apply_damage(game_state)
 			
 			
-			#looks like this is end of player turn! 
+			#looks like this is end of player unit movement! 
 			
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
@@ -1245,3 +1257,36 @@ func end_player_turn() -> bool:
 			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
 	return true
 	
+func undo_move() -> void:
+	if previous_action is Move:
+		var move_action : Move = previous_action as Move
+		active_move = null
+		previous_action = null
+		
+		selected_unit = get_unit(move_action.end_pos)
+		
+		move_action.undo(game_state)
+		undo = true
+		
+		#selected_unit.move_to(move_action.start_pos);
+		var new_pos : Vector3 = grid_to_world(selected_unit.state.grid_position)
+		selected_unit.position = new_pos
+		character_stats_changed.emit(selected_unit)
+		if character_turn_stage == Character_Turn_Stage.ACTION_MENU:
+			character_turn_stage = Character_Turn_Stage.SELECT_MOVE
+			
+
+#func update_level_from_game_state(g_state : GameState) -> void:
+	#var state_units : Array[Character] = g_state.units
+	#var player_units : Array[Character] = []
+	#var other_units : Array[Character] = []
+	#for u in state_units:
+		#if u == null:
+			#continue
+		#match u.state.faction:
+			#CharacterState.Faction.PLAYER:
+				#player_units.append(u)
+			#_:
+				#other_units.append(u)
+	#Main.characters = player_units
+	#characters = other_units

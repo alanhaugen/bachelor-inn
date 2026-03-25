@@ -1,11 +1,12 @@
 extends Control
 class_name MovePopup
 
-@onready var map: Node;
+@onready var map: Level;
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
 @onready var cancel_button: Button = $VBoxContainer/CancelButton
+@onready var undo_button : Button = $VBoxContainer/UndoButton
 
 # TODO: remove
 
@@ -19,6 +20,7 @@ func HidePopup() -> void:
 	move_button.hide();
 	attack_button.hide();
 	wait_button.hide();
+	undo_button.hide()
 	hide();
 
 
@@ -61,4 +63,5 @@ func _on_cancel_button_pressed() -> void:
 
 
 func _on_undo_button_pressed() -> void:
-	pass # Replace with function body.
+	HidePopup()
+	map.undo_move()
