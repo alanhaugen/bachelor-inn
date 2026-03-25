@@ -14,7 +14,8 @@ enum LevelState {
 	CHOOSING_ATTACK, ## Selecting a target for an attack/skill
 	ANIMATING,      ## Playing out unit actions
 	TRANSITION,     ## Switching turns
-	AI_TURN         ## AI is thinking/acting
+	AI_TURN,         ## AI is thinking/acting
+	CHOOSING_ENEMY   ## Selecting an enemy to attack AFTER moving
 }
 
 signal game_status_changed(new_status: GameStatus)

@@ -177,8 +177,17 @@ func show_move_popup(window_pos :Vector2) -> void:
 		#move_popup.move_button.show()
 		move_popup.wait_button.show()
 		move_popup.undo_button.show()
-		if active_move is Attack:
-			move_popup.attack_button.show()
+		
+		# Show attack button if there is an enemy in range from current position
+		if selected_unit and selected_unit.state.weapon:
+			var min_r := selected_unit.state.weapon.min_range
+			var max_r := selected_unit.state.weapon.max_range
+			if MoveGenerator._has_enemy_in_range_from_origin(selected_unit.state.grid_position, min_r, max_r, selected_unit, game_state):
+				move_popup.attack_button.show()
+			else:
+				move_popup.attack_button.hide()
+		else:
+			move_popup.attack_button.hide()
 
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
@@ -409,6 +418,51 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	# Start the animation sequence
 	state = States.ANIMATING
 
+func initiate_attack_selection() -> void:
+	is_in_menu = false
+	path_map.clear()
+	
+	var unit := selected_unit
+	if not unit: return
+	
+	var origin := unit.state.grid_position
+	var min_r := unit.state.weapon.min_range
+	var max_r := unit.state.weapon.max_range
+	
+	# Highlight all tiles containing enemies in range
+	for dx in range(-max_r, max_r + 1):
+		for dz in range(-max_r, max_r + 1):
+			var dist : int = abs(dx) + abs(dz)
+			if dist < min_r or dist > max_r:
+				continue
+			
+			var target_pos := origin + Vector3i(dx, 0, dz)
+			var tiles := game_state.get_tiles_at_xz(target_pos.x, target_pos.z)
+			for t in tiles:
+				if abs(t.y - origin.y) <= 1:
+					var target_unit := game_state.get_unit(t)
+					if target_unit and target_unit.state.faction != unit.state.faction and target_unit.state.faction != CharacterState.Faction.NEUTRAL:
+						path_map.set_cell_item(t, 0) # Highlighting the enemy tile
+	
+	state = States.CHOOSING_ENEMY
+
+func _handle_enemy_choice(pos: Vector3i) -> void:
+	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return
+
+	var victim := game_state.get_unit(pos)
+	if not victim:
+		return
+
+	# Already moved to selected_unit.state.grid_position
+	var current_pos := selected_unit.state.grid_position
+	var new_attack := Attack.new(current_pos, pos, current_pos)
+	
+	moves_stack.clear()
+	moves_stack.append(new_attack)
+	state = States.ANIMATING
+	path_map.clear()
+
 
 func _is_invalid_tile(pos: Vector3i) -> bool:
 	return get_tile_name(pos) == "Water"
@@ -516,6 +570,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_handle_attack_choice(pos)
 		# Clear moves_stack here after it's been used or before it's used?
 		# Actually _handle_attack_choice appends to it.
+		return
+
+	if state == States.CHOOSING_ENEMY:
+		_handle_enemy_choice(pos)
 		return
 
 	if _is_invalid_tile(pos):
