@@ -38,9 +38,9 @@ func _on_attack_button_pressed() -> void:
 	#map.a_star(map.moves_stack.front().start_pos, map.moves_stack.front().end_pos, false);
 	#map.state = map.States.ANIMATING;
 	
+	HidePopup();
 	map.click_attack_button()
 	
-	HidePopup();
 
 
 func _on_wait_button_pressed() -> void:

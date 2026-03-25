@@ -96,7 +96,7 @@ enum Character_Turn_Stage {
 	NONE,
 	SELECT_MOVE,
 	ACTION_MENU,
-	SELECT_ATTACK_TARGET
+	SELECT_ATTACK
 }
 var character_turn_stage : Character_Turn_Stage = Character_Turn_Stage.NONE
 var previous_action : Command = null
@@ -287,7 +287,7 @@ func get_trigger_name(pos : Vector3) -> String:
 	
 	return trigger_map.mesh_library.get_item_name(trigger_id)
 
-func show_attack_tiles(pos: Vector3i) -> void:
+func show_attack_tiles_old(pos: Vector3i) -> void:
 	path_map.clear()
 
 	var reachable: Array[Vector3i] = []
@@ -310,6 +310,16 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 	for tile: Vector3i in tiles:
 		path_map.set_cell_item(tile, 0)
+
+func show_attack_tiles() -> void:
+	path_map.clear()
+
+	for action : Command in possible_attacks:
+		if not action is Attack:
+			continue
+		var attack_action : Attack = action as Attack
+		path_map.set_cell_item(attack_action.attack_pos, 0)
+	path_map.show()
 
 func _can_handle_input(event: InputEvent) -> bool:
 	##old
@@ -397,7 +407,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
 
-func _handle_attack_choice(pos: Vector3i) -> void:
+func _handle_attack_choice_old(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return
 
@@ -411,6 +421,38 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 
 	state = States.ANIMATING
 
+func _handle_attack_choice(pos: Vector3i) -> void:
+	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		return
+	
+	var found_attack : Command = null
+	
+	for action in possible_attacks:
+		if action == null:
+			continue
+		var attack : Attack = action as Attack
+		if attack.attack_pos == pos:
+			found_attack = action
+		
+	
+	if found_attack == null:
+		push_error("ERROR: NO ATTACK FOUND DURING HANDLE ATTACK CHOICES")
+		return
+	
+	path_map.clear()
+	
+	previous_action = active_move
+	active_move = found_attack
+	moves_stack.append(active_move)
+	
+	#create_path(
+		#moves_stack.front().start_pos,
+		#moves_stack.front().end_pos
+	#)
+	animation_path.append(grid_to_world(pos))
+	state = States.ANIMATING
+	var unit : Character = get_unit(pos)
+	select_unit(unit)
 
 
 func can_handle_ui_input() -> bool:
@@ -449,9 +491,6 @@ func select_unit(unit: Character) -> void:
 	_update_cursor(unit.state.grid_position)
 	emit_signal("character_selected", selected_unit)
 
-	current_moves = MoveGenerator.generate_move(selected_unit, game_state, true)
-	movement_grid.fill_from_commands(current_moves, game_state)
-
 func _handle_player_click_old(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
 		return
@@ -480,6 +519,8 @@ func _handle_player_click(pos : Vector3i) -> void:
 	unit_pos = pos
 	movement_map.clear()
 	select_unit(unit)
+	current_moves = MoveGenerator.generate_move(selected_unit, game_state, true)
+	movement_grid.fill_from_commands(current_moves, game_state)
 
 func _handle_action_tile_click_old(pos: Vector3i) -> void:
 	active_move = null
@@ -505,7 +546,7 @@ func _handle_action_tile_click_old(pos: Vector3i) -> void:
 	elif found_attack != null:
 		active_move = found_attack
 
-		show_attack_tiles(pos)
+		show_attack_tiles_old(pos)
 		state = States.CHOOSING_ATTACK
 
 	movement_map.clear()
@@ -565,8 +606,11 @@ func _unhandled_input(event: InputEvent) -> void:
 				character_turn_stage = Character_Turn_Stage.ACTION_MENU
 		Character_Turn_Stage.ACTION_MENU:
 			pass
+		Character_Turn_Stage.SELECT_ATTACK:
+			_handle_attack_choice(pos)
+			character_turn_stage = Character_Turn_Stage.NONE
 
-func _unhandles_input_old(event: InputEvent) -> void:
+func _unhandled_input_old(event: InputEvent) -> void:
 	if not _can_handle_input(event):
 		return
 	
@@ -581,7 +625,7 @@ func _unhandles_input_old(event: InputEvent) -> void:
 	
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
-		_handle_attack_choice(pos)
+		_handle_attack_choice_old(pos)
 		return
 
 	# Player unit clicked
@@ -789,7 +833,7 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	var path : Array[Vector3i] = movement_grid.get_path(start, end)
 
 	for p in path:
-		var anim_pos := grid_to_world(p)
+		var anim_pos : Vector3 = grid_to_world(p)
 		animation_path.append(anim_pos)
 
 	selected_unit = get_unit(start)
@@ -1163,8 +1207,9 @@ func _process_old(delta: float) -> void:
 			#looks like this is end of player unit movement! 
 			
 			if is_player_turn:
-				active_move = Wait.new(active_move.end_pos)
-				show_move_popup(get_screen_position(selected_unit.sprite))
+				if character_turn_stage == Character_Turn_Stage.ACTION_MENU:
+					active_move = Wait.new(active_move.end_pos)
+					show_move_popup(get_screen_position(selected_unit.sprite))
 				for character in characters:
 					if characters == null: 
 						return
@@ -1279,6 +1324,8 @@ func undo_move() -> void:
 			_clear_selection()
 
 func click_attack_button() -> void:
+	show_attack_tiles()
+	character_turn_stage = Character_Turn_Stage.SELECT_ATTACK
 	pass
 	
 
