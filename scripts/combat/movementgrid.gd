@@ -9,12 +9,27 @@ var used_cells : Dictionary = {} # Vector3i -> bool
 
 #region methods
 func _init(movement_overlay : GridMap) -> void:
+	super(movement_overlay)
 	grid = movement_overlay
-	grid.clear();
+	grid.clear()
 
 
 func get_cost(pos : Vector3i) -> int:
 	return cost_map.get(pos, 1)
+
+
+func is_walkable(pos: Vector3i, from_pos: Vector3i = pos) -> bool:
+	if not super.is_walkable(pos):
+		return false
+	
+	if from_pos != pos and abs(pos.y - from_pos.y) > 1:
+		return false
+	
+	# Check if this is an INTERACT tile, which we don't want to include in A*
+	if grid.get_cell_item(pos) == GridTile.Type.INTERACT:
+		return false
+		
+	return true
 
 
 func is_blocked(pos : Vector3i) -> bool:
@@ -96,7 +111,7 @@ func get_walkable_neighbors(current: Vector3i) -> Array[Vector3i]:
 				if dx == 0 and dy == 0 and dz == 0:
 					continue
 				
-				var neighbor: Vector3i = current + Vector3i(dx, dy, dz)
+				var neighbor := Vector3i(current.x + dx, current.y + dy, current.z + dz)
 				
 				# Only allow moves that are:
 				# 1. horizontal (dx or dz only)
