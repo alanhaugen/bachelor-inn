@@ -162,17 +162,19 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[C
 	var max_depth : int = unit.state.weapon.max_range
 	var min_depth : int = unit.state.weapon.min_range
 	
+	var consider_terrain_cost : bool = false
+	var include_start_in_output : bool = false
+	var go_through_heroes : bool = true
+	var go_through_monsters : bool = true
+	
+	var go_through_empty_tiles : bool = true
+	var include_empty_tiles_in_output : bool = false
+	
 	match unit.state.faction:
 		CharacterState.Faction.PLAYER:
 			
-			var consider_terrain_cost : bool = false
-			var include_start_in_output : bool = false
-			var go_through_heroes : bool = true
-			var go_through_monsters : bool = false
 			var include_hero_tiles_in_output : bool = false
 			var include_monster_tiles_in_output : bool = true
-			var go_through_empty_tiles : bool = true
-			var include_empty_tiles_in_output : bool = false
 			
 			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
 				consider_terrain_cost, include_start_in_output,
@@ -182,14 +184,8 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[C
 			
 		CharacterState.Faction.ENEMY:
 			
-			var consider_terrain_cost : bool = false
-			var include_start_in_output : bool = false
-			var go_through_heroes : bool = false
-			var go_through_monsters : bool = true
 			var include_hero_tiles_in_output : bool = true
 			var include_monster_tiles_in_output : bool = false
-			var go_through_empty_tiles : bool = true
-			var include_empty_tiles_in_output : bool = false
 			
 			targets = basic_dijkstra(game_state, start, max_depth, min_depth,
 				consider_terrain_cost, include_start_in_output,
@@ -314,8 +310,8 @@ static func basic_dijkstra
 	
 	while frontier.size() > 0:
 		# lowest cost first
-		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
-		var current: Array = frontier.pop_front()
+		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] > b[1])
+		var current: Array = frontier.pop_back()
 		var pos: Vector3i = current[0]
 		var current_cost: int = current[1]
 
@@ -328,22 +324,24 @@ static func basic_dijkstra
 
 		if pos != start && not reachable.has(pos):
 			var unit : Character = game_state.get_unit(pos)
+			var add_to_reachable : bool = true
 			if(unit != null):
 				match unit.state.faction:
 					CharacterState.Faction.PLAYER:
 						if !include_hero_tiles_in_output:
-							continue
+							add_to_reachable = false
 					CharacterState.Faction.ENEMY:
 						if !include_monster_tiles_in_output:
-							continue
+							add_to_reachable = false
 					_:
-						continue
+						add_to_reachable = false
 			else:
 				if(!include_empty_tiles_in_output):
-					continue
+					add_to_reachable = false
 			if current_cost < min_depth:
-				continue
-			reachable.append(pos)
+				add_to_reachable = false
+			if add_to_reachable:
+				reachable.append(pos)
 
 		# Explore neighbors in XZ plane (keep your elevation logic)
 		var offsets : Array[Vector3i] = [Vector3i(1,0,0), Vector3i(-1,0,0), Vector3i(0,0,1), Vector3i(0,0,-1)]

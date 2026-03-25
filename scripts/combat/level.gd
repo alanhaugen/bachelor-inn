@@ -101,6 +101,8 @@ enum Character_Turn_Stage {
 var character_turn_stage : Character_Turn_Stage = Character_Turn_Stage.NONE
 var previous_action : Command = null
 var undo : bool = false
+
+var possible_attacks : Array[Command] = []
 #endregion
 
 var is_in_menu: bool = false
@@ -160,15 +162,14 @@ var monster_names := [
 
 
 func show_move_popup(window_pos :Vector2) -> void:
+	possible_attacks.clear()
+	possible_attacks = MoveGenerator.generate_attack(selected_unit, game_state)
 	move_popup.show();
 	is_in_menu = true;
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
-	if active_move is Attack:
-		move_popup.attack_button.show();
-	elif (active_move is Wait):
-		move_popup.wait_button.show();
-	else:
-		move_popup.move_button.show();
+	if possible_attacks.size() > 0:
+		move_popup.attack_button.show()
+	move_popup.wait_button.show()
 	if previous_action is Move:
 		move_popup.undo_button.show()
 
@@ -1276,7 +1277,10 @@ func undo_move() -> void:
 			character_turn_stage = Character_Turn_Stage.NONE
 			#_handle_player_click(selected_unit.state.grid_position)
 			_clear_selection()
-			
+
+func click_attack_button() -> void:
+	pass
+	
 
 #func update_level_from_game_state(g_state : GameState) -> void:
 	#var state_units : Array[Character] = g_state.units
