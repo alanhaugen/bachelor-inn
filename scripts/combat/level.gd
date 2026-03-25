@@ -450,7 +450,6 @@ func select_unit(unit: Character) -> void:
 
 	current_moves = MoveGenerator.generate_move(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
-	character_turn_stage = Character_Turn_Stage.SELECT_MOVE
 
 func _handle_player_click_old(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
@@ -477,7 +476,6 @@ func _handle_player_click(pos : Vector3i) -> void:
 		return
 	if selected_unit == null:
 		Tutorial.tutorial_unit_selected()
-	game_state = GameState.from_level(self)
 	unit_pos = pos
 	movement_map.clear()
 	select_unit(unit)
@@ -558,8 +556,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		Character_Turn_Stage.NONE:
 			if get_unit_name(pos) == CharacterStates.Player:
 				_handle_player_click(pos)
+				character_turn_stage = Character_Turn_Stage.SELECT_MOVE
 		Character_Turn_Stage.SELECT_MOVE:
-			if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+			var cell_item : int = movement_map.get_cell_item(pos)
+			if cell_item != GridMap.INVALID_CELL_ITEM:
 				_handle_action_tile_click(pos)
 				character_turn_stage = Character_Turn_Stage.ACTION_MENU
 		Character_Turn_Stage.ACTION_MENU:
@@ -1273,7 +1273,9 @@ func undo_move() -> void:
 		selected_unit.position = new_pos
 		character_stats_changed.emit(selected_unit)
 		if character_turn_stage == Character_Turn_Stage.ACTION_MENU:
-			character_turn_stage = Character_Turn_Stage.SELECT_MOVE
+			character_turn_stage = Character_Turn_Stage.NONE
+			#_handle_player_click(selected_unit.state.grid_position)
+			_clear_selection()
 			
 
 #func update_level_from_game_state(g_state : GameState) -> void:
