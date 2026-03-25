@@ -389,54 +389,23 @@ func _update_cursor(pos: Vector3i) -> void:
 	cursor.show()
 
 func _handle_skill(pos : Vector3i) -> void:
-	# Normalize to same plane your maps/skills use
-	##TODO make _handle_skill use height
-	#var p := Vector3i(pos.x, 0, pos.z)
-	
 	var p := Vector3i(pos)
 	var target: Character = get_unit(p)
 		
-	print("SKILL CLICK p=", p,
-			" in_valid=", valid_skill_target_tiles.has(p),
-			" target=", target)
-
 	if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
-		# Only exit if the user right-clicked (handled in _unhandled_input)
-		# Clicking an invalid tile should just do nothing, allowing the user to try again
 		return
 
-	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-	#THIS IS WHERE IT SHOULD TELL VFX CONTROLLER THAT IT SHOULD SPAWN THE SKILLS VFX AT TARGET
-
-	## Impact damage (Fireball)
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
-		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
-		
-	## Take all the stuff and compile a list of the results as AttackResult! 
-	var result: AttackResult = AttackResult.new()
-	result.aggressor = skill_caster
-	result.victim = target
-	result.vfx_scene =  active_skill.Vfx_Scene
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
-		result.damage = active_skill.effect_mods.get("damage", null)
+	# Create the command
+	var cmd := SkillCommand.new(skill_caster, target, active_skill)
 	
-	combat_vfx.play_skill(result)
-	
-	## DoT's
-	target.state.apply_skill_effect(active_skill)
-	emit_signal("character_stats_changed", target)
-	
-	var used_action := active_skill.uses_action
-	var caster := skill_caster
-	if used_action:
-		caster.state.is_ability_used = true
-		# cast a signal to Ribbon here to gray out ability bar
-		print("emitting ability_used signal")
-		emit_signal("ability_used")
-		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
-
+	# Close targeting and execute
 	_exit_skill_target_mode()
-	print("is_ability_used after exit: ", caster.state.is_ability_used)
+	
+	# If we are in the middle of a move (e.g. from popup), we might already have an active_move
+	# But skills usually end the turn or at least the action.
+	# We'll push it to moves_stack and let the animation system handle it.
+	moves_stack.append(cmd)
+	state = States.ANIMATING
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
@@ -583,6 +552,26 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 	movement_map.clear()
 
 
+func _on_cancel() -> void:
+	if is_choosing_skill_target:
+		_exit_skill_target_mode()
+		if selected_unit:
+			show_move_popup(get_screen_position(selected_unit.sprite))
+		return
+	
+	if state == States.CHOOSING_ATTACK:
+		# Go back one step: choosing an enemy
+		initiate_attack_selection()
+		return
+		
+	if state == States.CHOOSING_ENEMY:
+		# Go back to the move popup
+		state = States.PLAYING
+		path_map.clear()
+		if selected_unit:
+			show_move_popup(get_screen_position(selected_unit.sprite))
+		return
+
 func _clear_selection() -> void:
 	emit_signal("character_deselected")
 	emit_signal("enemy_deselected")
@@ -593,6 +582,12 @@ func _clear_selection() -> void:
 #_input is always handled first, then UI, then Unhandled input
 #(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! always remember to change these on UI nodes when they are created)
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		if is_choosing_skill_target or state == States.CHOOSING_ATTACK or state == States.CHOOSING_ENEMY:
+			_on_cancel()
+			get_viewport().set_input_as_handled()
+			return
+
 	if event is InputEventKey:
 		if event.pressed:
 			if event.keycode == KEY_TAB:
@@ -601,13 +596,8 @@ func _input(event: InputEvent) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
-		if is_choosing_skill_target:
-			_exit_skill_target_mode()
-			get_viewport().set_input_as_handled()
-			return
-		elif state == States.CHOOSING_ATTACK or state == States.CHOOSING_ENEMY:
-			state = States.PLAYING
-			path_map.clear()
+		if is_choosing_skill_target or state == States.CHOOSING_ATTACK or state == States.CHOOSING_ENEMY:
+			_on_cancel()
 			get_viewport().set_input_as_handled()
 			return
 
@@ -1310,7 +1300,10 @@ func _start_next_move_animation() -> void:
 
 	print("[DEBUG_LOG] Physical movement finished. Playing VFX for result: ", active_move.result)
 	# Execute VFX
-	await combat_vfx.play_attack(active_move.result)
+	if active_move is SkillCommand:
+		await combat_vfx.play_skill(active_move.result)
+	else:
+		await combat_vfx.play_attack(active_move.result)
 	
 	# Actual damage
 	print("[DEBUG_LOG] Applying damage via active_move")

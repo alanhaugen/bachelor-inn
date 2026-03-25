@@ -60,6 +60,8 @@ var _zoom_factor : float = 0
 @export var keyboard_zoom_factor: float = 1
 #endregion
 
+var _active_touches : Dictionary = {}
+
 #endregion
 
 
@@ -73,6 +75,12 @@ func _ready() -> void:
 
 #region input
 func _input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			_active_touches[event.index] = event.position
+		else:
+			_active_touches.erase(event.index)
+			
 	if _camera_mode == CameraStates.FREE:
 		_input_dragging(event)
 		_input_zoom(event)
@@ -81,26 +89,34 @@ func _input(event: InputEvent) -> void:
 		_toggle_tactical_view(event)
 
 func _input_dragging(event: InputEvent) -> void:
-	#this statement may cause a bug on phones.
-	#Figure out how to enable input mapping for phones
-	if Input.is_action_just_released("enable_dragging"):
-		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_HIDDEN
-		_stop_drag.call_deferred()
-	if !Input.is_action_pressed("enable_dragging"):
-		return
-	if(Input.mouse_mode != Input.MouseMode.MOUSE_MODE_CAPTURED):
-		_pre_drag_mouse_pos = get_viewport().get_mouse_position()
-		Input.mouse_mode = Input.MouseMode.MOUSE_MODE_CAPTURED
-	
-	var checkMouseDragging:bool = event is InputEventMouseMotion
-	var checkScreenDragging:bool = false
-	#if statement is to fix a runtime bug
-	if event is InputEventScreenDrag and event.index >= 1:
-		checkScreenDragging = true
-	
-	if checkMouseDragging or checkScreenDragging:
+	if event is InputEventMouseMotion:
+		#this statement may cause a bug on phones.
+		#Figure out how to enable input mapping for phones
+		if Input.is_action_just_released("enable_dragging"):
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			_stop_drag.call_deferred()
+		if !Input.is_action_pressed("enable_dragging"):
+			return
+		if(Input.mouse_mode != Input.MOUSE_MODE_CAPTURED):
+			_pre_drag_mouse_pos = get_viewport().get_mouse_position()
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		
 		_screen_movement.x += -event.relative.x/mouse_drag_sensitivity
 		_screen_movement.y += -event.relative.y/mouse_drag_sensitivity
+	
+	if event is InputEventScreenDrag:
+		_active_touches[event.index] = event.position
+		if _active_touches.size() >= 2:
+			_screen_movement.x += -event.relative.x / mouse_drag_sensitivity / _active_touches.size()
+			_screen_movement.y += -event.relative.y / mouse_drag_sensitivity / _active_touches.size()
+			
+			if _active_touches.size() == 2:
+				var other_index: int = 0 if event.index == 1 else 1
+				if _active_touches.has(other_index):
+					var other_pos: Vector2 = _active_touches[other_index]
+					var current_dist: float = event.position.distance_to(other_pos)
+					var prev_dist: float = (event.position - event.relative).distance_to(other_pos)
+					_zoom_factor += (prev_dist - current_dist) / mouse_drag_sensitivity
 
 func _input_zoom(event: InputEvent) -> void:
 	if not (event is InputEventMouseButton):
