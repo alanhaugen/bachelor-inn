@@ -148,8 +148,9 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	commands.append(Wait.new(start_pos))
 	return commands
 
-static func generate_attack(unit : Character, game_state : GameState) -> Array[Attack]:
-	var moves : Array[Attack]
+## returns array of Attack
+static func generate_attack(unit : Character, game_state : GameState) -> Array[Command]:
+	var moves : Array[Command]
 	if unit == null:
 		return moves
 	if unit.state.is_ability_used:
@@ -204,8 +205,9 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 	
 	return moves;
 
-static func generate_move(unit : Character, game_state : GameState, store_path : bool = false) -> Array[Move]:
-	var moves : Array[Move]
+## returns an array of Move
+static func generate_move(unit : Character, game_state : GameState, store_path : bool = false) -> Array[Command]:
+	var moves : Array[Command]
 	if unit == null:
 		return moves
 	if unit.state.is_moved:
@@ -220,7 +222,7 @@ static func generate_move(unit : Character, game_state : GameState, store_path :
 	match unit.state.faction:
 		CharacterState.Faction.PLAYER:
 			
-			var consider_terrain_cost : bool = false
+			var consider_terrain_cost : bool = true
 			var include_start_in_output : bool = true
 			var go_through_heroes : bool = true
 			var go_through_monsters : bool = false
@@ -238,7 +240,7 @@ static func generate_move(unit : Character, game_state : GameState, store_path :
 			
 		CharacterState.Faction.ENEMY:
 			
-			var consider_terrain_cost : bool = false
+			var consider_terrain_cost : bool = true
 			var include_start_in_output : bool = true
 			var go_through_heroes : bool = false
 			var go_through_monsters : bool = true

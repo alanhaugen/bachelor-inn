@@ -204,3 +204,20 @@ func save() -> Dictionary:
 	var state := {"units": units };
 	
 	return state;
+
+func get_attacks(unit_pos : Vector3i) -> Array[Command]:
+	var attacks : Array[Command] = []
+	var unit : Character = null
+	for candidate in units:
+		if candidate == null:
+			continue
+		if candidate.state.grid_position != unit_pos:
+			continue
+		unit = candidate
+		break
+	if unit == null:
+		return attacks
+	if unit.state.is_ability_used:
+		return attacks
+	attacks = MoveGenerator.generate_attack(unit, self)
+	return attacks

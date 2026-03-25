@@ -58,3 +58,7 @@ func _on_cancel_button_pressed() -> void:
 	HidePopup();
 	#map.selected_unit.reset();
 	map.selected_unit = null;
+
+
+func _on_undo_button_pressed() -> void:
+	pass # Replace with function body.

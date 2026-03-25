@@ -91,6 +91,15 @@ enum States {
 var state :int = States.PLAYING;
 var game_state : GameState;
 
+#region player character turn variables
+enum Character_Turn_Stage {
+	NONE,
+	SELECT_MOVE,
+	SELECT_ATTACK_TARGET
+}
+var character_turn_stage : Character_Turn_Stage = Character_Turn_Stage.NONE
+#endregion
+
 var is_in_menu: bool = false
 var active_move: Command
 var moves_stack: Array[Command]
@@ -116,6 +125,8 @@ var wait_timer : float = 0.0
 @onready var timer : Timer = $Timer
 var wait_for_camera : bool = false
 #endregion
+
+
 
 var monster_names := [
 	"Xathog-Ruun",
@@ -396,9 +407,6 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	state = States.ANIMATING
 
 
-func _is_invalid_tile(pos: Vector3i) -> bool:
-	return get_tile_name(pos) == "Water"
-
 
 func can_handle_ui_input() -> bool:
 		return(
@@ -413,7 +421,7 @@ func try_select_unit(unit: Character) -> void:
 	
 	select_unit(unit)
 	
-func select_unit(unit: Character) -> void:
+func select_unit_old(unit: Character) -> void:
 	# Switching unit
 	_clear_selection()
 
@@ -426,8 +434,21 @@ func select_unit(unit: Character) -> void:
 	current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 
+func select_unit(unit: Character) -> void:
+	# Switching unit
+	_clear_selection()
 
-func _handle_player_click(pos: Vector3i) -> void:
+	selected_unit = unit
+	
+	unit_pos = unit.state.grid_position
+	_update_cursor(unit.state.grid_position)
+	emit_signal("character_selected", selected_unit)
+
+	current_moves = MoveGenerator.generate_move(selected_unit, game_state, true)
+	movement_grid.fill_from_commands(current_moves, game_state)
+	character_turn_stage = Character_Turn_Stage.SELECT_MOVE
+
+func _handle_player_click_old(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
 		return
 	# Heal execution shortcut
@@ -445,8 +466,18 @@ func _handle_player_click(pos: Vector3i) -> void:
 
 	select_unit(get_unit(pos))
 
+func _handle_player_click(pos : Vector3i) -> void:
+	var unit : Character = get_unit(pos)
+	if unit == null:
+		return
+	if selected_unit == null:
+		Tutorial.tutorial_unit_selected()
+	game_state = GameState.from_level(self)
+	unit_pos = pos
+	movement_map.clear()
+	select_unit(unit)
 
-func _handle_action_tile_click(pos: Vector3i) -> void:
+func _handle_action_tile_click_old(pos: Vector3i) -> void:
 	active_move = null
 
 	var found_move : Move = null
@@ -475,6 +506,25 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 
 	movement_map.clear()
 
+func _handle_action_tile_click(pos: Vector3i) -> void:
+	active_move = null
+
+	var found_move : Move = null
+
+	for cmd in current_moves:
+		if cmd is Move and cmd.end_pos == pos:
+			found_move = cmd
+
+	# MOVE HAS PRIORITY
+	if found_move != null:
+		active_move = found_move
+
+		moves_stack.append(active_move)
+		state = States.ANIMATING
+		create_path_from_stored(unit_pos, pos)
+		path_map.clear()
+
+	movement_map.clear()
 
 func _clear_selection() -> void:
 	emit_signal("character_deselected")
@@ -495,6 +545,20 @@ func _input(event: InputEvent) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
 		return
+	var pos: Vector3i = get_grid_cell_from_mouse()
+	_update_cursor(pos)
+	
+	match character_turn_stage:
+		Character_Turn_Stage.NONE:
+			if get_unit_name(pos) == CharacterStates.Player:
+				_handle_player_click(pos)
+		Character_Turn_Stage.SELECT_MOVE:
+			if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+				_handle_action_tile_click(pos)
+
+func _unhandles_input_old(event: InputEvent) -> void:
+	if not _can_handle_input(event):
+		return
 	
 	var pos: Vector3i = get_grid_cell_from_mouse()
 	print(pos)
@@ -508,9 +572,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	# Attack selection phase
 	if state == States.CHOOSING_ATTACK:
 		_handle_attack_choice(pos)
-		return
-
-	if _is_invalid_tile(pos):
 		return
 
 	# Player unit clicked
@@ -531,7 +592,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		selected_enemy_unit = get_unit(pos)
 		emit_signal("enemy_selected", selected_enemy_unit)
 		print("hey an enemy has been selected ")
-
 
 func _ready() -> void:
 	camera_controller = Main.camera_controller
@@ -715,7 +775,7 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
 	movement_grid.fill_from_commands(foo3, game_state)
 	
-	var path := movement_grid.get_path(start, end)
+	var path : Array[Vector3i] = movement_grid.get_path(start, end)
 
 	for p in path:
 		var anim_pos := grid_to_world(p)
@@ -723,8 +783,16 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 
 	selected_unit = get_unit(start)
 
-
-
+func create_path_from_stored(start : Vector3i, end : Vector3i) -> void:
+	animation_path.clear()
+	path_map.clear()
+	var path : Array[Vector3i] = []
+	path = MoveGenerator.get_movement_path_array(end)
+	for i : int in range(path.size()):
+		var p : Vector3i = path[path.size()-i-1]
+		var anim_pos := grid_to_world(p)
+		animation_path.append(anim_pos)
+	selected_unit = get_unit(start)
 
 func reset_all_units() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
@@ -1065,6 +1133,7 @@ func _process_old(delta: float) -> void:
 				
 				reset_all_units();
 				is_player_turn = true;
+				character_turn_stage = Character_Turn_Stage.NONE
 		# Done with one move, execute it and start on next
 		
 		elif (animation_path.is_empty()):
