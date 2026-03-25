@@ -1,4 +1,5 @@
 extends Control
+class_name MovePopup
 
 @onready var map: Node;
 @onready var move_button: Button = $VBoxContainer/MoveButton

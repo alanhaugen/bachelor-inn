@@ -60,7 +60,7 @@ var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
 var is_choosing_skill_target: bool = false
 var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
-var move_popup: Control;
+var move_popup : MovePopup;
 #var stat_popup_player: Control;
 #var side_bar_array : Array[SideBar];
 #var stat_popup_enemy: Control;
@@ -146,7 +146,6 @@ var monster_names := [
 
 
 func show_move_popup(window_pos :Vector2) -> void:
-	return
 	move_popup.show();
 	is_in_menu = true;
 	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
@@ -713,8 +712,6 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	var foo0 : Command = moves_stack.front()
 	var foo1 : Vector3i = foo0.start_pos
 	var foo2 : Character = game_state.get_unit(foo1)
-	if(foo2.data.unit_name == "Tucy"):
-		pass
 	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
 	movement_grid.fill_from_commands(foo3, game_state)
 	
