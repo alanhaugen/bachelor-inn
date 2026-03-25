@@ -233,12 +233,13 @@ mesh_library = ExtResource("4_dsruw")
 cell_size = Vector3(2, 1, 2)
 cell_center_y = false
 data = {
-"cells": PackedInt32Array(-131069, 5, 1441805, 1, 65535, 50, 65534, 65535, 655418, 65535, 65535, 655417, 65536, 65535, 655382, 131072, 65535, 655381, 131071, 65535, 56)
+"cells": PackedInt32Array(-131069, 5, 1441805, 65534, 65535, 655418, 65535, 65535, 655417, 65536, 65535, 655382, 131072, 65535, 655381, 131071, 65535, 56, 0, 1, 1441842, 65534, 65533, 1048627, 65535, 65533, 1048627, 0, 65533, 1048627, 1, 65533, 1048627, 65533, 65533, 1441844, 65533, 65534, 655411, 65533, 65535, 655411, 65533, 0, 655411, 1, 0, 1441845, 65537, 0, 1441846, 131073, 0, 1441846, 196609, 0, 1441846, 262145, 0, 1441846, 327681, 0, 1441847)
 }
-metadata/_editor_floor_ = Vector3(0, 1, 0)
+metadata/_editor_floor_ = Vector3(0, 5, 0)
 
 [node name="Lamp" type="OmniLight3D" parent="." unique_id=1117281197]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.68427205, 4.0166073, -0.44316483)
+visible = false
 light_color = Color(1, 0.9254902, 0.92156863, 1)
 light_energy = 5.356
 light_indirect_energy = 6.128
@@ -281,7 +282,6 @@ skeleton = NodePath("")
 script = ExtResource("13_y13he")
 
 [node name="Fireflies" parent="." unique_id=1499673209 instance=ExtResource("15_y13he")]
-visible = false
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1291497818]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1.250097, 15.881016, 5.8819647)
@@ -318,11 +318,9 @@ visible = false
 
 [node name="Smaller fire" parent="." unique_id=925796476 instance=ExtResource("22_hokb8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.52073, 2.4252079, -1.0018764)
-visible = false
 
 [node name="Smaller fire2" parent="." unique_id=1091560813 instance=ExtResource("22_hokb8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.008188, 1.0412316, -0.9717675)
-visible = false
 
 [node name="Waterfall_Smoke" parent="." unique_id=511753639 instance=ExtResource("21_er3k5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82414484, 1.3292136)
