@@ -270,4 +270,34 @@ static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) ->
 			valid.append(tile)
 	
 	return valid
+
+
+static func get_attack_range_tiles(unit : Character, state : GameState, reachable : Array[Vector3i]) -> Array[Vector3i]:
+	var attack_range_tiles : Array[Vector3i] = []
+	var seen : Dictionary = {}
+	
+	var origins : Array[Vector3i] = reachable.duplicate()
+	origins.append(unit.state.grid_position)
+	
+	var min_r : int = unit.state.weapon.min_range
+	var max_r : int = unit.state.weapon.max_range
+	
+	for origin in origins:
+		for dx in range(-max_r, max_r + 1):
+			for dz in range(-max_r, max_r + 1):
+				var dist : int = abs(dx) + abs(dz)
+				if dist < min_r or dist > max_r:
+					continue
+				
+				var x : int = origin.x + dx
+				var z : int = origin.z + dz
+				
+				var tiles_here : Array[Vector3i] = state.get_tiles_at_xz(x, z)
+				for t in tiles_here:
+					if abs(t.y - origin.y) <= 1:
+						if not seen.has(t):
+							attack_range_tiles.append(t)
+							seen[t] = true
+	
+	return attack_range_tiles
 #endregion

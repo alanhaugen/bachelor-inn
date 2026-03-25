@@ -54,6 +54,12 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 			set_tile(tile)
 
 
+func fill_range(tiles : Array[Vector3i]) -> void:
+	for pos in tiles:
+		if grid.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+			grid.set_cell_item(pos, GridTile.Type.INTERACT)
+
+
 func set_tile(tile : GridTile) -> void:
 	cost_map[tile.pos] = tile.weight
 	used_cells[tile.pos] = true

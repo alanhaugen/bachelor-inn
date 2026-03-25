@@ -437,6 +437,15 @@ func select_unit(unit: Character) -> void:
 
 	current_moves = MoveGenerator.generate(unit, game_state)
 	movement_grid.fill_from_commands(current_moves, game_state)
+	
+	var reachable: Array[Vector3i] = []
+	for cmd in current_moves:
+		if cmd is Move:
+			reachable.append(cmd.end_pos)
+	
+	var range_tiles := MoveGenerator.get_attack_range_tiles(unit, game_state, reachable)
+	movement_grid.fill_range(range_tiles)
+	
 	unit_pos = unit.state.grid_position
 
 
