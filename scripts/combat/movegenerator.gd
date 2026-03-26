@@ -1,6 +1,7 @@
 extends RefCounted
 class_name MoveGenerator
 
+
 #region methods
 static func generate(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
 	var moves : Array[Command] = dijkstra(unit, state, exclude_attacks, exclude_move);
@@ -12,14 +13,14 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	var start_pos: Vector3i = unit.state.grid_position
 
 	# Priority queue: [pos, cost]
-	var frontier: Array = []
+	var frontier: PriorityQueue = PriorityQueue.new(false, [], "weight")
 	var cost_so_far: Dictionary = {}
 	var visited: Dictionary = {}
 
 	var reachable: Array[Vector3i] = []
 	var commands: Array[Command] = []
 
-	frontier.append([start_pos, 0])
+	frontier.insert(FrontierData.new(start_pos, 0))
 	cost_so_far[start_pos] = 0
 
 	#var movement_range: int = unit.state.movement
@@ -34,10 +35,9 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	# -------------------------
 	while frontier.size() > 0:
 		# lowest cost first
-		frontier.sort_custom(func(a: Array, b: Array) -> bool: return a[1] < b[1])
-		var current: Array = frontier.pop_front()
-		var pos: Vector3i = current[0]
-		var current_cost: int = current[1]
+		var current: FrontierData = frontier.pop()
+		var pos: Vector3i = current.tile
+		var current_cost: int = current.weight
 
 		if current_cost > movement_range:
 			continue
@@ -84,7 +84,7 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 
 			if not cost_so_far.has(neighbor) or new_cost < int(cost_so_far[neighbor]):
 				cost_so_far[neighbor] = new_cost
-				frontier.append([neighbor, new_cost])
+				frontier.insert(FrontierData.new(neighbor, new_cost))
 
 	# -------------------------
 	# 2) Build MOVE commands
@@ -513,4 +513,12 @@ static func get_valid_neighbours(pos : Vector3i, reachable : Array[Vector3i]) ->
 			valid.append(tile)
 	
 	return valid
+
+class FrontierData extends RefCounted:
+	var tile : Vector3i
+	var weight : int
+	
+	func _init(pos : Vector3i, cost : int) -> void:
+		tile = pos
+		weight = cost
 #endregion
