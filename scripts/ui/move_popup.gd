@@ -44,9 +44,10 @@ func _on_attack_button_pressed() -> void:
 
 
 func _on_wait_button_pressed() -> void:
-	map.active_move.execute(map.game_state);
+	map.active_move.apply_damage(map.game_state);
 	map.occupancy_map.set_cell_item(map.active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 	map.occupancy_map.set_cell_item(map.active_move.end_pos, map.player_code_done);
+	map.character_turn_stage = Level.Character_Turn_Stage.NONE
 	HidePopup()
 
 

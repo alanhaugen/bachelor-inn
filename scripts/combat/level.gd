@@ -445,13 +445,10 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	active_move = found_attack
 	moves_stack.append(active_move)
 	
-	#create_path(
-		#moves_stack.front().start_pos,
-		#moves_stack.front().end_pos
-	#)
-	animation_path.append(grid_to_world(pos))
+	#animation_path.append(grid_to_world(pos))
+	animation_path.clear()
 	state = States.ANIMATING
-	var unit : Character = get_unit(pos)
+	var unit : Character = get_unit(found_attack.end_pos)
 	select_unit(unit)
 
 
@@ -655,7 +652,7 @@ func _ready() -> void:
 	trigger_map.hide()
 	movement_map.clear()
 	movement_weights_map.hide()
-	occupancy_map.hide()
+	##occupancy_map.hide()
 	path_map.clear()
 	fog_map.clear()
 

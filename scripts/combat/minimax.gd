@@ -18,7 +18,7 @@ func minimax(state : GameState, depth : int, specific_character_pos : NullablePo
 			var end_pos : NullablePosition = null
 			if specific_character_pos != null:
 				if move is Attack:
-					end_pos = NullablePosition.new(move.attack_pos)
+					end_pos = NullablePosition.new(move.end_pos)
 				elif move is Move:
 					end_pos = NullablePosition.new(move.end_pos)
 				else:
@@ -31,7 +31,7 @@ func minimax(state : GameState, depth : int, specific_character_pos : NullablePo
 			var end_pos : NullablePosition = null
 			if specific_character_pos != null:
 				if move is Attack:
-					end_pos = NullablePosition.new(move.attack_pos)
+					end_pos = NullablePosition.new(move.end_pos)
 				elif move is Move:
 					end_pos = NullablePosition.new(move.end_pos)
 				else:
@@ -106,7 +106,7 @@ func choose_best_move(state : GameState, depth : int, specific_character : Chara
 		var end_pos : NullablePosition = null
 		if(specific_character != null):
 			if move is Attack:
-				end_pos = NullablePosition.new(move.attack_pos)
+				end_pos = NullablePosition.new(move.end_pos)
 			elif move is Move:
 				end_pos = NullablePosition.new(move.end_pos)
 			else:

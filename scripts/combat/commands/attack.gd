@@ -3,6 +3,7 @@ class_name Attack
 ## AttackMove is atomic: movement + attack resolution.
 ## Used as a single minimax action.
 
+##victim position
 var attack_pos : Vector3i;
 
 
@@ -18,6 +19,7 @@ func prepare(state : GameState, simulate_only: bool = false) -> void:
 
 	var aggressor : Character = state.get_unit(start_pos);
 	var victim : Character = state.get_unit(attack_pos);
+	aggressor.move_to(end_pos, simulate_only)
 	
 	result.aggressor = aggressor
 	result.victim = victim
