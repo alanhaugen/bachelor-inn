@@ -547,7 +547,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	camera_controller = Main.camera_controller
-	
 
 	cursor.hide()
 	trigger_map.hide()
@@ -1096,7 +1095,7 @@ func _process_old(delta: float) -> void:
 			
 			if is_player_turn:
 				active_move = Wait.new(active_move.end_pos)
-				show_move_popup(get_screen_position(selected_unit.sprite))
+				#show_move_popup(get_screen_position(selected_unit.sprite))
 				for character in characters:
 					if characters == null: 
 						return
@@ -1110,7 +1109,8 @@ func _process_old(delta: float) -> void:
 			selected_unit.move_to(active_move.end_pos);
 			selected_unit.pause_anim()
 			camera_controller.free_camera()
-			_clear_selection()
+			if not is_player_turn:
+				_clear_selection()
 
 			completed_moves.append(active_move);
 			Tutorial.tutorial_unit_moved();
