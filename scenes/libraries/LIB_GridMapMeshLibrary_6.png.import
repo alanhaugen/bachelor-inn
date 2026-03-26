@@ -2,21 +2,21 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvseqg7wrsjnf"
-path.s3tc="res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.s3tc.ctex"
-path.etc2="res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.etc2.ctex"
+uid="uid://drkstswl88ufn"
+path.s3tc="res://.godot/imported/LIB_GridMapMeshLibrary_6.png-6c9c55215e17647c8e927f551af0e646.s3tc.ctex"
+path.etc2="res://.godot/imported/LIB_GridMapMeshLibrary_6.png-6c9c55215e17647c8e927f551af0e646.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
-"md5": "c6e3ab30a27e2cbebdca9b1661ef99e6"
+"md5": "189af6d5f3892cdeeec8ee6040775bc6"
 }
 
 [deps]
 
-source_file="res://scenes/libraries/LIB_GridMapMeshLibrary_5.png"
-dest_files=["res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.s3tc.ctex", "res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.etc2.ctex"]
+source_file="res://scenes/libraries/LIB_GridMapMeshLibrary_6.png"
+dest_files=["res://.godot/imported/LIB_GridMapMeshLibrary_6.png-6c9c55215e17647c8e927f551af0e646.s3tc.ctex", "res://.godot/imported/LIB_GridMapMeshLibrary_6.png-6c9c55215e17647c8e927f551af0e646.etc2.ctex"]
 
 [params]
 

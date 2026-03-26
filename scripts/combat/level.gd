@@ -441,11 +441,12 @@ func _handle_player_click(pos: Vector3i) -> void:
 	unit_pos = pos
 	movement_map.clear()
 
-	# Same unit clicked again
-	if selected_unit == get_unit(pos):
-		active_move = Wait.new(pos)
-		show_move_popup(get_viewport().get_mouse_position())
-		return
+	# Same unit clicked again 
+	#Removed as a quickfix
+	#if selected_unit == get_unit(pos):
+		#active_move = Wait.new(pos)
+		#show_move_popup(get_viewport().get_mouse_position())
+		#return
 
 	select_unit(get_unit(pos))
 
