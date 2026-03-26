@@ -419,6 +419,7 @@ func select_unit(unit: Character) -> void:
 	_clear_selection()
 
 	selected_unit = unit
+	camera_controller.focus_camera(unit)
 	
 	unit_pos = unit.state.grid_position
 	_update_cursor(unit.state.grid_position)
