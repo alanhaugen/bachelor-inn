@@ -82,6 +82,8 @@ func _connect_to_level(level: Node) -> void:
 	#level.enemy_deselected.connect(_on_enemy_deselected)
 	_on_party_updated(level.characters)
 	ribbon.hide()
+
+
 #adds character preview scene to Vbox
 func add_character_preview(character: Character) -> void:
 	if previews.has(character):
@@ -129,7 +131,7 @@ func _on_character_deselected() -> void:
 	ribbon.hide()
 	for preview: CharacterPreview in previews.values():
 		preview.is_selected = false
-		
+
 
 func _on_character_stats_changed(character: Character) -> void:
 	
@@ -174,5 +176,6 @@ func remove_character_preview(character: Character) -> void:
 
 
 func _on_end_turn_button_pressed() -> void:
+	Main.level._clear_selection()
 	Main.level.end_player_turn()
-	print("end_turn")
+	print("'End turn' button pressed")

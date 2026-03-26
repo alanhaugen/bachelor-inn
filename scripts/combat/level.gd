@@ -37,7 +37,11 @@ var movement_weights_grid : Grid
 
 @onready var battle_log: Label = $BattleLog
 
-
+#cursor testing
+#const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
+@onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
+var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
+#cursor testing end
 @onready var cursor: Sprite3D = $Cursor
 @onready var terrain_map: GridMap = %TerrainGrid
 @onready var occupancy_map: GridMap = %OccupancyOverlay
@@ -175,6 +179,11 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 func grid_to_world(pos: Vector3i) -> Vector3:
 	var world:= terrain_map.map_to_local(pos)
 	return world
+
+
+func world_to_grid(pos: Vector3) -> Vector3i:
+	return movement_map.local_to_map(movement_map.to_local(pos))
+	#return terrain_map.local_to_map(terrain_map.to_local(pos))
 
 
 func get_selectable_characters() -> Array[Character]:
@@ -486,6 +495,7 @@ func _clear_selection() -> void:
 	movement_map.clear()
 	path_map.clear()
 	selected_unit = null
+	cursor.hide()
 
 #_input is always handled first, then UI, then Unhandled input
 #(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! always remember to change these on UI nodes when they are created)
@@ -1019,6 +1029,8 @@ func _draw_path_arrow() -> void:
 				path_map.set_cell_item(point, 0)
 
 func _process_old(delta: float) -> void:
+	_update_cursor_on_hover()
+	
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
 		camera_controller.lock_camera()
@@ -1191,4 +1203,29 @@ func end_player_turn() -> bool:
 			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
 	return true
+
+
+func _update_cursor_on_hover() -> void:
+	#Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
+	#print("cursor update called, texture is null: ", cursor_sword == null)
 	
+	var mouse_pos := get_viewport().get_mouse_position()
+	var origin := camera_controller.project_ray_origin(mouse_pos)
+	var direction := camera_controller.project_ray_normal(mouse_pos)
+	var world_pos := raycast_to_gridmap(origin, direction)
+	
+	if world_pos == Vector3():
+		Input.set_custom_mouse_cursor(null)
+		return
+		
+	var grid_pos := world_to_grid(world_pos)
+	print("grid_pos: ", grid_pos, " cell_item: ", movement_map.get_cell_item(grid_pos))
+
+	if grid_pos == _last_hovered_pos:
+		return
+	_last_hovered_pos = grid_pos
+	
+	if movement_map.get_cell_item(grid_pos) == GridTile.Type.ATTACK:
+		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
+	else:
+		Input.set_custom_mouse_cursor(null)
