@@ -424,8 +424,10 @@ func select_unit(unit: Character) -> void:
 	unit_pos = unit.state.grid_position
 	_update_cursor(unit.state.grid_position)
 	emit_signal("character_selected", selected_unit)
-
-	current_moves = MoveGenerator.generate(selected_unit, game_state, true)
+	## This allows to show attacks
+	current_moves = MoveGenerator.generate(selected_unit, game_state)
+	## This 'true' exludes attacks
+	#current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 
 

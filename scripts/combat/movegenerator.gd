@@ -422,9 +422,9 @@ static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	return false
 
 
-static func get_attack_origins(unit: Character, state: GameState, start_pos: Vector3i, reachable: Array[Vector3i]) -> Array[Vector3i]:
+static func get_attack_origins(unit: Character, state: GameState, target_pos: Vector3i, reachable: Array[Vector3i]) -> Array[Vector3i]:
 	# Include "attack from current position"
-	var origins: Array[Vector3i] = [start_pos]
+	var origins: Array[Vector3i] = [unit.state.grid_position]
 	for r in reachable:
 		origins.append(r)
 
@@ -442,9 +442,14 @@ static func get_attack_origins(unit: Character, state: GameState, start_pos: Vec
 		if seen.has(origin_key):
 			continue
 		seen[origin_key] = true
-
-		if _has_enemy_in_range_from_origin(origin, min_r, max_r, unit, state):
+		
+		var dist: int = abs(target_pos.x - origin.x) + abs(target_pos.z - origin.z)
+		if dist >= min_r and dist <= max_r and target_pos.y == origin.y:
 			valid.append(origin)
+			
+		## This caused attack origins to be generated from any enemy within range
+		#if _has_enemy_in_range_from_origin(origin, min_r, max_r, unit, state):
+		#	valid.append(origin)
 
 	return valid
 
