@@ -492,6 +492,16 @@ func _input(event: InputEvent) -> void:
 		if event.pressed:
 			if event.keycode == KEY_TAB:
 				select_next_character()
+			if event.keycode == KEY_1:
+				print("Ability 1 selected")
+			if event.keycode == KEY_2:
+				print("Ability 2 selected")
+			if event.keycode == KEY_3:
+				print("Ability 3 selected")
+			if event.keycode == KEY_4:
+				print("Ability 4 selected")
+			if event.keycode == KEY_5:
+				print("Ability 5 selected")
 
 
 func _unhandled_input(event: InputEvent) -> void:
