@@ -419,7 +419,7 @@ func select_unit(unit: Character) -> void:
 	_clear_selection()
 
 	selected_unit = unit
-	camera_controller.focus_camera(unit)
+	camera_controller.set_pivot_target_translate(unit.position)
 	
 	unit_pos = unit.state.grid_position
 	_update_cursor(unit.state.grid_position)
@@ -1015,8 +1015,9 @@ func _draw_path_arrow() -> void:
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			path_map.clear()
 			var points : Array[Vector3i] = movement_grid.get_path(selected_unit.state.grid_position, pos)
+			
 			for point : Vector3i in points:
-				path_map.set_cell_item(point, 0)
+				path_map.set_cell_item(point, 3) #SET PATH MAP TO BE THE TILE IN ARRAY WHEN DRAWING PATH ARROW
 
 func _process_old(delta: float) -> void:
 	if (turn_transition_animation_player.is_playing()):
