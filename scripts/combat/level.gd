@@ -40,6 +40,8 @@ var movement_weights_grid : Grid
 #cursor testing
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
+@onready var cursor_feet : Texture2D = preload("res://art/textures/cursor_feet.png")
+@onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
 @onready var cursor: Sprite3D = $Cursor
@@ -180,7 +182,7 @@ func grid_to_world(pos: Vector3i) -> Vector3:
 	var world:= terrain_map.map_to_local(pos)
 	return world
 
-
+#andreas's wonky world to grid transform using movement_map, because its used for cursors
 func world_to_grid(pos: Vector3) -> Vector3i:
 	return movement_map.local_to_map(movement_map.to_local(pos))
 	#return terrain_map.local_to_map(terrain_map.to_local(pos))
@@ -270,6 +272,7 @@ func get_unit_name(pos : Vector3) -> String:
 	
 	return occupancy_map.mesh_library.get_item_name(item_id)
 
+
 func get_trigger_name(pos : Vector3) -> String:
 	var trigger_id: int = trigger_map.get_cell_item(pos)
 	if trigger_id == GridMap.INVALID_CELL_ITEM:
@@ -280,6 +283,7 @@ func get_trigger_name(pos : Vector3) -> String:
 		return "null"
 	
 	return trigger_map.mesh_library.get_item_name(trigger_id)
+
 
 func show_attack_tiles(pos: Vector3i) -> void:
 	path_map.clear()
@@ -304,6 +308,7 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 	for tile: Vector3i in tiles:
 		path_map.set_cell_item(tile, 0)
+
 
 func _can_handle_input(event: InputEvent) -> bool:
 	##old
@@ -341,6 +346,7 @@ func _update_cursor(pos: Vector3i) -> void:
 	var world_pos := grid_to_world(pos)
 	cursor.position = Vector3(world_pos.x, world_pos.y + 0.1, world_pos.z)
 	cursor.show()
+
 
 func _handle_skill(pos : Vector3i) -> void:
 	# Normalize to same plane your maps/skills use
@@ -391,6 +397,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
 
+
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		return
@@ -416,13 +423,15 @@ func can_handle_ui_input() -> bool:
 			and state == States.PLAYING
 			and not is_in_menu
 		)
-		
+
+
 func try_select_unit(unit: Character) -> void:
 	if not can_handle_ui_input():
 		return
 	
 	select_unit(unit)
-	
+
+
 func select_unit(unit: Character) -> void:
 	# Switching unit
 	_clear_selection()
@@ -497,8 +506,10 @@ func _clear_selection() -> void:
 	selected_unit = null
 	cursor.hide()
 
+
 #_input is always handled first, then UI, then Unhandled input
-#(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! always remember to change these on UI nodes when they are created)
+#(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! 
+#always remember to change these on UI nodes when they are created)
 func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.pressed:
@@ -635,6 +646,7 @@ func _ready() -> void:
 	turn_transition_animation_player.play()
 	add_to_group("level")
 
+
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
 
@@ -718,6 +730,7 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.state.grid_position = pos
 			new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
 	return new_enemy
+
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
@@ -1225,7 +1238,10 @@ func _update_cursor_on_hover() -> void:
 		return
 	_last_hovered_pos = grid_pos
 	
-	if movement_map.get_cell_item(grid_pos) == GridTile.Type.ATTACK:
+	var cell := movement_map.get_cell_item(grid_pos)
+	if cell == GridTile.Type.ATTACK:
 		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
+	elif cell == GridTile.Type.INTERACT:
+		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)

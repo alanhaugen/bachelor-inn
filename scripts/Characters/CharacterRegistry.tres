@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CharacterRegistry" load_steps=6 format=3 uid="uid://ctkbvcilsv633"]
+[gd_resource type="Resource" script_class="CharacterRegistry" format=3 uid="uid://ctkbvcilsv633"]
 
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="1_far1n"]
 [ext_resource type="Resource" uid="uid://dhdymgaw357sb" path="res://scripts/Characters/Def_Alfred.tres" id="2_far1n"]

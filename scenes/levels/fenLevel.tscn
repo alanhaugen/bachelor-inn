@@ -261,7 +261,7 @@ metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(65529, 65534, 4, 65529, 65533, 5, 17, 65535, 0, 16, 65535, 0, 16, 0, 0, 15, 65535, 0, 15, 0, 0, 17, 65534, 0, 8, 65535, 5, 5, 0, 4, 2, 1, 6)
+"cells": PackedInt32Array(65529, 65534, 4, 65529, 65533, 5, 17, 65535, 0, 16, 65535, 0, 16, 0, 0, 15, 65535, 0, 15, 0, 0, 17, 65534, 0, 8, 65535, 5, 5, 0, 4, 2, 1, 6, 13, 0, 786437)
 }
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
