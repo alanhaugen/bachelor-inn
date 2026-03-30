@@ -10,6 +10,7 @@ extends Node
 #region Props
 ## Current level running
 var level: Level;
+var current_level_name: String = ""
 
 ## Reference to the World node
 var world: Node3D;
@@ -60,13 +61,31 @@ func load_level(level_name: String) -> void:
 	else:
 		Dialogic.VAR.PLATFORM = "DESKTOP";
 	unload_level();
-	var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
+	#var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
+	var level_path: String = "res://scenes/levels/%s.tscn" % level_name;
 	level = load(level_path).instantiate();
-	level.level_name = level_name;
+	level.level_name = level_name; ## TODO: Remove? This does nothing?
 	world.add_child(level) # Add the new level to the World node
 	
 	await get_tree().process_frame
 	var ui := get_tree().get_first_node_in_group("ui_controller")
 	if ui:
 		ui._connect_to_level(level)
+
+func load_level_by_name(level_name: String) -> void:
+	current_level_name = level_name
+	for path : String in levels:
+		if path.get_file().get_basename() == level_name:
+			load_level(level_name)
+			return
+	push_error("No level found matching name: " + level_name)
+
+func load_next_level() -> void:
+	# This splits "tutorial_1" into ["tutorial", "1"] from the right
+	var parts := current_level_name.rsplit("_", true, 1)
+	if parts.size() < 2 or not parts[1].is_valid_int():
+		push_error("Cannot increment level name: " + current_level_name)
+		return
+		var next_name := parts[0] + "_" + str(parts[1].to_int() + 1)
+		load_level_by_name(next_name)
 #endregion

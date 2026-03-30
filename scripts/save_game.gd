@@ -174,11 +174,29 @@ func read(save_slot: int) -> bool:
 		character.data = data
 		character.state = state
 		
-		print("DEBUG LOADED unit:", data.unit_name, " skills:", state.skills.size(), " ids:", state_dict.get("skill_ids", []))
-		print("LOADED ", data.unit_name, " skill_ids=", state_dict.get("skill_ids", []))
-		print("RESOLVED ", data.unit_name, " skills=", state.skills.map(func(s: Skill) -> String: return s.skill_id if s else "NULL"))
+		#print("DEBUG LOADED unit:", data.unit_name, " skills:", state.skills.size(), " ids:", state_dict.get("skill_ids", []))
+		#print("LOADED ", data.unit_name, " skill_ids=", state_dict.get("skill_ids", []))
+		#print("RESOLVED ", data.unit_name, " skills=", state.skills.map(func(s: Skill) -> String: return s.skill_id if s else "NULL"))
 		
 		Main.characters.append(character)
 
 	Main.load_level(Main.levels[level])
 	return true
+
+
+func load_tutorial() -> void:
+	print("load_tutorial() pressed.")
+	Main.characters.clear()
+	
+	for id: String in registry.characters.keys():
+		var chardef : CharacterDefinition = registry.characters[id]
+		if chardef == null:
+			continue
+		var character := chardef.scene.instantiate()
+		character.data = chardef.base_data.duplicate()
+		character.state = chardef.base_state.duplicate()
+		
+		Main.characters.append(character)
+	
+	Main.current_level_name = "tutorial_1"
+	Main.load_level("tutorial_1")

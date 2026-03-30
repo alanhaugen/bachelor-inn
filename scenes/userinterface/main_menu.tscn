@@ -391,7 +391,7 @@ autoplay = true
 
 [connection signal="pressed" from="UI/MainMenu/Selector/StartGameButton" to="." method="_on_start_game_button_pressed"]
 [connection signal="pressed" from="UI/MainMenu/Selector/QuitButton" to="." method="_on_quit_button_pressed"]
-[connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/Start Tutorial" to="." method="_on_load_map_0_pressed"]
+[connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/Start Tutorial" to="." method="_on_start_tutorial_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap1" to="." method="_on_load_map_1_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadMap2" to="." method="_on_load_map_2_pressed"]

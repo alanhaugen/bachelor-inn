@@ -1,22 +1,22 @@
 [gd_scene format=3 uid="uid://kkgvyut22uqr"]
 
-[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_xwjaq"]
-[ext_resource type="Texture2D" uid="uid://c71u0xag6oy8m" path="res://art/textures/GoboLightShaftPixelated.png" id="2_6llwq"]
-[ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="2_w7fxs"]
-[ext_resource type="Texture2D" uid="uid://b7sv6d5bhhb50" path="res://art/textures/ParticleTex/Star_Particle.png" id="3_kofws"]
-[ext_resource type="Texture2D" uid="uid://5sivuqa7b30x" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="4_6eqfw"]
-[ext_resource type="Texture2D" uid="uid://b4ske18hugso6" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="5_u2wd5"]
-[ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="6_ygipt"]
-[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="7_6llwq"]
-[ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="8_kofws"]
-[ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="8_xnnr5"]
-[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="9_ovtcx"]
-[ext_resource type="Texture2D" uid="uid://c4444y1cmnkra" path="res://art/textures/M_Orb.png" id="10_nxa0q"]
-[ext_resource type="Texture2D" uid="uid://c4mjpkmicyvg4" path="res://art/textures/No_Orb.png" id="11_h5d6a"]
-[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="12_roefr"]
-[ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="16_xnnr5"]
-[ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="17_ovtcx"]
-[ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="18_nxa0q"]
+[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_6w1qc"]
+[ext_resource type="Texture2D" uid="uid://c71u0xag6oy8m" path="res://art/textures/GoboLightShaftPixelated.png" id="2_oqa5m"]
+[ext_resource type="Texture2D" uid="uid://c82vjrwadgbax" path="res://art/Gradient Textures/BluePurpleGlow.tres" id="3_x738p"]
+[ext_resource type="Texture2D" uid="uid://b7sv6d5bhhb50" path="res://art/textures/ParticleTex/Star_Particle.png" id="4_bpgfi"]
+[ext_resource type="Texture2D" uid="uid://5sivuqa7b30x" path="res://art/textures/ParticleTex/LightCandle_Particle.png" id="5_ms6rl"]
+[ext_resource type="Texture2D" uid="uid://b4ske18hugso6" path="res://art/textures/ParticleTex/GlowStar_Particle.png" id="6_b35ld"]
+[ext_resource type="Shader" uid="uid://bk71px43jvsh6" path="res://shaders/EdgeHighlight.gdshader" id="7_cpycw"]
+[ext_resource type="Texture2D" uid="uid://d0o3l0nn5g8ta" path="res://art/textures/Orb.png" id="8_0o4ye"]
+[ext_resource type="Texture2D" uid="uid://c4444y1cmnkra" path="res://art/textures/M_Orb.png" id="9_eksy4"]
+[ext_resource type="Texture2D" uid="uid://c4mjpkmicyvg4" path="res://art/textures/No_Orb.png" id="10_rxrsm"]
+[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="11_vudcu"]
+[ext_resource type="Texture2D" uid="uid://cpwiq6fqddjr4" path="res://art/Gradient Textures/GreenBlueGlow.tres" id="12_mvhwv"]
+[ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="13_grt2m"]
+[ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="14_6oho0"]
+[ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="15_hwceo"]
+[ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="16_vra1y"]
+[ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="17_pu2tq"]
 
 [sub_resource type="FogMaterial" id="FogMaterial_2ubu0"]
 density = 8.0
@@ -52,7 +52,7 @@ gravity = Vector3(0, 0, 0)
 scale_min = 0.0
 scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_4qrvm")
-color_ramp = ExtResource("2_w7fxs")
+color_ramp = ExtResource("3_x738p")
 alpha_curve = SubResource("CurveTexture_y1qyw")
 hue_variation_curve = SubResource("CurveTexture_1xi66")
 turbulence_enabled = true
@@ -65,7 +65,7 @@ transparency = 1
 cull_mode = 2
 vertex_color_use_as_albedo = true
 vertex_color_is_srgb = true
-albedo_texture = ExtResource("3_kofws")
+albedo_texture = ExtResource("4_bpgfi")
 emission_enabled = true
 emission = Color(0.84608996, 0.84608996, 0.7322081, 1)
 emission_energy_multiplier = 1.6
@@ -97,13 +97,13 @@ radial_accel_min = 0.09999776
 radial_accel_max = 0.99999774
 scale_min = 0.5
 color = Color(1.8247963, 1.8247963, 1.503374, 1)
-color_ramp = ExtResource("2_w7fxs")
+color_ramp = ExtResource("3_x738p")
 alpha_curve = SubResource("CurveTexture_if14l")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0u0fo"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("4_6eqfw")
+albedo_texture = ExtResource("5_ms6rl")
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
 emission_energy_multiplier = 0.0
@@ -136,13 +136,13 @@ scale_min = 1.5
 scale_max = 3.0
 scale_curve = SubResource("CurveTexture_pd0wy")
 color = Color(1.5229772, 1.5229772, 1.5229772, 1)
-color_ramp = ExtResource("2_w7fxs")
+color_ramp = ExtResource("3_x738p")
 alpha_curve = SubResource("CurveTexture_hmitn")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yapfn"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_texture = ExtResource("5_u2wd5")
+albedo_texture = ExtResource("6_b35ld")
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
 billboard_mode = 3
@@ -156,10 +156,10 @@ material = SubResource("StandardMaterial3D_yapfn")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_quxob"]
 render_priority = 5
-shader = ExtResource("8_xnnr5")
-shader_parameter/diffuse_tex = ExtResource("9_ovtcx")
-shader_parameter/normal_map = ExtResource("11_h5d6a")
-shader_parameter/edge_mask = ExtResource("10_nxa0q")
+shader = ExtResource("7_cpycw")
+shader_parameter/diffuse_tex = ExtResource("8_0o4ye")
+shader_parameter/normal_map = ExtResource("10_rxrsm")
+shader_parameter/edge_mask = ExtResource("9_eksy4")
 shader_parameter/edge_strength = 1.0
 shader_parameter/edge_tint = Color(0, 0, 0, 1)
 shader_parameter/normal_tilt = 4.0
@@ -201,7 +201,7 @@ damping_max = 14.373001
 scale_min = 0.0
 scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_qrewn")
-color_ramp = ExtResource("6_ygipt")
+color_ramp = ExtResource("12_mvhwv")
 alpha_curve = SubResource("CurveTexture_7jryq")
 hue_variation_curve = SubResource("CurveTexture_vstu2")
 turbulence_noise_strength = 9.24
@@ -214,7 +214,7 @@ cull_mode = 2
 shading_mode = 0
 vertex_color_use_as_albedo = true
 vertex_color_is_srgb = true
-albedo_texture = ExtResource("7_6llwq")
+albedo_texture = ExtResource("13_grt2m")
 billboard_mode = 3
 billboard_keep_scale = true
 particles_anim_h_frames = 1
@@ -235,7 +235,7 @@ damping_max = 14.373001
 scale_min = 0.0
 scale_max = 0.29999998
 scale_curve = SubResource("CurveTexture_qrewn")
-color_ramp = ExtResource("6_ygipt")
+color_ramp = ExtResource("12_mvhwv")
 alpha_curve = SubResource("CurveTexture_7jryq")
 hue_variation_curve = SubResource("CurveTexture_vstu2")
 turbulence_enabled = true
@@ -243,7 +243,7 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
-[node name="Map3d" unique_id=1364062222 instance=ExtResource("1_xwjaq")]
+[node name="Map3d" unique_id=1364062222 instance=ExtResource("1_6w1qc")]
 level_name = "first fen edition"
 
 [node name="TerrainGrid" parent="." index="0" unique_id=1846160155]
@@ -344,7 +344,7 @@ light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
 light_energy = 3.322
 light_indirect_energy = 0.0
 light_volumetric_fog_energy = 16.0
-light_projector = ExtResource("2_6llwq")
+light_projector = ExtResource("2_oqa5m")
 light_size = 1.0
 shadow_enabled = true
 shadow_bias = 0.0
@@ -360,7 +360,7 @@ light_color = Color(2.7083335, 2.3488255, 1.814699, 1)
 light_energy = 1.282
 light_indirect_energy = 0.0
 light_volumetric_fog_energy = 1.967
-light_projector = ExtResource("2_6llwq")
+light_projector = ExtResource("2_oqa5m")
 light_size = 5.745
 shadow_enabled = true
 shadow_bias = 0.0
@@ -410,7 +410,7 @@ cast_shadow = 0
 gi_mode = 0
 mesh = SubResource("QuadMesh_vg5tu")
 skeleton = NodePath("")
-script = ExtResource("12_roefr")
+script = ExtResource("11_vudcu")
 
 [node name="Fireflies" type="Node3D" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="3" unique_id=704946536]
 
@@ -473,11 +473,11 @@ lifetime = 2.11
 process_material = SubResource("ParticleProcessMaterial_c8buq")
 draw_pass_1 = SubResource("QuadMesh_np4w8")
 
-[node name="Smog" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="4" unique_id=649702611 instance=ExtResource("8_kofws")]
+[node name="Smog" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="4" unique_id=649702611 instance=ExtResource("14_6oho0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.4099474, 1.3807526, -8.951434)
 visible = false
 
-[node name="Smog2" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="5" unique_id=1186449705 instance=ExtResource("8_kofws")]
+[node name="Smog2" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="5" unique_id=1186449705 instance=ExtResource("14_6oho0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
 
@@ -489,49 +489,49 @@ transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)
 
 [node name="GrassMesh" type="MeshInstance3D" parent="Scatterables" index="0" unique_id=520157100]
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 skeleton = NodePath("../..")
 
 [node name="GrassMesh2" type="MeshInstance3D" parent="Scatterables" index="1" unique_id=30563469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.840391, 0, 3.223936)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 skeleton = NodePath("../..")
 
 [node name="GrassMesh3" type="MeshInstance3D" parent="Scatterables" index="2" unique_id=737184689]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.296736, 0, -5.3271265)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 skeleton = NodePath("../..")
 
 [node name="GrassMesh4" type="MeshInstance3D" parent="Scatterables" index="3" unique_id=806798373]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.026525, 0, 0.5633981)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 skeleton = NodePath("../..")
 
 [node name="GrassMesh5" type="MeshInstance3D" parent="Scatterables" index="4" unique_id=2010107748]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -41.65063, 1, -4.369963)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 
 [node name="GrassMesh6" type="MeshInstance3D" parent="Scatterables" index="5" unique_id=1578190292]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -49.380703, 1, -3.4117384)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 
 [node name="GrassMesh7" type="MeshInstance3D" parent="Scatterables" index="6" unique_id=60414192]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.10535, 1, -10.215845)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 
 [node name="GrassMesh8" type="MeshInstance3D" parent="Scatterables" index="7" unique_id=787058879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65.71364, 0.99999905, -12.248171)
-mesh = ExtResource("16_xnnr5")
+mesh = ExtResource("15_hwceo")
 
 [node name="Vine2Mesh" type="MeshInstance3D" parent="Scatterables" index="8" unique_id=1028594411]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -10.750145, 0.9395361, 1.2234058)
-mesh = ExtResource("17_ovtcx")
+mesh = ExtResource("16_vra1y")
 
 [node name="Vine2Mesh2" type="MeshInstance3D" parent="Scatterables" index="9" unique_id=1542865816]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -59.724022, 1.0681987, 2.2893815)
-mesh = ExtResource("17_ovtcx")
+mesh = ExtResource("16_vra1y")
 
 [node name="Vine1Mesh" type="MeshInstance3D" parent="Scatterables" index="10" unique_id=1843563376]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.233303, 0.7964392, 3.263589)
-mesh = ExtResource("18_nxa0q")
+mesh = ExtResource("17_pu2tq")
 skeleton = NodePath("../..")

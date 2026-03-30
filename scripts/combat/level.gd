@@ -833,6 +833,21 @@ func MoveSingleAI() -> void:
 		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
 
+
+func CheckTriggerConditions() -> void:
+	## 02_Trigger2 = interact events like chest, sign post
+	## 03_Trigger3 = Dialogic events automatic trigger
+	var units :Array[Vector3i] = occupancy_map.get_used_cells();
+	for i in units.size():
+		var pos :Vector3i = units[i];
+		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
+			if get_trigger_name(pos) == "02_Trigger2":
+				## Run dialogic signal here
+				print("Player Unit moved to interact event tile");
+			elif get_trigger_name(pos) == "03_Trigger3":
+				## Run dialogic signal here
+				print("Player Unit moved to dialogic event tile here");
+
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
@@ -1064,7 +1079,8 @@ func _process_old(delta: float) -> void:
 	
 	if (is_in_menu):
 		return;
-	
+		
+	CheckTriggerConditions();
 	CheckVictoryConditions();
 	
 	if (state == States.PLAYING):
@@ -1234,7 +1250,7 @@ func _update_cursor_on_hover() -> void:
 		return
 		
 	var grid_pos := world_to_grid(world_pos)
-	print("grid_pos: ", grid_pos, " cell_item: ", movement_map.get_cell_item(grid_pos))
+	#print("grid_pos: ", grid_pos, " cell_item: ", movement_map.get_cell_item(grid_pos))
 
 	if grid_pos == _last_hovered_pos:
 		return

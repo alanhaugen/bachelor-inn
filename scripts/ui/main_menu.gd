@@ -42,6 +42,7 @@ func _ready() -> void:
 func _on_load_map_0_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
+	#Main.save.load_tutorial();
 	Main.save.read(0);
 func _on_load_map_1_pressed() -> void:
 	$UI/Background.visible = false;
@@ -51,11 +52,11 @@ func _on_load_map_2_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
 	Main.save.read(2);
-#func _on_start_tutorial_button_pressed() -> void:
-#	print("Tutorial Button Pressed")
-#	$UI/Background.visible = false;
-#	$UI/LevelSelect.visible = false;
-#	Main.save.read(3);
+func _on_start_tutorial_pressed() -> void:
+	print("Tutorial Button Pressed")
+	$UI/Background.visible = false;
+	$UI/LevelSelect.visible = false;
+	Main.save.load_tutorial();
 func _on_start_game_button_pressed() -> void:
 	$UI/LevelSelect.visible = true;
 	$UI/MainMenu.visible = false;
