@@ -73,6 +73,10 @@ func tutorial_unit_moved() -> void:
 		Dialogic.start("tutorial4");
 
 
+func tutorial_move_camera() -> void:
+	pass
+
+
 ## Hide an object in the level
 ## This function can be called via Dialogic
 ##

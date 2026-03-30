@@ -2,9 +2,7 @@
 narrator: *The hero animates falling down a steep hill. The hero is badly hurt*
 do Tutorial
 [signal arg="set_health_1"]
-[style name="chatBubbleStyle"]
 protagonist: *text buble* What... WHAT IS THAT THING? I got to get away! Away from it! I must go on despite my grave injuries!
-[style name="CustomDialogicStyle"]
 narrator: *Unit health bar is focused with flashy visuals* Your health is low, so you better make a run for it!
 narrator: *Unit is focused with flashy visuals* MouseButton1 (MB1) or TAB KEY to select Unit.
 do Tutorial.tutorial_unit_selected()
