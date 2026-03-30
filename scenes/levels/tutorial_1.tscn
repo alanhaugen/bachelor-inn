@@ -49,7 +49,7 @@ light_color = Color(0.60026926, 0.30395457, 0.8736758, 1)
 light_energy = 12.592
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, -2.466013, 8.317373, 6.4452515)
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1, 7, 3.5)
 
 [node name="FireParticle" parent="." index="18" unique_id=639555191 instance=ExtResource("2_lik2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.91478, 2.5466533, 3.0315752)

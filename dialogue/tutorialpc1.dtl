@@ -1,5 +1,12 @@
+[wait time="3.0"]
 narrator: *The hero animates falling down a steep hill. The hero is badly hurt*
+do Tutorial
+[signal arg="set_health_1"]
+[style name="chatBubbleStyle"]
 protagonist: *text buble* What... WHAT IS THAT THING? I got to get away! Away from it! I must go on despite my grave injuries!
-narrator: Your health is low, so you better make a run for it! The units movement options is visualized by blue highligts on each tile. Click on the tile furthest away from the monster chasing you.
-protagonist: *the monster follows you* Ahh, it keeps following me! I need to hide!
-narrator: *you come across some running water* The terrain you move across affects your movement range. Try moving over the running water.
+[style name="CustomDialogicStyle"]
+narrator: *Unit health bar is focused with flashy visuals* Your health is low, so you better make a run for it!
+narrator: *Unit is focused with flashy visuals* MouseButton1 (MB1) or TAB KEY to select Unit.
+do Tutorial.tutorial_unit_selected()
+do Tutorial.tutorial_wait_for_signal()
+[end_timeline]

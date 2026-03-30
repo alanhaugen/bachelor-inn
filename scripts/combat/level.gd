@@ -455,6 +455,10 @@ func select_unit(unit: Character) -> void:
 func _handle_player_click(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
 		return
+		
+	if (Main.level.name == "tutorial_1"):
+		print("DIALOGIC TEST")
+		Dialogic.start_timeline("tutorialpc2")
 	# Heal execution shortcut
 	if selected_unit == null:
 		Tutorial.tutorial_unit_selected()
@@ -597,7 +601,10 @@ func _ready() -> void:
 	elif (level_name == "fen"):
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
-
+	elif (level_name == "tutorial_1"):
+		Dialogic.start("tutorialpc1")
+	
+	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
 
 	var units: Array[Vector3i] = occupancy_map.get_used_cells()
@@ -1274,3 +1281,16 @@ func _update_cursor_on_hover() -> void:
 		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)
+
+
+func _on_dialogic_signal(argument: String) -> void:
+	if argument == "set_health_1":
+		for c in characters:
+			if c.state.faction == CharacterState.Faction.PLAYER:
+				c.state.current_health = 1
+				emit_signal("character_stats_changed", c)
+				break
+	elif argument == "hide_dialogue":
+		is_in_menu = false
+		Dialogic.paused = true
+		Dialogic.end_timeline()
