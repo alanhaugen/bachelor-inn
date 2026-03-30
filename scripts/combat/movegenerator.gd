@@ -10,6 +10,10 @@ static func generate(unit : Character, state : GameState, exclude_attacks : bool
 
 
 static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
+	print("Unit: ", unit.data.unit_name, 
+		  " | movement: ", unit.state.movement,
+		  " | effective: ", unit.state.get_effective_movement())
+	
 	var start_pos: Vector3i = unit.state.grid_position
 
 	# Priority queue: [pos, cost]

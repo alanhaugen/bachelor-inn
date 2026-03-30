@@ -74,6 +74,9 @@ var completed_moves :Array[Command];
 
 var characters: Array[Character];
 
+## For TriggerOverlay and Dialogic
+var triggered_positions: Array[Vector3i] = []
+
 const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
 
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
@@ -837,16 +840,23 @@ func MoveSingleAI() -> void:
 func CheckTriggerConditions() -> void:
 	## 02_Trigger2 = interact events like chest, sign post
 	## 03_Trigger3 = Dialogic events automatic trigger
+	var messages : int = 0
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "02_Trigger2":
-				## Run dialogic signal here
-				print("Player Unit moved to interact event tile");
+				## Run Event Dialogic signal here
+				print("Player Unit moved to interact event tile. A window should appear now.");
 			elif get_trigger_name(pos) == "03_Trigger3":
-				## Run dialogic signal here
-				print("Player Unit moved to dialogic event tile here");
+				## Run Story Dialogic signal here
+				print("Player Unit moved to dialogic event tile here. A dialogic event should start now.");
+				if triggered_positions.has(pos):
+					continue
+				print("Trigger fired at: ", pos)
+				triggered_positions.append(pos)
+				is_in_menu = true
+				Dialogic.start("tutorialpc1")
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
@@ -1080,7 +1090,7 @@ func _process_old(delta: float) -> void:
 	if (is_in_menu):
 		return;
 		
-	CheckTriggerConditions();
+	#CheckTriggerConditions();
 	CheckVictoryConditions();
 	
 	if (state == States.PLAYING):
@@ -1108,8 +1118,9 @@ func _process_old(delta: float) -> void:
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
 		if (moves_stack.is_empty()):
-			state = States.PLAYING;
+			state = States.PLAYING
 			movement_map.clear()
+			CheckTriggerConditions() ## 
 			
 			if (is_player_turn == false):
 				## END OF ROUND - RESET POINT
@@ -1189,7 +1200,7 @@ func _process_old(delta: float) -> void:
 				selected_unit.position = animation_path.pop_front();
 		## Process animation
 		else:
-			var movement_speed := 8.0 # units per second
+			var movement_speed := 8.0 # units per second WHAT IS THIS???
 			var target : Vector3 = animation_path.front()
 			var dir : Vector3 = target - selected_unit.position
 			var step := movement_speed * delta
