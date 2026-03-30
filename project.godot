@@ -36,16 +36,20 @@ gdscript/warnings/untyped_declaration=2
 
 directories/dch_directory={
 "WipGroup13": "res://dialogue/Characters/WipGroup13.dch",
-"character": "res://dialogue/character.dch"
+"character": "res://dialogue/character.dch",
+"monster": "res://dialogue/Characters/monster.dch",
+"narrator": "res://dialogue/Characters/narrator.dch",
+"protagonist": "res://dialogue/Characters/protagonist.dch"
 }
 directories/dtl_directory={
 "Showcase_Intro": "res://dialogue/Showcase_Intro.dtl",
 "firstLevel": "res://dialogue/firstLevel.dtl",
 "firstLevelVictory": "res://dialogue/firstLevelVictory.dtl",
-"tutorial1": "res://dialogue/tutorial1.dtl",
-"tutorial2": "res://dialogue/tutorial2.dtl",
-"tutorial3": "res://dialogue/tutorial3.dtl",
-"tutorial4": "res://dialogue/tutorial4.dtl"
+"tutorial1": "res://dialogue/tutorialmobile1.dtl",
+"tutorial2": "res://dialogue/tutorialmobile2.dtl",
+"tutorial3": "res://dialogue/tutorialmobile3.dtl",
+"tutorial4": "res://dialogue/tutorialmobile4.dtl",
+"tutorialpc1": "res://dialogue/tutorialpc1.dtl"
 }
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",
