@@ -48,8 +48,8 @@ func fill_from_commands(commands : Array[Command], state : GameState) -> void:
 			tile = GridTile.new(command.end_pos, GridTile.Type.INTERACT, weight)
 		
 		elif command is Move:
-			#tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
-			tile = GridTile.new(command.end_pos, GridTile.Type.INTERACT, weight)
+			tile = GridTile.new(command.end_pos, GridTile.Type.MOVE, weight)
+			#tile = GridTile.new(command.end_pos, GridTile.Type.INTERACT, weight)
 		if tile:
 			set_tile(tile)
 

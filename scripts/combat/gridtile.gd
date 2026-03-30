@@ -2,7 +2,7 @@ extends Resource
 class_name GridTile
 
 #region Tile codes
-enum Type { ATTACK = 0, MOVE, SELECTED, INTERACT }
+enum Type { ATTACK = 0, SELECTED, MOVE, WALKING, GOHERE, INTERACT }
 #endregion
 
 var weight : int
