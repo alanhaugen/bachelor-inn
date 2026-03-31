@@ -9,11 +9,11 @@ var overlay_color := Color(0, 0, 0, 0.7)
 
 func highlight(target: Control) -> void:
 	var padding := 10.0
-	var rect: Rect2 = target.get_global_rect()
-	rect = rect.grow(padding)
-	print("Target rect: ", rect)
-	print("Screen size: ", get_viewport_rect())
-	var screen := get_viewport_rect()
+	var global_rect: Rect2 = target.get_global_rect().grow(padding)
+	
+	var offset := global_position
+	var rect := Rect2(global_rect.position - offset, global_rect.size)
+	var screen := get_rect()
 	
 	top.color = overlay_color
 	top.position = Vector2.ZERO

@@ -55,7 +55,9 @@ directories/dtl_directory={
 "tutorialpc3": "res://dialogue/tutorialpc3.dtl",
 "tutorialpc4": "res://dialogue/tutorialpc4.dtl",
 "tutorialpc5": "res://dialogue/tutorialpc5.dtl",
-"tutorialpc6": "res://dialogue/tutorialpc6.dtl"
+"tutorialpc6": "res://dialogue/tutorialpc6.dtl",
+"tutorialpc7": "res://dialogue/tutorialpc7.dtl",
+"tutorialpc8": "res://dialogue/tutorialpc8.dtl"
 }
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",

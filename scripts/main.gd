@@ -86,6 +86,6 @@ func load_next_level() -> void:
 	if parts.size() < 2 or not parts[1].is_valid_int():
 		push_error("Cannot increment level name: " + current_level_name)
 		return
-		var next_name := parts[0] + "_" + str(parts[1].to_int() + 1)
-		load_level_by_name(next_name)
+	var next_name := parts[0] + "_" + str(parts[1].to_int() + 1)
+	load_level_by_name(next_name)
 #endregion
