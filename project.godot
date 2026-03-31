@@ -52,7 +52,10 @@ directories/dtl_directory={
 "tutorialmobile4": "res://dialogue/tutorialmobile4.dtl",
 "tutorialpc1": "res://dialogue/tutorialpc1.dtl",
 "tutorialpc2": "res://dialogue/tutorialpc2.dtl",
-"tutorialpc3": "res://dialogue/tutorialpc3.dtl"
+"tutorialpc3": "res://dialogue/tutorialpc3.dtl",
+"tutorialpc4": "res://dialogue/tutorialpc4.dtl",
+"tutorialpc5": "res://dialogue/tutorialpc5.dtl",
+"tutorialpc6": "res://dialogue/tutorialpc6.dtl"
 }
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",

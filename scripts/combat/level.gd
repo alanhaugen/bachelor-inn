@@ -61,6 +61,7 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 
 
 var selected_unit: Character = null
+var last_selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
@@ -438,7 +439,8 @@ func try_select_unit(unit: Character) -> void:
 func select_unit(unit: Character) -> void:
 	# Switching unit
 	_clear_selection()
-
+	
+	last_selected_unit = unit
 	selected_unit = unit
 	camera_controller.set_pivot_target_translate(unit.position)
 	
@@ -451,20 +453,19 @@ func select_unit(unit: Character) -> void:
 	#current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 	
+	if Main.level.level_name == "tutorial_1":
+		print("Level name matches: ", Main.level.name)
+		Tutorial.tutorial_unit_selected()
 	## DIALOGIC
-	if (Main.level.name == "tutorial_1"):
-		print("DIALOGIC TEST")
-		Dialogic.start_timeline("tutorialpc2")
+	#if (Main.level.name == "tutorial_1"):
+	#	print("DIALOGIC TEST")
+	#	Dialogic.start_timeline("tutorialpc2")
 
 
 func _handle_player_click(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
 		return
 	
-	# Heal execution shortcut
-	if selected_unit == null:
-		Tutorial.tutorial_unit_selected()
-
 	unit_pos = pos
 	movement_map.clear()
 
@@ -474,9 +475,8 @@ func _handle_player_click(pos: Vector3i) -> void:
 		#active_move = Wait.new(pos)
 		#show_move_popup(get_viewport().get_mouse_position())
 		#return
-
+		
 	select_unit(get_unit(pos))
-	Tutorial.tutorial_unit_selected()
 
 
 func _handle_action_tile_click(pos: Vector3i) -> void:
@@ -616,6 +616,7 @@ func _ready() -> void:
 	var characters_placed := 0
 
 	print("Loading new level, number of playable characters: ", Main.characters.size())
+	print("Level name: ", Main.level.name)
 
 	for i in range(units.size()):
 		var pos: Vector3i = units[i]
@@ -778,8 +779,6 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	selected_unit = get_unit(start)
 
 
-
-
 func reset_all_units() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
@@ -790,7 +789,6 @@ func reset_all_units() -> void:
 		if character is Character:
 			var character_script: Character = character;
 			character_script.reset();
-		
 
 
 func MoveAI() -> void:
@@ -847,6 +845,9 @@ func MoveSingleAI() -> void:
 			return
 		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
+		#if Main.level.level_name == "tutorial_1":
+		#	print("Advancing Tutorial Timeline")
+		#	Tutorial.advance_timeline()
 
 
 func CheckTriggerConditions() -> void:
@@ -1286,6 +1287,7 @@ func _update_cursor_on_hover() -> void:
 
 
 func _on_dialogic_signal(argument: String) -> void:
+	Tutorial.in_tutorial = true
 	if argument == "set_health_1":
 		for c in characters:
 			if c.state.faction == CharacterState.Faction.PLAYER:
@@ -1296,3 +1298,5 @@ func _on_dialogic_signal(argument: String) -> void:
 		is_in_menu = false
 		Dialogic.paused = true
 		Dialogic.end_timeline()
+	else:
+		Tutorial.advance_timeline()

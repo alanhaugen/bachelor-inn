@@ -1,0 +1,6 @@
+WAAAAAH! The monster keeps chasing you!
+narrator: Different terrain has different movement cost. \
+\
+You just moved over 5 tiles with grass.
+do Tutorial.tutorial_highlight_tile(7, 0, 2)
+narrator: Try moving towards the small river.

@@ -13,28 +13,40 @@ enum Step {
 var current_step : Step = Step.INACTIVE
 var current_timeline: int = 1
 var level: Level
+var in_tutorial : bool = false
 
 ## Tutorial state
 var tutorial_state: TutorialStates = TutorialStates.new();
 
 ## This should advance the tutorial to the next timeline
-## Given that the naming convention is tutorialpc + integer
+## Given that the naming convention is "tutorialpc" + integer
 func advance_timeline() -> void:
 	current_timeline += 1
-	tutorial_lock_menus()
-	Dialogic.start("tutorialpc" + str(current_timeline))
+	var next_timeline: String = "tutorialpc" + str(current_timeline)
+	
+	#if Dialogic.has_timeline(next_timeline):
+	if FileAccess.file_exists("res://dialogue/" + next_timeline + ".dtl"):
+		tutorial_lock_menus()
+		Dialogic.start(next_timeline)
+	else:
+		in_tutorial = false
+		tutorial_unlock_menus()
+		tutorial_unlock_camera()
 
 
 ## Start the first tutorial
 func start_tutorial() -> void:
+	in_tutorial = true
 	current_step = Step.INTRO
 	tutorial_lock_menus()
 	Dialogic.start("tutorialpc" + str(current_timeline))
 
 
 func on_timeline_ended() -> void:
-	tutorial_unlock_menus()
-	tutorial_unlock_camera()
+	if in_tutorial:
+		tutorial_unlock_menus()
+		tutorial_unlock_camera()
+	
 	match current_step:
 		Step.INTRO:
 			current_step = Step.MOVE_AWAY
@@ -104,9 +116,9 @@ func tutorial_highlight_tile(x : int, y : int, z: int) -> void:
 
 ## React to player selecting unit in tutorial
 func tutorial_unit_selected() -> void:
-	if tutorial_state.SelectTutorial == false:
-		tutorial_state.SelectTutorial = true
-		Tutorial.advance_timeline()
+	if not in_tutorial:
+		return
+	Tutorial.advance_timeline()
 	#if tutorial_state.SelectTutorial == false:
 	#	if Dialogic.Inputs.manual_advance.system_enabled == false:
 	#		Dialogic.Inputs.manual_advance.system_enabled = true;
