@@ -6,12 +6,20 @@
 script = ExtResource("1_rf8gj")
 entries = {
 "MB1": {
-"alternatives": ["TAB"],
+"alternatives": [],
 "case_sensitive": true,
 "color": Color(0.2632599, 0.87300104, 0.94921875, 1),
 "name": "MB1",
-"text": "(Press) Mouse Button 1 OR Keyboard Button TAB",
+"text": "(Press) Mouse Button 1",
 "title": "MB1"
 },
-"TAB": "MB1"
+"RED": {
+"color": Color(0.91796875, 0.22254467, 0.08605957, 1),
+"name": "RED"
+},
+"TAB": {
+"name": "TAB",
+"text": "(Press) Keyboard Button TAB",
+"title": "TAB"
+}
 }

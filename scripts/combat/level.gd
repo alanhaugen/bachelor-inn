@@ -447,18 +447,20 @@ func select_unit(unit: Character) -> void:
 	emit_signal("character_selected", selected_unit)
 	## This allows to show attacks
 	current_moves = MoveGenerator.generate(selected_unit, game_state)
-	## This 'true' exludes attacks
+	## Adding 'true' as a 3rd arg in fill_from_commands exludes attacks
 	#current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
+	
+	## DIALOGIC
+	if (Main.level.name == "tutorial_1"):
+		print("DIALOGIC TEST")
+		Dialogic.start_timeline("tutorialpc2")
 
 
 func _handle_player_click(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
 		return
-		
-	if (Main.level.name == "tutorial_1"):
-		print("DIALOGIC TEST")
-		Dialogic.start_timeline("tutorialpc2")
+	
 	# Heal execution shortcut
 	if selected_unit == null:
 		Tutorial.tutorial_unit_selected()
@@ -474,6 +476,7 @@ func _handle_player_click(pos: Vector3i) -> void:
 		#return
 
 	select_unit(get_unit(pos))
+	Tutorial.tutorial_unit_selected()
 
 
 func _handle_action_tile_click(pos: Vector3i) -> void:
@@ -602,7 +605,9 @@ func _ready() -> void:
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 	elif (level_name == "tutorial_1"):
-		Dialogic.start("tutorialpc1")
+		Tutorial.level = self
+		Tutorial.start_tutorial()
+		#Dialogic.start("tutorialpc1")
 	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
@@ -856,14 +861,11 @@ func CheckTriggerConditions() -> void:
 				## Run Event Dialogic signal here
 				print("Player Unit moved to interact event tile. A window should appear now.");
 			elif get_trigger_name(pos) == "03_Trigger3":
-				## Run Story Dialogic signal here
-				print("Player Unit moved to dialogic event tile here. A dialogic event should start now.");
 				if triggered_positions.has(pos):
 					continue
 				print("Trigger fired at: ", pos)
 				triggered_positions.append(pos)
-				is_in_menu = true
-				Dialogic.start("tutorialpc1")
+				Tutorial.advance_timeline()
 
 func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();

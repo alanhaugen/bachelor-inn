@@ -51,7 +51,8 @@ directories/dtl_directory={
 "tutorialmobile3": "res://dialogue/tutorialmobile3.dtl",
 "tutorialmobile4": "res://dialogue/tutorialmobile4.dtl",
 "tutorialpc1": "res://dialogue/tutorialpc1.dtl",
-"tutorialpc2": "res://dialogue/tutorialpc2.dtl"
+"tutorialpc2": "res://dialogue/tutorialpc2.dtl",
+"tutorialpc3": "res://dialogue/tutorialpc3.dtl"
 }
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",
@@ -62,7 +63,8 @@ layout/style_directory={
 layout/style_list=["res://dialogue/CustomDialogicStyle.tres", "res://dialogue/style.tres", "res://dialogue/chatBubbleStyle.tres"]
 layout/default_style="res://dialogue/CustomDialogicStyle.tres"
 variables={
-"PLATFORM": "MOBILE"
+"PLATFORM": "MOBILE",
+"UnitSelected": ""
 }
 glossary/default_case_sensitive=true
 extensions_folder="res://addons/dialogic_additions"

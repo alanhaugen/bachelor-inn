@@ -1,13 +1,59 @@
 extends Node
 
+enum Step {
+	INACTIVE,
+	INTRO,
+	MOVE_AWAY,
+	TERRIAN_EXPLAINED,
+	USE_ABILITIES,
+	COMBAT_EXPLAINED,
+	COMPLETE
+}
+
+var current_step : Step = Step.INACTIVE
+var current_timeline: int = 1
+var level: Level
 
 ## Tutorial state
 var tutorial_state: TutorialStates = TutorialStates.new();
 
+## This should advance the tutorial to the next timeline
+## Given that the naming convention is tutorialpc + integer
+func advance_timeline() -> void:
+	current_timeline += 1
+	tutorial_lock_menus()
+	Dialogic.start("tutorialpc" + str(current_timeline))
+
 
 ## Start the first tutorial
 func start_tutorial() -> void:
-	Dialogic.start_timeline("tutorial1");
+	current_step = Step.INTRO
+	tutorial_lock_menus()
+	Dialogic.start("tutorialpc" + str(current_timeline))
+
+
+func on_timeline_ended() -> void:
+	tutorial_unlock_menus()
+	tutorial_unlock_camera()
+	match current_step:
+		Step.INTRO:
+			current_step = Step.MOVE_AWAY
+			level.is_in_menu = false
+		Step.MOVE_AWAY:
+			current_step = Step.TERRIAN_EXPLAINED
+			level.is_in_menu = false
+		Step.TERRIAN_EXPLAINED:
+			current_step = Step.USE_ABILITIES
+			level.is_in_menu = false
+		Step.USE_ABILITIES:
+			current_step = Step.COMBAT_EXPLAINED
+			level.is_in_menu = false
+		Step.COMBAT_EXPLAINED:
+			current_step = Step.COMPLETE
+			level.is_in_menu = false
+		Step.COMPLETE:
+			current_step = Step.INACTIVE
+			level.is_in_menu = false
 
 
 ## Make tutorial wait for signal
@@ -51,18 +97,22 @@ func tutorial_camera_moved() -> void:
 
 
 ## Give a specific tile a special marker
-func tutorial_highlight_tile(x : int, y : int) -> void:
-	Main.level.movement_map.set_cell_item(Vector3i(x, y, 0), 1);
+func tutorial_highlight_tile(x : int, y : int, z: int) -> void:
+	#Main.level.movement_map.set_cell_item(Vector3i(x, y, 0), 1);
+	Main.level.movement_map.set_cell_item(Vector3i(x, y, z), 4);
 
 
 ## React to player selecting unit in tutorial
 func tutorial_unit_selected() -> void:
 	if tutorial_state.SelectTutorial == false:
-		if Dialogic.Inputs.manual_advance.system_enabled == false:
-			Dialogic.Inputs.manual_advance.system_enabled = true;
-			tutorial_state.SelectTutorial = true;
-			Dialogic.start_timeline("tutorial3");
-			#set_mouse_filter(Control.MOUSE_FILTER_IGNORE);
+		tutorial_state.SelectTutorial = true
+		Tutorial.advance_timeline()
+	#if tutorial_state.SelectTutorial == false:
+	#	if Dialogic.Inputs.manual_advance.system_enabled == false:
+	#		Dialogic.Inputs.manual_advance.system_enabled = true;
+	#		tutorial_state.SelectTutorial = true;
+	#		Dialogic.start_timeline("tutorial3");
+	#		#set_mouse_filter(Control.MOUSE_FILTER_IGNORE);
 
 
 ## React to player moving units in tutorial
@@ -84,3 +134,7 @@ func tutorial_move_camera() -> void:
 func hide_object(object_name : String) -> void:
 	var object :Node3D = Main.world.get_node("Map3d/" + object_name);
 	object.hide();
+
+
+func _ready() -> void:
+	Dialogic.timeline_ended.connect(on_timeline_ended)
