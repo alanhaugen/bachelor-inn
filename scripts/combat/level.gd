@@ -905,6 +905,9 @@ func next_level() -> void:
 		else:
 			get_unit(positions[i]).die(false)
 	
+	## SAVE GAME HAPPENS HERE
+	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
+	
 	Main.next_level()
 
 func _on_character_sanity_flipped(character: Character) -> void:
