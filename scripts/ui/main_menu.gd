@@ -15,6 +15,9 @@ extends Node3D
 
 @onready var camera_controller: CameraController = $World/CameraScene
 
+## Bools
+var _slot_pending_overwrite: int = -1
+
 #region --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
@@ -83,6 +86,7 @@ func _on_start_tutorial_pressed() -> void:
 func _on_start_new_game_pressed() -> void:
 	$UI/LevelSelect.visible = false
 	$UI/CreateNewSaveFileSelect.visible = true
+	_update_create_save_buttons()
 
 
 func _on_load_game_pressed() -> void:
@@ -122,19 +126,29 @@ func _on_back_button_load_pressed() -> void:
 ## CREATE SAVE FILE
 ## TODO: Add warning if player is about to overwrite existing save file
 func _on_back_button_create_save_pressed() -> void:
+	_slot_pending_overwrite = -1
 	$UI/CreateNewSaveFileSelect.visible = false;
 	$UI/LevelSelect.visible = true;
 
 
 func _on_select_save_file_0_pressed() -> void:
+	if Main.save.slot_has_data(0) and _slot_pending_overwrite != 0:
+		_slot_pending_overwrite = 0
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile0.text = "Slot 1 - Click again to confirm"
+		return
+	_slot_pending_overwrite = -1
 	$UI/Background.visible = false
 	$UI/CreateNewSaveFileSelect.visible = false
 	Main.current_save_slot = 0
 	Main.save.create_new_save_in_slot(0)
 	Main.save.read(0)
 
-
 func _on_select_save_file_1_pressed() -> void:
+	if Main.save.slot_has_data(1) and _slot_pending_overwrite != 1:
+		_slot_pending_overwrite = 1
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile1.text = "Slot 2 - Click again to confirm"
+		return
+	_slot_pending_overwrite = -1
 	$UI/Background.visible = false
 	$UI/CreateNewSaveFileSelect.visible = false
 	Main.current_save_slot = 1
@@ -143,9 +157,26 @@ func _on_select_save_file_1_pressed() -> void:
 
 
 func _on_select_save_file_2_pressed() -> void:
+	if Main.save.slot_has_data(2) and _slot_pending_overwrite != 2:
+		_slot_pending_overwrite = 2
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile2.text = "Slot 3 - Click again to confirm"
+		return
+	_slot_pending_overwrite = -1
 	$UI/Background.visible = false
 	$UI/CreateNewSaveFileSelect.visible = false
 	Main.current_save_slot = 2
 	Main.save.create_new_save_in_slot(2)
 	Main.save.read(2)
 #endregion
+
+func _update_create_save_buttons() -> void:
+	var buttons := [
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile0,
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile1,
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile2
+	]
+	for i in buttons.size():
+		if Main.save.slot_has_data(i):
+			buttons[i].text = "Slot " + str(i + 1) + " (OVERWRITE?)"
+		else:
+			buttons[i].text = "Slot " + str(i + 1) + " (Empty)"
