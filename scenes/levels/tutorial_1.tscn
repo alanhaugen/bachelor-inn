@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="2_lik2v"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
+[ext_resource type="Script" uid="uid://ddmmpi5gwt3ii" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
@@ -59,3 +60,34 @@ transform = Transform3D(49.708862, 0, 0, 0, 0.6568207, 0, 0, 0, 22.674746, -0.14
 
 [node name="Fireflies" parent="." index="20" unique_id=949192376 instance=ExtResource("4_digyo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2636974, 0.647439, 2.7913103)
+
+[node name="TutorialHighlight" type="Control" parent="." index="21" unique_id=184926546 groups=["tutorial_highlight"]]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_sbawd")
+
+[node name="Top" type="ColorRect" parent="TutorialHighlight" index="0" unique_id=942756291]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Bottom" type="ColorRect" parent="TutorialHighlight" index="1" unique_id=408025473]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Left" type="ColorRect" parent="TutorialHighlight" index="2" unique_id=97316471]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Right" type="ColorRect" parent="TutorialHighlight" index="3" unique_id=2134833057]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

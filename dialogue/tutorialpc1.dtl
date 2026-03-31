@@ -6,10 +6,10 @@ protagonist: I got to get away! Away from.. it! \
 \
 I must go on, despite my grave injuries!
 protagonist: For Frodo!
-Your health is low and you are in no shape to fight this thing. \
-You better make a run for it!\
-\
-*Unit health bar is focused with flashy visuals*
+Your health is low!
+[signal arg="highlight_health_bar"]
+[wait time="2.0"]
+[signal arg="clear_highlight"]
 Press MouseButton1 (MB1) on any unit to select it. \
 \
 OR\

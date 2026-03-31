@@ -1287,16 +1287,24 @@ func _update_cursor_on_hover() -> void:
 
 
 func _on_dialogic_signal(argument: String) -> void:
-	Tutorial.in_tutorial = true
+	#Tutorial.in_tutorial = true
 	if argument == "set_health_1":
 		for c in characters:
 			if c.state.faction == CharacterState.Faction.PLAYER:
 				c.state.current_health = 1
 				emit_signal("character_stats_changed", c)
 				break
-	elif argument == "hide_dialogue":
-		is_in_menu = false
-		Dialogic.paused = true
-		Dialogic.end_timeline()
+	elif argument == "highlight_health_bar":
+		print("Highlight Health Bar CALLED")
+		var ui : Control = get_tree().get_first_node_in_group("ui_controller")
+		var highlight := get_tree().get_first_node_in_group("tutorial_highlight")
+		print("ui: ", ui)
+		print("highlight: ", highlight)
+		if ui and highlight:
+			highlight.highlight(ui.player_stats)
+	elif argument == "clear_highlight":
+		var highlight := get_tree().get_first_node_in_group("tutorial_highlight")
+		if highlight:
+			highlight.clear()
 	else:
 		Tutorial.advance_timeline()

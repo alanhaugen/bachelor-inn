@@ -8,7 +8,11 @@ extends Control
 var overlay_color := Color(0, 0, 0, 0.7)
 
 func highlight(target: Control) -> void:
+	var padding := 10.0
 	var rect: Rect2 = target.get_global_rect()
+	rect = rect.grow(padding)
+	print("Target rect: ", rect)
+	print("Screen size: ", get_viewport_rect())
 	var screen := get_viewport_rect()
 	
 	top.color = overlay_color

@@ -148,5 +148,14 @@ func hide_object(object_name : String) -> void:
 	object.hide();
 
 
+func tutorial_highlight_element(target: Control) -> void:
+	var highlight := Main.level.get_node("UI/tutorial_highlight")
+	highlight.highligh(target)
+
+func tutorial_clear_highlight_element() -> void:
+	var highlight := Main.level.get_node("UI/tutorial_highlight")
+	highlight.clear()
+
+
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)
