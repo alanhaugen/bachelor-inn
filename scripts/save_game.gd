@@ -100,6 +100,8 @@ func read(save_slot: int) -> bool:
 	if not FileAccess.file_exists(SAVE_GAME_PATH):
 		return false
 
+	Main.current_save_slot = save_slot
+	
 	var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
 	var json_string := file.get_as_text()
 	file.close()
@@ -200,3 +202,28 @@ func load_tutorial() -> void:
 	
 	Main.current_level_name = "tutorial_1"
 	Main.load_level("tutorial_1")
+
+
+func save_progress(save_slot: int, level_index: int) -> void:
+	var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
+	var json_string := file.get_as_text()
+	file.close()
+	
+	var json := JSON.new()
+	if json.parse(json_string) != OK:
+		push_error("JSON parse error on save")
+		return
+	
+	var saves: Dictionary = json.data
+	var slot_key := "Slot" + str(save_slot +1)
+	var units := []
+	for char in Main.characters:
+		if char == null:
+			continue
+		units.append(char.save())
+		
+	saves[slot_key] = {"level": level_index, "units": units}
+	
+	var save_file := FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
+	save_file.store_string(JSON.stringify(saves))
+	save_file.close()

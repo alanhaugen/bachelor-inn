@@ -35,6 +35,7 @@ var camera_controller: CameraController;
 
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
+var current_save_slot: int = 0
 #endregion
 
 #region Methods
@@ -87,6 +88,7 @@ func load_level(level_name: String) -> void:
 	if ui:
 		ui._connect_to_level(level)
 
+
 func load_level_by_name(level_name: String) -> void:
 	current_level_name = level_name
 	for path : String in levels:
@@ -94,6 +96,7 @@ func load_level_by_name(level_name: String) -> void:
 			load_level(level_name)
 			return
 	push_error("No level found matching name: " + level_name)
+
 
 func load_next_level() -> void:
 	# This splits "tutorial_1" into ["tutorial", "1"] from the right
@@ -103,4 +106,11 @@ func load_next_level() -> void:
 		return
 	var next_name := parts[0] + "_" + str(parts[1].to_int() + 1)
 	load_level_by_name(next_name)
+
+
+func get_next_level_index() -> int:
+	for i in levels.size():
+		if levels[i].get_file().get_basename() == current_level_name:
+			return i + 1
+	return 0
 #endregion
