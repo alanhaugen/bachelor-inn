@@ -7,7 +7,8 @@ extends Node3D
 @onready var gui: Control = $UI;
 
 ## Level buttons
-@onready var levelButton: Button = $UI/LevelSelect/LevelSelectVBOX/LoadMap0;
+#@onready var levelButton: Button = $UI/LevelSelect/LevelSelectVBOX/LoadMap0;
+@onready var start_game_button: Button = $UI/MainMenu/Selector/StartGameButton
 
 ## Names of levels in the order they will be played
 @export var levels_order: LevelOrder
@@ -21,7 +22,7 @@ func _ready() -> void:
 	Main.levels = levels_order.levels;
 	Main.camera_controller = camera_controller;
 	
-	$UI/LevelSelect.visible = false;
+	#$UI/LevelSelect.visible = false;
 	
 	print(OS.get_data_dir());
 	
@@ -35,7 +36,7 @@ func _ready() -> void:
 		Main.save.create_new_save_data();
 	
 	# Set focus on the first button
-	#LevelButton.grab_focus();
+	start_game_button.grab_focus();
 #endregion
 
 #region --- Signals ---
@@ -47,15 +48,29 @@ func _on_start_game_button_pressed() -> void:
 
 
 func _on_options_button_pressed() -> void:
-	pass # Replace with function body.
+	$UI/MainMenu.visible = false;
+	$UI/OptionsSelect.visible = true;
 
 
 func _on_credits_button_pressed() -> void:
-	pass # Replace with function body.
+	$UI/MainMenu.visible = false;
+	$UI/CreditsSelect.visible = true;
 
 
 func _on_quit_button_pressed() -> void:
 	get_tree().quit();
+
+
+## OPTIONS
+func _on_back_button_options_pressed() -> void:
+	$UI/MainMenu.visible = true;
+	$UI/OptionsSelect.visible = false;
+
+
+## CREDITS
+func _on_back_button_credits_pressed() -> void:
+	$UI/MainMenu.visible = true;
+	$UI/CreditsSelect.visible = false;
 
 
 ## START GAME MENU

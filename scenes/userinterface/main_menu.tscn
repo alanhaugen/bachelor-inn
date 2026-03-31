@@ -368,6 +368,111 @@ theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Back"
 
+[node name="OptionsSelect" type="Control" parent="UI" unique_id=2059970587]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelSelectVBOX" type="VBoxContainer" parent="UI/OptionsSelect" unique_id=1643194182]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.5418
+offset_top = -96.978386
+offset_right = 210.4582
+offset_bottom = 100.021614
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Video Settings" type="Button" parent="UI/OptionsSelect/LevelSelectVBOX" unique_id=810580565]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("4_wb0q5")
+theme_override_styles/pressed = ExtResource("5_q85j6")
+theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Video"
+
+[node name="Audio Settings" type="Button" parent="UI/OptionsSelect/LevelSelectVBOX" unique_id=2146208092]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("4_wb0q5")
+theme_override_styles/pressed = ExtResource("5_q85j6")
+theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Audio"
+
+[node name="Fluff" type="Button" parent="UI/OptionsSelect/LevelSelectVBOX" unique_id=784122208]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_ds07i")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_nsnfg")
+theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Fluff"
+
+[node name="BackButtonOptions" type="Button" parent="UI/OptionsSelect/LevelSelectVBOX" unique_id=929817822]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleBoxTexture_wxwbn")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_beadd")
+theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Back"
+
+[node name="CreditsSelect" type="Control" parent="UI" unique_id=589572424]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LevelSelectVBOX" type="VBoxContainer" parent="UI/CreditsSelect" unique_id=90268271]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.5418
+offset_top = -96.978386
+offset_right = 210.4582
+offset_bottom = 100.021614
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackButtonCredits" type="Button" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=476628321]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 42
+theme_override_styles/normal = SubResource("StyleBoxTexture_wxwbn")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_beadd")
+theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Back"
+
 [node name="LoadSelect" type="Control" parent="UI" unique_id=247441802]
 visible = false
 anchors_preset = 0
@@ -528,6 +633,8 @@ autoplay = true
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/StartNewGame" to="." method="_on_start_new_game_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/LoadGame" to="." method="_on_load_game_pressed"]
 [connection signal="pressed" from="UI/LevelSelect/LevelSelectVBOX/BackButtonLevel" to="." method="_on_back_button_level_pressed"]
+[connection signal="pressed" from="UI/OptionsSelect/LevelSelectVBOX/BackButtonOptions" to="." method="_on_back_button_options_pressed"]
+[connection signal="pressed" from="UI/CreditsSelect/LevelSelectVBOX/BackButtonCredits" to="." method="_on_back_button_credits_pressed"]
 [connection signal="pressed" from="UI/LoadSelect/LevelSelectVBOX/LoadMap0" to="." method="_on_load_map_0_pressed"]
 [connection signal="pressed" from="UI/LoadSelect/LevelSelectVBOX/LoadMap1" to="." method="_on_load_map_1_pressed"]
 [connection signal="pressed" from="UI/LoadSelect/LevelSelectVBOX/LoadMap2" to="." method="_on_load_map_2_pressed"]
