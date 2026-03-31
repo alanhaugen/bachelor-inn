@@ -57,46 +57,80 @@ func _on_credits_button_pressed() -> void:
 func _on_quit_button_pressed() -> void:
 	get_tree().quit();
 
+
 ## START GAME MENU
 func _on_start_tutorial_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
 	Main.save.load_tutorial();
 
+
 func _on_start_new_game_pressed() -> void:
-	Main.save.create_new_save_data()
-	$UI/Background.visible = false
 	$UI/LevelSelect.visible = false
-	Main.current_save_slot = 0
-	Main.save.read(0)
-	
+	$UI/CreateNewSaveFileSelect.visible = true
+
+
 func _on_load_game_pressed() -> void:
-	#$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
 	$UI/LoadSelect.visible = true;
+
 
 func _on_back_button_level_pressed() -> void:
 	$UI/LevelSelect.visible = false;
 	$UI/MainMenu.visible = true;
 
+
 ## LOAD GAME
 func _on_load_map_0_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LoadSelect.visible = false;
-	#Main.save.load_tutorial();
 	Main.save.read(0);
-	
+
+
 func _on_load_map_1_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LoadSelect.visible = false;
 	Main.save.read(1);
-	
+
+
 func _on_load_map_2_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LoadSelect.visible = false;
 	Main.save.read(2);
 
+
 func _on_back_button_load_pressed() -> void:
 	$UI/LoadSelect.visible = false;
 	$UI/LevelSelect.visible = true;
+
+
+## CREATE SAVE FILE
+## TODO: Add warning if player is about to overwrite existing save file
+func _on_back_button_create_save_pressed() -> void:
+	$UI/CreateNewSaveFileSelect.visible = false;
+	$UI/LevelSelect.visible = true;
+
+
+func _on_select_save_file_0_pressed() -> void:
+	$UI/Background.visible = false
+	$UI/CreateNewSaveFileSelect.visible = false
+	Main.current_save_slot = 0
+	Main.save.create_new_save_in_slot(0)
+	Main.save.read(0)
+
+
+func _on_select_save_file_1_pressed() -> void:
+	$UI/Background.visible = false
+	$UI/CreateNewSaveFileSelect.visible = false
+	Main.current_save_slot = 1
+	Main.save.create_new_save_in_slot(1)
+	Main.save.read(1)
+
+
+func _on_select_save_file_2_pressed() -> void:
+	$UI/Background.visible = false
+	$UI/CreateNewSaveFileSelect.visible = false
+	Main.current_save_slot = 2
+	Main.save.create_new_save_in_slot(2)
+	Main.save.read(2)
 #endregion

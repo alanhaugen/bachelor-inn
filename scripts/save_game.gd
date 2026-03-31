@@ -73,6 +73,33 @@ func create_new_save_data() -> void:
 	save_file.store_string(json_string);
 	save_file.close();
 
+func create_new_save_in_slot(save_slot: int) -> void:
+	# Read existing saves first
+	var saves := {}
+	if FileAccess.file_exists(SAVE_GAME_PATH):
+		var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
+		var json := JSON.new()
+		json.parse(file.get_as_text())
+		file.close()
+		saves = json.data
+
+	# Build fresh units
+	var units := []
+	for id: String in registry.characters.keys():
+		var def: CharacterDefinition = registry.characters[id]
+		var char := Character.new()
+		char.data = def.base_data.duplicate()
+		char.state = def.base_state.duplicate()
+		char.scene_id = id
+		units.append(char.save())
+
+	# Only overwrite the selected slot
+	saves["Noble Nights Save format"] = version
+	saves["Slot " + str(save_slot + 1)] = {"level": 0, "units": units}
+	var save_file := FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
+	save_file.store_string(JSON.stringify(saves))
+	save_file.close()
+
 
 func write(_save_slot: int) -> void:
 	var save_file: Object = FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
@@ -227,3 +254,17 @@ func save_progress(save_slot: int, level_index: int) -> void:
 	var save_file := FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	save_file.store_string(JSON.stringify(saves))
 	save_file.close()
+
+
+func slot_has_data(save_slot: int) -> bool:
+	if not FileAccess.file_exists(SAVE_GAME_PATH):
+		return false
+	var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
+	var json_string := file.get_as_text()
+	file.close()
+	var json := JSON.new()
+	if json.parse(json_string) != OK:
+		return false
+	var save: Dictionary = json.data
+	var slot_key := "Slot " + str(save_slot + 1)
+	return save.has(slot_key) and save[slot_key].get("units", []).size() > 0
