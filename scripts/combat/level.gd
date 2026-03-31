@@ -869,6 +869,8 @@ func CheckTriggerConditions() -> void:
 				Tutorial.advance_timeline()
 
 func CheckVictoryConditions() -> void:
+	## Next_level() should not run here, but in the stat screen after button is pressed
+	## Victory conditions should just freeze the game, unload, and add an intermed screen / load screen
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
 	var numberOfEnemyUnits  :int = 0;
