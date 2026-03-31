@@ -44,13 +44,28 @@ func unload_level() -> void:
 		level.queue_free(); # Free the current level instance
 	level = null;
 
-
 func next_level() -> void:
-	current_level_index += 1;
-	if current_level_index > levels.size():
-		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
+	var current_index := -1
+	for i in levels.size():
+		if levels[i].get_file().get_basename() == current_level_name:
+			current_index = i
+			break
+	
+	if current_index == -1:
+		push_error("Current level not found: ", current_level_name)
+		return
+	
+	var next_index := current_index + 1
+	if next_index >= levels.size():
+		get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
 	else:
-		load_level(levels[current_level_index]);
+		load_level_by_name(levels[next_index].get_file().get_basename())
+#func next_level() -> void:
+#	current_level_index += 1;
+#	if current_level_index > levels.size():
+#		get_tree().change_scene_to_file("res://scenes/states/victory.tscn");
+#	else:
+#		load_level(levels[current_level_index]);
 
 ## Loads a new level and cleanup previously loaded level
 ##
