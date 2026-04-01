@@ -45,7 +45,8 @@ signal level_changed(new_level: int)
 @export var level := 1
 @export var skills: Array[Skill] = []
 @export var active_effects: Array[Dictionary] = []
-@export var aggro_state: AggroState = AggroState.FROZEN
+#@export var aggro_state: AggroState = AggroState.FROZEN #PATROL_RANDOM, PATROL_PATH, AGGRESSIVE
+@export var aggro_state: AggroState = AggroState.PATROL_RANDOM
 @export var aggro_range : int = 8
 #endregion
 

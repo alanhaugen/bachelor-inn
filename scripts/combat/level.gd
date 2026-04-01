@@ -837,8 +837,26 @@ func MoveSingleAI() -> void:
 			return
 		CharacterState.AggroState.PATROL_RANDOM:
 			## TODO: Implement random patrol
-			currentEnemy.state.is_moved = true
-			MoveSingleAI()
+			var offsets := [Vector3i(1,0,0), Vector3i(0,1,0), Vector3i(0,0,1)]
+			offsets.shuffle()
+			var moved := false
+			for offset : Vector3i in offsets:
+				var target : Vector3i = currentEnemy.state.grid_position + offset
+				if current_state.is_free(target) and current_state.get_tiles_at_xz(target.x, target.z).size() > 0:
+					moves_stack.append(Move.new(currentEnemy.state.grid_position, target))
+					create_path(currentEnemy.state.grid_position, target)
+					selected_unit = currentEnemy
+					camera_controller.focus_camera(currentEnemy)
+					state = States.ANIMATING
+					#wait_for_camera = true
+					#timer.start(pre_enemy_turn_wait)
+					#await timer.timeout
+					#wait_for_camera = false
+					moved = true
+					break
+			if not moved:
+				currentEnemy.state.is_moved = true
+				MoveSingleAI()
 			return
 		CharacterState.AggroState.PATROL_PATH:
 			## TODO: Implement waypoint patrol
@@ -1173,6 +1191,15 @@ func _process_old(delta: float) -> void:
 				
 				reset_all_units();
 				is_player_turn = true;
+				
+				 # Pan camera back to player after enemy turn ends
+				camera_controller.free_camera()
+				if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+					camera_controller.set_pivot_target_translate(last_selected_unit.position)
+				else:
+					var first : Character = get_selectable_characters().front()
+					if first != null:
+						camera_controller.set_pivot_target_translate(first.position)
 		# Done with one move, execute it and start on next
 		
 		elif (animation_path.is_empty()):
