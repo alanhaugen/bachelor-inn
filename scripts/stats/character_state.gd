@@ -51,6 +51,8 @@ signal level_changed(new_level: int)
 @export var max_health : int
 @export var max_sanity : int
 @export var movement : int
+@export var aggro_state: AggroState = AggroState.FROZEN
+@export var aggro_range : int = 8
 @export var current_health : int
 @export var current_sanity : int : set = _set_sanity
 @export var current_level : int = 1
