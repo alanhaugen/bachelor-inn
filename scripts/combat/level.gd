@@ -833,7 +833,8 @@ func MoveSingleAI() -> void:
 	match currentEnemy.state.aggro_state:
 		CharacterState.AggroState.FROZEN:
 			currentEnemy.state.is_moved = true
-			MoveSingleAI()
+			#MoveSingleAI()
+			call_deferred("MoveSingleAI")
 			return
 		CharacterState.AggroState.PATROL_RANDOM:
 			## TODO: Implement random patrol
@@ -856,7 +857,8 @@ func MoveSingleAI() -> void:
 					break
 			if not moved:
 				currentEnemy.state.is_moved = true
-				MoveSingleAI()
+				#MoveSingleAI()
+				call_deferred("MoveSingleAI")
 			return
 		CharacterState.AggroState.PATROL_PATH:
 			## TODO: Implement waypoint patrol
@@ -864,13 +866,15 @@ func MoveSingleAI() -> void:
 			if path == null:
 				push_error("No patrol path found for: " + currentEnemy.data.unit_name)
 				currentEnemy.state.aggro_state = CharacterState.AggroState.PATROL_RANDOM
-				MoveSingleAI()
+				#MoveSingleAI()
+				call_deferred("MoveSingleAI")
 				return
 			
 			var waypoints := path.get_waypoints(self)
 			if waypoints.is_empty():
 				currentEnemy.state.is_moved = true
-				MoveSingleAI()
+				#MoveSingleAI()
+				call_deferred("MoveSingleAI")
 			return
 
 			# Get next waypoint, wrap around when reaching the end
@@ -905,7 +909,8 @@ func MoveSingleAI() -> void:
 				state = States.ANIMATING
 			else:
 				currentEnemy.state.is_moved = true
-				MoveSingleAI()
+				#MoveSingleAI()
+				call_deferred("MoveSingleAI")
 			return
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
