@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://0763ifvwqsdr"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_nhemk"]
+[ext_resource type="Script" uid="uid://cp16qj5iurkhq" path="res://scripts/combat/patrol_path.gd" id="2_uonig"]
 
 [node name="Map3d2" unique_id=656823534 instance=ExtResource("1_nhemk")]
+level_name = null
 
 [node name="TerrainGrid" parent="." index="0" unique_id=1846160155]
 data = {
@@ -23,3 +25,14 @@ data = {
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.622765, 0, 4.044525)
 visible = true
+
+[node name="PatrolPath" type="Node3D" parent="." index="18" unique_id=1654232922]
+script = ExtResource("2_uonig")
+enemy_name = "Bird"
+metadata/_custom_type_script = "uid://cp16qj5iurkhq"
+
+[node name="Waypoint1" type="Node3D" parent="PatrolPath" index="0" unique_id=1332175701]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 20)
+
+[node name="Waypoint2" type="Node3D" parent="PatrolPath" index="1" unique_id=349900508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 4)

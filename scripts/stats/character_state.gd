@@ -19,7 +19,7 @@ enum AggroState {
 	FROZEN,
 	PATROL_RANDOM,
 	PATROL_PATH,
-	AGRESSIVE
+	AGGRESSIVE
 }
 #endregion
 
@@ -45,14 +45,14 @@ signal level_changed(new_level: int)
 @export var level := 1
 @export var skills: Array[Skill] = []
 @export var active_effects: Array[Dictionary] = []
+@export var aggro_state: AggroState = AggroState.FROZEN
+@export var aggro_range : int = 8
 #endregion
 
 #region inferred vars calculated from CharacterData on spawn
 @export var max_health : int
 @export var max_sanity : int
 @export var movement : int
-@export var aggro_state: AggroState = AggroState.FROZEN
-@export var aggro_range : int = 8
 @export var current_health : int
 @export var current_sanity : int : set = _set_sanity
 @export var current_level : int = 1

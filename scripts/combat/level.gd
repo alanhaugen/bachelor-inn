@@ -92,6 +92,7 @@ const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
+var patrol_paths: Dictionary[String, PatrolPath] = {}
 
 enum States {
 	PLAYING,
@@ -662,7 +663,8 @@ func _ready() -> void:
 	
 	turn_transition_animation_player.play()
 	add_to_group("level")
-
+	
+	_register_patrol_paths()
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -810,6 +812,7 @@ func MoveAI() -> void:
 		camera_controller.free_camera()
 
 func MoveSingleAI() -> void:
+	check_aggro()
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
@@ -823,6 +826,27 @@ func MoveSingleAI() -> void:
 			continue
 		currentEnemy = unit
 		break
+		
+	if currentEnemy == null:
+		return
+		
+	match currentEnemy.state.aggro_state:
+		CharacterState.AggroState.FROZEN:
+			currentEnemy.state.is_moved = true
+			MoveSingleAI()
+			return
+		CharacterState.AggroState.PATROL_RANDOM:
+			## TODO: Implement random patrol
+			currentEnemy.state.is_moved = true
+			MoveSingleAI()
+			return
+		CharacterState.AggroState.PATROL_PATH:
+			## TODO: Implement waypoint patrol
+			currentEnemy.state.is_moved = true
+			MoveSingleAI()
+			return
+		CharacterState.AggroState.AGGRESSIVE:
+			pass
 	
 	if currentEnemy != null:
 		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
@@ -1313,3 +1337,35 @@ func _on_dialogic_signal(argument: String) -> void:
 			highlight.clear()
 	else:
 		Tutorial.advance_timeline()
+
+
+func _register_patrol_paths() -> void:
+	for child in get_children():
+		if child is PatrolPath:
+			patrol_paths[child.enemy_name] = child
+			print("Registered patrol path for: ", child.enemy_name, " waypoints: ", child.get_waypoints(self))
+
+
+func check_aggro() -> void:
+	print("Check_Aggro() called")
+	for unit in characters:
+		if unit == null:
+			continue
+		if not unit.state.is_enemy():
+			continue
+		if unit.state.aggro_state == CharacterState.AggroState.AGGRESSIVE:
+			continue
+			
+		for player_unit in characters:
+			if player_unit == null:
+				continue
+			if player_unit.state.faction != CharacterState.Faction.PLAYER:
+				continue
+			
+			var distx : int = abs(unit.state.grid_position.x - player_unit.state.grid_position.x)
+			var distz : int = abs(unit.state.grid_position.z - player_unit.state.grid_position.z)
+			var dist : int = distx + distz
+			if dist <= unit.state.aggro_range:
+				unit.state.aggro_state = CharacterState.AggroState.AGGRESSIVE
+				print(unit.data.unit_name, " has aggro")
+				break
