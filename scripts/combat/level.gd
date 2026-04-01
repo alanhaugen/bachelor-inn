@@ -860,8 +860,52 @@ func MoveSingleAI() -> void:
 			return
 		CharacterState.AggroState.PATROL_PATH:
 			## TODO: Implement waypoint patrol
-			currentEnemy.state.is_moved = true
-			MoveSingleAI()
+			var path: PatrolPath = patrol_paths.get(currentEnemy.data.unit_name, null)
+			if path == null:
+				push_error("No patrol path found for: " + currentEnemy.data.unit_name)
+				currentEnemy.state.aggro_state = CharacterState.AggroState.PATROL_RANDOM
+				MoveSingleAI()
+				return
+			
+			var waypoints := path.get_waypoints(self)
+			if waypoints.is_empty():
+				currentEnemy.state.is_moved = true
+				MoveSingleAI()
+			return
+
+			# Get next waypoint, wrap around when reaching the end
+			var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
+
+			# If already at waypoint, advance to next
+			if target == currentEnemy.state.grid_position:
+				currentEnemy.state.patrol_index += 1
+				target = waypoints[currentEnemy.state.patrol_index % waypoints.size()]
+	
+			# Move one step toward the waypoint using existing pathfinding
+			var move_targets := MoveGenerator.generate_move(currentEnemy, current_state)
+			var best_move: Move = null
+			var best_dist := INF
+			
+			for m in move_targets:
+				var dx : int = abs(m.end_pos.x - target.x)
+				var dz : int = abs(m.end_pos.z - target.z)
+				var dist : int = dx + dz
+				if dist < best_dist:
+					best_dist = dist
+					best_move = m
+			
+			if best_move != null:
+				# Check if we reached the waypoint after this move
+				if best_move.end_pos == target:
+					currentEnemy.state.patrol_index += 1
+				moves_stack.append(best_move)
+				create_path(best_move.start_pos, best_move.end_pos)
+				selected_unit = currentEnemy
+				camera_controller.focus_camera(currentEnemy)
+				state = States.ANIMATING
+			else:
+				currentEnemy.state.is_moved = true
+				MoveSingleAI()
 			return
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
