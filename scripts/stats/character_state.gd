@@ -14,6 +14,13 @@ enum SanityState
 	OBSESSED, # fear
 	DISSOCIATED # delusion
 }
+
+enum AggroState {
+	FROZEN,
+	PATROL_RANDOM,
+	PATROL_PATH,
+	AGRESSIVE
+}
 #endregion
 
 #region signals
