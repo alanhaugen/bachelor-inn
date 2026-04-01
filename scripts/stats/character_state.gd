@@ -46,7 +46,7 @@ signal level_changed(new_level: int)
 @export var skills: Array[Skill] = []
 @export var active_effects: Array[Dictionary] = []
 ## Default state is FROZEN. All states: FROZEN, PATROL_RANDOM, PATROL_PATH, AGGRESSIVE
-@export var aggro_state: AggroState = AggroState.PATROL_PATH
+@export var aggro_state: AggroState = AggroState.AGGRESSIVE
 @export var aggro_range : int = 8
 @export var patrol_index: int = 0
 #endregion
