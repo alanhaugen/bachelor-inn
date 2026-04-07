@@ -666,6 +666,7 @@ func _ready() -> void:
 	
 	_register_patrol_paths()
 	check_aggro()
+	hide_inactive_characters()
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -834,6 +835,7 @@ func MoveSingleAI() -> void:
 		is_animation_just_finished = true
 		reset_all_units()
 		check_aggro()
+		hide_inactive_characters()
 		camera_controller.free_camera()
 		if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
 			camera_controller.set_pivot_target_translate(last_selected_unit.position)
@@ -1265,6 +1267,7 @@ func _process_old(delta: float) -> void:
 				
 				reset_all_units();
 				check_aggro()
+				hide_inactive_characters()
 				is_player_turn = true;
 				
 				 # Pan camera back to player after enemy turn ends
@@ -1473,20 +1476,15 @@ func check_aggro() -> void:
 				break
 
 func hide_inactive_characters() -> void:
-	var any_active_enemy := characters.any(func(u: Character) -> bool:
-		return u != null and u.state.is_enemy() and u.state.aggro_state != CharacterState.AggroState.FROZEN)
-	
-	var first_shown := false
-	for c in characters:
-		if c == null:
+	## TODO: Implement hiding player units when out of combat
+	#var any_active_enemy := false
+	for unit in characters:
+		if unit == null:
 			continue
-		if c.state.faction != CharacterState.Faction.PLAYER:
+		if not unit.state.is_enemy():
 			continue
-		if any_active_enemy:
-			c.show()
+		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
+			unit.hide()
+			#any_active_enemy = true
 		else:
-			if not first_shown:
-				c.show()
-				first_shown = true
-			else:
-				c.hide()
+			unit.show()
