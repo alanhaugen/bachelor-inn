@@ -122,7 +122,17 @@ func apply_skill_effect(skill: Skill) -> void:
 			if k in ["damage", "dot_tick_damage"]:
 				continue
 			mods[k] = skill.effect_mods[k]
+	
+	## Direct friendly effects
+	if skill.duration_turns <= 0 and mods.size() > 0:
+		for k: String in mods.keys():
+			match k:
+				"current_sanity":
+					current_sanity = min(current_sanity + int(mods[k]), max_sanity)
+				"current_health":
+					current_health = min(current_health + int(mods[k]), max_health)
 
+	
 	## Passive mods effect, if any
 	if mods.size() > 0 and skill.duration_turns > 0:
 		var effect := {
