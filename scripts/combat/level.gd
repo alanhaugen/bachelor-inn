@@ -665,6 +665,7 @@ func _ready() -> void:
 	add_to_group("level")
 	
 	_register_patrol_paths()
+	check_aggro()
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -812,7 +813,8 @@ func MoveAI() -> void:
 		camera_controller.free_camera()
 
 func MoveSingleAI() -> void:
-	check_aggro()
+	#check_aggro()
+	#Hide "End Turn button" and other UI elements
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
@@ -1239,6 +1241,7 @@ func _process_old(delta: float) -> void:
 					emit_signal("character_stats_changed", c)
 				
 				reset_all_units();
+				check_aggro()
 				is_player_turn = true;
 				
 				 # Pan camera back to player after enemy turn ends

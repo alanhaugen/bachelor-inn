@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://c4b8f02hyixcc"]
+[gd_scene format=3 uid="uid://c4b8f02hyixcc"]
 
 [ext_resource type="Script" uid="uid://ml4dennnbf1u" path="res://scripts/ui/in_game_ui.gd" id="1_aljfs"]
 [ext_resource type="PackedScene" uid="uid://cogf2xkkqlmrb" path="res://scenes/userinterface/player_stats.tscn" id="2_3kd8n"]
@@ -33,7 +33,7 @@ texture_margin_right = 5.0
 texture_margin_bottom = 5.0
 region_rect = Rect2(227, 67, 26, 26)
 
-[node name="GUI" type="Control"]
+[node name="GUI" type="Control" unique_id=1620263469]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -43,7 +43,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_aljfs")
 
-[node name="Scale" type="Control" parent="."]
+[node name="Scale" type="Control" parent="." unique_id=110596003]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,7 +52,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Player_Stats" parent="Scale" instance=ExtResource("2_3kd8n")]
+[node name="Player_Stats" parent="Scale" unique_id=1444668078 instance=ExtResource("2_3kd8n")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -62,7 +62,7 @@ offset_right = 48.0
 offset_bottom = -87.99994
 scale = Vector2(3, 3)
 
-[node name="Enemy_Stats" parent="Scale" instance=ExtResource("3_5uqut")]
+[node name="Enemy_Stats" parent="Scale" unique_id=272324159 instance=ExtResource("3_5uqut")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -76,7 +76,7 @@ offset_bottom = 11.0
 grow_horizontal = 0
 scale = Vector2(3, 3)
 
-[node name="Characters_VBOX" type="VBoxContainer" parent="Scale"]
+[node name="Characters_VBOX" type="VBoxContainer" parent="Scale" unique_id=1558160718]
 unique_name_in_owner = true
 layout_mode = 1
 offset_left = 15.0
@@ -87,16 +87,16 @@ scale = Vector2(3, 3)
 mouse_filter = 2
 theme_override_constants/separation = 4
 
-[node name="CharacterPreview" parent="Scale/Characters_VBOX" instance=ExtResource("6_aljfs")]
+[node name="CharacterPreview" parent="Scale/Characters_VBOX" unique_id=801399757 instance=ExtResource("6_aljfs")]
 visible = false
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Scale"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Scale" unique_id=1909360445]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Ribbon" parent="Scale" instance=ExtResource("5_aljfs")]
+[node name="Ribbon" parent="Scale" unique_id=2041898346 instance=ExtResource("5_aljfs")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -105,7 +105,7 @@ offset_top = -297.99994
 offset_right = 9.0
 offset_bottom = -297.99994
 
-[node name="End_Turn_Button" type="Button" parent="Scale"]
+[node name="End_Turn_Button" type="Button" parent="Scale" unique_id=1064894623]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 1
