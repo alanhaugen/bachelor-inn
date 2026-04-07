@@ -418,6 +418,7 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 		moves_stack.front().end_pos
 	)
 
+	is_choosing_skill_attack_origin = false
 	state = States.ANIMATING
 
 

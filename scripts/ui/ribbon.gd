@@ -65,7 +65,7 @@ func _on_ability_used() -> void:
 	print("ability_used signal received in ribbon")
 	gray_out_abilities_used(true)
 
-## Faied attempt to gray out ability buttons after use
+## TODO: Fix? Faied attempt to gray out ability buttons after use
 func gray_out_abilities_used(used: bool) -> void:
 	for b in _skill_buttons:
 		b.disabled = used
