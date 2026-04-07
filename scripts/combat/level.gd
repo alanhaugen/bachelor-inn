@@ -1058,7 +1058,9 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
-	print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
+	#print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
+	#if skill == active_skill:
+	#	return
 	if selected_unit != null and selected_unit.state.is_ability_used:
 		print("Unit has already used their ability this turn.")
 		return
@@ -1469,3 +1471,22 @@ func check_aggro() -> void:
 				unit.state.aggro_state = CharacterState.AggroState.AGGRESSIVE
 				print(unit.data.unit_name, " has aggro")
 				break
+
+func hide_inactive_characters() -> void:
+	var any_active_enemy := characters.any(func(u: Character) -> bool:
+		return u != null and u.state.is_enemy() and u.state.aggro_state != CharacterState.AggroState.FROZEN)
+	
+	var first_shown := false
+	for c in characters:
+		if c == null:
+			continue
+		if c.state.faction != CharacterState.Faction.PLAYER:
+			continue
+		if any_active_enemy:
+			c.show()
+		else:
+			if not first_shown:
+				c.show()
+				first_shown = true
+			else:
+				c.hide()
