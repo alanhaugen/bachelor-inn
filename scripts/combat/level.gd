@@ -1477,7 +1477,8 @@ func check_aggro() -> void:
 
 func hide_inactive_characters() -> void:
 	## TODO: Implement hiding player units when out of combat
-	#var any_active_enemy := false
+	var any_active_enemy := false
+	# This hide inactive enemies
 	for unit in characters:
 		if unit == null:
 			continue
@@ -1485,6 +1486,22 @@ func hide_inactive_characters() -> void:
 			continue
 		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
 			unit.hide()
-			#any_active_enemy = true
+			any_active_enemy = true
 		else:
 			unit.show()
+	
+	# This hides units when out of combat
+	var first_shown := false
+	for c in Main.characters:
+		if c == null:
+			continue
+		if c.state.faction != CharacterState.Faction.PLAYER:
+			continue
+		if any_active_enemy:
+			c.show()
+		else:
+			if not first_shown:
+				c.show()
+				first_shown = true
+			else:
+				c.hide()
