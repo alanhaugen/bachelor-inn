@@ -817,6 +817,27 @@ func MoveSingleAI() -> void:
 	#Hide "End Turn button" and other UI elements
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
+	var any_active_enemies := false
+	
+	## Check if any enemies are active, if not, return to player turn
+	for unit in characters:
+		if unit == null:
+			continue
+		if not unit.state.is_enemy():
+			continue
+		if unit.state.aggro_state != CharacterState.AggroState.FROZEN:
+			any_active_enemies = true
+			break
+	
+	if not any_active_enemies:
+		is_player_turn = true
+		is_animation_just_finished = true
+		reset_all_units()
+		check_aggro()
+		camera_controller.free_camera()
+		if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+			camera_controller.set_pivot_target_translate(last_selected_unit.position)
+		return
 	
 	var currentEnemy : Character = null
 	for unit in characters:
