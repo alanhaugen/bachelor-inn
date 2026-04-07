@@ -1490,18 +1490,20 @@ func hide_inactive_characters() -> void:
 		else:
 			unit.show()
 	
-	# This hides units when out of combat
-	var first_shown := false
-	for c in Main.characters:
-		if c == null:
-			continue
-		if c.state.faction != CharacterState.Faction.PLAYER:
-			continue
-		if any_active_enemy:
-			c.show()
-		else:
-			if not first_shown:
-				c.show()
-				first_shown = true
-			else:
-				c.hide()
+	# This hides all but 1 unit when out of combat
+	## TODO: Add function to respawn units around unhidden unit when entering
+	##       combat.
+	#var first_shown := false
+	#for c in Main.characters:
+		#if c == null:
+			#continue
+		#if c.state.faction != CharacterState.Faction.PLAYER:
+			#continue
+		#if any_active_enemy:
+			#c.show()
+		#else:
+			#if not first_shown:
+				#c.show()
+				#first_shown = true
+			#else:
+				#c.hide()
