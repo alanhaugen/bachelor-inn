@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="2_baqsr"]
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="3_baqsr"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_034s2"]
-[ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_0oyyt"]
+[ext_resource type="PackedScene" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_0oyyt"]
 
 [node name="Map3d2" unique_id=1579630590 instance=ExtResource("1_vknko")]
 
@@ -22,7 +22,7 @@ data = {
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(0, 0, 0, 12, 3, 1, 12, 9, 1441797, 5, 9, 1441797, 8, 3, 1441797)
+"cells": PackedInt32Array(0, 0, 0, 12, 3, 1, 12, 9, 1441797, 5, 9, 1441797, 8, 3, 1441797, 1, 0, 0, 1, 1, 0, 0, 1, 0, 2, 0, 0, 2, 1, 0)
 }
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]

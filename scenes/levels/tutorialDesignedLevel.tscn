@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://wafi17lrl1ac"]
+[gd_scene format=3 uid="uid://buoj0blfhynou"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_gwuxj"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]

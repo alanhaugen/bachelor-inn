@@ -603,16 +603,20 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
-	if (level_name == "first"):
-		Dialogic.start(str(level_name) + "Level");
-		is_in_menu = true;
-	elif (level_name == "fen"):
-		Dialogic.start("Showcase_Intro")
-		is_in_menu = true
-	elif (level_name == "tutorial_1"):
-		Tutorial.level = self
-		Tutorial.start_tutorial()
-		#Dialogic.start("tutorialpc1")
+	#if (level_name == "first"):
+		#Dialogic.start(str(level_name) + "Level");
+		#is_in_menu = true;
+	#elif (level_name == "fen"):
+		#Dialogic.start("Showcase_Intro")
+		#is_in_menu = true
+	#elif (level_name == "tutorial_1"):
+		#Tutorial.level = self
+		#Tutorial.start_tutorial()
+		##Dialogic.start("tutorialpc1")
+	#elif (level_name == "fento"):
+		#for c in Main.characters:
+			#if c.state.faction == CharacterState.Faction.ENEMY:
+				#c.state.aggro_range = 20
 	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
@@ -657,7 +661,23 @@ func _ready() -> void:
 					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		else:
 			spawn_enemy(pos, unit_type, true)
-		
+
+
+	if (level_name == "first"):
+		Dialogic.start(str(level_name) + "Level");
+		is_in_menu = true;
+	elif (level_name == "fen"):
+		Dialogic.start("Showcase_Intro")
+		is_in_menu = true
+	elif (level_name == "tutorial_1"):
+		Tutorial.level = self
+		Tutorial.start_tutorial()
+		#Dialogic.start("tutorialpc1")
+	elif (level_name == "fento"):
+		for c in characters:
+			if c.state.faction == CharacterState.Faction.ENEMY:
+				c.state.aggro_range = 12
+
 
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()

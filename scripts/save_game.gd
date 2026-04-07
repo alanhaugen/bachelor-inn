@@ -54,17 +54,17 @@ func create_new_save_data() -> void:
 		"Noble Nights Save format": version,
 		"Slot 1":
 		{
-			"level": 0,
+			"level": 3,
 			"units": units
 		},
 		"Slot 2":
 		{
-			"level": 1,
+			"level": 4,
 			"units": units
 		},
 		"Slot 3":
 		{
-			"level": 2,
+			"level": 5,
 			"units": units
 		},
 	}
