@@ -52,6 +52,10 @@ func _connect_group(buttons: Array[TextureButton], handler: Callable) -> void:
 
 func _on_skill_button_pressed(button: TextureButton) -> void:
 	print("Skill button pressed.")
+	if Main.level.is_choosing_skill_attack_origin:
+		return
+	if Main.level.is_choosing_skill_target:
+		return
 	var s: Skill = button.get_meta("skill") as Skill
 	if s != null:
 		skill_pressed.emit(s)

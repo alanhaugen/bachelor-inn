@@ -66,6 +66,7 @@ var selected_enemy_unit: Character = null
 var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
 var is_choosing_skill_target: bool = false
+var is_choosing_skill_attack_origin: bool = false
 var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
 var move_popup: Control;
 #var stat_popup_player: Control;
@@ -291,6 +292,8 @@ func get_trigger_name(pos : Vector3) -> String:
 
 
 func show_attack_tiles(pos: Vector3i) -> void:
+	is_choosing_skill_attack_origin = true
+	## TODO: Gray out abilities?
 	path_map.clear()
 
 	var reachable: Array[Vector3i] = []
@@ -1477,6 +1480,7 @@ func check_aggro() -> void:
 
 func hide_inactive_characters() -> void:
 	## TODO: Implement hiding player units when out of combat
+	##       Implement spawning player units when re entering combat
 	var any_active_enemy := false
 	# This hide inactive enemies
 	for unit in characters:
