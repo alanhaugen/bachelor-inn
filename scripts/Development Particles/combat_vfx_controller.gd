@@ -51,6 +51,16 @@ func _spawn_dmg_number_scene(result : AttackResult) -> void:
 		result.was_critical
 	)
 
+
+func spawn_damage_number(amount: int, position: Vector3, is_critical: bool = false) -> void:
+	if not damage_number_scene:
+		return
+	var dmg: Node3D = damage_number_scene.instantiate()
+	get_tree().current_scene.add_child(dmg)
+	dmg.global_position = position + Vector3(0, 1, 0)
+	dmg.set_value(amount, is_critical)
+
+
 func _spawn_hit_particles(target : Character) -> void:
 	if not hit_particles_scene:
 		return

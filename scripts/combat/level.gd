@@ -1079,8 +1079,17 @@ func tick_all_units_end_round() -> void:
 			continue
 		if c.state and c.state.is_alive == false:
 			continue
-
+		
+		var health_before := c.state.current_health
+		var sanity_before := c.state.current_sanity
 		c.state.tick_effects_end_round(c)
+		
+		var health_diff := c.state.current_health - health_before
+		var sanity_diff := c.state.current_sanity - sanity_before
+		if health_diff != 0:
+			combat_vfx.spawn_damage_number(health_diff, c.global_position)
+		if sanity_diff != 0:
+			combat_vfx.spawn_damage_number(sanity_diff, c.global_position + Vector3(0,0.5,0))
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
@@ -1284,6 +1293,7 @@ func _process_old(delta: float) -> void:
 				## Going from enemy phase to player phase
 				is_animation_just_finished = true;
 				tick_all_units_end_round(); ## Decay effects
+				## TODO: Implement damagenumbers
 				for c in Main.characters:
 					if c == null:
 						continue

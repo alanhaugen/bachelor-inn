@@ -16,7 +16,9 @@ skill_name = "Fireball"
 tooltip = "A fireball that deals initial damage, and burns the victim for 2 rounds."
 icon = SubResource("AtlasTexture_11pje")
 effect_mods = {
-&"damage": 4
+&"damage": 3,
+&"dot_tick_damage": 1
 }
 target_faction = 1
+duration_turns = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"
