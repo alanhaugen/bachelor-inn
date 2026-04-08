@@ -53,6 +53,8 @@ light_energy = 12.592
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1, 0.5, 1)
 minimum_camera_height = 8.0
 maximum_camera_height = 20.0
+set_springarm_length = true
+springarm_length = 20.0
 maximum_camera_x = 38.0
 minimum_camera_z = 1.0
 
