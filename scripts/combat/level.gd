@@ -1026,6 +1026,19 @@ func CheckTriggerConditions() -> void:
 				print("Trigger fired at: ", pos)
 				triggered_positions.append(pos)
 				Tutorial.advance_timeline()
+			
+			var adjacent := [
+				pos + Vector3i(1, 0, 0),
+				pos + Vector3i(-1, 0, 0),
+				pos + Vector3i(0, 0, 1),
+				pos + Vector3i(0, 0, -1)
+			]
+			for adj : Vector3i in adjacent:
+				if get_trigger_name(adj) == "02_Chest":
+					if triggered_positions.has(adj):
+						continue
+					triggered_positions.append(adj)
+					_on_chest_opened(adj)
 
 func CheckVictoryConditions() -> void:
 	## Next_level() should not run here, but in the stat screen after button is pressed
@@ -1472,7 +1485,7 @@ func _update_cursor_on_hover() -> void:
 	else:
 		Input.set_custom_mouse_cursor(null)
 
-
+## DIALOGIC AND INTERACTION
 func _on_dialogic_signal(argument: String) -> void:
 	#Tutorial.in_tutorial = true
 	if argument == "set_health_1":
@@ -1496,6 +1509,11 @@ func _on_dialogic_signal(argument: String) -> void:
 	else:
 		Tutorial.advance_timeline()
 
+
+func _on_chest_opened(pos: Vector3i) -> void:
+	is_in_menu = true
+	Dialogic.start("chest_tutorial")
+## DIALOGIC AND INTERACTION END
 
 func _register_patrol_paths() -> void:
 	for child in get_children():

@@ -20,8 +20,14 @@ static func from_level(level : Level) -> GameState:
 			state.units.append(character);
 		else:
 			# Interactables will be considered terrain, but is in the units_map
-			var id : int = level.units_map.get_cell_item(pos);
-			var type : String = level.units_map.mesh_library.get_item_name(id);
+			#var id : int = level.units_map.get_cell_item(pos);
+			var id : int = level.occupancy_map.get_cell_item(pos)
+			if id == GridMap.INVALID_CELL_ITEM:
+				continue
+			var type : String = level.occupancy_map.mesh_library.get_item_name(id)
+			if type.begins_with("02") or type.begins_with("03"):
+				continue
+			#var type : String = level.units_map.mesh_library.get_item_name(id);
 			state.terrain.append(Terrain.new(pos, type));
 	
 	var level_terrain :Array[Vector3i] = level.movement_weights_map.get_used_cells();

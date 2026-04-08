@@ -44,6 +44,7 @@ directories/dch_directory={
 }
 directories/dtl_directory={
 "Showcase_Intro": "res://dialogue/Showcase_Intro.dtl",
+"chest_tutorial": "res://dialogue/chest_tutorial.dtl",
 "firstLevel": "res://dialogue/firstLevel.dtl",
 "firstLevelVictory": "res://dialogue/firstLevelVictory.dtl",
 "tutorialmobile1": "res://dialogue/tutorialmobile1.dtl",
