@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://crgdpyhxu1t8u"]
+[gd_scene format=3 uid="uid://crgdpyhxu1t8u"]
 
 [ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_w78pb"]
 [ext_resource type="Resource" uid="uid://b86jeecevuihs" path="res://art/Animations/Enemies/Ghost/Ghost_Moving_L.tres" id="2_cwx50"]
@@ -19,13 +19,15 @@ shader_parameter/frame_rows = 1
 shader_parameter/grey_tint = false
 shader_parameter/hit_effect = 0.0
 shader_parameter/hit_effect_color = Color(1, 0, 0, 1)
+shader_parameter/passive = false
+shader_parameter/passive_tint = Color(0.1, 0.1, 0.1, 1)
 shader_parameter/edge_strength = 3.0
 shader_parameter/edge_tint = Color(1.469, 0.676, 0.772, 1)
 shader_parameter/normal_tilt = 4.0
 shader_parameter/normal_sensitivity = 1.0
 shader_parameter/flip_normal_y = true
 
-[node name="Ghost_Enemy" instance=ExtResource("1_w78pb")]
+[node name="Ghost_Enemy" unique_id=1339368304 instance=ExtResource("1_w78pb")]
 run_left_animation = ExtResource("3_og36s")
 run_right_animation = ExtResource("2_cwx50")
 run_up_animation = ExtResource("4_qga0n")
@@ -33,15 +35,15 @@ run_down_animation = ExtResource("5_qfpck")
 idle_animation = ExtResource("6_f02yr")
 portrait = ExtResource("7_iu64w")
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="0" unique_id=1365623275]
 transform = Transform3D(7.06, 0, 0, 0, 3.1610909, 2.4510214, 0, -2.4510214, 3.1610909, 0, 1.1570795, -0.23443079)
 material_override = SubResource("ShaderMaterial_og36s")
 script = ExtResource("9_iu64w")
 
-[node name="Outline" parent="." index="1"]
+[node name="Outline" parent="." index="1" unique_id=53410441]
 transform = Transform3D(7.06, 0, 0, 0, 3.1610909, 2.4510214, 0, -2.4510214, 3.1610909, 0, 1.1570795, -0.23443079)
 script = ExtResource("9_iu64w")
 
-[node name="Shadow" parent="." index="2"]
+[node name="Shadow" parent="." index="2" unique_id=2091232362]
 transform = Transform3D(10.268, 0, 0, 0, -2.3468644e-07, -4, 0, 5.369, -1.7484555e-07, 0, 0.07548618, -0.24753797)
 transparency = 0.45
