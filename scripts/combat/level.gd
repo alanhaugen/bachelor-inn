@@ -42,6 +42,7 @@ var movement_weights_grid : Grid
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
 @onready var cursor_feet : Texture2D = preload("res://art/textures/cursor_feet.png")
 @onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
+@onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
 @onready var cursor: Sprite3D = $Cursor
@@ -1481,7 +1482,7 @@ func _update_cursor_on_hover() -> void:
 	if cell == GridTile.Type.ATTACK:
 		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
 	elif cell == GridTile.Type.INTERACT:
-		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+		Input.set_custom_mouse_cursor(cursor_hand, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)
 

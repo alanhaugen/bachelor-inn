@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://dg1jj5qvf04uy"]
+[gd_resource type="Resource" script_class="SpriteAnim" format=3 uid="uid://dg1jj5qvf04uy"]
 
 [ext_resource type="Texture2D" uid="uid://bgj2u36gkqfj" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred.png" id="1_nibih"]
 [ext_resource type="Texture2D" uid="uid://b8vt3136v8jph" path="res://art/Animations/Characters/Alfred/Tex_New/D_Idle_Animation_Alfred_Mask4.png" id="2_isxp1"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b10bf6hwaqddg"]
+[gd_scene format=3 uid="uid://b10bf6hwaqddg"]
 
 [ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_br8hb"]
 [ext_resource type="Resource" uid="uid://b5tfb3fssigcy" path="res://art/Animations/Characters/Alfred/Alfred_Moving_D.tres" id="2_mfx1k"]
@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://dg1jj5qvf04uy" path="res://art/Animations/Characters/Alfred/Alfred_Idle.tres" id="6_d2cp7"]
 [ext_resource type="Texture2D" uid="uid://cp5oaeiyh12gx" path="res://art/textures/Alphred_portrait_normal.png" id="7_d2cp7"]
 
-[node name="Character" instance=ExtResource("1_br8hb")]
+[node name="Character" unique_id=516576733 instance=ExtResource("1_br8hb")]
 run_left_animation = ExtResource("3_d2cp7")
 run_right_animation = ExtResource("3_mfx1k")
 run_up_animation = ExtResource("5_o3dv1")
@@ -16,5 +16,5 @@ run_down_animation = ExtResource("2_mfx1k")
 idle_animation = ExtResource("6_d2cp7")
 portrait = ExtResource("7_d2cp7")
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="0" unique_id=1365623275]
 no_depth_test = true

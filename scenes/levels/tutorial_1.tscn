@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="2_lik2v"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
-[ext_resource type="Script" uid="uid://ddmmpi5gwt3ii" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
+[ext_resource type="Script" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
