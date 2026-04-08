@@ -1,5 +1,6 @@
 [gd_resource type="Resource" script_class="Skill" format=3 uid="uid://x7mbefo655v8"]
 
+[ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="1_sxwr3"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_u21qa"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_sxwr3"]
@@ -15,6 +16,7 @@ skill_id = "fireball_basic"
 skill_name = "Fireball"
 tooltip = "A fireball that deals initial damage, and burns the victim for 2 rounds."
 icon = SubResource("AtlasTexture_11pje")
+Vfx_Scene = ExtResource("1_sxwr3")
 effect_mods = {
 &"damage": 3,
 &"dot_tick_damage": 1

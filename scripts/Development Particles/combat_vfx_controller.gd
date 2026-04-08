@@ -20,22 +20,39 @@ func play_attack(result : AttackResult) -> void:
 			await _spawn_ranged_attack(attacker, result.victim, result)
 
 func play_skill(result : AttackResult) -> void:
-	var target : Character = result.victim
-	var effect : PackedScene = result.vfx_scene
-	var dmg : int = result.damage if result.damage != null else 0
-	
-	if dmg >= 1:
-		_spawn_dmg_number_scene(result)
-	if effect == null:
+	if result == null:
 		return
-		
-	var vfx : Node3D = effect.instantiate()
-	
-	add_child(vfx)
-	vfx.global_position = result.victim.global_position
-	
-	if vfx.has_method("play"):
-		vfx.play()
+	#var dmg : int = result.damage if result.damage != null else 0
+	#if dmg >= 1:
+	#	_spawn_dmg_number_scene(result)
+	await _spawn_ability_attack(result.aggressor, result.victim, result)
+	#print("play_skill called, vfx_scene: ", result.vfx_scene)
+	#var target : Character = result.victim
+	#var effect : PackedScene = result.vfx_scene
+	#var dmg : int = result.damage if result.damage != null else 0
+	#
+	#if dmg >= 1:
+		#_spawn_dmg_number_scene(result)
+	#if effect == null:
+		#return
+		#
+	#var vfx : Node3D = effect.instantiate()
+	#get_tree().current_scene.add_child(vfx)
+	#
+	#var start_pos := result.aggressor.global_position + Vector3(0, 1, 0)
+	#var end_pos := target.global_position + Vector3(0, 1, 0)
+	#vfx.global_position = result.victim.global_position
+	#vfx.look_at(end_pos, Vector3.UP)
+	#
+	#var tween := vfx.create_tween()
+	#tween.tween_property(vfx, "global_position", end_pos, 0.25)
+	#await tween.finished
+	#vfx.queue_free()
+	#_spawn_hit_particles(target)
+	#_trigger_hit_flash(target, result.was_critical)
+#
+	##if vfx.has_method("play"):
+	##	vfx.play()
 
 
 func _spawn_dmg_number_scene(result : AttackResult) -> void:
@@ -109,20 +126,21 @@ func _spawn_melee_attack(attacker : Character, target : Character, result: Attac
 	_is_aniamting_attack = false;
 	
 func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
+	var projectile_scene: PackedScene = result.vfx_scene if result.vfx_scene != null else ranged_attack_scene
 	if not ranged_attack_scene:
 		return
-	var projectile := ranged_attack_scene.instantiate()
+	
+	#var projectile := ranged_attack_scene.instantiate()
+	var projectile := projectile_scene.instantiate()
 	get_tree().current_scene.add_child(projectile)
 	
 	var start_pos: = attacker.global_position + Vector3(0, 1, 0)
 	var end_pos: = target.global_position + Vector3(0, 1, 0)
-
 	projectile.global_position = start_pos
 	projectile.look_at(end_pos, Vector3.UP)
 	
 	_is_aniamting_attack = true;
 	var tween: = projectile.create_tween()
-	
 	tween.tween_property(
 		projectile, 
 		"global_position", 
@@ -135,9 +153,37 @@ func _spawn_ranged_attack(attacker : Character, target : Character, result: Atta
 	_spawn_dmg_number_scene(result)
 	_trigger_hit_flash(target, result.was_critical)
 	_is_aniamting_attack = false;
+
+
+func _spawn_ability_attack(attacker : Character, target : Character, result: AttackResult) -> void:
+	var projectile_scene: PackedScene = result.vfx_scene if result.vfx_scene != null else ranged_attack_scene
+	if not ranged_attack_scene:
+		return
 	
+	#var projectile := ranged_attack_scene.instantiate()
+	var projectile := projectile_scene.instantiate()
+	get_tree().current_scene.add_child(projectile)
+	
+	var start_pos: = attacker.global_position + Vector3(0, 1, 0)
+	var end_pos: = target.global_position + Vector3(0, 1, 0)
+	projectile.global_position = start_pos
+	projectile.look_at(end_pos, Vector3.UP)
+	
+	_is_aniamting_attack = true;
+	var tween: = projectile.create_tween()
+	tween.tween_property(
+		projectile, 
+		"global_position", 
+		end_pos, 
+		0.25
+	)
+	await tween.finished
+	projectile.queue_free()
+	_spawn_hit_particles(target)
+	_spawn_dmg_number_scene(result)
+	_trigger_hit_flash(target, result.was_critical)
+	_is_aniamting_attack = false;
+
+
 func is_finished() -> bool:
 	return !_is_aniamting_attack
-	
-	
-	

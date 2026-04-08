@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://dn2eahj1aq85s"]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://dn2eahj1aq85s"]
 
 [ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_e3fg3"]
+[ext_resource type="PackedScene" uid="uid://bhfj4kn8ra1o3" path="res://scenes/Development/Particles/ranged_attack_particle.tscn" id="2_2iway"]
 
 [resource]
 script = ExtResource("1_e3fg3")
 weapon_id = "bow_basic"
 weapon_name = "Wooden Bow"
+vfx_scene = ExtResource("2_2iway")
 damage_modifier = 3
 min_range = 2
 max_range = 5

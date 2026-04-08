@@ -6,7 +6,7 @@ class_name Weapon
 @export var weapon_name : String;
 @export var weapon_tooltip : String;
 @export var weapon_icon : Texture2D;
-
+@export var vfx_scene: PackedScene;
 
 ## STATS
 @export var damage_modifier: int = 1; ## Additional damage 
