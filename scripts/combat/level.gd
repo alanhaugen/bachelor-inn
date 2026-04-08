@@ -42,7 +42,6 @@ var movement_weights_grid : Grid
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
 @onready var cursor_feet : Texture2D = preload("res://art/textures/cursor_feet.png")
 @onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
-@onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
 @onready var cursor: Sprite3D = $Cursor
@@ -95,6 +94,8 @@ const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 var patrol_paths: Dictionary[String, PatrolPath] = {}
+var chests: Dictionary[Vector3i, Chest] = {}
+var pending_chest_weapon: Weapon = null
 
 enum States {
 	PLAYING,
@@ -128,6 +129,14 @@ const pre_enemy_turn_wait : float = 0.2
 var wait_timer : float = 0.0
 @onready var timer : Timer = $Timer
 var wait_for_camera : bool = false
+#endregion
+
+#region Key Input Controls
+var _held_key: Key = KEY_NONE
+var _hold_timer: float = 0.0
+var _hold_duration: float = 1.0
+var _hold_action: Callable = Callable()
+var _key_consumed: bool = false
 #endregion
 
 var monster_names := [
@@ -532,35 +541,74 @@ func _clear_selection() -> void:
 #(use property mouse_filter: Stop to let ui steal input, use Ignore to not let UI steal input! 
 #always remember to change these on UI nodes when they are created)
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey:
+	if event is InputEventKey and not event.echo:
 		if event.pressed:
-			if event.keycode == KEY_TAB:
-				select_next_character()
-			if event.keycode == KEY_1:
-				print("Ability 1 selected")
-				var ui := get_tree().get_first_node_in_group("ui_controller")
-				if ui:
-					ui.ribbon.trigger_skill_by_index(0)
-			if event.keycode == KEY_2:
-				print("Ability 2 selected")
-				var ui := get_tree().get_first_node_in_group("ui_controller")
-				if ui:
-					ui.ribbon.trigger_skill_by_index(1)
-			if event.keycode == KEY_3:
-				print("Ability 3 selected")
-				var ui := get_tree().get_first_node_in_group("ui_controller")
-				if ui:
-					ui.ribbon.trigger_skill_by_index(2)
-			if event.keycode == KEY_4:
-				print("Ability 4 selected")
-				var ui := get_tree().get_first_node_in_group("ui_controller")
-				if ui:
-					ui.ribbon.trigger_skill_by_index(3)
-			if event.keycode == KEY_5:
-				print("Ability 5 selected")
-				var ui := get_tree().get_first_node_in_group("ui_controller")
-				if ui:
-					ui.ribbon.trigger_skill_by_index(4)
+			if _key_consumed:
+				return
+			match event.keycode:
+				KEY_SPACE:
+					_start_hold(KEY_SPACE, 1.0, 
+						func() -> void: if is_player_turn and state != States.ANIMATING: end_player_turn()
+					)
+				KEY_N:
+					_start_hold(KEY_N, 1.0, 
+						func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
+					)
+				KEY_TAB:
+					select_next_character()
+				KEY_1:
+					var ui := get_tree().get_first_node_in_group("ui_controller")
+					if ui:
+						ui.ribbon.trigger_skill_by_index(0)
+				KEY_2:
+					var ui := get_tree().get_first_node_in_group("ui_controller")
+					if ui:
+						ui.ribbon.trigger_skill_by_index(1)
+				KEY_3:
+					var ui := get_tree().get_first_node_in_group("ui_controller")
+					if ui:
+						ui.ribbon.trigger_skill_by_index(2)
+				KEY_4:
+					var ui := get_tree().get_first_node_in_group("ui_controller")
+					if ui:
+						ui.ribbon.trigger_skill_by_index(3)
+				KEY_5:
+					var ui := get_tree().get_first_node_in_group("ui_controller")
+					if ui:
+						ui.ribbon.trigger_skill_by_index(4)
+		else:
+			if event.keycode == _held_key:
+				_cancel_hold()
+				_key_consumed = false
+			elif _key_consumed:
+				_key_consumed = false
+			#if event.keycode == KEY_TAB:
+				#select_next_character()
+			#if event.keycode == KEY_1:
+				#print("Ability 1 selected")
+				#var ui := get_tree().get_first_node_in_group("ui_controller")
+				#if ui:
+					#ui.ribbon.trigger_skill_by_index(0)
+			#if event.keycode == KEY_2:
+				#print("Ability 2 selected")
+				#var ui := get_tree().get_first_node_in_group("ui_controller")
+				#if ui:
+					#ui.ribbon.trigger_skill_by_index(1)
+			#if event.keycode == KEY_3:
+				#print("Ability 3 selected")
+				#var ui := get_tree().get_first_node_in_group("ui_controller")
+				#if ui:
+					#ui.ribbon.trigger_skill_by_index(2)
+			#if event.keycode == KEY_4:
+				#print("Ability 4 selected")
+				#var ui := get_tree().get_first_node_in_group("ui_controller")
+				#if ui:
+					#ui.ribbon.trigger_skill_by_index(3)
+			#if event.keycode == KEY_5:
+				#print("Ability 5 selected")
+				#var ui := get_tree().get_first_node_in_group("ui_controller")
+				#if ui:
+					#ui.ribbon.trigger_skill_by_index(4)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -708,6 +756,7 @@ func _ready() -> void:
 	turn_transition_animation_player.play()
 	add_to_group("level")
 	
+	_register_chests()
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
@@ -1071,14 +1120,18 @@ func CheckVictoryConditions() -> void:
 func next_level() -> void:
 	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in positions.size():
-		##occupancy_map 0 == Unit, 3 == UnitDone
+		var unit := get_unit(positions[i])
 		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
-			get_unit(positions[i]).reset();
-			get_unit(positions[i]).state.grid_position = Vector3i(0, 0, 0)
+			if unit == null:
+				continue
+			unit.reset();
+			unit.state.grid_position = Vector3i(0, 0, 0)
 
 		##Remove all other occupants, since they should not be in the next level
 		else:
-			get_unit(positions[i]).die(false)
+			if unit == null:
+				continue
+			unit.die(false)
 	
 	## SAVE GAME HAPPENS HERE
 	#Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
@@ -1269,6 +1322,13 @@ func _draw_path_arrow() -> void:
 
 func _process_old(delta: float) -> void:
 	_update_cursor_on_hover()
+	
+	if _held_key != KEY_NONE:
+		_hold_timer += delta
+		if _hold_timer >= _hold_duration:
+			_key_consumed = true
+			_hold_action.call()
+			_cancel_hold()
 	
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
@@ -1482,7 +1542,7 @@ func _update_cursor_on_hover() -> void:
 	if cell == GridTile.Type.ATTACK:
 		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
 	elif cell == GridTile.Type.INTERACT:
-		Input.set_custom_mouse_cursor(cursor_hand, Input.CURSOR_ARROW, Vector2(8, 8))
+		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)
 
@@ -1509,11 +1569,6 @@ func _on_dialogic_signal(argument: String) -> void:
 			highlight.clear()
 	else:
 		Tutorial.advance_timeline()
-
-
-func _on_chest_opened(pos: Vector3i) -> void:
-	is_in_menu = true
-	Dialogic.start("chest_tutorial")
 ## DIALOGIC AND INTERACTION END
 
 func _register_patrol_paths() -> void:
@@ -1558,12 +1613,10 @@ func hide_inactive_characters() -> void:
 		if not unit.state.is_enemy():
 			continue
 		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
-			#unit.hide()
-			unit.my_material.set_shader_parameter("passive", true)
+			unit.hide()
 			any_active_enemy = true
 		else:
-			#unit.show()
-			unit.my_material.set_shader_parameter("passive", false)
+			unit.show()
 	
 	# This hides all but 1 unit when out of combat
 	## TODO: Add function to respawn units around unhidden unit when entering
@@ -1582,3 +1635,45 @@ func hide_inactive_characters() -> void:
 				#first_shown = true
 			#else:
 				#c.hide()
+
+
+func _register_chests() -> void:
+	for child in get_children():
+		if child is Chest:
+			var grid_pos := world_to_grid(child.global_position)
+			chests[grid_pos] = child
+			print("Registered chest at: ", grid_pos, " weapon: ", child.weapon_id)
+
+
+func _on_chest_opened(pos: Vector3i) -> void:
+	var chest: Chest = chests.get(pos, null)
+	if chest == null:
+		push_error("No chest found at: " + str(pos))
+		return
+	if chest.is_opened:
+		return
+	chest.is_opened = true
+	pending_chest_weapon = WeaponRegistry.get_weapon(chest.weapon_id)
+	is_in_menu = true
+	Dialogic.start(chest.dialogue_timeline)
+
+
+func _start_hold(key: Key, duration: float, action: Callable) -> void:
+	_held_key = key
+	_hold_timer = 0.0
+	_hold_duration = duration
+	_hold_action = action
+	_key_consumed = false
+
+func _cancel_hold() -> void:
+	_held_key = KEY_NONE
+	_hold_timer = 0.0
+	_hold_action = Callable()
+
+#func _process(delta: float) -> void:
+	#if _held_key != KEY_NONE:
+		#_hold_timer += delta
+		#if _hold_timer >= _hold_duration:
+			#_key_consumed = true
+			#_hold_action.call()
+			#_cancel_hold()

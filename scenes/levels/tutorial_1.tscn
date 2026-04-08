@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="2_lik2v"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
-[ext_resource type="Script" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
+[ext_resource type="Script" uid="uid://ddmmpi5gwt3ii" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
@@ -21,7 +21,7 @@ data = {
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(0, 0, 1441792, 327675, 0, 1441798, 65535, 2, 524290)
+"cells": PackedInt32Array(0, 0, 1441792, 327675, 0, 1441798)
 }
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
@@ -50,7 +50,13 @@ light_color = Color(0.60026926, 0.30395457, 0.8736758, 1)
 light_energy = 12.592
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
-transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1, 7, 3.5)
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 1, 0.5, 1)
+minimum_camera_height = 8.0
+maximum_camera_height = 20.0
+set_springarm_length = true
+springarm_length = 20.0
+maximum_camera_x = 38.0
+minimum_camera_z = 1.0
 
 [node name="FireParticle" parent="." index="18" unique_id=639555191 instance=ExtResource("2_lik2v")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.91478, 2.5466533, 3.0315752)

@@ -1,12 +1,19 @@
 extends Node3D
 
+#region springarm
 @export var minimum_camera_height: float = 3.0
 @export var maximum_camera_height: float = 15.0
+@export var set_springarm_length : bool = false
+@export var springarm_length : float = 15.0
+#endregion
 
+#region pivot
 @export var minimum_camera_x: float = -10.0
 @export var maximum_camera_x: float = 100.0
 @export var minimum_camera_z: float = -10.0
 @export var maximum_camera_z: float = 10.0
+#endregion
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -29,3 +36,5 @@ func _ready() -> void:
 	var newTransform : Transform3D = transform
 	camera_controller.free_camera()
 	camera_controller.set_pivot_transform(newTransform)
+	if set_springarm_length:
+		camera_controller.set_springarm_length(springarm_length)
