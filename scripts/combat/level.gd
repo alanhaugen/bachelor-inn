@@ -385,9 +385,13 @@ func _handle_skill(pos : Vector3i) -> void:
 	result.victim = target
 	result.vfx_scene =  active_skill.Vfx_Scene
 	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
-		result.damage = active_skill.effect_mods.get("damage", null)
+		result.damage = active_skill.effect_mods.get("damage", 0)
 	
-	combat_vfx.play_skill(result)
+	print("Skill result - aggressor: ", result.aggressor)
+	print("Skill result - victim: ", result.victim)
+	print("Skill result - vfx_scene: ", result.vfx_scene)
+	print("Skill result - damage: ", result.damage)
+	await combat_vfx.play_skill(result)
 	
 	## DoT's
 	target.state.apply_skill_effect(active_skill)

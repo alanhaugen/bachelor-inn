@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://cypyoqyclfkrf"]
+[gd_scene format=4 uid="uid://cypyoqyclfkrf"]
 
 [ext_resource type="Script" uid="uid://cdje4jdvfxffu" path="res://scenes/Development/Particles/hit_particle.gd" id="1_4etf0"]
 [ext_resource type="Texture2D" uid="uid://bb1qbxirp4mrj" path="res://art/textures/ParticleTex/VFX_Speed.png" id="2_6osqv"]
@@ -88,10 +88,10 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_mwivj")
 
-[node name="Shield_FX" type="Node3D"]
+[node name="Shield_FX" type="Node3D" unique_id=418891251]
 script = ExtResource("1_4etf0")
 
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=1887878659]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.37026274, 0.041459322)
 emitting = false
 amount = 4
@@ -100,7 +100,7 @@ explosiveness = 0.54
 process_material = SubResource("ParticleProcessMaterial_yegfy")
 draw_pass_1 = SubResource("QuadMesh_whuyr")
 
-[node name="GPUParticles3D2" type="GPUParticles3D" parent="."]
+[node name="GPUParticles3D2" type="GPUParticles3D" parent="." unique_id=1610951366]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.291265, 0)
 emitting = false
 amount = 1
