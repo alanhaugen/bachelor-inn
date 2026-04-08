@@ -533,14 +533,29 @@ func _input(event: InputEvent) -> void:
 				select_next_character()
 			if event.keycode == KEY_1:
 				print("Ability 1 selected")
+				var ui := get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(0)
 			if event.keycode == KEY_2:
 				print("Ability 2 selected")
+				var ui := get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(1)
 			if event.keycode == KEY_3:
 				print("Ability 3 selected")
+				var ui := get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(2)
 			if event.keycode == KEY_4:
 				print("Ability 4 selected")
+				var ui := get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(3)
 			if event.keycode == KEY_5:
 				print("Ability 5 selected")
+				var ui := get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(4)
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -71,6 +71,17 @@ func gray_out_abilities_used(used: bool) -> void:
 		b.disabled = used
 		b.modulate = Color(0.4, 0.4, 0.4, 1.0) if used else Color(1, 1, 1, 1)
 
+
+func trigger_skill_by_index(index: int) -> void:
+	if index < 0 or index >= _skill_buttons.size():
+		return
+	var button := _skill_buttons[index]
+	if button.disabled or not button.visible:
+		return
+	var s: Skill = button.get_meta("skill") as Skill
+	if s != null:
+		skill_pressed.emit(s)
+
 func _debug_print_buttons() -> void:
 	print("=== Ribbon Debug ===")
 	print("Skills buttons found:", _skill_buttons.size())
