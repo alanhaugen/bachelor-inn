@@ -1535,10 +1535,12 @@ func hide_inactive_characters() -> void:
 		if not unit.state.is_enemy():
 			continue
 		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
-			unit.hide()
+			#unit.hide()
+			unit.my_material.set_shader_parameter("passive", true)
 			any_active_enemy = true
 		else:
-			unit.show()
+			#unit.show()
+			unit.my_material.set_shader_parameter("passive", false)
 	
 	# This hides all but 1 unit when out of combat
 	## TODO: Add function to respawn units around unhidden unit when entering

@@ -15,6 +15,8 @@ uniform bool grey_tint = false;
 
 uniform float hit_effect = 0.0;
 uniform vec3 hit_effect_color : source_color = vec3(1.0,1.0,1.0);
+uniform bool passive = false; 
+uniform vec3 passive_tint : source_color = vec3(0.1,0.1,0.1);
 
 group_uniforms Settings;
 uniform float edge_strength = 1.0;
@@ -56,10 +58,11 @@ void fragment() {
     if (d.a < 0.5) discard;
 	
 	
+	if (passive){
+		d.rgb *= passive_tint;
+	}
 	
-	
-	if (grey_tint)
-	{
+	if (grey_tint){
 		vec3 grey_color = vec3(0.338, 0.338, 0.338);
 		d.rgb *= grey_color;
 	}

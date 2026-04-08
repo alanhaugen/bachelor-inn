@@ -2,21 +2,18 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bvseqg7wrsjnf"
-path.s3tc="res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.s3tc.ctex"
-path.etc2="res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.etc2.ctex"
+uid="uid://dovvk1pht8oqj"
+path.s3tc="res://.godot/imported/ArrowSprite.png-c9043e547e1e89d2be4eae05fd65b01a.s3tc.ctex"
+path.etc2="res://.godot/imported/ArrowSprite.png-c9043e547e1e89d2be4eae05fd65b01a.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "af85e65918bc54c4d4ac43b95ae67709"
-}
 
 [deps]
 
-source_file="res://scenes/libraries/LIB_GridMapMeshLibrary_5.png"
-dest_files=["res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.s3tc.ctex", "res://.godot/imported/LIB_GridMapMeshLibrary_5.png-dc9b2efc803479c2273c13da5a14ef65.etc2.ctex"]
+source_file="res://art/textures/ParticleTex/ArrowSprite.png"
+dest_files=["res://.godot/imported/ArrowSprite.png-c9043e547e1e89d2be4eae05fd65b01a.s3tc.ctex", "res://.godot/imported/ArrowSprite.png-c9043e547e1e89d2be4eae05fd65b01a.etc2.ctex"]
 
 [params]
 

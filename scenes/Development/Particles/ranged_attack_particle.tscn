@@ -1,20 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://bhfj4kn8ra1o3"]
+[gd_scene format=3 uid="uid://bhfj4kn8ra1o3"]
 
 [ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_xl5xg"]
-[ext_resource type="Texture2D" uid="uid://bmpspt3r1tunw" path="res://art/textures/ParticleTex/muzzle_05_rotated.png" id="2_bdpgj"]
+[ext_resource type="Texture2D" uid="uid://dovvk1pht8oqj" path="res://art/textures/ParticleTex/ArrowSprite.png" id="2_xl5xg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5d4l2"]
 render_priority = 0
 shader = ExtResource("1_xl5xg")
-shader_parameter/diffuse_tex = ExtResource("2_bdpgj")
-shader_parameter/colorTint = Color(1.6518712, 0.9489926, 4.100857e-05, 1)
-shader_parameter/clippingMask = 0.150000007125
+shader_parameter/diffuse_tex = ExtResource("2_xl5xg")
+shader_parameter/colorTint = Color(1.353256, 1.353256, 1.353256, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_fr0lo"]
 material = SubResource("ShaderMaterial_5d4l2")
 
-[node name="MAIN" type="Node3D"]
+[node name="MAIN" type="Node3D" unique_id=454491279]
 
-[node name="Particle" type="MeshInstance3D" parent="."]
+[node name="Particle" type="MeshInstance3D" parent="." unique_id=382728329]
 transform = Transform3D(-9.9246314e-08, 1.7539933, 4.371139e-08, 0, -7.666948e-08, 1, 2.270491, 7.666948e-08, 1.9106855e-15, 0.007662803, -0.0070314407, 0.58753264)
 mesh = SubResource("QuadMesh_fr0lo")
