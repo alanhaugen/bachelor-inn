@@ -1,18 +1,18 @@
 [wait time="1.5"]
-*The hero animates falling down a steep hill. The hero is badly hurt. From a tecnical point of view, it is very impressive*
+narrator: *The hero falls down a steep hill. They are badly hurt. From a tecnical point of view, it is very impressive*
 [signal arg="set_health_1"]
-protagonist: What... WHAT IS THAT THING?
-protagonist: I got to get away! Away from.. it! \
-\
-I must go on, despite my grave injuries!
-protagonist: For Frodo!
-Your health is low!
+protagonist: Who the hell pushed me down.. Ouch!..
+protagonist: ...
+protagonist: What is THAT thing?!
+protagonist: NOPE! Not dealing with this right now.
+protagonist: Grit through the pain.. gotta get away from that thing..
+narrator: *Your health is low!*
 [signal arg="highlight_health_bar"]
 [wait time="2.0"]
 [signal arg="clear_highlight"]
-Press MouseButton1 (MB1) on any unit to select it. \
+narrator: *Press MouseButton1 (MB1) on any unit to select it. \
 \
 OR\
 \
-Use TAB KEY to shuffle between available units.
+Use TAB KEY to shuffle between available units.*
 [end_timeline]
