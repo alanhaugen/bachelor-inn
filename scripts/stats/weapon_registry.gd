@@ -3,7 +3,7 @@ extends Node
 
 const W_UNARMED: Weapon = preload("res://Data/Weapons/unarmed.tres")
 const W_AXE_BASIC: Weapon = preload("res://Data/Weapons/axe_basic.tres")
-const W_BOW_BASIC: Weapon = preload("res://Data/Weapons/bow_baisc.tres")
+const W_BOW_BASIC: Weapon = preload("res://Data/Weapons/bow_basic.tres")
 const W_SCEPTER_BASIC: Weapon = preload("res://Data/Weapons/scepter_basic.tres")
 const W_SWORD_BASIC: Weapon = preload("res://Data/Weapons/sword_basic.tres")
 const W_SWORD_ELITE: Weapon = preload("res://Data/Weapons/sword_elite.tres")

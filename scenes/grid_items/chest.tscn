@@ -1,7 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://bajx21wdflkf8"]
+[gd_scene format=3 uid="uid://bajx21wdflkf8"]
 
 [ext_resource type="PackedScene" uid="uid://ctcbsf1b8tg5x" path="res://art/gltf/Chest.gltf" id="1_6rfxg"]
+[ext_resource type="Script" uid="uid://fq2l2nas2itl" path="res://scripts/Characters/chest_interactive.gd" id="1_srpob"]
 
-[node name="Chest" type="Node3D"]
+[node name="Chest" type="Node3D" unique_id=903149754]
+script = ExtResource("1_srpob")
 
-[node name="blockbench_export" parent="." instance=ExtResource("1_6rfxg")]
+[node name="blockbench_export" parent="." unique_id=865220950 instance=ExtResource("1_6rfxg")]
