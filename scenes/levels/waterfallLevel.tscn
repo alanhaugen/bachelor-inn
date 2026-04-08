@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="2_baqsr"]
 [ext_resource type="PackedScene" uid="uid://cs3ahspmvkfod" path="res://scenes/Development/Particles/fire_particle.tscn" id="3_baqsr"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_034s2"]
-[ext_resource type="PackedScene" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_0oyyt"]
+[ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_0oyyt"]
 
 [node name="Map3d2" unique_id=1579630590 instance=ExtResource("1_vknko")]
 
@@ -53,6 +53,12 @@ light_color = Color(0.84716165, 0.4663447, 0.23022354, 1)
 light_energy = 3.0
 shadow_enabled = true
 omni_range = 27.256
+
+[node name="CameraSettings" parent="." index="16" unique_id=2146881514]
+minimum_camera_x = 0.0
+maximum_camera_x = 50.0
+minimum_camera_z = 0.0
+maximum_camera_z = 20.0
 
 [node name="Water" parent="." index="18" unique_id=108789974 instance=ExtResource("2_baqsr")]
 transform = Transform3D(43.37941, 0, 0, 0, 0.6568207, 0, 0, 0, 21.911085, 18.326813, 0.09487867, 16.482395)
