@@ -377,11 +377,23 @@ func _handle_skill(pos : Vector3i) -> void:
 	print("SKILL CLICK p=", p,
 			" in_valid=", valid_skill_target_tiles.has(p),
 			" target=", target)
+	
+	## check if exit skill
+	var exit_skill : bool = false
+	if not valid_skill_target_tiles.has(p):
+		exit_skill = true
+	if target == null:
+		exit_skill = true
+	if not _is_valid_target(target, active_skill, skill_caster):
+		exit_skill = true
+	if active_skill.uses_action && skill_caster.state.is_ability_used:
+		exit_skill = true
 
-	if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
+	if exit_skill:
 		_exit_skill_target_mode()
 		return
-
+	
+	## begin executing skill
 	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
 	#THIS IS WHERE IT SHOULD TELL VFX CONTROLLER THAT IT SHOULD SPAWN THE SKILLS VFX AT TARGET
 
@@ -400,6 +412,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	## TODO: fix crash here if active_skill is null
 	var used_action : bool = active_skill.uses_action
+	
 	var caster : Character = skill_caster
 	if used_action:
 		caster.state.is_ability_used = true
@@ -1105,7 +1118,7 @@ func CheckVictoryConditions() -> void:
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
-				next_level();
+				next_level.call_deferred();
 				return;
 			numberOfPlayerUnits += 1;
 			
@@ -1116,7 +1129,7 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
 		is_player_turn = true;
-		next_level();
+		next_level.call_deferred();
 		return;
 
 ##Removing unwanted occupants and resetting movement of characters
@@ -1128,7 +1141,7 @@ func next_level() -> void:
 	
 	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in positions.size():
-		var unit := get_unit(positions[i])
+		var unit : Character = get_unit(positions[i])
 		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
 			if unit == null:
 				continue
