@@ -1137,6 +1137,10 @@ func next_level() -> void:
 			if unit == null:
 				continue
 			unit.die(false)
+			
+	#Healing units between levels
+	for i in Main.characters.size():
+		Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
 	## SAVE GAME HAPPENS HERE
 	#Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
