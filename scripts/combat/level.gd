@@ -433,6 +433,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
+	#CheckVictoryConditions()
 
 
 func _handle_attack_choice(pos: Vector3i) -> void:
@@ -625,7 +626,6 @@ func _input(event: InputEvent) -> void:
 				#if ui:
 					#ui.ribbon.trigger_skill_by_index(4)
 
-
 func _unhandled_input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
 		return
@@ -636,8 +636,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	_update_cursor(pos)
 	
 	if is_choosing_skill_target == true:
-		await _handle_skill(pos)
-		CheckVictoryConditions();
+		_handle_skill(pos)
 		return;
 	
 	# Attack selection phase
@@ -1115,14 +1114,16 @@ func CheckVictoryConditions() -> void:
 	
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
+		var cell_item : int = occupancy_map.get_cell_item(pos)
+		if cell_item == player_code or cell_item == player_code_done:
 			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
 				next_level();
 				return;
 			numberOfPlayerUnits += 1;
-			
-		elif (occupancy_map.get_cell_item(pos) >= enemy_code):
+		elif cell_item == 2:
+			continue
+		elif cell_item >= enemy_code:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
