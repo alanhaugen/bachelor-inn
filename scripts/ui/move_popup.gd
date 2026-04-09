@@ -4,7 +4,7 @@ extends Control
 @onready var move_button: Button = $VBoxContainer/MoveButton
 @onready var attack_button: Button = $VBoxContainer/AttackButton
 @onready var wait_button: Button = $VBoxContainer/WaitButton
-@onready var cancel_button: Button = $VBoxContainer/CancelButton
+#@onready var cancel_button: Button = $VBoxContainer/CancelButton
 
 # TODO: remove
 

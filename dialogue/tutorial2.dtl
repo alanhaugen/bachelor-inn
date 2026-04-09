@@ -1,6 +1,6 @@
 narrator: Use WASD to move the camera, then\
 \
 Click (MB1) on any highlighted tile to move.
-narrator: Move to the RED tile.
+narrator: Move to the tile with a RED mark.
 do Tutorial.tutorial_highlight_tile(7, 0, 2)
 [end_timeline]

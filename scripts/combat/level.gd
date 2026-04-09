@@ -91,6 +91,9 @@ const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.t
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
 
+@onready var loot_popup : LootPopup = $LootPopUp
+
+
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 var patrol_paths: Dictionary[String, PatrolPath] = {}
@@ -1086,7 +1089,7 @@ func CheckTriggerConditions() -> void:
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "02_Trigger2":
-				## Run Event Dialogic signal here
+				_on_chest_opened(pos)
 				print("Player Unit moved to interact event tile. A window should appear now.");
 			elif get_trigger_name(pos) == "03_Trigger3":
 				if triggered_positions.has(pos):
@@ -1097,7 +1100,11 @@ func CheckTriggerConditions() -> void:
 			
 			var adjacent := [
 				pos + Vector3i(1, 0, 0),
+				pos + Vector3i(1, 0, 1),
+				pos + Vector3i(1, 0, -1),
 				pos + Vector3i(-1, 0, 0),
+				pos + Vector3i(-1, 0, 1),
+				pos + Vector3i(-1, 0, -1),
 				pos + Vector3i(0, 0, 1),
 				pos + Vector3i(0, 0, -1)
 			]
@@ -1690,6 +1697,7 @@ func _register_chests() -> void:
 
 
 func _on_chest_opened(pos: Vector3i) -> void:
+	print("on_chest_opened triggered.")
 	var chest: Chest = chests.get(pos, null)
 	if chest == null:
 		push_error("No chest found at: " + str(pos))
@@ -1697,10 +1705,18 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	if chest.is_opened:
 		return
 	chest.is_opened = true
-	pending_chest_weapon = WeaponRegistry.get_weapon(chest.weapon_id)
+	
+	var new_weapon : Weapon = WeaponRegistry.get_weapon(chest.weapon_id)
+	if new_weapon == null:
+		push_error(chest.weapon_id + " Weapon in chest not found.")
+		return
+	else:
+		print("New weapon is: " + new_weapon.weapon_name)
+	
 	is_in_menu = true
-	## TODO: Run PopUpScreen with loot
-	#Dialogic.start(chest.dialogue_timeline)
+	print("loot_popup: ", loot_popup)
+	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
+	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
 
 
 func _start_hold(key: Key, duration: float, action: Callable) -> void:
