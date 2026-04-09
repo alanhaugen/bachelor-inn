@@ -367,6 +367,7 @@ func _update_cursor(pos: Vector3i) -> void:
 
 
 func _handle_skill(pos : Vector3i) -> void:
+	var used_skill : Skill = active_skill
 	# Normalize to same plane your maps/skills use
 	##TODO make _handle_skill use height
 	#var p := Vector3i(pos.x, 0, pos.z)
@@ -384,9 +385,9 @@ func _handle_skill(pos : Vector3i) -> void:
 		exit_skill = true
 	if target == null:
 		exit_skill = true
-	if not _is_valid_target(target, active_skill, skill_caster):
+	if not _is_valid_target(target, used_skill, skill_caster):
 		exit_skill = true
-	if active_skill.uses_action && skill_caster.state.is_ability_used:
+	if used_skill.uses_action && skill_caster.state.is_ability_used:
 		exit_skill = true
 
 	if exit_skill:
@@ -394,24 +395,19 @@ func _handle_skill(pos : Vector3i) -> void:
 		return
 	
 	## begin executing skill
-	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-	#THIS IS WHERE IT SHOULD TELL VFX CONTROLLER THAT IT SHOULD SPAWN THE SKILLS VFX AT TARGET
-
-	## Impact damage (Fireball)
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
-		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
-		
+	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+	
 	## Take all the stuff and compile a list of the results as AttackResult! 
 	var result: AttackResult = AttackResult.new()
 	result.aggressor = skill_caster
 	result.victim = target
-	result.vfx_scene =  active_skill.Vfx_Scene
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
-		result.damage = active_skill.effect_mods.get("damage", 0)
+	result.vfx_scene =  used_skill.Vfx_Scene
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"): 
+		result.damage = used_skill.effect_mods.get("damage", 0)
 	
 	
-	## TODO: fix crash here if active_skill is null
-	var used_action : bool = active_skill.uses_action
+	## TODO: fix crash here if used_skill is null
+	var used_action : bool = used_skill.uses_action
 	
 	var caster : Character = skill_caster
 	if used_action:
@@ -428,8 +424,11 @@ func _handle_skill(pos : Vector3i) -> void:
 	print("Skill result - damage: ", result.damage)
 	await combat_vfx.play_skill(result)
 	
+	## Impact damage (Fireball)
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
+		target.apply_damage(int(used_skill.effect_mods["damage"]), false, skill_caster, used_skill.skill_name)
 	## DoT's
-	target.state.apply_skill_effect(active_skill)
+	target.state.apply_skill_effect(used_skill)
 	emit_signal("character_stats_changed", target)
 	
 	_exit_skill_target_mode()
@@ -637,7 +636,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	_update_cursor(pos)
 	
 	if is_choosing_skill_target == true:
-		_handle_skill(pos)
+		await _handle_skill(pos)
+		CheckVictoryConditions();
 		return;
 	
 	# Attack selection phase
@@ -1118,7 +1118,7 @@ func CheckVictoryConditions() -> void:
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
-				next_level.call_deferred();
+				next_level();
 				return;
 			numberOfPlayerUnits += 1;
 			
@@ -1129,7 +1129,7 @@ func CheckVictoryConditions() -> void:
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
 	elif (numberOfEnemyUnits == 0):
 		is_player_turn = true;
-		next_level.call_deferred();
+		next_level();
 		return;
 
 ##Removing unwanted occupants and resetting movement of characters
