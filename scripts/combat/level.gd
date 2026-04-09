@@ -58,7 +58,7 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-
+var _level_complete : bool = false
 
 var selected_unit: Character = null
 var last_selected_unit: Character = null
@@ -1118,6 +1118,11 @@ func CheckVictoryConditions() -> void:
 
 ##Removing unwanted occupants and resetting movement of characters
 func next_level() -> void:
+	## Guard for our not so nice next level system
+	if _level_complete:
+		return
+	_level_complete = true
+	
 	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in positions.size():
 		var unit := get_unit(positions[i])
@@ -1135,7 +1140,12 @@ func next_level() -> void:
 	
 	## SAVE GAME HAPPENS HERE
 	#Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
-	Main.characters = characters.filter(func(c: Character) -> bool: return c != null and c.state.is_alive)
+	var surviving_chars : Array[Character] = []
+	for c in characters:
+		if c != null and c.state.is_alive:
+			surviving_chars.append(c)
+	Main.characters = surviving_chars
+	#Main.characters = characters.filter(func(c: Character) -> bool: return c != null and c.state.is_alive)
 	Main.next_level()
 
 func _on_character_sanity_flipped(character: Character) -> void:

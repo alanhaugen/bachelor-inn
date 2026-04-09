@@ -46,12 +46,16 @@ func unload_level() -> void:
 	level = null;
 
 func next_level() -> void:
+	print("current_level_name: '", current_level_name, "'")
 	var current_index := -1
 	for i in levels.size():
+		var basename := levels[i].get_file().get_basename()
+		print("levels[", i, "] raw: '", levels[i], "' basename: '", basename, "'")
 		if levels[i].get_file().get_basename() == current_level_name:
 			current_index = i
 			break
-	
+	print("current_index: ", current_index)
+
 	if current_index == -1:
 		push_error("Current level not found: ", current_level_name)
 		return
@@ -77,10 +81,17 @@ func load_level(level_name: String) -> void:
 	else:
 		Dialogic.VAR.PLATFORM = "DESKTOP";
 	unload_level();
+	current_level_name = level_name
 	#var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	var level_path: String = "res://scenes/levels/%s.tscn" % level_name;
-	level = load(level_path).instantiate();
-	level.level_name = level_name; ## TODO: Remove? This does nothing?
+	print("Attempting to load level path: '", level_path, "'")
+	var packed := load(level_path)
+	if packed == null:
+		push_error("Failed to load level at path: " + level_path)
+		return
+	level = packed.instantiate()
+	#level = load(level_path).instantiate();
+	level.level_name = level_name;	
 	world.add_child(level) # Add the new level to the World node
 	
 	await get_tree().process_frame
@@ -90,7 +101,7 @@ func load_level(level_name: String) -> void:
 
 
 func load_level_by_name(level_name: String) -> void:
-	current_level_name = level_name
+	#current_level_name = level_name
 	for path : String in levels:
 		if path.get_file().get_basename() == level_name:
 			load_level(level_name)
@@ -98,6 +109,7 @@ func load_level_by_name(level_name: String) -> void:
 	push_error("No level found matching name: " + level_name)
 
 
+## Not in use atm
 func load_next_level() -> void:
 	# This splits "tutorial_1" into ["tutorial", "1"] from the right
 	var parts := current_level_name.rsplit("_", true, 1)
@@ -111,6 +123,6 @@ func load_next_level() -> void:
 func get_next_level_index() -> int:
 	for i in levels.size():
 		if levels[i].get_file().get_basename() == current_level_name:
-			return i + 1
+			return i
 	return 0
 #endregion

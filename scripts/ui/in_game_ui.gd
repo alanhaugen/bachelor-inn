@@ -51,9 +51,12 @@ func _ready() -> void:
 
 func _clear_previews() -> void:
 	print("cleared previews")
-	for p: Character in previews.values():
-		if is_instance_valid(p):
-			p.queue_free()
+	for p: CharacterPreview in previews.values():
+		if p == null:
+			continue
+		if not is_instance_valid(p):
+			continue
+		p.queue_free()
 	previews.clear()
 
 	for child in preview_container.get_children():

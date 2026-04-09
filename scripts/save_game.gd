@@ -208,8 +208,8 @@ func read(save_slot: int) -> bool:
 		#print("RESOLVED ", data.unit_name, " skills=", state.skills.map(func(s: Skill) -> String: return s.skill_id if s else "NULL"))
 		
 		Main.characters.append(character)
-
-	Main.load_level(Main.levels[level])
+	var level_name : String = Main.levels[level].get_file().get_basename()
+	Main.load_level(level_name)
 	return true
 
 
