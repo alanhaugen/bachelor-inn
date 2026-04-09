@@ -1,0 +1,2 @@
+Seek refuge in the ruins up head.
+do Tutorial.tutorial_highlight_tile(17, 0, 3)
