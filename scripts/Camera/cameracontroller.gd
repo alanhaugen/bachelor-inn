@@ -302,10 +302,13 @@ func add_pivot_translate(added_translate: Vector3) -> void:
 func _clamp_pivot_target_translation() -> void:
 	if _pivot_target_transform.origin.x > _pivot_max_x:
 		_pivot_target_transform.origin.x = _pivot_max_x
+		
 	if _pivot_target_transform.origin.x < _pivot_min_x:
 		_pivot_target_transform.origin.x = _pivot_min_x
+		
 	if _pivot_target_transform.origin.z < _pivot_min_z:
 		_pivot_target_transform.origin.z = _pivot_min_z
+		
 	if _pivot_target_transform.origin.z > _pivot_max_z:
 		_pivot_target_transform.origin.z = _pivot_max_z
 
@@ -313,10 +316,13 @@ func _clamp_pivot_target_translation() -> void:
 func _clamp_pivot_translation() -> void:
 	if pivot.transform.origin.x > _pivot_max_x:
 		pivot.transform.origin.x = _pivot_max_x
+		
 	if pivot.transform.origin.x < _pivot_min_x:
 		pivot.transform.origin.x = _pivot_min_x
+		
 	if pivot.transform.origin.z < _pivot_min_z:
 		pivot.transform.origin.z = _pivot_min_z
+		
 	if pivot.transform.origin.z > _pivot_max_z:
 		pivot.transform.origin.z = _pivot_max_z
 #endregion

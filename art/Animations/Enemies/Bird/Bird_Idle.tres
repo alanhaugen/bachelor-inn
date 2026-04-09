@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="SpriteAnim" load_steps=5 format=3 uid="uid://f5ypnq3b1pdl"]
+[gd_resource type="Resource" script_class="SpriteAnim" format=3 uid="uid://f5ypnq3b1pdl"]
 
-[ext_resource type="Texture2D" uid="uid://bfqraamr3mk7h" path="res://art/Animations/Enemies/Ghost/NewTextures/D_bird_Idle_Base_.png" id="1_fkx6p"]
+[ext_resource type="Texture2D" uid="uid://1jgjwakhav3h" path="res://art/Animations/IdleAnims/IdleAnims_Bird.png" id="1_fkx6p"]
 [ext_resource type="Script" uid="uid://c876dul20yd5j" path="res://art/WIP/SpriteAnimation.gd" id="1_yfdtf"]
-[ext_resource type="Texture2D" uid="uid://b32evp67qomdo" path="res://art/Animations/Enemies/Ghost/NewTextures/D_bird_Idle_Base.png" id="2_v6yle"]
-[ext_resource type="Texture2D" uid="uid://bxe6qswqs2sw0" path="res://art/Animations/Enemies/Ghost/NewTextures/D_bird_Idle_Normal.png" id="3_cpvmo"]
+[ext_resource type="Texture2D" uid="uid://b6oyy1wol352o" path="res://art/Animations/IdleAnims/IdleAnims_mask4_Bird.png" id="2_v6yle"]
+[ext_resource type="Texture2D" uid="uid://cf7fkcwimn0r2" path="res://art/Animations/IdleAnims/IdleAnims_normal_Bird.png" id="3_cpvmo"]
 
 [resource]
 script = ExtResource("1_yfdtf")
 diffuse_atlas = ExtResource("1_fkx6p")
 normal_atlas = ExtResource("3_cpvmo")
 mask_atlas = ExtResource("2_v6yle")
-frame_columns = 1
+fps = 6.0
 metadata/_custom_type_script = "uid://c876dul20yd5j"

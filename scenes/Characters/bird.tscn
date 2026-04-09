@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://uwkg1mydmaxl"]
+[gd_scene format=3 uid="uid://uwkg1mydmaxl"]
 
 [ext_resource type="PackedScene" uid="uid://wo1fe0qm5jjk" path="res://scenes/Characters/character.tscn" id="1_vlk3e"]
 [ext_resource type="Resource" uid="uid://3cd4cr5lmyf6" path="res://art/Animations/Enemies/Bird/Bird_Moving_L.tres" id="2_2k662"]
@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://f5ypnq3b1pdl" path="res://art/Animations/Enemies/Bird/Bird_Idle.tres" id="6_fxafu"]
 [ext_resource type="Texture2D" uid="uid://dts8poisflgnq" path="res://art/textures/Bird_portrait.png" id="7_fxafu"]
 
-[node name="Character" instance=ExtResource("1_vlk3e")]
+[node name="Character" unique_id=159367408 instance=ExtResource("1_vlk3e")]
 run_left_animation = ExtResource("2_2k662")
 run_right_animation = ExtResource("3_nb2gx")
 run_up_animation = ExtResource("3_1o3ex")
@@ -16,8 +16,8 @@ run_down_animation = ExtResource("4_nb2gx")
 idle_animation = ExtResource("6_fxafu")
 portrait = ExtResource("7_fxafu")
 
-[node name="Sprite" parent="." index="0"]
+[node name="Sprite" parent="." index="0" unique_id=1365623275]
 transform = Transform3D(10, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.67509294, -0.53662795)
 
-[node name="Outline" parent="." index="1"]
+[node name="Outline" parent="." index="1" unique_id=53410441]
 transform = Transform3D(10, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.67509294, -0.53662795)
