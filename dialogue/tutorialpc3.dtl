@@ -1,4 +1,5 @@
 narrator: *You have spent your movement actions this turn.\
 \
 Click 'END TURN' in the top right corner   OR   hold 'SPACEBAR'*
+do Tutorial.tutorial_set_select_unit_advances_timeline()
 [end_timeline]

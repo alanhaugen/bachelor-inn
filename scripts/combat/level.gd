@@ -1431,7 +1431,7 @@ func _process_old(delta: float) -> void:
 				hide_inactive_characters()
 				
 				## TUTORIAL
-				if Tutorial.in_tutorial:
+				if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline:
 					Tutorial.advance_timeline()
 				
 				

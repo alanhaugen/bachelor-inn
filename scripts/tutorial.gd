@@ -175,9 +175,18 @@ func tutorial_highlight_element(target: Control) -> void:
 	var highlight := Main.level.get_node("UI/tutorial_highlight")
 	highlight.highligh(target)
 
+
 func tutorial_clear_highlight_element() -> void:
 	var highlight := Main.level.get_node("UI/tutorial_highlight")
 	highlight.clear()
+
+
+func tutorial_set_select_unit_advances_timeline() -> void:
+	if selection_advances_timeline:
+		selection_advances_timeline = false
+		return
+	else: 
+		selection_advances_timeline = true
 
 
 func _ready() -> void:
