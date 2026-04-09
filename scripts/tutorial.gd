@@ -29,10 +29,11 @@ var tutorial_state: TutorialStates = TutorialStates.new();
 ## This should advance the tutorial to the next timeline
 ## Given that the naming convention is "tutorialpc" + integer
 func advance_timeline() -> void:
+	print("Advance timeline called.")
 	current_timeline += 1
-	var next_timeline: String = "tutorialpc" + str(current_timeline)
-	
-	#if Dialogic.has_timeline(next_timeline):
+	#var next_timeline: String = "tutorialpc" + str(current_timeline)
+	var next_timeline: String = "tutorial" + str(current_timeline)
+	print("Next timeline: " + str(next_timeline))
 	if FileAccess.file_exists("res://dialogue/" + next_timeline + ".dtl"):
 		tutorial_lock_menus()
 		Dialogic.start(next_timeline)
@@ -45,9 +46,10 @@ func advance_timeline() -> void:
 ## Start the first tutorial
 func start_tutorial() -> void:
 	in_tutorial = true
-	current_step = Step.STEP_1
+	#current_step = Step.STEP_1
 	tutorial_lock_menus()
-	Dialogic.start("tutorialpc" + str(current_timeline))
+	#Dialogic.start("tutorialpc" + str(current_timeline))
+	Dialogic.start("tutorial" + str(current_timeline))
 
 
 func on_timeline_ended() -> void:
@@ -154,7 +156,7 @@ func tutorial_unit_selected() -> void:
 func tutorial_unit_moved() -> void:
 	if tutorial_state.MoveTutorial == false and tutorial_state.SelectTutorial:
 		tutorial_state.MoveTutorial = true;
-		await get_tree().create_timer(2).timeout # wait a second so the previous dialogue closes
+		await get_tree().create_timer(2).timeout
 		Dialogic.start("tutorial4");
 
 

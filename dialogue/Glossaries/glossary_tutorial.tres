@@ -31,6 +31,10 @@ entries = {
 "text": "(Press) Keyboard Button TAB",
 "title": "TAB"
 },
+"WASD": {
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
+"name": "WASD"
+},
 "grass": {
 "color": Color(0.26572216, 0.94921875, 0.22618103, 1),
 "name": "grass"

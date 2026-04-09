@@ -3,8 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_gwuxj"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_8b5cb"]
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
-[ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="4_f0odu"]
-[ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_smjk0"]
+[ext_resource type="PackedScene" path="res://scenes/Development/Particles/smaller_fire.tscn" id="4_f0odu"]
+[ext_resource type="PackedScene" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_smjk0"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
@@ -27,8 +27,9 @@ data = {
 metadata/_editor_floor_ = Vector3(0, 3, 0)
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 data = {
-"cells": PackedInt32Array(65553, 3, 655360)
+"cells": PackedInt32Array(7, 2, 3, 11, 3, 3, 17, 3, 0, 65553, 3, 0)
 }
 
 [node name="Cursor" parent="." index="7" unique_id=791973269]

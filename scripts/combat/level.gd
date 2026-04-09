@@ -488,7 +488,7 @@ func select_unit(unit: Character) -> void:
 	#current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 	
-	if Main.level.level_name == "tutorial_1":
+	if Main.level.level_name.begins_with("tutorial") == true:
 		print("Level name matches: ", Main.level.name)
 		Tutorial.tutorial_unit_selected()
 	## DIALOGIC
@@ -752,7 +752,8 @@ func _ready() -> void:
 	elif (level_name == "fen"):
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
-	elif (level_name == "tutorial_1"):
+	#elif (level_name == "tutorial_1"):
+	elif (level_name == "tutorialDesignedLevel"):
 		Tutorial.level = self
 		Tutorial.start_tutorial()
 		#Dialogic.start("tutorialpc1")

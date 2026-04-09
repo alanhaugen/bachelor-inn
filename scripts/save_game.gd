@@ -227,8 +227,10 @@ func load_tutorial() -> void:
 		
 		Main.characters.append(character)
 	
-	Main.current_level_name = "tutorial_1"
-	Main.load_level("tutorial_1")
+	#Main.current_level_name = "tutorial_1"
+	#Main.load_level("tutorial_1")
+	Main.current_level_name = "tutorialDesignedLevel"
+	Main.load_level("tutorialDesignedLevel")
 
 
 func save_progress(save_slot: int, level_index: int) -> void:

@@ -1,0 +1,6 @@
+narrator: You can only move one time per turn.\
+\
+Click 'END TURN' in the top right corner ,  OR   \
+hold 'SPACEBAR'.
+do Tutorial.tutorial_set_select_unit_advances_timeline()
+[end_timeline]
