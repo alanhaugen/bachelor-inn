@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
 [ext_resource type="Script" uid="uid://ddmmpi5gwt3ii" path="res://scripts/ui/tutorial_highlight.gd" id="5_sbawd"]
 
-[node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
+[node name="Map3d3" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
 [node name="TerrainGrid" parent="." index="0" unique_id=1846160155]
 data = {
