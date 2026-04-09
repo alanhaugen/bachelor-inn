@@ -449,6 +449,7 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 	)
 
 	is_choosing_skill_attack_origin = false
+	camera_controller.focus_camera(selected_unit)
 	state = States.ANIMATING
 
 
@@ -531,6 +532,7 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 		active_move = found_move
 
 		moves_stack.append(active_move)
+		camera_controller.focus_camera(selected_unit)
 		state = States.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
