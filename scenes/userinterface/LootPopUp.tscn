@@ -59,9 +59,16 @@ custom_minimum_size = Vector2(225, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="CurrentWeaponLabel" type="Label" parent="Panel/VBoxContainer/CompareItems/CurrentWeapon" unique_id=1104040070]
+layout_mode = 2
+theme_override_font_sizes/font_size = 46
+text = "Current"
+horizontal_alignment = 1
+
 [node name="CurrentWeaponIcon" type="TextureRect" parent="Panel/VBoxContainer/CompareItems/CurrentWeapon" unique_id=515892141]
 unique_name_in_owner = true
 layout_mode = 2
+stretch_mode = 5
 
 [node name="CurrentWeaponName" type="Label" parent="Panel/VBoxContainer/CompareItems/CurrentWeapon" unique_id=526220253]
 unique_name_in_owner = true
@@ -87,9 +94,16 @@ custom_minimum_size = Vector2(225, 300)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="NewWeaponLabel" type="Label" parent="Panel/VBoxContainer/CompareItems/NewWeapon" unique_id=716206676]
+layout_mode = 2
+theme_override_font_sizes/font_size = 46
+text = "New"
+horizontal_alignment = 1
+
 [node name="NewWeaponIcon" type="TextureRect" parent="Panel/VBoxContainer/CompareItems/NewWeapon" unique_id=1306812299]
 unique_name_in_owner = true
 layout_mode = 2
+stretch_mode = 5
 
 [node name="NewWeaponName" type="Label" parent="Panel/VBoxContainer/CompareItems/NewWeapon" unique_id=307249262]
 unique_name_in_owner = true

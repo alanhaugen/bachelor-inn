@@ -1,11 +1,13 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://ehboxt8aboe7"]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://ehboxt8aboe7"]
 
 [ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_ev6gq"]
+[ext_resource type="Texture2D" uid="uid://ddogsq0mua2ft" path="res://art/textures/cursor_sword.png" id="2_lf8gy"]
 
 [resource]
 script = ExtResource("1_ev6gq")
 weapon_id = "sword_elite"
 weapon_name = "Sword of a Thousand Truths"
 weapon_tooltip = "Only the strongest may wield this."
+weapon_icon = ExtResource("2_lf8gy")
 damage_modifier = 12
 metadata/_custom_type_script = "uid://hhe2ydney01y"
