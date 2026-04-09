@@ -125,4 +125,28 @@ func get_next_level_index() -> int:
 		if levels[i].get_file().get_basename() == current_level_name:
 			return i
 	return 0
+
+
+func go_to_transition_screen() -> void:
+	get_tree().change_scene_to_file("res://scenes/states/level_transition.tscn")
 #endregion
+
+var level_display_names: Dictionary = {
+	"tutorial_1": "The Escape",
+	"tutorial_2": "Ruins",
+	"tutorial_3": "The Camp",
+	"fen": "The Fen",
+	"fento": "Keep Fen",
+	"waterfallLevel": "The Waterfall",
+	"woodlandsLevel": "The Woodlands"
+}
+
+var level_flavor_texts: Dictionary = {
+	"tutorial_1": "You tumble down the hillside...",
+	"tutorial_2": "Ancient ruins hide forgotten secrets.",
+	"tutorial_3": "The aid of those of kindled spirit.",
+	"fen": "The sound of footsteps..",
+	"fento": "They keep coming.",
+	"waterfallLevel": "The sound of rushing water fills the air.",
+	"woodlandsLevel": "The trees whisper of things soon forgotten."
+}

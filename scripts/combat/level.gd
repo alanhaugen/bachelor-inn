@@ -1177,7 +1177,9 @@ func next_level() -> void:
 			surviving_chars.append(c)
 	Main.characters = surviving_chars
 	#Main.characters = characters.filter(func(c: Character) -> bool: return c != null and c.state.is_alive)
+	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
 	Main.next_level()
+	#Main.go_to_transition_screen()
 
 func _on_character_sanity_flipped(character: Character) -> void:
 	print("heyaaa, we just flipped sanity")
