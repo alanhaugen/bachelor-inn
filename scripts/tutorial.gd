@@ -2,18 +2,26 @@ extends Node
 
 enum Step {
 	INACTIVE,
-	INTRO,
-	MOVE_AWAY,
-	TERRIAN_EXPLAINED,
-	USE_ABILITIES,
-	COMBAT_EXPLAINED,
-	COMPLETE
+	#INTRO,
+	#MOVE_AWAY,
+	#TERRIAN_EXPLAINED,
+	#USE_ABILITIES,
+	#COMBAT_EXPLAINED,
+	#COMPLETE
+	STEP_1,
+	STEP_2,
+	STEP_3,
+	STEP_4,
+	STEP_5,
+	STEP_6,
+	STEP_7
 }
 
 var current_step : Step = Step.INACTIVE
 var current_timeline: int = 1
 var level: Level
 var in_tutorial : bool = false
+var selection_advances_timeline: bool = true
 
 ## Tutorial state
 var tutorial_state: TutorialStates = TutorialStates.new();
@@ -37,7 +45,7 @@ func advance_timeline() -> void:
 ## Start the first tutorial
 func start_tutorial() -> void:
 	in_tutorial = true
-	current_step = Step.INTRO
+	current_step = Step.STEP_1
 	tutorial_lock_menus()
 	Dialogic.start("tutorialpc" + str(current_timeline))
 
@@ -48,23 +56,35 @@ func on_timeline_ended() -> void:
 		tutorial_unlock_camera()
 	
 	match current_step:
-		Step.INTRO:
-			current_step = Step.MOVE_AWAY
+		#Step.INTRO:
+		Step.STEP_1:
+			#current_step = Step.MOVE_AWAY
+			current_step = Step.STEP_2
 			level.is_in_menu = false
-		Step.MOVE_AWAY:
-			current_step = Step.TERRIAN_EXPLAINED
+		#Step.MOVE_AWAY:
+		Step.STEP_2:
+			#current_step = Step.TERRIAN_EXPLAINED
+			current_step = Step.STEP_3
 			level.is_in_menu = false
-		Step.TERRIAN_EXPLAINED:
-			current_step = Step.USE_ABILITIES
+		#Step.TERRIAN_EXPLAINED:
+		Step.STEP_3:
+			#current_step = Step.USE_ABILITIES
+			current_step = Step.STEP_4
 			level.is_in_menu = false
-		Step.USE_ABILITIES:
-			current_step = Step.COMBAT_EXPLAINED
+		#Step.USE_ABILITIES:
+		Step.STEP_4:
+			#current_step = Step.COMBAT_EXPLAINED
+			current_step = Step.STEP_5
 			level.is_in_menu = false
-		Step.COMBAT_EXPLAINED:
-			current_step = Step.COMPLETE
+		#Step.COMBAT_EXPLAINED:
+		Step.STEP_5:
+			#current_step = Step.COMPLETE
+			current_step = Step.STEP_6
 			level.is_in_menu = false
-		Step.COMPLETE:
-			current_step = Step.INACTIVE
+		#Step.COMPLETE:
+		Step.STEP_6:
+			#current_step = Step.INACTIVE
+			current_step = Step.STEP_7
 			level.is_in_menu = false
 
 
@@ -118,6 +138,9 @@ func tutorial_highlight_tile(x : int, y : int, z: int) -> void:
 func tutorial_unit_selected() -> void:
 	if not in_tutorial:
 		return
+	if not selection_advances_timeline:
+		return
+	selection_advances_timeline = false
 	Tutorial.advance_timeline()
 	#if tutorial_state.SelectTutorial == false:
 	#	if Dialogic.Inputs.manual_advance.system_enabled == false:

@@ -8,7 +8,7 @@ protagonist: NOPE! Not dealing with this right now.
 protagonist: Grit through the pain.. gotta get away from that thing..
 narrator: *Your health is low!*
 [signal arg="highlight_health_bar"]
-[wait time="2.0"]
+[wait time="1.0"]
 [signal arg="clear_highlight"]
 narrator: *Press MouseButton1 (MB1) on any unit to select it. \
 \

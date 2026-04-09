@@ -1333,12 +1333,14 @@ func _draw_path_arrow() -> void:
 func _process_old(delta: float) -> void:
 	_update_cursor_on_hover()
 	
+	## KEYBOARD INPUT CONTROL
 	if _held_key != KEY_NONE:
 		_hold_timer += delta
 		if _hold_timer >= _hold_duration:
 			_key_consumed = true
 			_hold_action.call()
 			_cancel_hold()
+	## KEYBOARD INPUT CONTROL END
 	
 	if (turn_transition_animation_player.is_playing()):
 		turn_transition.show()
@@ -1403,9 +1405,14 @@ func _process_old(delta: float) -> void:
 					emit_signal("character_stats_changed", c)
 				
 				reset_all_units();
+				is_player_turn = true;
 				check_aggro()
 				hide_inactive_characters()
-				is_player_turn = true;
+				
+				## TUTORIAL
+				if Tutorial.in_tutorial:
+					Tutorial.advance_timeline()
+				
 				
 				 # Pan camera back to player after enemy turn ends
 				camera_controller.free_camera()
@@ -1577,7 +1584,10 @@ func _on_dialogic_signal(argument: String) -> void:
 		var highlight := get_tree().get_first_node_in_group("tutorial_highlight")
 		if highlight:
 			highlight.clear()
+	elif argument == "enable_selection_advances_timeline":
+		Tutorial.selection_advances_timeline = true
 	else:
+		#Tutorial.selection_advances_timeline = true
 		Tutorial.advance_timeline()
 ## DIALOGIC AND INTERACTION END
 

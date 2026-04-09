@@ -1,2 +1,3 @@
 do Tutorial.tutorial_highlight_tile(16, 0, 3)
 narrator: *See how the road provides much greater movement range?*
+[end_timeline]

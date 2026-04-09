@@ -5,10 +5,14 @@
 [resource]
 script = ExtResource("1_rf8gj")
 entries = {
+"END TURN": {
+"color": Color(0.90234375, 0.67103004, 0.3736267, 1),
+"name": "END TURN"
+},
 "MB1": {
 "alternatives": [],
 "case_sensitive": true,
-"color": Color(0.2632599, 0.87300104, 0.94921875, 1),
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
 "name": "MB1",
 "text": "(Press) Mouse Button 1",
 "title": "MB1"
@@ -17,9 +21,18 @@ entries = {
 "color": Color(0.91796875, 0.22254467, 0.08605957, 1),
 "name": "RED"
 },
+"SPACEBAR": {
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
+"name": "SPACEBAR"
+},
 "TAB": {
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
 "name": "TAB",
 "text": "(Press) Keyboard Button TAB",
 "title": "TAB"
+},
+"grass": {
+"color": Color(0.26572216, 0.94921875, 0.22618103, 1),
+"name": "grass"
 }
 }
