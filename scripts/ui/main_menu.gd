@@ -86,12 +86,13 @@ func _on_start_tutorial_pressed() -> void:
 func _on_start_new_game_pressed() -> void:
 	$UI/LevelSelect.visible = false
 	$UI/CreateNewSaveFileSelect.visible = true
-	_update_create_save_buttons()
-
+	#_update_create_save_buttons()
+	_update_save_buttons()
 
 func _on_load_game_pressed() -> void:
 	$UI/LevelSelect.visible = false;
 	$UI/LoadSelect.visible = true;
+	_update_load_buttons()
 
 
 func _on_back_button_level_pressed() -> void:
@@ -180,3 +181,31 @@ func _update_create_save_buttons() -> void:
 			buttons[i].text = "Slot " + str(i + 1) + " (OVERWRITE?)"
 		else:
 			buttons[i].text = "Slot " + str(i + 1) + " (Empty)"
+
+
+func _update_load_buttons() -> void:
+	var load_buttons := [
+		$UI/LoadSelect/LevelSelectVBOX/LoadMap0,
+		$UI/LoadSelect/LevelSelectVBOX/LoadMap1,
+		$UI/LoadSelect/LevelSelectVBOX/LoadMap2
+	]
+	for i in load_buttons.size():
+		if Main.save.slot_has_data(i):
+			load_buttons[i].text = "Slot " + str(i+1)
+			load_buttons[i].disabled = false
+		else:
+			load_buttons[i].text = "Slot " + str(i+1) + "EMPTY"
+			load_buttons[i].disabled = true
+
+
+func _update_save_buttons() -> void:
+	var save_buttons := [		
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile0,
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile1,
+		$UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile2
+	]
+	for i in save_buttons.size():
+		if Main.save.slot_has_data(i):
+			save_buttons[i].text = "Slot " + str(i+1) + " - Overwrite?"
+		else:
+			save_buttons[i].text = "Slot " + str(i+1) + " - EMPTY"
