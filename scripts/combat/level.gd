@@ -371,7 +371,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	##TODO make _handle_skill use height
 	#var p := Vector3i(pos.x, 0, pos.z)
 	
-	var p := Vector3i(pos)
+	var p : Vector3i = Vector3i(pos)
 	var target: Character = get_unit(p)
 		
 	print("SKILL CLICK p=", p,
@@ -397,6 +397,18 @@ func _handle_skill(pos : Vector3i) -> void:
 	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
 		result.damage = active_skill.effect_mods.get("damage", 0)
 	
+	
+	## TODO: fix crash here if active_skill is null
+	var used_action : bool = active_skill.uses_action
+	var caster : Character = skill_caster
+	if used_action:
+		caster.state.is_ability_used = true
+		# cast a signal to Ribbon here to gray out ability bar
+		print("emitting ability_used signal")
+		emit_signal("ability_used")
+		emit_signal("character_stats_changed", skill_caster)
+		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
+
 	print("Skill result - aggressor: ", result.aggressor)
 	print("Skill result - victim: ", result.victim)
 	print("Skill result - vfx_scene: ", result.vfx_scene)
@@ -407,15 +419,6 @@ func _handle_skill(pos : Vector3i) -> void:
 	target.state.apply_skill_effect(active_skill)
 	emit_signal("character_stats_changed", target)
 	
-	var used_action := active_skill.uses_action
-	var caster := skill_caster
-	if used_action:
-		caster.state.is_ability_used = true
-		# cast a signal to Ribbon here to gray out ability bar
-		print("emitting ability_used signal")
-		emit_signal("ability_used")
-		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
-
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
 
