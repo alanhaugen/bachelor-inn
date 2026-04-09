@@ -95,7 +95,7 @@ func create_new_save_in_slot(save_slot: int) -> void:
 
 	# Only overwrite the selected slot
 	saves["Noble Nights Save format"] = version
-	saves["Slot " + str(save_slot + 1)] = {"level": 0, "units": units}
+	saves["Slot " + str(save_slot + 1)] = {"level": 3, "units": units}
 	var save_file := FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	save_file.store_string(JSON.stringify(saves))
 	save_file.close()
