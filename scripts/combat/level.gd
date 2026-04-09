@@ -367,57 +367,73 @@ func _update_cursor(pos: Vector3i) -> void:
 
 
 func _handle_skill(pos : Vector3i) -> void:
+	var used_skill : Skill = active_skill
 	# Normalize to same plane your maps/skills use
 	##TODO make _handle_skill use height
 	#var p := Vector3i(pos.x, 0, pos.z)
 	
-	var p := Vector3i(pos)
+	var p : Vector3i = Vector3i(pos)
 	var target: Character = get_unit(p)
 		
 	print("SKILL CLICK p=", p,
 			" in_valid=", valid_skill_target_tiles.has(p),
 			" target=", target)
+	
+	## check if exit skill
+	var exit_skill : bool = false
+	if not valid_skill_target_tiles.has(p):
+		exit_skill = true
+	if target == null:
+		exit_skill = true
+	if not _is_valid_target(target, used_skill, skill_caster):
+		exit_skill = true
+	if used_skill.uses_action && skill_caster.state.is_ability_used:
+		exit_skill = true
 
-	if not valid_skill_target_tiles.has(p) or target == null or not _is_valid_target(target, active_skill, skill_caster):
+	if exit_skill:
 		_exit_skill_target_mode()
 		return
-
-	print("Casting ", active_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-	#THIS IS WHERE IT SHOULD TELL VFX CONTROLLER THAT IT SHOULD SPAWN THE SKILLS VFX AT TARGET
-
-	## Impact damage (Fireball)
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"):
-		target.apply_damage(int(active_skill.effect_mods["damage"]), false, skill_caster, active_skill.skill_name)
-		
+	
+	## begin executing skill
+	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+	
 	## Take all the stuff and compile a list of the results as AttackResult! 
 	var result: AttackResult = AttackResult.new()
 	result.aggressor = skill_caster
 	result.victim = target
-	result.vfx_scene =  active_skill.Vfx_Scene
-	if active_skill.effect_mods != null and active_skill.effect_mods.has("damage"): 
-		result.damage = active_skill.effect_mods.get("damage", 0)
+	result.vfx_scene =  used_skill.Vfx_Scene
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"): 
+		result.damage = used_skill.effect_mods.get("damage", 0)
 	
+	
+	## TODO: fix crash here if used_skill is null
+	var used_action : bool = used_skill.uses_action
+	
+	var caster : Character = skill_caster
+	if used_action:
+		caster.state.is_ability_used = true
+		# cast a signal to Ribbon here to gray out ability bar
+		print("emitting ability_used signal")
+		emit_signal("ability_used")
+		emit_signal("character_stats_changed", skill_caster)
+		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
+
 	print("Skill result - aggressor: ", result.aggressor)
 	print("Skill result - victim: ", result.victim)
 	print("Skill result - vfx_scene: ", result.vfx_scene)
 	print("Skill result - damage: ", result.damage)
 	await combat_vfx.play_skill(result)
 	
+	## Impact damage (Fireball)
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
+		target.apply_damage(int(used_skill.effect_mods["damage"]), false, skill_caster, used_skill.skill_name)
 	## DoT's
-	target.state.apply_skill_effect(active_skill)
+	target.state.apply_skill_effect(used_skill)
 	emit_signal("character_stats_changed", target)
 	
-	var used_action := active_skill.uses_action
-	var caster := skill_caster
-	if used_action:
-		caster.state.is_ability_used = true
-		# cast a signal to Ribbon here to gray out ability bar
-		print("emitting ability_used signal")
-		emit_signal("ability_used")
-		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
-
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
+	#CheckVictoryConditions()
 
 
 func _handle_attack_choice(pos: Vector3i) -> void:
@@ -609,7 +625,6 @@ func _input(event: InputEvent) -> void:
 				#var ui := get_tree().get_first_node_in_group("ui_controller")
 				#if ui:
 					#ui.ribbon.trigger_skill_by_index(4)
-
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
@@ -1099,14 +1114,16 @@ func CheckVictoryConditions() -> void:
 	
 	for i in units.size():
 		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
+		var cell_item : int = occupancy_map.get_cell_item(pos)
+		if cell_item == player_code or cell_item == player_code_done:
 			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
 				next_level();
 				return;
 			numberOfPlayerUnits += 1;
-			
-		elif (occupancy_map.get_cell_item(pos) >= enemy_code):
+		elif cell_item == 2:
+			continue
+		elif cell_item >= enemy_code:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
@@ -1125,7 +1142,7 @@ func next_level() -> void:
 	
 	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in positions.size():
-		var unit := get_unit(positions[i])
+		var unit : Character = get_unit(positions[i])
 		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
 			if unit == null:
 				continue
@@ -1137,6 +1154,10 @@ func next_level() -> void:
 			if unit == null:
 				continue
 			unit.die(false)
+			
+	#Healing units between levels
+	for i in Main.characters.size():
+		Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
 	## SAVE GAME HAPPENS HERE
 	#Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
