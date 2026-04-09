@@ -19,6 +19,7 @@ enum Step {
 
 var current_step : Step = Step.INACTIVE
 var current_timeline: int = 1
+var current_tutorial_level : int = 1
 var level: Level
 var in_tutorial : bool = false
 var selection_advances_timeline: bool = true
@@ -50,6 +51,10 @@ func start_tutorial() -> void:
 	tutorial_lock_menus()
 	#Dialogic.start("tutorialpc" + str(current_timeline))
 	Dialogic.start("tutorial" + str(current_timeline))
+
+
+func tutorial_level_complete() -> void:
+	current_tutorial_level += 1
 
 
 func on_timeline_ended() -> void:

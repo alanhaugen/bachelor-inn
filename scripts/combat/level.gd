@@ -755,7 +755,7 @@ func _ready() -> void:
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 	#elif (level_name == "tutorial_1"):
-	elif (level_name == "tutorialDesignedLevel"):
+	elif (level_name.begins_with("tutorial") == true):
 		Tutorial.level = self
 		Tutorial.start_tutorial()
 		#Dialogic.start("tutorialpc1")
@@ -1699,7 +1699,8 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	chest.is_opened = true
 	pending_chest_weapon = WeaponRegistry.get_weapon(chest.weapon_id)
 	is_in_menu = true
-	Dialogic.start(chest.dialogue_timeline)
+	## TODO: Run PopUpScreen with loot
+	#Dialogic.start(chest.dialogue_timeline)
 
 
 func _start_hold(key: Key, duration: float, action: Callable) -> void:

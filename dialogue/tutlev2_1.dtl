@@ -1,0 +1,4 @@
+You made it, and look! There's a chest!\
+\
+Better go see if there's any loot.
+do Tutorial.tutorial_highlight_tile(4, 0, 0)
