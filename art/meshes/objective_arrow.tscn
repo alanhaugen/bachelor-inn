@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://baxbhle1ny1wt"]
+
+[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_s61nl"]
+[ext_resource type="Texture2D" uid="uid://b08oo5aeeey6t" path="res://art/textures/ObjectiveArrow.png" id="2_5b8e2"]
+[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="3_ar1qj"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pgpe8"]
+render_priority = 0
+shader = ExtResource("1_s61nl")
+shader_parameter/diffuse_tex = ExtResource("2_5b8e2")
+shader_parameter/colorTint = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_mgncu"]
+material = SubResource("ShaderMaterial_pgpe8")
+
+[node name="ObjectiveArrow" type="MeshInstance3D" unique_id=938619167]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("QuadMesh_mgncu")
+script = ExtResource("3_ar1qj")

@@ -43,6 +43,10 @@ data = {
 [node name="Cursor" parent="." index="7" unique_id=791973269]
 visible = true
 
+[node name="BattleLog" parent="." index="9" unique_id=840436049]
+text = "Objective: Walk adjacent to the Orb
+"
+
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.662776, -2.9688683, 0.08767605)
 visible = true

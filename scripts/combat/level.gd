@@ -759,14 +759,15 @@ func _ready() -> void:
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 	#elif (level_name == "tutorial_1"):
-	elif (level_name.begins_with("tutorial") == true):
+	elif (level_name.begins_with("tutorialDesignedLevel") == true):
 		Tutorial.level = self
 		Tutorial.start_tutorial()
 		#Dialogic.start("tutorialpc1")
 	elif (level_name == "fento"):
 		for c in characters:
 			if c.state.faction == CharacterState.Faction.ENEMY:
-				c.state.aggro_range = 12
+				pass
+				#c.state.aggro_range = 12
 
 
 	move_popup = MOVE_POPUP.instantiate()
@@ -1260,7 +1261,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 
 	#var o := Vector3i(origin.x, 0, origin.z)
 	var o := Vector3i(origin)
-	var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
+	var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
 		#var p := Vector3i(t.x, 0, t.z)
@@ -1274,20 +1275,6 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 			valid_skill_target_tiles[p] = true
 			path_map.set_cell_item(p, skill_target_code)
 
-func _get_tiles_in_manhattan_range(origin: Vector3i, min_r: int, max_r: int, min_y : int = -1, max_y : int = 5) -> Array[Vector3i]:
-	var out: Array[Vector3i] = []
-	min_r = max(min_r, 0)
-	max_r = max(max_r, 0)
-
-	for dx in range(-max_r, max_r + 1):
-		var rem:int = max_r - abs(dx)
-		for dz in range(-rem, rem + 1):
-			for dy in range(min_y, max_y):
-				var dist :int = abs(dx) + abs(dz)
-				if dist < min_r or dist > max_r:
-					continue
-				out.append(Vector3i(origin.x + dx, origin.y+dy, origin.z + dz))
-	return out
 
 func _exit_skill_target_mode() -> void:
 	var caster := skill_caster

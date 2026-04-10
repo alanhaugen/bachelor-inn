@@ -29,8 +29,7 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 
 	#var movement_range: int = unit.state.movement
 	var movement_range: int = unit.state.get_effective_movement() 
-	## TODO: Spells/Abilities - add an effect checker for buffs/debuffs
-	## This TODO is kind of done.
+	
 	if unit.state.is_moved:
 		movement_range = 0
 
@@ -104,7 +103,6 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 	#    (Temporary rule: enemy must be on same y as origin)
 	# -------------------------
 	if !exclude_attacks:
-		## TODO: Get attack origins per selected enemy, not all enemies.
 		if not unit.state.is_ability_used:
 			# Include "attack from current position"
 			var attack_origins: Array[Vector3i] = [start_pos]

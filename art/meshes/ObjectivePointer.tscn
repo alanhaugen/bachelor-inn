@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bn1tonmm5wi3v"]
+
+[ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="1_fq2oa"]
+[ext_resource type="Texture2D" uid="uid://dil02tf1fbx2j" path="res://art/textures/ObjectiveIcon.png" id="2_4wyuw"]
+[ext_resource type="Shader" uid="uid://x3ag05hug2kv" path="res://shaders/Unshaded.gdshader" id="2_qu3ld"]
+[ext_resource type="Texture2D" uid="uid://butdxk1w64bqx" path="res://art/textures/ObjectiveIconTop.png" id="3_4wyuw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fq2oa"]
+render_priority = 0
+shader = ExtResource("2_qu3ld")
+shader_parameter/diffuse_tex = ExtResource("2_4wyuw")
+shader_parameter/colorTint = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_qu3ld"]
+material = SubResource("ShaderMaterial_fq2oa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qu3ld"]
+render_priority = 0
+shader = ExtResource("2_qu3ld")
+shader_parameter/diffuse_tex = ExtResource("3_4wyuw")
+shader_parameter/colorTint = Color(1, 1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cqhvf"]
+material = SubResource("ShaderMaterial_qu3ld")
+
+[node name="ObjectivePointer" type="Node3D" unique_id=946006907]
+script = ExtResource("1_fq2oa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=832356689]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 0, 0, 0)
+mesh = SubResource("QuadMesh_qu3ld")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=702656918]
+transform = Transform3D(2, 0, 0, 0, -8.742278e-08, 2, 0, -2, -8.742278e-08, 0, 0.09169173, 0)
+mesh = SubResource("QuadMesh_cqhvf")
