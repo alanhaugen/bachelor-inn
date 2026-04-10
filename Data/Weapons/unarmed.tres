@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://bde3fwobbck4h"]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://bde3fwobbck4h"]
 
 [ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_nwjql"]
 
@@ -9,4 +9,5 @@ weapon_name = "Unarmed"
 weapon_tooltip = "Say hello to Pain and Gain"
 damage_modifier = 0
 weapon_critical = 0
+is_melee = true
 metadata/_custom_type_script = "uid://hhe2ydney01y"

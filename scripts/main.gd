@@ -36,6 +36,9 @@ var camera_controller: CameraController;
 ## Save file
 @onready var save: SaveGame = SaveGame.new();
 var current_save_slot: int = 0
+
+## UI
+var transition_screen: Control = null
 #endregion
 
 #region Methods
@@ -76,6 +79,8 @@ func next_level() -> void:
 ##
 ## @param level_name: New level name to load
 func load_level(level_name: String) -> void:
+	print("world valid: ", is_instance_valid(world))
+	print("world: ", world)
 	if OS.has_feature("mobile"):
 		Dialogic.VAR.PLATFORM = "MOBILE";
 	else:
@@ -128,7 +133,11 @@ func get_next_level_index() -> int:
 
 
 func go_to_transition_screen() -> void:
-	get_tree().change_scene_to_file("res://scenes/states/level_transition.tscn")
+	if is_instance_valid(Main.level):
+		Main.level.is_in_menu = true
+	var packed := load("res://scenes/states/level_transition.tscn")
+	transition_screen = packed.instantiate()
+	get_tree().root.add_child(transition_screen)
 #endregion
 
 var level_display_names: Dictionary = {
