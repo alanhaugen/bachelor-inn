@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://11ajdfsavwva"]
+
+[ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_okv8j"]
+
+[node name="Map3d2" unique_id=656823534 instance=ExtResource("1_okv8j")]
+
+[node name="TerrainGrid" parent="." index="0" unique_id=1846160155]
+data = {
+"cells": PackedInt32Array(0, 0, 16, 0, 1, 16, 0, 2, 16, 1, 0, 16, 1, 1, 16, 1, 2, 16, 2, 0, 16, 2, 1, 16, 2, 2, 16, 3, 0, 16, 3, 1, 16, 3, 2, 16, 4, 0, 16, 4, 1, 16, 4, 2, 16)
+}
+metadata/_editor_floor_ = Vector3(0, 4, 0)
