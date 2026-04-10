@@ -432,8 +432,9 @@ static func get_attack_origins(unit: Character, state: GameState, target_pos: Ve
 			continue
 		seen[origin_key] = true
 		
-		var dist: int = abs(target_pos.x - origin.x) + abs(target_pos.z - origin.z)
-		if dist >= min_r and dist <= max_r and (target_pos.y - origin.y) <= 2:
+		var delta : Vector3i = target_pos - origin
+		var dist: int = abs(delta.x) + abs(delta.z) + max(0, abs(delta.y)-1)
+		if dist >= min_r and dist <= max_r and (delta.y) <= 2:
 			valid.append(origin)
 			
 		## Thi caused attack origins to be generated from any enemy within range
