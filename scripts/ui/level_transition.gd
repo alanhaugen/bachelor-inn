@@ -9,8 +9,8 @@ func _ready() -> void:
 
 func _setup_ui() -> void:
 	var level_name := Main.current_level_name
-	$VBoxContainer/LevelName.text = Main.level_display_names.get(level_name, level_name)
-	$VBoxContainer/FlavorText.text = Main.level_flavor_texts.get(level_name, "")
+	$VBoxContainer/HBoxContainer/LevelName.text = Main.level_display_names.get(level_name, level_name)
+	$VBoxContainer/HBoxContainer/FlavorText.text = Main.level_flavor_texts.get(level_name, "")
 	
 	## TODO: FIll in the "card slots" for each unit
 	for c in Main.characters:
