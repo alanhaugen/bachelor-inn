@@ -141,20 +141,20 @@ func go_to_transition_screen() -> void:
 #endregion
 
 var level_display_names: Dictionary = {
-	"tutorial_1": "The Escape",
-	"tutorial_2": "Ruins",
-	"tutorial_3": "The Camp",
-	"fen": "The Fen",
-	"fento": "Keep Fen",
-	"waterfallLevel": "The Waterfall",
-	"woodlandsLevel": "The Woodlands"
+	"tutorial_1": "The Escape  :  ",
+	"tutorial_2": "Ruins  :  ",
+	"tutorial_3": "The Camp  :  ",
+	"fen": "The Fen  :  ",
+	"fento": "Keep Fen  :  ",
+	"waterfallLevel": "The Waterfall  :  ",
+	"woodlandsLevel": "The Woodlands  :  "
 }
 
 var level_flavor_texts: Dictionary = {
 	"tutorial_1": "You tumble down the hillside...",
 	"tutorial_2": "Ancient ruins hide forgotten secrets.",
 	"tutorial_3": "The aid of those of kindled spirit.",
-	"fen": "The sound of footsteps..",
+	"fen": "The sound of chasing footsteps..",
 	"fento": "They keep coming.",
 	"waterfallLevel": "The sound of rushing water fills the air.",
 	"woodlandsLevel": "The trees whisper of things soon forgotten."

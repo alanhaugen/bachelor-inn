@@ -34,10 +34,17 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="LevelName" type="Label" parent="VBoxContainer" unique_id=1276034142]
+[node name="LabelLevelComplete" type="Label" parent="VBoxContainer" unique_id=1042242152]
+layout_mode = 2
+text = "LEVEL COMPLETE!"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=83707430]
 layout_mode = 2
 
-[node name="FlavorText" type="Label" parent="VBoxContainer" unique_id=1278041659]
+[node name="LevelName" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1276034142]
+layout_mode = 2
+
+[node name="FlavorText" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1278041659]
 layout_mode = 2
 
 [node name="UnitContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=200009858]

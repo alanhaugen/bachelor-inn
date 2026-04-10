@@ -765,7 +765,8 @@ func _ready() -> void:
 	elif (level_name == "fento"):
 		for c in characters:
 			if c.state.faction == CharacterState.Faction.ENEMY:
-				c.state.aggro_range = 12
+				pass
+				#c.state.aggro_range = 12
 
 
 	move_popup = MOVE_POPUP.instantiate()
