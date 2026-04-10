@@ -758,7 +758,7 @@ func _ready() -> void:
 		Dialogic.start("Showcase_Intro")
 		is_in_menu = true
 	#elif (level_name == "tutorial_1"):
-	elif (level_name.begins_with("tutorial") == true):
+	elif (level_name.begins_with("tutorialDesignedLevel") == true):
 		Tutorial.level = self
 		Tutorial.start_tutorial()
 		#Dialogic.start("tutorialpc1")
