@@ -3,16 +3,22 @@
 [ext_resource type="Script" uid="uid://fx8gv41dxy6g" path="res://scripts/stats/unit_card.gd" id="1_fuw7w"]
 
 [node name="UnitCard" type="PanelContainer" unique_id=535593357]
+custom_minimum_size = Vector2(200, 300)
 script = ExtResource("1_fuw7w")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=220681901]
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="Portrait" type="TextureRect" parent="VBoxContainer" unique_id=1389592788]
+custom_minimum_size = Vector2(150, 150)
 layout_mode = 2
+expand_mode = 3
+stretch_mode = 5
 
 [node name="UnitName" type="Label" parent="VBoxContainer" unique_id=1504596107]
 layout_mode = 2
+horizontal_alignment = 1
 
 [node name="Health" type="Label" parent="VBoxContainer" unique_id=107307867]
 layout_mode = 2
