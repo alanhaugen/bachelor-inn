@@ -54,6 +54,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="STRButton" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=1240739841]
+unique_name_in_owner = true
 layout_mode = 2
 text = "+"
 
@@ -65,6 +66,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="MNDButton" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1698774842]
+unique_name_in_owner = true
 layout_mode = 2
 text = "+"
 
@@ -76,6 +78,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="SPDButton" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=697744949]
+unique_name_in_owner = true
 layout_mode = 2
 text = "+"
 
@@ -87,6 +90,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="ENDButton" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=607875166]
+unique_name_in_owner = true
 layout_mode = 2
 text = "+"
 
@@ -98,6 +102,7 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="FCSButton" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1989678428]
+unique_name_in_owner = true
 layout_mode = 2
 text = "+"
 
