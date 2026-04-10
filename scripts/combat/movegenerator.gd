@@ -115,34 +115,21 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 			# de-dupe origin->target pairs
 			var seen_pairs: Dictionary = {}
 
-			for origin: Vector3i in attack_origins:
-				for dx in range(-max_r, max_r + 1):
-					for dz in range(-max_r, max_r + 1):
-						var dist : int = abs(dx) + abs(dz)
-						if dist < min_r or dist > max_r:
-							continue
-
-						var x := origin.x + dx
-						var z := origin.z + dz
-
-						# Check all tiles at this XZ and pick enemies that match origin height (y)
-						var tiles_here: Array[Vector3i] = state.get_tiles_at_xz(x, z)
-						if tiles_here.is_empty():
-							continue
-
-						for t: Vector3i in tiles_here:
-							if t.y != origin.y:
-								continue
-							if not state.is_enemy(t):
-								continue
-
-							# De-dupe by origin and target (XZ+Y as chosen)
-							var key := str(origin.x)+","+str(origin.y)+","+str(origin.z)+"->"+str(t.x)+","+str(t.y)+","+str(t.z)
-							if seen_pairs.has(key):
-								continue
-							seen_pairs[key] = true
-
-							commands.append(Attack.new(start_pos, t, origin))
+			var opponents : Array[Character] = state.get_enemies()
+			for opponent : Character in opponents:
+				if opponent == null:
+					continue
+				for origin : Vector3i in attack_origins:
+					var tile : Vector3i = opponent.state.grid_position
+					var delta : Vector3i = tile - origin
+					var dist : int = abs(delta.x) + abs(delta.z) + max(0, abs(delta.y)-1)
+					if dist < min_r or dist > max_r:
+						continue
+					var key := str(origin.x)+","+str(origin.y)+","+str(origin.z)+"->"+str(tile.x)+","+str(tile.y)+","+str(tile.z)
+					if seen_pairs.has(key):
+						continue
+					seen_pairs[key] = true
+					commands.append(Attack.new(start_pos, tile, origin))
 	
 	# -------------------------
 	# 4) Always allow WAIT

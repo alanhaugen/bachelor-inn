@@ -210,3 +210,12 @@ func save() -> Dictionary:
 	var state := {"units": units };
 	
 	return state;
+
+func get_enemies() -> Array[Character]:
+	var output : Array[Character] = []
+	for u in units:
+		if u == null:
+			continue
+		if u.state.is_enemy() == !is_current_player_enemy:
+			output.append(u)
+	return output
