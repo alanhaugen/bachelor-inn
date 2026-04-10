@@ -37,6 +37,8 @@ func setup(character: Character) -> void:
 	speed.text = "SPD: %d" % character.data.speed
 	endurance.text = "END: %d" % character.data.endurance
 	focus.text = "FOC: %d" % character.data.focus
+	_refresh_stats()
+
 
 ## FUNCTIONS
 func _check_can_continue() -> bool:

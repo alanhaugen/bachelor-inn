@@ -26,7 +26,6 @@ stretch_mode = 5
 [node name="BannerPoints" type="Label" parent="VBoxContainer" unique_id=1920500231]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Available points:"
 horizontal_alignment = 1
 
 [node name="UnitName" type="Label" parent="VBoxContainer" unique_id=1504596107]
