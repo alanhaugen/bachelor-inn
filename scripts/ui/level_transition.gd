@@ -12,6 +12,8 @@ func _setup_ui() -> void:
 	
 	## TODO: FIll in the "card slots" for each unit
 	for c in Main.characters:
+		if c != null:
+			c.state.unspent_skill_points += 3
 		if c == null:
 			continue
 		var card := UNIT_CARD.instantiate() as UnitCard
