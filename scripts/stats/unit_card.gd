@@ -11,9 +11,12 @@ class_name UnitCard
 @onready var speed: Label = %Speed
 @onready var endurance: Label = %Endurance
 @onready var focus: Label = %Focus
-
+@onready var banner_lvl_up : Label = %BannerLvlUp
+@onready var banner_points : Label = %BannerPoints
+var _character : Character = null
 
 func setup(character: Character) -> void:
+	_character = character
 	portrait.texture = character.portrait if character.portrait != null else null
 	unit_name.text = character.data.unit_name
 	health.text = "HP: %d/%d" % [character.state.current_health, character.state.max_health]
@@ -31,6 +34,10 @@ func _check_can_continue() -> bool:
 		if c != null and c.state.unspent_skill_points > 0:
 			return false
 	return true
+
+
+func _spend_skill_point() -> void:
+	pass
 
 func _on_str_button_pressed() -> void:
 	pass # Replace with function body.
