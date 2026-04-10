@@ -36,6 +36,10 @@ transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0,
 visible = true
 cast_shadow = 0
 
+[node name="BattleLog" parent="." index="9" unique_id=840436049]
+text = "Objective: Flee to the ruins
+"
+
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2643209, 0.16053152, 3.1048808)
 visible = true

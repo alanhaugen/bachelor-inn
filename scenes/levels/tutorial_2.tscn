@@ -30,6 +30,10 @@ data = {
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
+[node name="BattleLog" parent="." index="9" unique_id=840436049]
+text = "Objective: Walk on the chest, then defeat  the enemy
+"
+
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.622765, 0, 4.044525)
 visible = true
