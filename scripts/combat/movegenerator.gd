@@ -448,10 +448,10 @@ static func get_attack_origins(unit: Character, state: GameState, target_pos: Ve
 		seen[origin_key] = true
 		
 		var dist: int = abs(target_pos.x - origin.x) + abs(target_pos.z - origin.z)
-		if dist >= min_r and dist <= max_r and target_pos.y == origin.y:
+		if dist >= min_r and dist <= max_r and (target_pos.y - origin.y) <= 2:
 			valid.append(origin)
 			
-		## This caused attack origins to be generated from any enemy within range
+		## Thi caused attack origins to be generated from any enemy within range
 		#if _has_enemy_in_range_from_origin(origin, min_r, max_r, unit, state):
 		#	valid.append(origin)
 

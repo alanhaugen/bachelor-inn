@@ -441,6 +441,7 @@ func _handle_skill(pos : Vector3i) -> void:
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
+		_cancel_attack_choice_mode()
 		return
 
 	active_move.end_pos = pos
@@ -1298,6 +1299,16 @@ func _exit_skill_target_mode() -> void:
 	print("caster is_moved: ", caster.state.is_moved if caster else "null")
 	if caster != null and caster.state.is_moved == false:
 		select_unit(caster)
+
+
+func _cancel_attack_choice_mode() -> void:
+	is_choosing_skill_attack_origin = false
+	state = States.PLAYING
+	path_map.clear()
+	active_move = null
+	var attacker := selected_unit
+	if attacker != null and attacker.state.is_moved == false:
+		select_unit(attacker)
 
 
 func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
