@@ -220,3 +220,4 @@ item/6/shapes = []
 item/6/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 item/6/navigation_layers = 1
 item/6/preview = SubResource("ImageTexture_puvja")
+metadata/_editor_source_scene = "res://scenes/libraries/OccupancyMeshLibrary_Source.tscn"
