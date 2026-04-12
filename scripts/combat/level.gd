@@ -19,10 +19,6 @@ signal ability_used
 signal character_stats_changed(character: Character)
 signal party_updated(characters: Array[Character])
 
-
-
-
-
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 
 @export var level_name :String
@@ -92,15 +88,14 @@ const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
-
 @onready var loot_popup : LootPopup = $LootPopUp
-
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 var patrol_paths: Dictionary[String, PatrolPath] = {}
 var chests: Dictionary[Vector3i, Chest] = {}
 var pending_chest_weapon: Weapon = null
+var neutral_units: Dictionary[Vector3i, NeutralUnit] = {}
 
 enum States {
 	PLAYING,
@@ -1608,6 +1603,9 @@ func _on_dialogic_signal(argument: String) -> void:
 			highlight.clear()
 	elif argument == "enable_selection_advances_timeline":
 		Tutorial.selection_advances_timeline = true
+	elif argument == "recruit_neutral":
+		#_recruit_nearest_neutral()
+		pass
 	else:
 		#Tutorial.selection_advances_timeline = true
 		Tutorial.advance_timeline()
@@ -1678,13 +1676,21 @@ func hide_inactive_characters() -> void:
 			#else:
 				#c.hide()
 
-
+## REGISTER FUNCTIONS
 func _register_chests() -> void:
 	for child in get_children():
 		if child is Chest:
 			var grid_pos := world_to_grid(child.global_position)
 			chests[grid_pos] = child
 			print("Registered chest at: ", grid_pos, " weapon: ", child.weapon_id)
+
+
+func _register_neutral_units() -> void:
+	for child in get_children():
+		if child is NeutralUnit:
+			var grid_pos := world_to_grid(child.global_position)
+			neutral_units[grid_pos] = child
+			print("Registered neutral unit at: ", grid_pos, " scene_id: ", child.scene_id)
 
 
 func _on_chest_opened(pos: Vector3i) -> void:
