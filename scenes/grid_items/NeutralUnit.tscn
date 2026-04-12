@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ub7bbuvs2e6a"]
+
+[ext_resource type="Script" uid="uid://bb5lcdq4mfx1v" path="res://scripts/Characters/neutral_unit.gd" id="1_anttc"]
+
+[node name="NeutralUnit" type="Node3D" unique_id=752975325]
+script = ExtResource("1_anttc")
