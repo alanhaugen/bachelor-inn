@@ -78,6 +78,10 @@ func is_playable() -> bool:
 	return faction == Faction.PLAYER;
 
 
+func is_neutral() -> bool:
+	return faction == Faction.NEUTRAL;
+
+
 func duplicate_data() -> CharacterState:
 	return duplicate(true);
 

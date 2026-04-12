@@ -1,1 +1,3 @@
 Event happens here.
+[signal arg="recruit_neutral"]
+[end_timeline]

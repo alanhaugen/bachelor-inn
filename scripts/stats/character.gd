@@ -243,6 +243,8 @@ func calibrate_level_popup() -> void:
 
 
 func calc_derived_stats() -> void:
+	if data == null:
+		return
 	state.defense = 4 + data.endurance
 	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
@@ -277,7 +279,7 @@ func _ready() -> void:
 		#state.skills.append(SkillRegistry.get_skill("heal_basic"));
 	#abilities.append(abilites[0]);
 	
-	if not state.is_playable():
+	if not state.is_playable() and state.faction != CharacterState.Faction.NEUTRAL:
 		#health_bar = health_bar_ally;
 	#else:
 		#health_bar = health_bar_enemy;

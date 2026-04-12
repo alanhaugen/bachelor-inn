@@ -83,7 +83,9 @@ const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
-const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn");
+const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn"); ## TODO:
+const EMIL: PackedScene = preload("res://scenes/Characters/Emil.tscn")
+const LUCY: PackedScene = preload("res://scenes/Characters/Char_Lucy.tscn")
 const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
@@ -755,6 +757,7 @@ func _ready() -> void:
 	add_to_group("level")
 	
 	_register_chests()
+	#_register_neutral_units()
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
@@ -764,20 +767,37 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 
 	match unit_id:
 		"01_Enemy":
-			new_enemy = PLAYER.instantiate()
-			
+			#new_enemy = PLAYER.instantiate()
+			#
+			#var data := CharacterData.new()
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.ENEMY
+			#
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+			#new_enemy.data.unit_name = monster_names.pick_random()
+			new_enemy = LUCY.instantiate()
+			#print("Lucy faction right after instantiate: ", new_enemy.state.faction)
 			var data := CharacterData.new()
 			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY
-			
+			c_state.faction = CharacterState.Faction.NEUTRAL
 			new_enemy.data = data
 			new_enemy.state = c_state
-			new_enemy.data.unit_name = monster_names.pick_random()
+			print("Lucy faction after state assignment: ", new_enemy.state.faction)
+			new_enemy.data.unit_name = "Lucy"
 
 		"02_Chest":
 			var chest := CHEST.instantiate()
 			chest.position = grid_to_world(pos)
 			add_child(chest)
+		
+		"03_UnitDone":
+			new_enemy = EMIL.instantiate()
+			var data := CharacterData.new()
+			var c_state := CharacterState.new()
+			c_state.faction = CharacterState.Faction.NEUTRAL
+			new_enemy.data = data
+			new_enemy.state = c_state
 
 		"04_EnemyBird":
 			new_enemy = BIRD_ENEMY.instantiate()
@@ -1604,8 +1624,8 @@ func _on_dialogic_signal(argument: String) -> void:
 	elif argument == "enable_selection_advances_timeline":
 		Tutorial.selection_advances_timeline = true
 	elif argument == "recruit_neutral":
-		#_recruit_nearest_neutral()
-		pass
+		print("SIGNAL DIALOGIC RECRUITMENT")
+		_recruit_neutral_units()
 	else:
 		#Tutorial.selection_advances_timeline = true
 		Tutorial.advance_timeline()
@@ -1685,13 +1705,6 @@ func _register_chests() -> void:
 			print("Registered chest at: ", grid_pos, " weapon: ", child.weapon_id)
 
 
-func _register_neutral_units() -> void:
-	for child in get_children():
-		if child is NeutralUnit:
-			var grid_pos := world_to_grid(child.global_position)
-			neutral_units[grid_pos] = child
-			print("Registered neutral unit at: ", grid_pos, " scene_id: ", child.scene_id)
-
 
 func _on_chest_opened(pos: Vector3i) -> void:
 	print("on_chest_opened triggered.")
@@ -1714,6 +1727,42 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	print("loot_popup: ", loot_popup)
 	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
 	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
+
+
+func _recruit_neutral_units() -> void:
+	print("Recruit Neutral Func Started")
+	for c in characters:
+		if c == null:
+			print("null c in characters found.")
+			continue
+		print(c.data.unit_name, " faction int value: ", c.state.faction, " NEUTRAL value: ", CharacterState.Faction.NEUTRAL)
+		if c.state.faction == CharacterState.Faction.NEUTRAL:
+			print("MATCH FOUND: ", c.data.unit_name)
+			print(str(c.data.unit_name) + "'s faction before recruitment is:" + str(c.state.Faction))
+			c.state.faction = CharacterState.Faction.PLAYER
+			print(str(c.data.unit_name) + "'s faction after recruitment is:" + str(c.state.Faction))
+			Main.characters.append(c)
+			occupancy_map.set_cell_item(c.state.grid_position, player_code)
+			game_state = GameState.from_level(self)
+			
+			#emit_signal("party_updated", characters.filter(func(ch: Character) -> bool: 
+				#return ch != null and ch.state.faction == CharacterState.Faction.PLAYER))
+		#print("Recruited: ", c.data.unit_name)
+		
+			var player_chars: Array[Character] = []
+			for ch in characters:
+				if ch != null and ch.state.faction == CharacterState.Faction.PLAYER:
+					player_chars.append(ch)
+			print("Emitting party_updated with: ", player_chars.size(), " characters")
+			emit_signal("party_updated", player_chars)
+			print("Recruited: ", c.data.unit_name)
+			return
+
+	print("No neutral units found to recruit")
+
+
+func _add_neutral_unit_to_party() -> void:
+	pass
 
 
 func _start_hold(key: Key, duration: float, action: Callable) -> void:
