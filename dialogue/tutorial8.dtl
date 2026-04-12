@@ -1,7 +1,8 @@
-You got a weapon! WAOW!
+You got a weapon! WAOW! *Information about weapons*
 You see a monser lurking inside the ruins!\
 \
 The only thing to do is to figh!
 To preform an attack with your weapon\: \
 1. First click the unit you want to attack,\
 2. then select the tile you want to attack from.
+do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()

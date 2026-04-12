@@ -17,6 +17,7 @@ var current_tutorial_level : int = 1
 var level: Level
 var in_tutorial : bool = false
 var can_advance_timeline : bool = true
+var timeline_advances_at_player_turn_begins : bool = true
 var selection_advances_timeline: bool = true
 
 ## Tutorial state
@@ -54,19 +55,18 @@ func start_tutorial() -> void:
 			Dialogic.start("tutorial1")
 		2:
 			Dialogic.start("tutorial7")
+			current_timeline = 7
 		3:
 			Dialogic.start("tutorial10")
+			current_timeline = 10
 		# Only 3 tutorial levels are planned, but add more if needed.
 		_:
 			push_error("No toturial start found.")
 
 
-func tutorial_level_complete() -> void:
-	current_tutorial_level += 1 # This is to recognize which tutoral map we are currently in
-	print("Current tutorial level set to: " + str(current_tutorial_level) + ".")
-
 
 func tutorial_trigger_victory() -> void:
+	current_tutorial_level += 1
 	Main.level.is_player_turn = true;
 	Main.level.next_level();
 
@@ -209,12 +209,12 @@ func tutorial_set_select_unit_advances_timeline() -> void:
 	else: 
 		selection_advances_timeline = true
 
-
-func tutorial_advance_tutorial_level() -> void:
-	current_tutorial_level += 1
-	print("Current tutorial level set to: " + str(current_tutorial_level) + ".")
-	print("Next tutorial level set to: " + str(current_tutorial_level + 1) + ".")
-	print("Current tutorial timeline: " +  str(current_timeline))
+func tutorial_set_timeline_advances_at_player_turn_begins() -> void:
+	if timeline_advances_at_player_turn_begins:
+		timeline_advances_at_player_turn_begins = false
+		return
+	else: 
+		timeline_advances_at_player_turn_begins = true
 
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)

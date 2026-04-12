@@ -1,3 +1,2 @@
 You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.
-Move to the RED opening.
-do Tutorial.tutorial_highlight_tile(2, 0, 2)
+do Tutorial.tutorial_trigger_victory()

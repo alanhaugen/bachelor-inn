@@ -587,9 +587,13 @@ func _input(event: InputEvent) -> void:
 						func() -> void: if is_player_turn and state != States.ANIMATING: end_player_turn()
 					)
 				KEY_N:
-					_start_hold(KEY_N, 1.0, 
-						func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
-					)
+					if Tutorial.in_tutorial:
+						_start_hold(KEY_N, 1.0, 
+						func() -> void: if is_player_turn and state != States.ANIMATING: Tutorial.tutorial_trigger_victory())
+					else:
+						_start_hold(KEY_N, 1.0, 
+							func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
+						)
 				KEY_TAB:
 					select_next_character()
 				KEY_1:
@@ -612,39 +616,14 @@ func _input(event: InputEvent) -> void:
 					var ui := get_tree().get_first_node_in_group("ui_controller")
 					if ui:
 						ui.ribbon.trigger_skill_by_index(4)
+		
 		else:
 			if event.keycode == _held_key:
 				_cancel_hold()
 				_key_consumed = false
 			elif _key_consumed:
 				_key_consumed = false
-			#if event.keycode == KEY_TAB:
-				#select_next_character()
-			#if event.keycode == KEY_1:
-				#print("Ability 1 selected")
-				#var ui := get_tree().get_first_node_in_group("ui_controller")
-				#if ui:
-					#ui.ribbon.trigger_skill_by_index(0)
-			#if event.keycode == KEY_2:
-				#print("Ability 2 selected")
-				#var ui := get_tree().get_first_node_in_group("ui_controller")
-				#if ui:
-					#ui.ribbon.trigger_skill_by_index(1)
-			#if event.keycode == KEY_3:
-				#print("Ability 3 selected")
-				#var ui := get_tree().get_first_node_in_group("ui_controller")
-				#if ui:
-					#ui.ribbon.trigger_skill_by_index(2)
-			#if event.keycode == KEY_4:
-				#print("Ability 4 selected")
-				#var ui := get_tree().get_first_node_in_group("ui_controller")
-				#if ui:
-					#ui.ribbon.trigger_skill_by_index(3)
-			#if event.keycode == KEY_5:
-				#print("Ability 5 selected")
-				#var ui := get_tree().get_first_node_in_group("ui_controller")
-				#if ui:
-					#ui.ribbon.trigger_skill_by_index(4)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _can_handle_input(event):
@@ -766,31 +745,6 @@ func _ready() -> void:
 					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		else:
 			spawn_enemy(pos, unit_type, true)
-
-	## TUTORIAL TRIGGERS
-	#if level_name.begins_with("tutorial"):
-		#Tutorial.level = self
-		#Tutorial.start_tutorial()
-		#
-	## TUTORIAL TRIGGERS END
-	#if (level_name == "first"):
-		#Dialogic.start(str(level_name) + "Level");
-		#is_in_menu = true;
-	#if (level_name == "fen"):
-		#Dialogic.start("Showcase_Intro")
-		#is_in_menu = true
-	##elif (level_name == "tutorial_1"):
-	#elif (level_name.begins_with("tutorialDesignedLevel") == true):
-		#Tutorial.level = self
-		#Tutorial.start_tutorial()
-		##Dialogic.start("tutorialpc1")
-	#elif (level_name == "fento"):
-		#for c in characters:
-			#if c.state.faction == CharacterState.Faction.ENEMY:
-				#pass
-				#c.state.aggro_range = 12
-
-	## DIALOGIC TRIGGERS END
 
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
@@ -1099,9 +1053,6 @@ func MoveSingleAI() -> void:
 			return
 		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
-		#if Main.level.level_name == "tutorial_1":
-		#	print("Advancing Tutorial Timeline")
-		#	Tutorial.advance_timeline()
 
 
 func CheckTriggerConditions() -> void:
@@ -1474,7 +1425,8 @@ func _process_old(delta: float) -> void:
 				hide_inactive_characters()
 				
 				## TUTORIAL
-				if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline:
+				if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline and Tutorial.timeline_advances_at_player_turn_begins:
+				#if Tutorial.in_tutorial and not	Tutorial.timeline_advances_at_player_turn_begins:
 					Tutorial.advance_timeline()
 				
 				
