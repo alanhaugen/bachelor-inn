@@ -8,7 +8,8 @@ entries = {
 "END TURN": {
 "case_sensitive": true,
 "color": Color(0.90234375, 0.67103004, 0.3736267, 1),
-"name": "END TURN"
+"name": "END TURN",
+"text": ""
 },
 "MB1": {
 "alternatives": [],
@@ -47,8 +48,12 @@ entries = {
 "name": "WASD"
 },
 "attack": {
-"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
-"name": "attack"
+"color": Color(0.27450982, 0.85882354, 0.9372549, 1),
+"name": "attack",
+"text": "To preform an attack with your weapon: 
+1. First click the unit you want to attack,
+2. then select the tile you want to attack from.",
+"title": "Attack "
 },
 "chest": {
 "color": Color(0.9576887, 0.96484375, 0.04899597, 1),

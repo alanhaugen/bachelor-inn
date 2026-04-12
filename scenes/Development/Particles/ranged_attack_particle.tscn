@@ -14,6 +14,7 @@ shader_parameter/frame_columns = 1
 shader_parameter/frame_rows = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_fr0lo"]
+material = SubResource("ShaderMaterial_5d4l2")
 
 [node name="MAIN" type="Node3D" unique_id=454491279]
 script = ExtResource("1_bdpgj")
