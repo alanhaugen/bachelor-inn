@@ -162,6 +162,8 @@ func _on_party_updated(characters: Array[Character]) -> void:
 		##Instead we should be moving the null value out of the array.
 		if (character == null) :
 			continue;
+		if character.state.faction == CharacterState.Faction.NEUTRAL:
+			continue
 		add_character_preview(character)
 	for c: Character in previews.keys():
 		if not characters.has(c):

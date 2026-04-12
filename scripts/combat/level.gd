@@ -1707,7 +1707,7 @@ func _register_chests() -> void:
 
 
 func _on_chest_opened(pos: Vector3i) -> void:
-	print("on_chest_opened triggered.")
+	print("on_chest_opened() triggered.")
 	var chest: Chest = chests.get(pos, null)
 	if chest == null:
 		push_error("No chest found at: " + str(pos))
@@ -1730,7 +1730,7 @@ func _on_chest_opened(pos: Vector3i) -> void:
 
 
 func _recruit_neutral_units() -> void:
-	print("Recruit Neutral Func Started")
+	print("recruit_neutral_units() triggered")
 	for c in characters:
 		if c == null:
 			print("null c in characters found.")
@@ -1738,16 +1738,12 @@ func _recruit_neutral_units() -> void:
 		print(c.data.unit_name, " faction int value: ", c.state.faction, " NEUTRAL value: ", CharacterState.Faction.NEUTRAL)
 		if c.state.faction == CharacterState.Faction.NEUTRAL:
 			print("MATCH FOUND: ", c.data.unit_name)
-			print(str(c.data.unit_name) + "'s faction before recruitment is:" + str(c.state.Faction))
+			print(str(c.data.unit_name) + "'s faction before recruitment is:" + str(c.state.faction))
 			c.state.faction = CharacterState.Faction.PLAYER
-			print(str(c.data.unit_name) + "'s faction after recruitment is:" + str(c.state.Faction))
+			print(str(c.data.unit_name) + "'s faction after recruitment is:" + str(c.state.faction))
 			Main.characters.append(c)
 			occupancy_map.set_cell_item(c.state.grid_position, player_code)
 			game_state = GameState.from_level(self)
-			
-			#emit_signal("party_updated", characters.filter(func(ch: Character) -> bool: 
-				#return ch != null and ch.state.faction == CharacterState.Faction.PLAYER))
-		#print("Recruited: ", c.data.unit_name)
 		
 			var player_chars: Array[Character] = []
 			for ch in characters:
