@@ -55,6 +55,7 @@ func start_tutorial() -> void:
 			Dialogic.start("tutorial1")
 		2:
 			Dialogic.start("tutorial7")
+			selection_advances_timeline = false
 			current_timeline = 7
 		3:
 			Dialogic.start("tutorial10")

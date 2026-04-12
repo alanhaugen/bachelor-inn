@@ -1,2 +1,4 @@
-You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.
+You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.\
+\
+Curiosity gets the better of you, and you force your way through.
 do Tutorial.tutorial_trigger_victory()

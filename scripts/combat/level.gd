@@ -59,6 +59,8 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
 var _level_complete : bool = false
+var level_has_victory_trigger: bool = false
+
 
 var selected_unit: Character = null
 var last_selected_unit: Character = null
@@ -710,6 +712,8 @@ func _ready() -> void:
 
 	print("Loading new level, number of playable characters: ", Main.characters.size())
 	print("Level name: ", Main.level.name)
+	
+	_check_for_victory_trigger()
 
 	for i in range(units.size()):
 		var pos: Vector3i = units[i]
@@ -1113,7 +1117,7 @@ func CheckVictoryConditions() -> void:
 	
 	if (numberOfPlayerUnits == 0):
 		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
-	elif (numberOfEnemyUnits == 0):
+	elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
 		is_player_turn = true;
 		next_level();
 		return;
@@ -1718,10 +1722,8 @@ func _cancel_hold() -> void:
 	_hold_timer = 0.0
 	_hold_action = Callable()
 
-#func _process(delta: float) -> void:
-	#if _held_key != KEY_NONE:
-		#_hold_timer += delta
-		#if _hold_timer >= _hold_duration:
-			#_key_consumed = true
-			#_hold_action.call()
-			#_cancel_hold()
+func _check_for_victory_trigger() -> void:
+	for pos in trigger_map.get_used_cells():
+		if get_trigger_name(pos) == "00_Victory":
+			level_has_victory_trigger = true
+			return
