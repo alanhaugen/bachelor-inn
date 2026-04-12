@@ -4,7 +4,9 @@ class_name CombatVFXController
 @export var damage_number_scene : PackedScene
 @export var hit_particles_scene : PackedScene
 @export var ranged_attack_scene : PackedScene
+@export var ranged_attack_magic : PackedScene
 @export var melee_attack_scene  : PackedScene
+@export var melee_attack_magic  : PackedScene
 
 var _is_aniamting_attack : bool = false;
 
@@ -51,6 +53,7 @@ func play_skill(result : AttackResult) -> void:
 	#if dmg > 0:
 		#_spawn_hit_particles(result.victim)
 		#_trigger_hit_flash(result.victim, result.was_critical)
+		
 	if result == null:
 		return
 	
