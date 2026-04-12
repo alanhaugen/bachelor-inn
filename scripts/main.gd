@@ -38,6 +38,7 @@ var camera_controller: CameraController;
 var current_save_slot: int = 0
 
 ## UI
+var flavor_screen: Control = null
 var transition_screen: Control = null
 #endregion
 
@@ -103,6 +104,7 @@ func load_level(level_name: String) -> void:
 	var ui := get_tree().get_first_node_in_group("ui_controller")
 	if ui:
 		ui._connect_to_level(level)
+	Main.show_flavor_screen()
 
 
 func load_level_by_name(level_name: String) -> void:
@@ -138,10 +140,20 @@ func go_to_transition_screen() -> void:
 	var packed := load("res://scenes/states/level_transition.tscn")
 	transition_screen = packed.instantiate()
 	get_tree().root.add_child(transition_screen)
+
+func show_flavor_screen() -> void:
+	if not level_story_text.has(current_level_name):
+		return  
+	if is_instance_valid(level):
+		level.is_in_menu = true
+	var packed := load("res://scenes/userinterface/flavor_text_screen.tscn")
+	flavor_screen = packed.instantiate()
+	get_tree().root.add_child(flavor_screen)
+
 #endregion
 
 var level_display_names: Dictionary = {
-	"tutorial_1": "The Escape  :  ",
+	"tutorialDesignedLevel": "The Escape  :  ",
 	"tutorial_2": "Ruins  :  ",
 	"tutorial_3": "The Camp  :  ",
 	"fen": "The Fen  :  ",
@@ -151,11 +163,28 @@ var level_display_names: Dictionary = {
 }
 
 var level_flavor_texts: Dictionary = {
-	"tutorial_1": "You tumble down the hillside...",
+	"tutorialDesignedLevel": "You tumble down the hillside...",
 	"tutorial_2": "Ancient ruins hide forgotten secrets.",
 	"tutorial_3": "The aid of those of kindled spirit.",
 	"fen": "The sound of chasing footsteps..",
 	"fento": "They keep coming.",
 	"waterfallLevel": "The sound of rushing water fills the air.",
 	"woodlandsLevel": "The trees whisper of things soon forgotten."
+}
+
+var level_story_text : Dictionary = {
+	"tutorialDesignedLevel": 
+	"\nAn evil force has swept across the world.\n
+	The majority of folks have been taken and turned, but there are a few who still remain human.\n
+	You lived quietly for so long, but alas one of those.. things.. found your hideout.\n 
+	The only thing to do is to flee.\n\n\n",
+	"tutorial_2":
+	"\nYou find yourself inside a smal, but sturdy set of ruins.\n 
+	The thing that was chasing you has stopped.. For now.\n 
+	The ruins are damp and cold, but a small torch somehow flickers on the far side.\n 
+	Could someone have been here recently?\n\n\n",
+	"tutorial_3":
+	"\nThe sound of a whisper draws your attention.\n
+	Outside, on the other side of the ruins you stumble upon a makeshift camp outside a worn stable.\n
+	Two shadows make out a silhuette before a flickering bonfire.\n\n\n"
 }

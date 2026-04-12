@@ -2,12 +2,6 @@ extends Node
 
 enum Step {
 	INACTIVE,
-	#INTRO,
-	#MOVE_AWAY,
-	#TERRIAN_EXPLAINED,
-	#USE_ABILITIES,
-	#COMBAT_EXPLAINED,
-	#COMPLETE
 	STEP_1,
 	STEP_2,
 	STEP_3,
@@ -22,6 +16,7 @@ var current_timeline: int = 1
 var current_tutorial_level : int = 1
 var level: Level
 var in_tutorial : bool = false
+var can_advance_timeline : bool = true
 var selection_advances_timeline: bool = true
 
 ## Tutorial state
@@ -30,9 +25,13 @@ var tutorial_state: TutorialStates = TutorialStates.new();
 ## This should advance the tutorial to the next timeline
 ## Given that the naming convention is "tutorialpc" + integer
 func advance_timeline() -> void:
+	if not can_advance_timeline:
+		print("Cannot advance timeline - System not ready")
+		return
+		
 	print("Advance timeline called.")
 	current_timeline += 1
-	#var next_timeline: String = "tutorialpc" + str(current_timeline)
+	
 	var next_timeline: String = "tutorial" + str(current_timeline)
 	print("Next timeline: " + str(next_timeline))
 	if FileAccess.file_exists("res://dialogue/" + next_timeline + ".dtl"):
@@ -46,15 +45,30 @@ func advance_timeline() -> void:
 
 ## Start the first tutorial
 func start_tutorial() -> void:
+	print("start_tutorial called. current_tutorial_level: ", current_tutorial_level)
+	print(get_stack())
 	in_tutorial = true
-	#current_step = Step.STEP_1
 	tutorial_lock_menus()
-	#Dialogic.start("tutorialpc" + str(current_timeline))
-	Dialogic.start("tutorial" + str(current_timeline))
+	match current_tutorial_level:
+		1:
+			Dialogic.start("tutorial1")
+		2:
+			Dialogic.start("tutorial7")
+		3:
+			Dialogic.start("tutorial10")
+		# Only 3 tutorial levels are planned, but add more if needed.
+		_:
+			push_error("No toturial start found.")
 
 
 func tutorial_level_complete() -> void:
-	current_tutorial_level += 1
+	current_tutorial_level += 1 # This is to recognize which tutoral map we are currently in
+	print("Current tutorial level set to: " + str(current_tutorial_level) + ".")
+
+
+func tutorial_trigger_victory() -> void:
+	Main.level.is_player_turn = true;
+	Main.level.next_level();
 
 
 func on_timeline_ended() -> void:
@@ -195,6 +209,12 @@ func tutorial_set_select_unit_advances_timeline() -> void:
 	else: 
 		selection_advances_timeline = true
 
+
+func tutorial_advance_tutorial_level() -> void:
+	current_tutorial_level += 1
+	print("Current tutorial level set to: " + str(current_tutorial_level) + ".")
+	print("Next tutorial level set to: " + str(current_tutorial_level + 1) + ".")
+	print("Current tutorial timeline: " +  str(current_timeline))
 
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)

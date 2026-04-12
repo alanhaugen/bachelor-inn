@@ -6,6 +6,7 @@
 script = ExtResource("1_rf8gj")
 entries = {
 "END TURN": {
+"case_sensitive": true,
 "color": Color(0.90234375, 0.67103004, 0.3736267, 1),
 "name": "END TURN"
 },
@@ -16,6 +17,16 @@ entries = {
 "name": "MB1",
 "text": "(Press) Mouse Button 1",
 "title": "MB1"
+},
+"Nights": "Noble",
+"Noble": {
+"alternatives": ["Nights"],
+"color": Color(0.7856431, 0.5813141, 0.97265625, 1),
+"name": "Noble"
+},
+"OR": {
+"color": Color(0.82766247, 0.50842285, 0.9296875, 1),
+"name": "OR"
 },
 "RED": {
 "color": Color(0.91796875, 0.22254467, 0.08605957, 1),
@@ -34,6 +45,14 @@ entries = {
 "WASD": {
 "color": Color(0.27450982, 0.8627451, 0.9411765, 1),
 "name": "WASD"
+},
+"attack": {
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
+"name": "attack"
+},
+"chest": {
+"color": Color(0.9576887, 0.96484375, 0.04899597, 1),
+"name": "chest"
 },
 "grass": {
 "color": Color(0.26572216, 0.94921875, 0.22618103, 1),

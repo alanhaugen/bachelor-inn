@@ -1,4 +1,7 @@
-narrator: Different terrain has different movement cost.
-narrator: Try moving across the small river.
+narrator: Different terrain has different movement cost.\
+Water tiles cost 3 movement.\
+Grass tiles cost 2 movement.\
+Road tiles cost 1 movement.
+narrator: Try moving to the RED mark across the small river.
 do Tutorial.tutorial_highlight_tile(11, 0, 3)
 [end_timeline]

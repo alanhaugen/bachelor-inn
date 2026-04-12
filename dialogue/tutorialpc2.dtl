@@ -2,7 +2,9 @@ narrator: *Good! Your movement range is shown with blue highlights on the map.\
 \
 Click (MB1) on any highlighted tile to move.*
 do Tutorial.tutorial_highlight_tile(4, 1, 1)
-narrator: *Click on the RED tile furthest away from the monster chasing you. \
+narrator: *Click on the RED tile furthest away from you,\
 \
-No tile to spare!*
+THEN\
+\
+Click 'END TURN' in the top right corner   OR   hold 'SPACEBAR'*
 [end_timeline]

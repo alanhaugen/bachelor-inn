@@ -237,6 +237,20 @@ func select_next_character() -> void:
 	try_select_unit(list[next_index])
 
 
+func _on_turn_transition_finished(anim_name: StringName) -> void:
+	if not is_player_turn:
+		return
+	camera_controller.free_camera()
+	if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+		camera_controller.set_pivot_target_translate(last_selected_unit.position)
+		select_unit(last_selected_unit)
+	else:
+		var first : Character = get_selectable_characters().front()
+		if first != null:
+			camera_controller.set_pivot_target_translate(first.position)
+			#select_unit(first)
+
+
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var ray_origin: Vector3 = camera_controller.project_ray_origin(mouse_pos)
@@ -692,6 +706,8 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
+	turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
+
 	#if (level_name == "first"):
 		#Dialogic.start(str(level_name) + "Level");
 		#is_in_menu = true;
@@ -751,24 +767,30 @@ func _ready() -> void:
 		else:
 			spawn_enemy(pos, unit_type, true)
 
-
-	if (level_name == "first"):
-		Dialogic.start(str(level_name) + "Level");
-		is_in_menu = true;
-	elif (level_name == "fen"):
-		Dialogic.start("Showcase_Intro")
-		is_in_menu = true
-	#elif (level_name == "tutorial_1"):
-	elif (level_name.begins_with("tutorialDesignedLevel") == true):
-		Tutorial.level = self
-		Tutorial.start_tutorial()
-		#Dialogic.start("tutorialpc1")
-	elif (level_name == "fento"):
-		for c in characters:
-			if c.state.faction == CharacterState.Faction.ENEMY:
-				pass
+	## TUTORIAL TRIGGERS
+	#if level_name.begins_with("tutorial"):
+		#Tutorial.level = self
+		#Tutorial.start_tutorial()
+		#
+	## TUTORIAL TRIGGERS END
+	#if (level_name == "first"):
+		#Dialogic.start(str(level_name) + "Level");
+		#is_in_menu = true;
+	#if (level_name == "fen"):
+		#Dialogic.start("Showcase_Intro")
+		#is_in_menu = true
+	##elif (level_name == "tutorial_1"):
+	#elif (level_name.begins_with("tutorialDesignedLevel") == true):
+		#Tutorial.level = self
+		#Tutorial.start_tutorial()
+		##Dialogic.start("tutorialpc1")
+	#elif (level_name == "fento"):
+		#for c in characters:
+			#if c.state.faction == CharacterState.Faction.ENEMY:
+				#pass
 				#c.state.aggro_range = 12
 
+	## DIALOGIC TRIGGERS END
 
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
@@ -953,9 +975,9 @@ func MoveSingleAI() -> void:
 		check_aggro()
 		hide_inactive_characters()
 		camera_controller.free_camera()
-		if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-			camera_controller.set_pivot_target_translate(last_selected_unit.position)
-		return
+		#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+			#camera_controller.set_pivot_target_translate(last_selected_unit.position)
+		#return
 	
 	var currentEnemy : Character = null
 	for unit in characters:
@@ -1148,6 +1170,7 @@ func CheckVictoryConditions() -> void:
 ##Removing unwanted occupants and resetting movement of characters
 func next_level() -> void:
 	## Guard for our not so nice next level system
+	print("next_level() in level.gd triggered!")
 	if _level_complete:
 		return
 	_level_complete = true
@@ -1155,7 +1178,8 @@ func next_level() -> void:
 	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in positions.size():
 		var unit : Character = get_unit(positions[i])
-		if occupancy_map.get_cell_item(positions[i]) == 3 || occupancy_map.get_cell_item(positions[i]) == 0:
+		var cell_item := occupancy_map.get_cell_item(positions[i])
+		if cell_item == 3 or cell_item == 0:
 			if unit == null:
 				continue
 			unit.reset();
@@ -1164,23 +1188,34 @@ func next_level() -> void:
 		##Remove all other occupants, since they should not be in the next level
 		else:
 			if unit == null:
+				print("No unit found at enemy position: ", positions[i])
 				continue
+			print("Killing unit: ", unit.data.unit_name)			
 			unit.die(false)
+	
+	## Force Delete Enemy Units from map
+	for c in characters:
+		if c == null:
+			continue
+		if not c.state.is_enemy():
+			continue
+		if is_instance_valid(c):
+			print("Force deleting unit enemy: " + str(c.data.unit_name))
+			if c.get_parent() != null:
+				c.get_parent().remove_child(c)
+			c.free()
 			
-	#Healing units between levels
+	# Healing units between levels
 	for i in Main.characters.size():
 		Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
 	## SAVE GAME HAPPENS HERE
-	#Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
 	var surviving_chars : Array[Character] = []
 	for c in characters:
 		if c != null and c.state.is_alive:
 			surviving_chars.append(c)
 	Main.characters = surviving_chars
-	#Main.characters = characters.filter(func(c: Character) -> bool: return c != null and c.state.is_alive)
 	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
-	#Main.next_level()
 	Main.go_to_transition_screen()
 
 func _on_character_sanity_flipped(character: Character) -> void:
@@ -1414,8 +1449,6 @@ func _process_old(delta: float) -> void:
 				player_label.hide();
 		else:
 			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
-			#reset_all_units();   ## this reset can clear states etc before enemy does their thing. 
-			#MoveAI();
 			MoveSingleAI()
 	elif (state == States.ANIMATING):
 		# Animations done: stop animating
@@ -1446,13 +1479,15 @@ func _process_old(delta: float) -> void:
 				
 				
 				 # Pan camera back to player after enemy turn ends
-				camera_controller.free_camera()
-				if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-					camera_controller.set_pivot_target_translate(last_selected_unit.position)
-				else:
-					var first : Character = get_selectable_characters().front()
-					if first != null:
-						camera_controller.set_pivot_target_translate(first.position)
+				#camera_controller.free_camera()
+				#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+					#camera_controller.set_pivot_target_translate(last_selected_unit.position)
+					#call_deferred("selected_unit", last_selected_unit)
+				#else:
+					#var first : Character = get_selectable_characters().front()
+					#if first != null:
+						#camera_controller.set_pivot_target_translate(first.position)
+						#call_deferred("selected_unit", first)
 		# Done with one move, execute it and start on next
 		
 		elif (animation_path.is_empty()):

@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://b7dwu7kelle6j"]
+
+[ext_resource type="Script" uid="uid://dcahnadk4e4f8" path="res://scripts/ui/flavor_text_screen.gd" id="1_y4wmc"]
+
+[node name="FlavorTextScreen" type="Control" unique_id=602348232]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_y4wmc")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=96244499]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1164209284]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -29.0
+offset_right = 32.0
+offset_bottom = 29.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LevelName" type="Label" parent="VBoxContainer" unique_id=2091941892]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 46
+
+[node name="FlavorText" type="Label" parent="VBoxContainer" unique_id=818408873]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+
+[node name="ContinuieButton" type="Button" parent="VBoxContainer" unique_id=15181870]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Continue"
+
+[connection signal="pressed" from="VBoxContainer/ContinuieButton" to="." method="_on_continuie_button_pressed"]

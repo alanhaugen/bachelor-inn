@@ -23,6 +23,7 @@ data = {
 data = {
 "cells": PackedInt32Array(0, 0, 1441792, 327675, 0, 1441798)
 }
+metadata/_editor_floor_ = Vector3(0, -1, 0)
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)

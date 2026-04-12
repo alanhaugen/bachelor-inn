@@ -413,6 +413,8 @@ func die(simulate_only : bool) -> void:
 			Main.characters.erase(self)
 		Main.level.game_state.units.erase(self)
 		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
+		if get_parent() != null:
+			get_parent().remove_child(self)
 		queue_free.call_deferred()
 
 

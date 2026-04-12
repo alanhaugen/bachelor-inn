@@ -1,7 +1,3 @@
-The monster is still chasing you! \
-\
-Better find a place to hide!
-narrator: Water tiles cost 3 movement.\
-Grass tiles cost 2 movement.\
-Road tiles cost 1 movement.
+The monster is still chasing you!  Better find a place to hide! Seek refuge in the ruins up head.
+do Tutorial.tutorial_highlight_tile(17, 0, 3)
 [end_timeline]
