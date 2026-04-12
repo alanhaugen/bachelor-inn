@@ -49,6 +49,8 @@ directories/dtl_directory={
 "firstLevelVictory": "res://dialogue/firstLevelVictory.dtl",
 "tutlev2_1": "res://dialogue/tutlev2_1.dtl",
 "tutorial1": "res://dialogue/tutorial1.dtl",
+"tutorial10": "res://dialogue/tutorial10.dtl",
+"tutorial11": "res://dialogue/tutorial11.dtl",
 "tutorial2": "res://dialogue/tutorial2.dtl",
 "tutorial3": "res://dialogue/tutorial3.dtl",
 "tutorial4": "res://dialogue/tutorial4.dtl",
