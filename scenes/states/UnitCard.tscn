@@ -13,6 +13,7 @@ theme_override_constants/separation = 8
 [node name="BannerLvlUp" type="Label" parent="VBoxContainer" unique_id=1068156912]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 46
 text = "LEVEL UP!"
 horizontal_alignment = 1
 
@@ -51,10 +52,13 @@ layout_mode = 2
 [node name="Strength" type="Label" parent="VBoxContainer/HBoxContainerSTR" unique_id=334211650]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="STRButton" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=1240739841]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "+"
 
 [node name="HBoxContainerMND" type="HBoxContainer" parent="VBoxContainer" unique_id=2074149787]
@@ -63,10 +67,13 @@ layout_mode = 2
 [node name="Mind" type="Label" parent="VBoxContainer/HBoxContainerMND" unique_id=1778992396]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="MNDButton" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1698774842]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "+"
 
 [node name="HBoxContainerSPD" type="HBoxContainer" parent="VBoxContainer" unique_id=20325593]
@@ -75,10 +82,13 @@ layout_mode = 2
 [node name="Speed" type="Label" parent="VBoxContainer/HBoxContainerSPD" unique_id=658937446]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="SPDButton" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=697744949]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "+"
 
 [node name="HBoxContainerEND" type="HBoxContainer" parent="VBoxContainer" unique_id=867862978]
@@ -87,10 +97,13 @@ layout_mode = 2
 [node name="Endurance" type="Label" parent="VBoxContainer/HBoxContainerEND" unique_id=2147042002]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="ENDButton" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=607875166]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "+"
 
 [node name="HBoxContainerFCS" type="HBoxContainer" parent="VBoxContainer" unique_id=980634620]
@@ -99,10 +112,13 @@ layout_mode = 2
 [node name="Focus" type="Label" parent="VBoxContainer/HBoxContainerFCS" unique_id=1159517512]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="FCSButton" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1989678428]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
+size_flags_horizontal = 8
 text = "+"
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/STRButton" to="." method="_on_str_button_pressed"]

@@ -20,4 +20,7 @@ Emil: " Yeah, me too. "\
 "Join us? "
 do Tutorial.tutorial_set_select_unit_advances_timeline()
 [signal arg="recruit_neutral"]
+Your party has increased!\
+\
+Use TAB to quicky circle through party units.
 [end_timeline]

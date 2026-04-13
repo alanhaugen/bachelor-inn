@@ -36,6 +36,7 @@ grow_vertical = 2
 
 [node name="LabelLevelComplete" type="Label" parent="VBoxContainer" unique_id=1042242152]
 layout_mode = 2
+theme_override_font_sizes/font_size = 46
 text = "LEVEL COMPLETE!"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=83707430]
@@ -43,9 +44,11 @@ layout_mode = 2
 
 [node name="LevelName" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1276034142]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="FlavorText" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1278041659]
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="UnitContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=200009858]
 layout_mode = 2
