@@ -1,19 +1,25 @@
 [gd_scene format=3 uid="uid://bhfj4kn8ra1o3"]
 
-[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_xl5xg"]
-[ext_resource type="Texture2D" uid="uid://dovvk1pht8oqj" path="res://art/textures/ParticleTex/ArrowSprite.png" id="2_xl5xg"]
+[ext_resource type="Script" uid="uid://bppbl5hcragij" path="res://scenes/Development/Particles/ParticleAnimator.gd" id="1_bdpgj"]
+[ext_resource type="Shader" uid="uid://drbsl5anwwyhq" path="res://shaders/BasicShaderAnimated.gdshader" id="2_xl5xg"]
+[ext_resource type="Texture2D" uid="uid://dovvk1pht8oqj" path="res://art/textures/ParticleTex/ArrowSprite.png" id="3_bdpgj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5d4l2"]
 render_priority = 0
-shader = ExtResource("1_xl5xg")
-shader_parameter/diffuse_tex = ExtResource("2_xl5xg")
+shader = ExtResource("2_xl5xg")
+shader_parameter/diffuse_tex = ExtResource("3_bdpgj")
 shader_parameter/colorTint = Color(1.353256, 1.353256, 1.353256, 1)
+shader_parameter/frame_index = 0
+shader_parameter/frame_columns = 1
+shader_parameter/frame_rows = 1
 
 [sub_resource type="QuadMesh" id="QuadMesh_fr0lo"]
 material = SubResource("ShaderMaterial_5d4l2")
 
 [node name="MAIN" type="Node3D" unique_id=454491279]
+script = ExtResource("1_bdpgj")
 
 [node name="Particle" type="MeshInstance3D" parent="." unique_id=382728329]
-transform = Transform3D(-9.9246314e-08, 1.7539933, 4.371139e-08, 0, -7.666948e-08, 1, 2.270491, 7.666948e-08, 1.9106855e-15, 0.007662803, -0.0070314407, 0.58753264)
+transform = Transform3D(-8.742278e-08, 2, 8.742278e-08, 0, -8.742278e-08, 2, 2, 8.742278e-08, 3.821371e-15, 0.007662803, -0.0070314407, 0.58753264)
+material_override = SubResource("ShaderMaterial_5d4l2")
 mesh = SubResource("QuadMesh_fr0lo")
