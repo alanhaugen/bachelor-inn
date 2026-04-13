@@ -1,7 +1,8 @@
-Welcome to Noble Nights!\
+join narrator center [animation="Fade In" length="0.3"]
+narrator: Welcome to Noble Nights!\
 \
-Press SPACE to advance the tutorial prompts!
-*Press MouseButton1 (MB1) on any unit to select it. \
+Press MB1  OR  SPACEBAR to advance the tutorial prompts!
+narrator: *Press MouseButton1 (MB1) on any unit to select it. \
 \
 OR\
 \

@@ -36,6 +36,8 @@ gdscript/warnings/untyped_declaration=2
 
 directories/dch_directory={
 "Alfred": "res://dialogue/Characters/Alfred.dch",
+"Emil": "res://dialogue/Characters/Emil.dch",
+"Lucy": "res://dialogue/Characters/Lucy.dch",
 "WipGroup13": "res://dialogue/Characters/WipGroup13.dch",
 "character": "res://dialogue/character.dch",
 "monster": "res://dialogue/Characters/monster.dch",
@@ -51,6 +53,9 @@ directories/dtl_directory={
 "tutorial1": "res://dialogue/tutorial1.dtl",
 "tutorial10": "res://dialogue/tutorial10.dtl",
 "tutorial11": "res://dialogue/tutorial11.dtl",
+"tutorial12": "res://dialogue/tutorial12.dtl",
+"tutorial13": "res://dialogue/tutorial13.dtl",
+"tutorial14": "res://dialogue/tutorial14.dtl",
 "tutorial2": "res://dialogue/tutorial2.dtl",
 "tutorial3": "res://dialogue/tutorial3.dtl",
 "tutorial4": "res://dialogue/tutorial4.dtl",

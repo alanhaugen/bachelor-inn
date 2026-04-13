@@ -15,6 +15,9 @@ script = ExtResource("2_fcktc")
 
 [sub_resource type="Resource" id="Resource_dpq1f"]
 script = ExtResource("2_fcktc")
+overrides = {
+"name_label_custom_font_size": "32.0"
+}
 
 [sub_resource type="Resource" id="Resource_2hk7u"]
 script = ExtResource("2_fcktc")

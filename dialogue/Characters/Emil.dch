@@ -10,16 +10,16 @@
 "style": "",
 "suffix": ""
 },
-&"default_portrait": "DPortrait_Alfred",
-&"description": "A sword soldier.",
-&"display_name": "Alfred",
+&"default_portrait": "DPortrait_Emil",
+&"description": "",
+&"display_name": "Emil",
 &"mirror": false,
 &"nicknames": [""],
 &"offset": Vector2(0, 0),
 &"portraits": {
-"DPortrait_Alfred": {
+"DPortrait_Emil": {
 "export_overrides": {
-"image": "\"res://art/textures/Alphred_portrait_normal.png\""
+"image": "\"res://art/textures/Emil_portrait.png\""
 },
 "mirror": false,
 "offset": Vector2(0, 0),

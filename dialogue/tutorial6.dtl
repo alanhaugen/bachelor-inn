@@ -1,3 +1,5 @@
-*You escape into a small crack in the walls*
+narrator: *You escape into a small crack in the walls*
 do Tutorial.tutorial_trigger_victory()
+narrator: Once a level is completed, every unit levels up and gets 3 skill points.
+narrator: You must spend all 3 before advancing.
 [end_timeline]

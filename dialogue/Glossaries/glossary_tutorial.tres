@@ -5,10 +5,17 @@
 [resource]
 script = ExtResource("1_rf8gj")
 entries = {
+"1-5": "KEYBOARD",
 "END TURN": {
 "case_sensitive": true,
 "color": Color(0.90234375, 0.67103004, 0.3736267, 1),
 "name": "END TURN"
+},
+"HP": "health",
+"KEYBOARD": {
+"alternatives": ["1-5"],
+"color": Color(0.27450982, 0.8627451, 0.9411765, 1),
+"name": "KEYBOARD"
 },
 "MB1": {
 "alternatives": [],
@@ -23,10 +30,6 @@ entries = {
 "alternatives": ["Nights"],
 "color": Color(0.7856431, 0.5813141, 0.97265625, 1),
 "name": "Noble"
-},
-"OR": {
-"color": Color(0.82766247, 0.50842285, 0.9296875, 1),
-"name": "OR"
 },
 "RED": {
 "color": Color(0.91796875, 0.22254467, 0.08605957, 1),
@@ -46,6 +49,12 @@ entries = {
 "color": Color(0.27450982, 0.8627451, 0.9411765, 1),
 "name": "WASD"
 },
+"abilities": "ability",
+"ability": {
+"alternatives": ["abilities"],
+"color": Color(0.23529412, 0.50980395, 0.78431374, 1),
+"name": "ability"
+},
 "attack": {
 "color": Color(0.27450982, 0.8627451, 0.9411765, 1),
 "name": "attack"
@@ -57,5 +66,34 @@ entries = {
 "grass": {
 "color": Color(0.26572216, 0.94921875, 0.22618103, 1),
 "name": "grass"
-}
+},
+"heal": {
+"alternatives": ["healing"],
+"color": Color(0.078431375, 0.50980395, 0.078431375, 1),
+"name": "heal"
+},
+"healing": "heal",
+"health": {
+"alternatives": ["HP"],
+"color": Color(0.8627451, 0.11764706, 0.19607843, 1),
+"name": "health"
+},
+"insane": "sanity",
+"points": "skill",
+"sanity": {
+"alternatives": ["insane"],
+"color": Color(0.627451, 0.039215688, 0.78431374, 1),
+"name": "sanity"
+},
+"skill": {
+"alternatives": ["points"],
+"color": Color(0.94140625, 0.8574014, 0.30889893, 1),
+"name": "skill"
+},
+"spell": {
+"alternatives": ["spells"],
+"color": Color(0.23529412, 0.50980395, 0.78431374, 1),
+"name": "spell"
+},
+"spells": "spell"
 }

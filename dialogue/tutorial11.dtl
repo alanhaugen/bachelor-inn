@@ -1,3 +1,23 @@
-Event happens here.
+narrator: Infront of a crackeling bondifre, you find yourself behind two survivors.\
+\
+They have stopped talking, and are just gazing towards the bonfire.
+narrator: *CRACK*\
+\
+You just stepped on a tiny branch.\
+\
+The two turn around in an instant and draws their weapons!
+join Lucy center [z_index="1"]
+Lucy: " Halt! "
+Emil: " Dont come any closer! "
+Alfred: " I'm sorry! " you say, as you raise your arms.\
+\
+" I mean no harm! I'm a survivor, just like you! "
+Alfred: " And I love cats and dogs! "
+Lucy: " Hmmm... well, no one that love cats and dogs can be a bad person. "
+Lucy: " I trust you. What about you, Emil? "
+Emil: " Yeah, me too. "\
+\
+"Join us? "
+do Tutorial.tutorial_set_select_unit_advances_timeline()
 [signal arg="recruit_neutral"]
 [end_timeline]
