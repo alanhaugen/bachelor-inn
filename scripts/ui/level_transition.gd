@@ -1,11 +1,12 @@
 extends Control
 
 const UNIT_CARD := preload("res://scenes/states/UnitCard.tscn")
-@onready var continue_button: Button = %ContinueButton
+@onready var continue_button: Button = $VBoxContainer/ContinueButton
+#@onready var continue_button: Button = $VBoxContainer/ContinueButton
 
 func _ready() -> void:
 	_setup_ui()
-
+	update_continue_button()
 
 func _setup_ui() -> void:
 	var level_name := Main.current_level_name
@@ -32,3 +33,12 @@ func _on_continue_button_pressed() -> void:
 	Main.transition_screen.queue_free()
 	Main.transition_screen = null
 	Main.next_level()
+
+
+func update_continue_button() -> void:
+	## Order in "spend_skill_points()" in unit_card.gd is wrong, so the trigger cant happen.
+	for c in Main.characters:
+		if c != null and c.state.unspent_skill_points > 0:
+			continue_button.modulate = Color(1, 1, 1, 1)
+			return
+	continue_button.modulate = Color(1, 0, 0, 1)

@@ -433,7 +433,12 @@ func _handle_skill(pos : Vector3i) -> void:
 		emit_signal("ability_used")
 		emit_signal("character_stats_changed", skill_caster)
 		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
-
+	
+	if Tutorial.in_tutorial and used_skill.skill_id == "heal_basic":
+		Tutorial.heal_cast = true
+		Tutorial.can_advance_timeline = true
+		Tutorial.advance_timeline()
+	
 	print("Skill result - aggressor: ", result.aggressor)
 	print("Skill result - victim: ", result.victim)
 	print("Skill result - vfx_scene: ", result.vfx_scene)
@@ -1741,6 +1746,14 @@ func _recruit_neutral_units() -> void:
 			print(str(c.data.unit_name) + "'s faction before recruitment is:" + str(c.state.faction))
 			c.state.faction = CharacterState.Faction.PLAYER
 			print(str(c.data.unit_name) + "'s faction after recruitment is:" + str(c.state.faction))
+			
+			var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
+			if def != null:
+				c.state.skills = def.base_state.skills.duplicate()
+				print("Loaded ", c.state.skills.size(), " skills for: ", c.data.unit_name)
+			else:
+				push_error("No definition found for: " + c.data.unit_name)
+			
 			Main.characters.append(c)
 			occupancy_map.set_cell_item(c.state.grid_position, player_code)
 			game_state = GameState.from_level(self)

@@ -28,8 +28,9 @@ data = {
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 data = {
-"cells": PackedInt32Array(131068, 65534, 1, 131068, 65535, 1, 65533, 1, 655363, 65538, 65530, 0)
+"cells": PackedInt32Array(131068, 65534, 1, 131068, 65535, 1, 65533, 1, 655363, 131068, 65533, 0, 65532, 65533, 3)
 }
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="MovementOverlay" parent="." index="4" unique_id=1093741866]
 data = {

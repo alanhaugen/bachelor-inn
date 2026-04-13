@@ -19,6 +19,7 @@ var in_tutorial : bool = false
 var can_advance_timeline : bool = true
 var timeline_advances_at_player_turn_begins : bool = true
 var selection_advances_timeline: bool = true
+var heal_cast: bool = false
 
 ## Tutorial state
 var tutorial_state: TutorialStates = TutorialStates.new();
@@ -216,6 +217,17 @@ func tutorial_set_timeline_advances_at_player_turn_begins() -> void:
 		return
 	else: 
 		timeline_advances_at_player_turn_begins = true
+
+
+func tutorial_complete() -> void:
+	print("Tutorial complete!")
+	in_tutorial = false
+	can_advance_timeline = false
+	current_tutorial_level = 1
+	current_timeline = 1
+	tutorial_unlock_menus()
+	tutorial_unlock_camera()
+	Main.level.next_level()
 
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)

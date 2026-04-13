@@ -54,19 +54,10 @@ theme_override_font_sizes/font_size = 32
 layout_mode = 2
 
 [node name="ContinueButton" type="Button" parent="VBoxContainer" unique_id=2145263595]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/ContinueButton" unique_id=363898288]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
 theme_override_font_sizes/font_size = 48
 text = "Continue"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="pressed" from="VBoxContainer/ContinueButton" to="." method="_on_continue_button_pressed"]

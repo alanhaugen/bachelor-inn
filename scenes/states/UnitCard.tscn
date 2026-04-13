@@ -17,6 +17,12 @@ theme_override_font_sizes/font_size = 46
 text = "LEVEL UP!"
 horizontal_alignment = 1
 
+[node name="UnitName" type="Label" parent="VBoxContainer" unique_id=1504596107]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
 [node name="Portrait" type="TextureRect" parent="VBoxContainer" unique_id=1389592788]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 150)
@@ -27,24 +33,23 @@ stretch_mode = 5
 [node name="BannerPoints" type="Label" parent="VBoxContainer" unique_id=1920500231]
 unique_name_in_owner = true
 layout_mode = 2
-horizontal_alignment = 1
-
-[node name="UnitName" type="Label" parent="VBoxContainer" unique_id=1504596107]
-unique_name_in_owner = true
-layout_mode = 2
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 
 [node name="Health" type="Label" parent="VBoxContainer" unique_id=107307867]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="Sanity" type="Label" parent="VBoxContainer" unique_id=1765685499]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="Weapon" type="Label" parent="VBoxContainer" unique_id=1645553679]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 32
 
 [node name="HBoxContainerSTR" type="HBoxContainer" parent="VBoxContainer" unique_id=1125907852]
 layout_mode = 2
@@ -52,6 +57,8 @@ layout_mode = 2
 [node name="Strength" type="Label" parent="VBoxContainer/HBoxContainerSTR" unique_id=334211650]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Increases melee weapon damage."
 theme_override_font_sizes/font_size = 32
 
 [node name="STRButton" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=1240739841]
@@ -59,7 +66,16 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
 text = "+"
+
+[node name="STRButtonAll" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=626948136]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
+text = "ALL"
 
 [node name="HBoxContainerMND" type="HBoxContainer" parent="VBoxContainer" unique_id=2074149787]
 layout_mode = 2
@@ -67,6 +83,7 @@ layout_mode = 2
 [node name="Mind" type="Label" parent="VBoxContainer/HBoxContainerMND" unique_id=1778992396]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 
 [node name="MNDButton" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1698774842]
@@ -74,7 +91,16 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
 text = "+"
+
+[node name="MNDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1369103208]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
+text = "ALL"
 
 [node name="HBoxContainerSPD" type="HBoxContainer" parent="VBoxContainer" unique_id=20325593]
 layout_mode = 2
@@ -82,6 +108,8 @@ layout_mode = 2
 [node name="Speed" type="Label" parent="VBoxContainer/HBoxContainerSPD" unique_id=658937446]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Increases movement range"
 theme_override_font_sizes/font_size = 32
 
 [node name="SPDButton" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=697744949]
@@ -89,7 +117,16 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
 text = "+"
+
+[node name="SPDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=1290827523]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
+text = "ALL"
 
 [node name="HBoxContainerEND" type="HBoxContainer" parent="VBoxContainer" unique_id=867862978]
 layout_mode = 2
@@ -97,6 +134,8 @@ layout_mode = 2
 [node name="Endurance" type="Label" parent="VBoxContainer/HBoxContainerEND" unique_id=2147042002]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Increases health points."
 theme_override_font_sizes/font_size = 32
 
 [node name="ENDButton" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=607875166]
@@ -104,7 +143,16 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
 text = "+"
+
+[node name="ENDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=1975471972]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
+text = "ALL"
 
 [node name="HBoxContainerFCS" type="HBoxContainer" parent="VBoxContainer" unique_id=980634620]
 layout_mode = 2
@@ -112,6 +160,8 @@ layout_mode = 2
 [node name="Focus" type="Label" parent="VBoxContainer/HBoxContainerFCS" unique_id=1159517512]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Increases critical chance with weapons."
 theme_override_font_sizes/font_size = 32
 
 [node name="FCSButton" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1989678428]
@@ -119,10 +169,24 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
 text = "+"
 
+[node name="FCSButtonAll" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1497307943]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 48
+text = "ALL"
+
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/STRButton" to="." method="_on_str_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/STRButtonAll" to="." method="_on_str_button_all_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerMND/MNDButton" to="." method="_on_mnd_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerMND/MNDButtonAll" to="." method="_on_mnd_button_all_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSPD/SPDButton" to="." method="_on_spd_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerSPD/SPDButtonAll" to="." method="_on_spd_button_all_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerEND/ENDButton" to="." method="_on_end_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerEND/ENDButtonAll" to="." method="_on_end_button_all_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerFCS/FCSButton" to="." method="_on_fcs_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerFCS/FCSButtonAll" to="." method="_on_fcs_button_all_pressed"]

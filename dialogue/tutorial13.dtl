@@ -1,4 +1,12 @@
-Lucy: 1. Use MB1  OR  KEY 1-5 to select an ability,\
-2. then select a unit within range.\
-3. Using abilities consumes the units' action.
-narrator: ...
+Lucy: Your sanity, on the other han, I can't help you with. \
+\
+Just make sure you never go insane.
+narrator: Fighting monsters causes units to lose their sanity.
+narrator: Once their sanity meter is depleated, they turn into a monster themselves!\
+\
+So choose your battles carefully.
+Lucy: You can practice some attacks on the strawman by the small river, if you'd like.\
+\
+Then go to the barn door  once you are ready for a nights sleep.
+do Tutorial.tutorial_highlight_tile(-2, 0, -1)
+[end_timeline]
