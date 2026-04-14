@@ -1571,6 +1571,7 @@ func end_player_turn() -> bool:
 			active_move.execute(game_state);
 			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
+			_clear_selection()
 	return true
 
 
@@ -1729,6 +1730,11 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	print("loot_popup: ", loot_popup)
 	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
 	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
+	
+	if Tutorial.in_tutorial and Tutorial.chest_open == false:
+		Tutorial.chest_open = true
+		Tutorial.can_advance_timeline = true
+		Tutorial.advance_timeline()
 
 
 func _recruit_neutral_units() -> void:

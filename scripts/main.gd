@@ -181,11 +181,12 @@ var level_story_text : Dictionary = {
 	"tutorial_2":
 	"\nYou find yourself inside a smal, but sturdy set of ruins.\n 
 	The thing that was chasing you has stopped.. For now.\n 
-	The ruins are damp and cold, but a small torch somehow flickers on the far side.\n 
-	Could someone have been here recently?\n\n\n",
+	The ruins are damp, and a faint draft causes a small torch to flicker on the far side.\n 
+	A lit torch? Could someone have been here recently?\n\n
+	.. you hear something\n\n\n",
 	"tutorial_3":
-	"\nThe sound of a whisper draws your attention.\n
-	Outside, on the other side of the ruins you stumble upon a makeshift camp outside a worn stable.\n
+	"\nThe faint sound of a voice draws your attention.\n
+	You stumble upon a makeshift camp outside a worn stable.\n
 	Two shadows make out a silhuette before a flickering bonfire.\n\n\n",
 	"fento": 
 	"\nFeral screams pierce the night. Several monsters, no doubt.\n

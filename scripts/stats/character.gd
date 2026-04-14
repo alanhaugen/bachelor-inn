@@ -185,45 +185,46 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 
 
 func _on_experience_changed(in_experience: int) -> void:
-	#data.experience += in_experience;
-	return
-	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
-	if (state.experience > state.next_level_experience):
-		print("Level up!");
-		state.current_level += 1;
-		if (data.speciality == CharacterData.Speciality.Militia):
-			if (state.next_level_experience >= 10):
-				data.health += 1;
-				data.mind += 1;
-			if (state.next_level_experience >= 100):
-				data.health += 1;
-				data.mind += 1;
-			if (state.next_level_experience >= 1000):
-				data.luck += 1;
-				data.skill += 1;
-		
-		calc_derived_stats()
-		
-		state.next_level_experience *= 10;
-		calibrate_level_popup();
-		level_up_popup.show();
-		Main.level.is_in_menu = true;
-		
-		var new_skill_1 : Skill = get_random_unaquired_skill();
-		var new_skill_2 : Skill = get_random_unaquired_skill(new_skill_1);
-		
-		if new_skill_1 != null:
-			skill_choose_popup.unit = self;
-			
-			skill_choose_popup.icon_1.texture = new_skill_1.icon;
-			skill_choose_popup.skill_name_1.text = new_skill_1.skill_name;
-			skill_choose_popup.label_skill_1.text = new_skill_1.tooltip;
-			skill_choose_popup.first_skill = new_skill_1;
-			skill_choose_popup.icon_2.texture = new_skill_2.icon;
-			skill_choose_popup.skill_name_2.text = new_skill_2.skill_name;
-			skill_choose_popup.label_skill_2.text = new_skill_2.tooltip;
-			skill_choose_popup.second_skill = new_skill_2;
-			skill_choose_popup.show();
+	pass
+	##data.experience += in_experience;
+	#return
+	#print(data.unit_name + " gains " + str(in_experience) + " experience points.");
+	#if (state.experience > state.next_level_experience):
+		#print("Level up!");
+		#state.current_level += 1;
+		#if (data.speciality == CharacterData.Speciality.Militia):
+			#if (state.next_level_experience >= 10):
+				#data.health += 1;
+				#data.mind += 1;
+			#if (state.next_level_experience >= 100):
+				#data.health += 1;
+				#data.mind += 1;
+			#if (state.next_level_experience >= 1000):
+				#data.luck += 1;
+				#data.skill += 1;
+		#
+		#calc_derived_stats()
+		#
+		#state.next_level_experience *= 10;
+		#calibrate_level_popup();
+		#level_up_popup.show();
+		#Main.level.is_in_menu = true;
+		#
+		#var new_skill_1 : Skill = get_random_unaquired_skill();
+		#var new_skill_2 : Skill = get_random_unaquired_skill(new_skill_1);
+		#
+		#if new_skill_1 != null:
+			#skill_choose_popup.unit = self;
+			#
+			#skill_choose_popup.icon_1.texture = new_skill_1.icon;
+			#skill_choose_popup.skill_name_1.text = new_skill_1.skill_name;
+			#skill_choose_popup.label_skill_1.text = new_skill_1.tooltip;
+			#skill_choose_popup.first_skill = new_skill_1;
+			#skill_choose_popup.icon_2.texture = new_skill_2.icon;
+			#skill_choose_popup.skill_name_2.text = new_skill_2.skill_name;
+			#skill_choose_popup.label_skill_2.text = new_skill_2.tooltip;
+			#skill_choose_popup.second_skill = new_skill_2;
+			#skill_choose_popup.show();
 
 
 #func update_health_bar() -> void:

@@ -20,6 +20,7 @@ var can_advance_timeline : bool = true
 var timeline_advances_at_player_turn_begins : bool = true
 var selection_advances_timeline: bool = true
 var heal_cast: bool = false
+var chest_open: bool = false
 
 ## Tutorial state
 var tutorial_state: TutorialStates = TutorialStates.new();
@@ -59,8 +60,8 @@ func start_tutorial() -> void:
 			selection_advances_timeline = false
 			current_timeline = 7
 		3:
-			Dialogic.start("tutorial10")
-			current_timeline = 10
+			Dialogic.start("tutorial11")
+			current_timeline = 11
 		# Only 3 tutorial levels are planned, but add more if needed.
 		_:
 			push_error("No toturial start found.")

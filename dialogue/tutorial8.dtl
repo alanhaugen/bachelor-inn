@@ -2,15 +2,7 @@ do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: You got your first weapon! \
 \
 Units may only wield one weapon at the time.
-narrator: Some weapons stats vary, like their damage, crit and attack range.
-narrator: A monser lurks nearby!\
-\
-The only thing to do is to fight!
-narrator: To preform an attack with your weapon\: \
-1. First click the enemy you want to attack,\
-2. then select the tile you want to attack from.\
-\
-Choosing the smartest attack origin is a great way to gain some tactical advantage!
+narrator: Some weapons stats vary, like their damage, crit chance and attack range.
+do Tutorial.tutorial_set_select_unit_advances_timeline()
 do Tutorial.tutorial_hide_portrait()
-do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()
-do Tutorial.tutorial_highlight_tile(0, 0, 0)
+[end_timeline]

@@ -1,6 +1,15 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.\
+narrator: A monser has noticed you!\
 \
-Curiosity gets the better of you, and you force your way through.
+The only thing to do is to fight!
+narrator: To preform an attack with your weapon\: \
+1. First click the enemy you want to attack,\
+2. then select the tile you want to attack from.\
+\
+Choosing the smartest attack origin is a great way to gain some tactical advantage!
+narrator: If all your units are out of actions, your turn will end automaticly.\
+\
+*results may vary
 do Tutorial.tutorial_hide_portrait()
-do Tutorial.tutorial_trigger_victory()
+do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()
+[end_timeline]

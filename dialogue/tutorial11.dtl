@@ -1,33 +1,5 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: Infront of a crackeling bondifre, you find yourself behind two survivors.\
-\
-They have stopped talking, and are just gazing towards the bonfire.
-narrator: *CRACK* - You just stepped on a tiny branch with cartoonish looks.\
-\
-The two turn around in an instant and draws their weapons!
+narrator: The cool and fresh evening air, combined with a sense of safety, feels good.
+do Tutorial.tutorial_highlight_tile(-3, 0, 1)
+narrator: The distinct sound of human voices drives you forward.
 do Tutorial.tutorial_hide_portrait()
-join Lucy center [z_index="1"]
-do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: " Halt! "
-do Tutorial.tutorial_show_portrait("emil", "left")
-Emil: " Dont come any closer! "
-do Tutorial.tutorial_show_portrait("alfred", "left")
-Alfred: " I'm sorry! " you say, as you raise your arms.\
-\
-" I mean no harm! I'm a survivor, just like you! "
-Alfred: " And I love cats and dogs! "
-do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: " Hmmm... well, no one that love cats and dogs can be a bad person. "
-Lucy: " I trust you. What about you, Emil? "
-do Tutorial.tutorial_show_portrait("emil", "left")
-Emil: " Yeah, me too. "\
-\
-"Join us? " Ps. Im a ghost in this current state.
-do Tutorial.tutorial_set_select_unit_advances_timeline()
-[signal arg="recruit_neutral"]
-do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: Your party has increased!\
-\
-Use TAB to quicky circle through party units.
-do Tutorial.tutorial_hide_portrait()
-[end_timeline]

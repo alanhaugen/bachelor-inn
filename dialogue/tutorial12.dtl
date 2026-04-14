@@ -1,14 +1,33 @@
-do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: " Looks like you are a bit hurt there. "\
-\
-" I can use my ability to heal you health. "
-do Tutorial.tutorial_set_select_unit_advances_timeline()
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: Every unit has an action bar with abilities and spells.\
+narrator: Infront of a crackeling bondifre, you find yourself behind two survivors.\
 \
-You can find the action bar to the bottom left, above the unit portrait.
-narrator: Action bar short cuts are KEYBOARD 1-5.
-narrator: Try using Lucy's healing spell on Alfred.
+They have stopped talking, and are just gazing towards the bonfire.
+narrator: *CRACK* - You just stepped on a tiny branch with cartoonish looks.\
+\
+The two turn around in an instant and draws their weapons!
 do Tutorial.tutorial_hide_portrait()
+join Lucy center [z_index="1"]
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " Halt! "
+do Tutorial.tutorial_show_portrait("emil", "left")
+Emil: " Dont come any closer! "
+do Tutorial.tutorial_show_portrait("alfred", "left")
+Alfred: " I'm sorry! " you say, as you raise your arms.\
+\
+" I mean no harm! I'm a survivor, just like you! "
+Alfred: " And I love cats and dogs! "
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " Hmmm... well, no one that love cats and dogs can be a bad person. "
+Lucy: " I trust you. What about you, Emil? "
+do Tutorial.tutorial_show_portrait("emil", "left")
+Emil: " Yeah, me too. "\
+\
+"Join us? " Ps. Im a ghost in this current state.
 do Tutorial.tutorial_set_select_unit_advances_timeline()
+[signal arg="recruit_neutral"]
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Your PARTY has increased!\
+\
+Use TAB to quicky circle through party units.
+do Tutorial.tutorial_hide_portrait()
 [end_timeline]
