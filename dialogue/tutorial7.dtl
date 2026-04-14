@@ -2,6 +2,7 @@ do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: Dangers lurk around every corner. \
 \
 Be on your toes and stay foc-
-narrator: Ohh look, a chest! Walk ONTOP of it top open the chest!
+narrator: Ohh look, a chest!
+narrator: Walk ONTOP of the chest to open it.
 do Tutorial.tutorial_hide_portrait()
 [end_timeline]

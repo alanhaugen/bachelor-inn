@@ -453,12 +453,117 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -247.5418
-offset_top = -96.978386
-offset_right = 210.4582
-offset_bottom = 100.021614
+offset_left = -229.0
+offset_top = -98.5
+offset_right = 229.0
+offset_bottom = 98.5
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=2130943363]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer" unique_id=447604078]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Project Leader : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer" unique_id=894630925]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Kittel"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=547189827]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer2" unique_id=456652613]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Art : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer2" unique_id=1877381111]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Mari"
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=2004656275]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer3" unique_id=2092386354]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Art : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer3" unique_id=1882821925]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Fen"
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=1702204987]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer4" unique_id=327942803]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Programming : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer4" unique_id=279302695]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Alan"
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=410877668]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer5" unique_id=362275450]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Programming : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer5" unique_id=685766953]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Alexander"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=2109790666]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer6" unique_id=1731844059]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Programming : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer6" unique_id=366586036]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Andreas"
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=1317908277]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Title" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer7" unique_id=1979002671]
+layout_mode = 2
+size_flags_vertical = 5
+text = "Music : "
+horizontal_alignment = 2
+
+[node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer7" unique_id=1237151151]
+layout_mode = 2
+size_flags_vertical = 5
+text = "huskerikke"
 
 [node name="BackButtonCredits" type="Button" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=476628321]
 custom_minimum_size = Vector2(32, 32)
@@ -604,6 +709,19 @@ theme_override_styles/hover = ExtResource("6_8g5eo")
 theme_override_styles/focus = ExtResource("7_fj817")
 text = "Save Slot 3"
 
+[node name="DeleteSaveData" type="Button" parent="UI/CreateNewSaveFileSelect/LevelSelectVBOX" unique_id=1913962266]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_fonts/font = ExtResource("2_cix78")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxTexture_e6rwi")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_74hbn")
+theme_override_styles/hover = ExtResource("6_8g5eo")
+theme_override_styles/focus = ExtResource("7_fj817")
+text = "Delete ALL save data"
+
 [node name="BackButtonCreateSave" type="Button" parent="UI/CreateNewSaveFileSelect/LevelSelectVBOX" unique_id=142544829]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
@@ -642,4 +760,5 @@ autoplay = true
 [connection signal="pressed" from="UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile0" to="." method="_on_select_save_file_0_pressed"]
 [connection signal="pressed" from="UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile1" to="." method="_on_select_save_file_1_pressed"]
 [connection signal="pressed" from="UI/CreateNewSaveFileSelect/LevelSelectVBOX/SelectSaveFile2" to="." method="_on_select_save_file_2_pressed"]
+[connection signal="pressed" from="UI/CreateNewSaveFileSelect/LevelSelectVBOX/DeleteSaveData" to="." method="_on_delete_save_data_pressed"]
 [connection signal="pressed" from="UI/CreateNewSaveFileSelect/LevelSelectVBOX/BackButtonCreateSave" to="." method="_on_back_button_create_save_pressed"]

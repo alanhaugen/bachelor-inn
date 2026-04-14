@@ -45,9 +45,18 @@ var transition_screen: Control = null
 #region Methods
 ## Unloads the current level instance
 func unload_level() -> void:
+	#if is_instance_valid(level):
+		#level.cleanup_characters_before_load()
+		#level.queue_free(); # Free the current level instance
+	#level = null;
 	if is_instance_valid(level):
-		level.queue_free(); # Free the current level instance
-	level = null;
+		# Only remove enemies from world, leave player characters alone
+		for child in world.get_children():
+			if child is Character and child.state.is_enemy():
+				world.remove_child(child)
+				child.queue_free()
+		level.queue_free()
+	level = null
 
 func next_level() -> void:
 	print("current_level_name: '", current_level_name, "'")
@@ -86,8 +95,9 @@ func load_level(level_name: String) -> void:
 		Dialogic.VAR.PLATFORM = "MOBILE";
 	else:
 		Dialogic.VAR.PLATFORM = "DESKTOP";
-	unload_level();
+	unload_level(); ## TODO: Called too early?
 	current_level_name = level_name
+	current_level_index = levels.find_custom(func(p: String) -> bool: return p.get_file().get_basename() == level_name)
 	#var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	var level_path: String = "res://scenes/levels/%s.tscn" % level_name;
 	print("Attempting to load level path: '", level_path, "'")
@@ -101,6 +111,7 @@ func load_level(level_name: String) -> void:
 	world.add_child(level) # Add the new level to the World node
 	
 	await get_tree().process_frame
+	#SaveGame.new().save_progress(current_save_slot, current_level_index)
 	var ui := get_tree().get_first_node_in_group("ui_controller")
 	if ui:
 		ui._connect_to_level(level)
@@ -128,6 +139,13 @@ func load_next_level() -> void:
 
 
 func get_next_level_index() -> int:
+	for i in levels.size():
+		if levels[i].get_file().get_basename() == current_level_name:
+			return i
+	return 0
+
+
+func get_current_level_index() -> int:
 	for i in levels.size():
 		if levels[i].get_file().get_basename() == current_level_name:
 			return i

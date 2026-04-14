@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="4_f0odu"]
 [ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_smjk0"]
 [ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="6_bg3qq"]
+[ext_resource type="PackedScene" uid="uid://d00tnaxafw4ia" path="res://scenes/states/game_over.tscn" id="7_rtseb"]
 
 [node name="Map3d2" unique_id=1972183518 instance=ExtResource("1_gwuxj")]
 
@@ -80,3 +81,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.936693, 2.9685597, 2.54854
 transform = Transform3D(0.36142, 0, 0, 0, 1, 0, 0, 0, 1, 16.967281, 0.80069065, 0.19851494)
 
 [node name="PortraitPopUp" parent="." index="24" unique_id=1108238431 instance=ExtResource("6_bg3qq")]
+
+[node name="GameOver" parent="." index="25" unique_id=997112840 instance=ExtResource("7_rtseb")]
+visible = false

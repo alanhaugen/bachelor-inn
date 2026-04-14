@@ -1,13 +1,13 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: A monser has noticed you!\
 \
-The only thing to do is to fight!
+Time to fight!
 narrator: To preform an attack with your weapon\: \
 1. First click the enemy you want to attack,\
 2. then select the tile you want to attack from.\
 \
 Choosing the smartest attack origin is a great way to gain some tactical advantage!
-narrator: If all your units are out of actions, your turn will end automaticly.\
+narrator: If all your units are out of actions (Movement and actions), your turn will end automaticly.\
 \
 *results may vary
 do Tutorial.tutorial_hide_portrait()

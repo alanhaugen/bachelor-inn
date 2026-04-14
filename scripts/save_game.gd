@@ -7,9 +7,10 @@ const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 ## Use this to detect old player save files and update them 
 @export var version := 1;
 @export var map_name := "first";
+
 var registry: CharacterRegistry = load("res://scripts/Characters/CharacterRegistry.tres")
 
-
+const TUTORIAL_SAVE_SLOT := 3
 
 func is_savefile_existing() -> bool:
 	return FileAccess.file_exists(SAVE_GAME_PATH);
@@ -67,6 +68,11 @@ func create_new_save_data() -> void:
 			"level": 5,
 			"units": units
 		},
+		"Slot 4": #For Tutorial reset. 
+		{
+			"level": 0,
+			"units": units
+		}
 	}
 	
 	var json_string: String = JSON.stringify(saves);
@@ -74,6 +80,10 @@ func create_new_save_data() -> void:
 	save_file.close();
 
 func create_new_save_in_slot(save_slot: int) -> void:
+	if save_slot == TUTORIAL_SAVE_SLOT:
+		push_error("Cannot overwrite Tutorial save slot")
+		return
+		
 	# Read existing saves first
 	var saves := {}
 	if FileAccess.file_exists(SAVE_GAME_PATH):
@@ -215,6 +225,7 @@ func read(save_slot: int) -> bool:
 
 func load_tutorial() -> void:
 	print("load_tutorial() pressed.")
+	Main.current_save_slot = TUTORIAL_SAVE_SLOT
 	Main.characters.clear()
 	
 	for id: String in registry.characters.keys():
@@ -224,13 +235,17 @@ func load_tutorial() -> void:
 		var character := chardef.scene.instantiate()
 		character.data = chardef.base_data.duplicate()
 		character.state = chardef.base_state.duplicate()
-		
 		Main.characters.append(character)
 	
-	#Main.current_level_name = "tutorial_1"
-	#Main.load_level("tutorial_1")
-	Main.current_level_name = "tutorialDesignedLevel"
-	Main.load_level("tutorialDesignedLevel")
+	#Main.current_level_name = "tutorialDesignedLevel"
+	var level := Main.current_level_name if Main.current_level_name != "" else "tutorialDesignedLevel"
+	
+	var start_info: Dictionary = Tutorial.tutorial_level_start.get(level, {})
+	if not start_info.is_empty():
+		Tutorial.current_tutorial_level = start_info["tutorial_level"]
+		Tutorial.current_timeline = start_info["timeline"]
+		Tutorial.in_tutorial = true
+	Main.load_level(level)
 
 
 func save_progress(save_slot: int, level_index: int) -> void:
@@ -244,7 +259,7 @@ func save_progress(save_slot: int, level_index: int) -> void:
 		return
 	
 	var saves: Dictionary = json.data
-	var slot_key := "Slot" + str(save_slot +1)
+	var slot_key := "Slot " + str(save_slot +1)
 	var units := []
 	for char in Main.characters:
 		if char == null:
@@ -270,3 +285,9 @@ func slot_has_data(save_slot: int) -> bool:
 	var save: Dictionary = json.data
 	var slot_key := "Slot " + str(save_slot + 1)
 	return save.has(slot_key) and save[slot_key].get("units", []).size() > 0
+
+
+func clear_save_file() -> void:
+	if FileAccess.file_exists(SAVE_GAME_PATH):
+		DirAccess.remove_absolute(SAVE_GAME_PATH)
+	#create_new_save_data()

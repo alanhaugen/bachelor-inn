@@ -54,7 +54,11 @@ func start_tutorial() -> void:
 	tutorial_lock_menus()
 	match current_tutorial_level:
 		1:
+			can_advance_timeline = true
+			timeline_advances_at_player_turn_begins = true
+			selection_advances_timeline = true
 			Dialogic.start("tutorial1")
+			current_timeline = 1
 		2:
 			Dialogic.start("tutorial7")
 			selection_advances_timeline = false
@@ -264,8 +268,15 @@ func tutorial_complete() -> void:
 	current_timeline = 1
 	tutorial_unlock_menus()
 	tutorial_unlock_camera()
+	Main.current_save_slot = 0
 	Main.level.next_level()
 
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)
 	#print("PORTRAIT EXSISTS: " + str(portrait_pop_up))
+
+var tutorial_level_start: Dictionary = {
+	"tutorialDesignedLevel": {"tutorial_level": 1, "timeline": 1},
+	"tutorial_2": {"tutorial_level": 2, "timeline": 7},
+	"tutorial_3": {"tutorial_level": 3, "timeline": 11}
+}

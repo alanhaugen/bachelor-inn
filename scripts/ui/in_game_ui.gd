@@ -48,8 +48,6 @@ func _ready() -> void:
 	add_to_group("ui_controller")
 
 
-
-
 func _clear_previews() -> void:
 	print("cleared previews")
 	for p: CharacterPreview in previews.values():
@@ -62,6 +60,7 @@ func _clear_previews() -> void:
 
 	for child in preview_container.get_children():
 		child.queue_free()
+
 
 func _on_preview_selected(character: Character) -> void:
 	var level := get_tree().get_first_node_in_group("level")
@@ -107,12 +106,14 @@ func add_character_preview(character: Character) -> void:
 	
 	previews[character] = preview
 
+
 func _on_character_selected(character: Character) -> void:
 	player_stats.apply_stats(build_character_stats(character))
 	player_stats.show()
 	print("DEBUG SELECT:",character.data.unit_name, "effects", character.state.active_effects)
 	ribbon.show()
 	ribbon.set_skills(character.state.skills)
+
 
 	print("DEBUG SELECT:", character.data.unit_name, "skills:", character.state.skills.size())
 	for c: Character in previews.keys():
@@ -121,15 +122,14 @@ func _on_character_selected(character: Character) -> void:
 		if (c == null):
 			continue;
 		previews[c].is_selected = (c == character)
-	
+
+
 func _on_enemy_selected(enemy: Character) -> void:
 	enemy_stats.apply_stats(build_enemy_Stats(enemy), enemy)
 	enemy_stats.show()
 	print("a enemy has been selected")
 
-#func _on_enemy_deselected() -> void:
-	#enemy_stats.hide()
-	
+
 func _on_character_deselected() -> void:
 	#player_stats.hide()
 	ribbon.hide()
@@ -156,6 +156,7 @@ func _on_character_stats_changed(character: Character) -> void:
 	for preview: CharacterPreview in previews.values():
 		preview.update_effects_ui(character)
 
+
 func _on_party_updated(characters: Array[Character]) -> void:
 	print("UI party_updated count:", characters.size())
 	for character in characters:
@@ -170,6 +171,7 @@ func _on_party_updated(characters: Array[Character]) -> void:
 		if not characters.has(c):
 			remove_character_preview(c)
 
+
 func remove_character_preview(character: Character) -> void:
 	if previews.has(character):
 		var preview: CharacterPreview = previews[character]
@@ -178,7 +180,6 @@ func remove_character_preview(character: Character) -> void:
 		
 	if enemy_stats.current_enemy == character:
 		enemy_stats.hide()
-	
 
 
 func _on_end_turn_button_pressed() -> void:
@@ -189,3 +190,10 @@ func _on_end_turn_button_pressed() -> void:
 	Main.level._clear_selection()
 	Main.level.end_player_turn()
 	print("'End turn' button pressed")
+
+
+func _hide_ui() -> void:
+	self.hide()
+
+func _show_ui() -> void:
+	self.show()

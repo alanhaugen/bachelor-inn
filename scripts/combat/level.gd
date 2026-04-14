@@ -80,7 +80,7 @@ var characters: Array[Character];
 var triggered_positions: Array[Vector3i] = []
 
 const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
-
+#var in_game_ui: Control
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
@@ -93,6 +93,8 @@ const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.t
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
 const PORTRAIT_POPUP = preload("res://scenes/userinterface/PortraitPopUp.tscn")
+const GAME_OVER = preload("res://scenes/states/game_over.tscn")
+var game_over_screen: Control
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -600,6 +602,9 @@ func _input(event: InputEvent) -> void:
 						_start_hold(KEY_N, 1.0, 
 							func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
 						)
+				KEY_K:
+					_start_hold(KEY_N, 1.0, 
+					func() -> void: if is_player_turn and state != States.ANIMATING: game_over_screen._load_retry())
 				KEY_TAB:
 					select_next_character()
 				KEY_1:
@@ -738,13 +743,23 @@ func _ready() -> void:
 					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		else:
 			spawn_enemy(pos, unit_type, true)
-
+	
+	## POP UPS INSTANTIATED
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
 	portrait_pop_up = PORTRAIT_POPUP.instantiate()
 	portrait_pop_up.hide()
 	add_child(portrait_pop_up)
+	
+	var game_over_layer := CanvasLayer.new()
+	game_over_layer.layer = 10
+	add_child(game_over_layer)
+	game_over_screen = GAME_OVER.instantiate()
+	game_over_screen.hide()
+	game_over_layer.add_child(game_over_screen)
+	#add_child(game_over_screen)
+	#in_game_ui = GAME_UI.instantiate()
 	
 	game_state = GameState.from_level(self)
 	
@@ -756,6 +771,11 @@ func _ready() -> void:
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
+	
+	if Main.get_current_level_index() > 2:
+		Main.save.save_progress(Main.current_save_slot, Main.get_current_level_index())
+	#SaveGame.new().save_progress(Main.current_save_slot, Main.current_level_index)
+
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -1126,7 +1146,7 @@ func CheckVictoryConditions() -> void:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
+		trigger_game_over()
 	elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
 		is_player_turn = true;
 		next_level();
@@ -1139,36 +1159,37 @@ func next_level() -> void:
 	if _level_complete:
 		return
 	_level_complete = true
-	
-	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
-	for i in positions.size():
-		var unit : Character = get_unit(positions[i])
-		var cell_item := occupancy_map.get_cell_item(positions[i])
-		if cell_item == 3 or cell_item == 0:
-			if unit == null:
-				continue
-			unit.reset();
-			unit.state.grid_position = Vector3i(0, 0, 0)
-
-		##Remove all other occupants, since they should not be in the next level
-		else:
-			if unit == null:
-				print("No unit found at enemy position: ", positions[i])
-				continue
-			print("Killing unit: ", unit.data.unit_name)			
-			unit.die(false)
+	cleanup_characters_before_load()
+	#var positions : Array[Vector3i] = occupancy_map.get_used_cells();
+	#for i in positions.size():
+		#var unit : Character = get_unit(positions[i])
+		#var cell_item := occupancy_map.get_cell_item(positions[i])
+		#if cell_item == 3 or cell_item == 0:
+			#if unit == null:
+				#continue
+			#unit.reset();
+			#unit.state.grid_position = Vector3i(0, 0, 0)
+#
+		###Remove all other occupants, since they should not be in the next level
+		#else:
+			#if unit == null:
+				#print("No unit found at enemy position: ", positions[i])
+				#continue
+			#print("Killing unit: ", unit.data.unit_name)			
+			#unit.die(false)
 	
 	## Force Delete Enemy Units from map
-	for c in characters:
-		if c == null:
-			continue
-		if not c.state.is_enemy():
-			continue
-		if is_instance_valid(c):
-			print("Force deleting unit enemy: " + str(c.data.unit_name))
-			if c.get_parent() != null:
-				c.get_parent().remove_child(c)
-			c.free()
+	#cleanup_enemies_before_load()
+	#for c in characters:
+		#if c == null:
+			#continue
+		#if not c.state.is_enemy():
+			#continue
+		#if is_instance_valid(c):
+			##print("Force deleting unit enemy: " + str(c.data.unit_name))
+			#if c.get_parent() != null:
+				#c.get_parent().remove_child(c)
+			#c.free()
 	
 	## TODO: Decide this?
 	# Healing units between levels
@@ -1184,12 +1205,54 @@ func next_level() -> void:
 	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
 	Main.go_to_transition_screen()
 
+
+func cleanup_characters_before_load() -> void:
+	# Kill enemies through proper death system first
+	var positions: Array[Vector3i] = occupancy_map.get_used_cells()
+	for i in positions.size():
+		var unit: Character = get_unit(positions[i])
+		var cell_item := occupancy_map.get_cell_item(positions[i])
+		if cell_item != 3 and cell_item != 0:
+			if unit == null:
+				print("No unit found at enemy position: ", positions[i])
+				continue
+			print("Killing unit: ", unit.data.unit_name)
+			unit.die(false)
+
+	# Force remove any remaining enemies
+	for c in characters:
+		if c == null:
+			continue
+		if not c.state.is_enemy():
+			continue
+		if is_instance_valid(c):
+			if c.get_parent() != null:
+				c.get_parent().remove_child(c)
+			c.free()
+
+	# Reset player units
+	for c in characters:
+		if c == null:
+			continue
+		if c.state.is_enemy():
+			continue
+		c.reset()
+		c.state.grid_position = Vector3i(0, 0, 0)
+
+
+func trigger_game_over() -> void:
+	is_in_menu = true
+	var ui := get_tree().get_first_node_in_group("ui_controller")
+	if ui:
+		ui.hide()
+	game_over_screen.show()
+
+
 func _on_character_sanity_flipped(character: Character) -> void:
 	print("heyaaa, we just flipped sanity")
 	emit_signal("character_stats_changed", character)
 	#characters.erase(character)
-	
-	
+
 
 func interpolate_to(target_transform:Transform3D, delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform)
