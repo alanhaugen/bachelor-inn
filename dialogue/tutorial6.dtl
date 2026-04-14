@@ -1,5 +1,7 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: *You escape into a small crack in the walls*
 do Tutorial.tutorial_trigger_victory()
 narrator: Once a level is completed, every unit levels up and gets 3 skill points.
 narrator: You must spend all 3 before advancing.
+do Tutorial.tutorial_hide_portrait()
 [end_timeline]

@@ -1,3 +1,4 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: You got your first weapon! \
 \
 Units may only wield one weapon at the time.
@@ -10,4 +11,5 @@ narrator: To preform an attack with your weapon\: \
 2. then select the tile you want to attack from.\
 \
 Choosing the smartest attack origin is a great way to gain some tactical advantage!
+do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()

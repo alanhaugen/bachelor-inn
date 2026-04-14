@@ -219,6 +219,42 @@ func tutorial_set_timeline_advances_at_player_turn_begins() -> void:
 		timeline_advances_at_player_turn_begins = true
 
 
+func tutorial_show_portrait(character: String, position: String) -> void:
+	print("Function called: tutorial_show_portrait()")
+	var name_lc : String = character.to_lower()
+	
+	var path := "res://art/textures/portrait_%s.png" % name_lc
+	var texture := load(path) as Texture2D
+	if texture == null:
+		push_warning("Texture for portrait not found")
+		print("Texture is null, returning.")
+		return
+	
+	Main.level.portrait_pop_up.show_portrait(texture, position)
+
+
+func tutorial_hide_portrait() -> void:
+	Main.level.portrait_pop_up.hide_portrait()
+
+func tutorial_set_aggro_range() -> void:
+	pass
+	#elif (level_name == "fento"):
+		#for c in Main.characters:
+			#if c.state.faction == CharacterState.Faction.ENEMY:
+				#c.state.aggro_range = 20
+
+
+func tutorial_end_turn() -> void:
+	if not Main.level.is_player_turn:
+		return
+	if Main.level.state == Main.level.States.ANIMATING:
+		return
+	Main.level.is_in_menu = false
+	Main.level._clear_selection()
+	Main.level.end_player_turn()
+	print("'End turn' called from Tutorial")
+
+
 func tutorial_complete() -> void:
 	print("Tutorial complete!")
 	in_tutorial = false
@@ -231,3 +267,4 @@ func tutorial_complete() -> void:
 
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)
+	#print("PORTRAIT EXSISTS: " + str(portrait_pop_up))

@@ -1,4 +1,7 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: * Inside you see some makeshift beds with hey. *
-Alfred: " The best bedding I have seen in a good while " you think to yourself.
+do Tutorial.tutorial_show_portrait("alfred", "left")
+Alfred: * The best bedding I have had in a good while *, you think to yourself.
+do Tutorial.tutorial_hide_portrait("lucy", "left")
 do Tutorial.tutorial_complete()
 [end_timeline]

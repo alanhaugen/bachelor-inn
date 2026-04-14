@@ -53,6 +53,8 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
+@onready var portrait_pop_up: PortraitPopup = $PortraitPopUp
+@onready var loot_popup : LootPopup = $LootPopUp
 
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
@@ -90,7 +92,7 @@ const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
-@onready var loot_popup : LootPopup = $LootPopUp
+const PORTRAIT_POPUP = preload("res://scenes/userinterface/PortraitPopUp.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -690,21 +692,6 @@ func _ready() -> void:
 	fog_grid = Grid.new(fog_map)
 	
 	turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
-
-	#if (level_name == "first"):
-		#Dialogic.start(str(level_name) + "Level");
-		#is_in_menu = true;
-	#elif (level_name == "fen"):
-		#Dialogic.start("Showcase_Intro")
-		#is_in_menu = true
-	#elif (level_name == "tutorial_1"):
-		#Tutorial.level = self
-		#Tutorial.start_tutorial()
-		##Dialogic.start("tutorialpc1")
-	#elif (level_name == "fento"):
-		#for c in Main.characters:
-			#if c.state.faction == CharacterState.Faction.ENEMY:
-				#c.state.aggro_range = 20
 	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
@@ -755,6 +742,9 @@ func _ready() -> void:
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
+	portrait_pop_up = PORTRAIT_POPUP.instantiate()
+	portrait_pop_up.hide()
+	add_child(portrait_pop_up)
 	
 	game_state = GameState.from_level(self)
 	
@@ -931,7 +921,7 @@ func MoveAI() -> void:
 
 func MoveSingleAI() -> void:
 	#check_aggro()
-	#Hide "End Turn button" and other UI elements
+	## TODO: Hide "End Turn button" and other UI elements
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	var any_active_enemies := false
@@ -1556,16 +1546,22 @@ func _process_old(delta: float) -> void:
 
 func end_player_turn() -> bool:
 	if !is_player_turn:
+		print("BLOCKED: not player turn")
 		return false
 	if (turn_transition_animation_player.is_playing()):
+		print("BLOCKED: animation playing")
 		return false
 	if(!combat_vfx.is_finished()):
+		print("BLOCKED: combat vfx not finished")
 		return false
 	if wait_for_camera:
+		print("BLOCKED: waiting for camera")
 		return false
 	if (is_in_menu):
+		print("BLOCKED: is in menu")
 		return false
 	if state != States.PLAYING:
+		print("BLOCKED: state is ", state)
 		return false
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():

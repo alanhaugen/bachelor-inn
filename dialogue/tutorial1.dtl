@@ -1,4 +1,4 @@
-join narrator center [animation="Fade In" length="0.3"]
+do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: Welcome to Noble Nights!\
 \
 Press MB1  OR  SPACEBAR to advance the tutorial prompts!
@@ -7,4 +7,5 @@ narrator: *Press MouseButton1 (MB1) on any unit to select it. \
 OR\
 \
 Use TAB KEY to shuffle between available units.*
+do Tutorial.tutorial_hide_portrait()
 [end_timeline]

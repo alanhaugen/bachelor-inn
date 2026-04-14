@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bajx21wdflkf8" path="res://scenes/grid_items/chest.tscn" id="3_mjh77"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_xbsfl"]
 [ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/LootPopUp.tscn" id="4_131pe"]
+[ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="8_mqfpd"]
 
 [node name="Map3d2" unique_id=656823534 instance=ExtResource("1_nhemk")]
 
@@ -99,3 +100,6 @@ weapon_id = "sword_advanced"
 
 [node name="LootPopUp" parent="." index="20" unique_id=294007816 instance=ExtResource("4_131pe")]
 visible = false
+
+[node name="PortraitPopUp" parent="." index="21" unique_id=1108238431 instance=ExtResource("8_mqfpd")]
+unique_name_in_owner = true

@@ -1,4 +1,6 @@
-You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.\
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: You see another openeing in the ruin walls, and a vague light shimmering between the damp mortar.\
 \
 Curiosity gets the better of you, and you force your way through.
+do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_trigger_victory()

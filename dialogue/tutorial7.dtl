@@ -1,2 +1,4 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: Ohh look, a chest! Walk ONTOP of it top open the chest!
+do Tutorial.tutorial_hide_portrait()
 [end_timeline]
