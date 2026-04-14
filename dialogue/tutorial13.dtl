@@ -1,5 +1,5 @@
 do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: Your sanity, on the other han, I can't help you with. \
+Lucy: Your sanity, on the other hand, I can't help you with. \
 \
 Just make sure you never go insane.
 do Tutorial.tutorial_show_portrait("narrator", "left")
@@ -10,7 +10,7 @@ So choose your battles carefully.
 do Tutorial.tutorial_show_portrait("lucy", "left")
 Lucy: You can practice some attacks on the strawman by the small river, if you'd like.\
 \
-Then go to the barn door  once you are ready for a nights sleep.
+Then go to the barn door, once you are ready for a nights sleep.
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_highlight_tile(-4, 0, -3)
 do Tutorial.tutorial_end_turn()

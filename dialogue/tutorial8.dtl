@@ -13,3 +13,4 @@ narrator: To preform an attack with your weapon\: \
 Choosing the smartest attack origin is a great way to gain some tactical advantage!
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()
+do Tutorial.tutorial_highlight_tile(0, 0, 0)

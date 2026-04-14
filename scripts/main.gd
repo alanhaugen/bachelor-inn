@@ -186,5 +186,16 @@ var level_story_text : Dictionary = {
 	"tutorial_3":
 	"\nThe sound of a whisper draws your attention.\n
 	Outside, on the other side of the ruins you stumble upon a makeshift camp outside a worn stable.\n
-	Two shadows make out a silhuette before a flickering bonfire.\n\n\n"
+	Two shadows make out a silhuette before a flickering bonfire.\n\n\n",
+	"fento": 
+	"\nFeral screams pierce the night. Several monsters, no doubt.\n
+	You rush out as fast as you can. Lucy and Emil are already on their feet.\n
+	You draw your weapon.\n\n\n",
+	"fen":
+	"\nPast the river, to the east, your party is embraced by a shining light.\n
+	Behind you - more monsters.\n\n\n",
+	"waterfallLevel":
+	"\nH20\n\n\n",
+	"woodlandsLevel":
+	"\nHowMuchWoodWouldAWoodchuckChuckIfAWoodchuckCouldChuckWood?\n\n\n"
 }
