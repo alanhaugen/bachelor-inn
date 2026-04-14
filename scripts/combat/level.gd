@@ -36,7 +36,7 @@ var movement_weights_grid : Grid
 #cursor testing
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
-@onready var cursor_feet : Texture2D = preload("res://art/textures/cursor_feet.png")
+@onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
 @onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
@@ -1659,10 +1659,19 @@ func _update_cursor_on_hover() -> void:
 	_last_hovered_pos = grid_pos
 	
 	var cell := movement_map.get_cell_item(grid_pos)
+	#print("cell value: ", cell, " ATTACK: ", GridTile.Type.ATTACK, " INTERACT: ", GridTile.Type.INTERACT)
+	var cell_name := movement_map.mesh_library.get_item_name(cell) if cell != GridMap.INVALID_CELL_ITEM else ""
+	if cell_name == "Gohere":
+		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+
 	if cell == GridTile.Type.ATTACK:
 		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
-	elif cell == GridTile.Type.INTERACT:
+	elif cell in [GridTile.Type.MOVE, GridTile.Type.INTERACT, 3, 4]:
 		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+	#elif cell == GridTile.Type.MOVE:
+		#Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+	elif get_trigger_name(grid_pos) == "02_Chest":
+		Input.set_custom_mouse_cursor(cursor_hand, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)
 
