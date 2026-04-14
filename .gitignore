@@ -1,3 +1,13 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+.DS_Store
+*~
+*autosave.kra
+*.import
+*.swp
+*.tmp
+.vscode/settings.json
+.ai
+.junie
+.idea
