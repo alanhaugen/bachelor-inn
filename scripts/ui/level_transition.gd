@@ -36,7 +36,7 @@ func _on_continue_button_pressed() -> void:
 
 
 func update_continue_button() -> void:
-	## Order in "spend_skill_points()" in unit_card.gd is wrong, so the trigger cant happen.
+	## Order in "spend_skill_points()" in unit_card.gd is wrong, so the trigger cant happen atm.
 	for c in Main.characters:
 		if c != null and c.state.unspent_skill_points > 0:
 			continue_button.modulate = Color(1, 1, 1, 1)
