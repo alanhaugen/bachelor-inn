@@ -38,7 +38,5 @@ func _on_continue_button_pressed() -> void:
 func update_continue_button() -> void:
 	## Order in "spend_skill_points()" in unit_card.gd is wrong, so the trigger cant happen atm.
 	for c in Main.characters:
-		if c != null and c.state.unspent_skill_points > 0:
-			continue_button.modulate = Color(1, 1, 1, 1)
-			return
-	continue_button.modulate = Color(1, 0, 0, 1)
+		c.state.level += 1
+		print("Level up! " + c.data.unit_name + " is now level " + str(c.state.level))

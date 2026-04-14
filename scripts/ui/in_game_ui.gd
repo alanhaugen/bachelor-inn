@@ -27,7 +27,8 @@ func build_character_stats(character: Character) -> Dictionary:
 		"focus": character.data.focus,
 		"endurance": character.data.endurance,
 
-		"level": character.state.current_level,
+		#"level": character.state.current_level,
+		"level": character.state.level,
 		"type": "%s %s" % [
 			CharacterData.Speciality.keys()[character.data.speciality],
 			CharacterData.Personality.keys()[character.data.personality]
