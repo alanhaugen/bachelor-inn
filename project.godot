@@ -80,10 +80,11 @@ directories/dtl_directory={
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",
 "CustomDialogicStyle": "res://dialogue/CustomDialogicStyle.tres",
+"VisualNovel_Style_test": "res://dialogue/VisualNovel_Style_test.tres",
 "chatBubbleStyle": "res://dialogue/chatBubbleStyle.tres",
 "style": "res://dialogue/style.tres"
 }
-layout/style_list=["res://dialogue/CustomDialogicStyle.tres", "res://dialogue/style.tres", "res://dialogue/chatBubbleStyle.tres"]
+layout/style_list=["res://dialogue/CustomDialogicStyle.tres", "res://dialogue/style.tres", "res://dialogue/chatBubbleStyle.tres", "res://dialogue/VisualNovel_Style_test.tres"]
 layout/default_style="res://dialogue/CustomDialogicStyle.tres"
 variables={
 "PLATFORM": "MOBILE",

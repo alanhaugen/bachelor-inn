@@ -31,8 +31,9 @@ metadata/_editor_floor_ = Vector3(0, 1, 0)
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 data = {
-"cells": PackedInt32Array(6, 1, 1376258, 11, 7, 1441795, 65547, 7, 1048576)
+"cells": PackedInt32Array(6, 1, 1376258, 11, 7, 1441795, 65547, 7, 1048576, 10, 7, 3, 9, 7, 3)
 }
+metadata/_editor_floor_ = Vector3(0, 0, 0)
 
 [node name="MovementOverlay" parent="." index="4" unique_id=1093741866]
 metadata/_editor_floor_ = Vector3(0, 1, 0)

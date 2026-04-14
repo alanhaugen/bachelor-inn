@@ -125,6 +125,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "Discard"
 
 [node name="ButtonKeep" type="Button" parent="Panel/VBoxContainer/KeepDrop" unique_id=1532762509]
@@ -132,6 +133,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
 text = "Keep"
 
 [connection signal="pressed" from="Panel/VBoxContainer/KeepDrop/ButtonDiscard" to="." method="_on_button_discard_pressed"]

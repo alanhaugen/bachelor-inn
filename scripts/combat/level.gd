@@ -1179,10 +1179,11 @@ func next_level() -> void:
 			if c.get_parent() != null:
 				c.get_parent().remove_child(c)
 			c.free()
-			
+	
+	## TODO: Decide this?
 	# Healing units between levels
-	for i in Main.characters.size():
-		Main.characters[i].state.current_health = Main.characters[i].state.max_health;
+	#for i in Main.characters.size():
+		#Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
 	## SAVE GAME HAPPENS HERE
 	var surviving_chars : Array[Character] = []
