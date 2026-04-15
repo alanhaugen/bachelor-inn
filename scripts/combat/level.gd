@@ -1845,10 +1845,6 @@ func _recruit_neutral_units() -> void:
 	print("No neutral units found to recruit")
 
 
-func _add_neutral_unit_to_party() -> void:
-	pass
-
-
 func _start_hold(key: Key, duration: float, action: Callable) -> void:
 	_held_key = key
 	_hold_timer = 0.0

@@ -20,9 +20,6 @@ class_name Character
 @export var state : CharacterState
 @export var scene_id : String = ""
 
-
-
-
 ### SIGNALS
 
 signal sanity_flipped(character: Character)
@@ -244,6 +241,10 @@ func calibrate_level_popup() -> void:
 
 
 func calc_derived_stats() -> void:
+	## TODO: Fix calc_derived_stats() being used to build character initially?
+	## 		 the game crashes if we touch current_sanity = max_sanity.
+	## TODO: Simplyfy how stats work?? Right now, adding endurance increases max sanity, 
+	## 	 	 because it increases resistance.
 	if data == null:
 		return
 	state.defense = 4 + data.endurance
@@ -253,9 +254,32 @@ func calc_derived_stats() -> void:
 	#state.movement = 4 + floor(data.speed / 3.0)
 	state.movement = 4 + data.speed
 	state.current_health = state.max_health
+	#state.current_health = state.current_health
 	state.current_sanity = state.max_sanity
+	#state.current_sanity = state.current_sanity
 	state.stability = max(1, data.focus - data.mind)
 
+
+func update_derived_stats_after_level_up() -> void:
+	if data == null:
+		return
+	state.defense = 4 + data.endurance
+	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	state.movement = 4 + data.speed
+	state.stability = max(1, data.focus - data.mind)
+	
+	var new_max_health := int(4 + data.endurance + floor(data.strength / 2.0))
+	var new_max_sanity := int(state.resistance + data.mind)
+	
+	if state.current_health == state.max_health:
+		state.current_health = new_max_health
+	state.max_health = new_max_health
+	
+	if state.current_sanity == state.max_sanity or state.current_sanity == new_max_sanity - 1:
+		state.max_sanity = new_max_sanity
+		state.current_sanity = new_max_sanity
+	else:
+		state.max_sanity = new_max_sanity
 
 func _ready() -> void:
 	if state:
@@ -311,16 +335,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	#var mesh_3d_position: Vector3 = global_transform.origin;
-	
-	#if state.is_alive:
-		#show_ui() # hack, TODO: removeme
-	
-	#if camera:
-		#var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		#health_bar.position = screen_position_2d - Vector2(3 * 15, 0);
-		#health_bar.position.y += 70; # move down a little 
-	
 	if current_animation == null:
 		return
 	
@@ -332,14 +346,6 @@ func _process(delta: float) -> void:
 		if stop_anim:
 			frame_index = 0
 		sprite.material_override.set_shader_parameter("frame_index", frame_index)
-
-
-#func hide_ui() -> void:
-	#health_bar.hide()
-
-
-#func show_ui() -> void:
-	#health_bar.show()
 
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:

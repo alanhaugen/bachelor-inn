@@ -61,12 +61,20 @@ size_flags_horizontal = 3
 tooltip_text = "Increases melee weapon damage."
 theme_override_font_sizes/font_size = 32
 
+[node name="RemoveSTRButton" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=1214537700]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 56
+text = "-"
+
 [node name="STRButton" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=1240739841]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 text = "+"
 
 [node name="STRButtonAll" type="Button" parent="VBoxContainer/HBoxContainerSTR" unique_id=626948136]
@@ -74,7 +82,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "ALL"
 
 [node name="HBoxContainerMND" type="HBoxContainer" parent="VBoxContainer" unique_id=2074149787]
@@ -86,12 +94,20 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
 
+[node name="RemoveMNDButton" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=312153809]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 56
+text = "-"
+
 [node name="MNDButton" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1698774842]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 text = "+"
 
 [node name="MNDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerMND" unique_id=1369103208]
@@ -99,7 +115,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "ALL"
 
 [node name="HBoxContainerSPD" type="HBoxContainer" parent="VBoxContainer" unique_id=20325593]
@@ -112,12 +128,20 @@ size_flags_horizontal = 3
 tooltip_text = "Increases movement range"
 theme_override_font_sizes/font_size = 32
 
+[node name="RemoveSPDButton" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=762435113]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 56
+text = "-"
+
 [node name="SPDButton" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=697744949]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 text = "+"
 
 [node name="SPDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerSPD" unique_id=1290827523]
@@ -125,7 +149,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "ALL"
 
 [node name="HBoxContainerEND" type="HBoxContainer" parent="VBoxContainer" unique_id=867862978]
@@ -138,12 +162,20 @@ size_flags_horizontal = 3
 tooltip_text = "Increases health points."
 theme_override_font_sizes/font_size = 32
 
+[node name="RemoveENDButton" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=666315032]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 56
+text = "-"
+
 [node name="ENDButton" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=607875166]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 text = "+"
 
 [node name="ENDButtonAll" type="Button" parent="VBoxContainer/HBoxContainerEND" unique_id=1975471972]
@@ -151,7 +183,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "ALL"
 
 [node name="HBoxContainerFCS" type="HBoxContainer" parent="VBoxContainer" unique_id=980634620]
@@ -164,12 +196,20 @@ size_flags_horizontal = 3
 tooltip_text = "Increases critical chance with weapons."
 theme_override_font_sizes/font_size = 32
 
+[node name="RemoveFCSButton" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=186522086]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_font_sizes/font_size = 56
+text = "-"
+
 [node name="FCSButton" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1989678428]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 56
 text = "+"
 
 [node name="FCSButtonAll" type="Button" parent="VBoxContainer/HBoxContainerFCS" unique_id=1497307943]
@@ -177,16 +217,21 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "ALL"
 
+[connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/RemoveSTRButton" to="." method="_on_remove_str_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/STRButton" to="." method="_on_str_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSTR/STRButtonAll" to="." method="_on_str_button_all_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerMND/RemoveMNDButton" to="." method="_on_remove_mnd_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerMND/MNDButton" to="." method="_on_mnd_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerMND/MNDButtonAll" to="." method="_on_mnd_button_all_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerSPD/RemoveSPDButton" to="." method="_on_remove_spd_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSPD/SPDButton" to="." method="_on_spd_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerSPD/SPDButtonAll" to="." method="_on_spd_button_all_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerEND/RemoveENDButton" to="." method="_on_remove_end_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerEND/ENDButton" to="." method="_on_end_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerEND/ENDButtonAll" to="." method="_on_end_button_all_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainerFCS/RemoveFCSButton" to="." method="_on_remove_fcs_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerFCS/FCSButton" to="." method="_on_fcs_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainerFCS/FCSButtonAll" to="." method="_on_fcs_button_all_pressed"]
