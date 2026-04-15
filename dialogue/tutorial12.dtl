@@ -6,7 +6,6 @@ narrator: *CRACK* - You just stepped on a tiny branch with cartoonish looks.\
 \
 The two turn around in an instant and draws their weapons!
 do Tutorial.tutorial_hide_portrait()
-join Lucy center [z_index="1"]
 do Tutorial.tutorial_show_portrait("lucy", "left")
 Lucy: " Halt! "
 do Tutorial.tutorial_show_portrait("emil", "left")

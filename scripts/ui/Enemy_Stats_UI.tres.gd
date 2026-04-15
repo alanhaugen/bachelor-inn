@@ -5,8 +5,8 @@ class_name EnemyStatsUI
 @onready var health_bar: ProgressBar = %HealthBar
 @onready var name_label: Label = %CharacterName
 @onready var health_text: Label = %HealthText
-@onready var type: Label = %Type
-@onready var oc_icon: TextureRect = %O_C_icon
+#@onready var type: Label = %Type
+#@onready var oc_icon: TextureRect = %O_C_icon
 
 
 var current_enemy: Character = null

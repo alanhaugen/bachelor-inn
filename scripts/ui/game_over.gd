@@ -5,8 +5,12 @@ class_name GameOver
 @onready var back_button: Button = $ColorRect/VBoxContainer/BackButton
 
 func _ready() -> void:
-	retry_button.pressed.connect(_on_retry_button_pressed)
-	back_button.pressed.connect(_on_back_button_pressed)
+	#retry_button.pressed.connect(_on_retry_button_pressed)
+	#back_button.pressed.connect(_on_back_button_pressed)
+	if not retry_button.pressed.is_connected(_on_retry_button_pressed):
+		retry_button.pressed.connect(_on_retry_button_pressed)
+	if not back_button.pressed.is_connected(_on_back_button_pressed):
+		back_button.pressed.connect(_on_back_button_pressed)
 	
 func _on_retry_button_pressed() -> void:
 	call_deferred("_load_retry")

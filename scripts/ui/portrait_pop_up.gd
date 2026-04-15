@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func show_portrait(texture: Texture2D, position: String) -> void:
-	print("Function called: show_portrait()")
+	#print("Function called: show_portrait()")
 	portrait_rect.texture = texture
 	await get_tree().process_frame
 	show()

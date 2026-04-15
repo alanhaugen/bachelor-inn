@@ -43,12 +43,12 @@ func create_new_save_data() -> void:
 	for id: String in registry.characters.keys():
 		var def: CharacterDefinition = registry.characters[id]
 		
-		var char := Character.new()
-		char.data = def.base_data.duplicate()
-		char.state = def.base_state.duplicate()
-		char.scene_id = id
+		var character := Character.new()
+		character.data = def.base_data.duplicate()
+		character.state = def.base_state.duplicate()
+		character.scene_id = id
 		
-		units.append(char.save())
+		units.append(character.save())
 	
 	
 	var saves := {
@@ -97,11 +97,11 @@ func create_new_save_in_slot(save_slot: int) -> void:
 	var units := []
 	for id: String in registry.characters.keys():
 		var def: CharacterDefinition = registry.characters[id]
-		var char := Character.new()
-		char.data = def.base_data.duplicate()
-		char.state = def.base_state.duplicate()
-		char.scene_id = id
-		units.append(char.save())
+		var character := Character.new()
+		character.data = def.base_data.duplicate()
+		character.state = def.base_state.duplicate()
+		character.scene_id = id
+		units.append(character.save())
 
 	# Only overwrite the selected slot
 	saves["Noble Nights Save format"] = version

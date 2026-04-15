@@ -225,7 +225,7 @@ func tutorial_set_timeline_advances_at_player_turn_begins() -> void:
 
 
 func tutorial_show_portrait(character: String, position: String) -> void:
-	print("Function called: tutorial_show_portrait()")
+	#print("Function called: tutorial_show_portrait()")
 	var name_lc : String = character.to_lower()
 	
 	var path := "res://art/textures/portrait_%s.png" % name_lc

@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_xbsfl"]
 [ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/LootPopUp.tscn" id="4_131pe"]
 [ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="8_mqfpd"]
+[ext_resource type="PackedScene" uid="uid://d00tnaxafw4ia" path="res://scenes/states/game_over.tscn" id="9_h66jy"]
 
 [node name="Map3d2" unique_id=656823534 instance=ExtResource("1_nhemk")]
 
@@ -98,8 +99,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 4)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.022412, 0.5625, 3.190421)
 weapon_id = "sword_advanced"
 
-[node name="LootPopUp" parent="." index="20" unique_id=294007816 instance=ExtResource("4_131pe")]
+[node name="PortraitPopUp" parent="." index="20" unique_id=1108238431 instance=ExtResource("8_mqfpd")]
+unique_name_in_owner = true
+
+[node name="LootPopUp" parent="." index="21" unique_id=294007816 instance=ExtResource("4_131pe")]
 visible = false
 
-[node name="PortraitPopUp" parent="." index="21" unique_id=1108238431 instance=ExtResource("8_mqfpd")]
-unique_name_in_owner = true
+[node name="GameOver" parent="." index="22" unique_id=997112840 instance=ExtResource("9_h66jy")]
+visible = false
