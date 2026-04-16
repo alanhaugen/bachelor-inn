@@ -181,8 +181,8 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	return new_skill;
 
 
-func _on_experience_changed(in_experience: int) -> void:
-	pass
+#func _on_experience_changed(in_experience: int) -> void:
+	#pass
 	##data.experience += in_experience;
 	#return
 	#print(data.unit_name + " gains " + str(in_experience) + " experience points.");
@@ -284,7 +284,7 @@ func update_derived_stats_after_level_up() -> void:
 func _ready() -> void:
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
-		state.experience_changed.connect(_on_experience_changed)
+		#state.experience_changed.connect(_on_experience_changed)
 	
 	#health_bar_ally = HEALTH_BAR_SCENE.instantiate();
 	#health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
@@ -381,7 +381,7 @@ func reset() -> void:
 
 ## Importing this to attack.gd
 func apply_damage(amount: int, simulate_only: bool = false, 
-					source: Character = null, label: String = "") -> bool:
+	_source: Character = null, _label: String = "") -> bool:
 	amount = int(amount)
 	if amount <= 0:
 		return false

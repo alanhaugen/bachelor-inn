@@ -73,6 +73,8 @@ func start_tutorial() -> void:
 
 
 func tutorial_trigger_victory() -> void:
+	#Main.level._level_complete = true
+	#Main.level.is_in_menu = true
 	current_tutorial_level += 1
 	Main.level.is_player_turn = true;
 	Main.level.next_level();

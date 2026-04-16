@@ -155,6 +155,7 @@ func get_current_level_index() -> int:
 func go_to_transition_screen() -> void:
 	if is_instance_valid(Main.level):
 		Main.level.is_in_menu = true
+		print("Going to Transition Screen. Instance Main.level is valid.")
 	var packed := load("res://scenes/states/level_transition.tscn")
 	transition_screen = packed.instantiate()
 	get_tree().root.add_child(transition_screen)

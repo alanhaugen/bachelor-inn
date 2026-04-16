@@ -261,10 +261,10 @@ func save_progress(save_slot: int, level_index: int) -> void:
 	var saves: Dictionary = json.data
 	var slot_key := "Slot " + str(save_slot +1)
 	var units := []
-	for char in Main.characters:
-		if char == null:
+	for character in Main.characters:
+		if character == null:
 			continue
-		units.append(char.save())
+		units.append(character.save())
 		
 	saves[slot_key] = {"level": level_index, "units": units}
 	

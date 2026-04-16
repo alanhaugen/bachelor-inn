@@ -37,7 +37,7 @@ func _set_has_used_ability(in_has_used_ability: bool) -> void:
 func _set_is_selected(in_is_selected: bool) -> void:
 	selected_indicator.visible = in_is_selected
 
-func update_effects_ui(in_character: Character) -> void:
+func update_effects_ui(_in_character: Character) -> void:
 	for child in effectContainer.get_children():
 		child.queue_free()
 	

@@ -50,6 +50,7 @@ weapon: Weapon) -> void:
 
 func _on_button_discard_pressed() -> void:
 	Main.level.is_in_menu = false
+	Main.level.has_window_open = false
 	hide()
 	## add signal for discarded weapon
 
@@ -59,5 +60,6 @@ func _on_button_keep_pressed() -> void:
 		_character.state.weapon = _new_weapon
 	print("New weapon is: " + _character.state.weapon.weapon_name)
 	Main.level.is_in_menu = false
+	Main.level.has_window_open = false
 	hide()
 	## add singlal and function for keeping new weapon

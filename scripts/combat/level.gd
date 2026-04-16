@@ -57,9 +57,11 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #@onready var loot_popup : LootPopup = $LootPopUp
 var portrait_pop_up: PortraitPopup
 var loot_popup : LootPopup
+var pause_menu: PauseMenu
 
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
+var has_window_open : bool = false
 
 
 var selected_unit: Character = null
@@ -98,6 +100,7 @@ const PORTRAIT_POPUP = preload("res://scenes/userinterface/PortraitPopUp.tscn")
 const LOOT_POP_UP = preload("uid://bge25dwwd4pbs")
 const GAME_OVER = preload("res://scenes/states/game_over.tscn")
 var game_over_screen: Control
+const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -610,6 +613,18 @@ func _input(event: InputEvent) -> void:
 					func() -> void: if is_player_turn and state != States.ANIMATING: game_over_screen._load_retry())
 				KEY_TAB:
 					select_next_character()
+				KEY_ESCAPE:
+					if _level_complete or has_window_open:
+						print("Pressed ESC while another window is open.")
+						pass
+					elif not is_in_menu:
+						is_in_menu = true
+						pause_menu.show()
+						get_tree().paused = true
+					else:
+						is_in_menu = false
+						pause_menu.hide()
+						get_tree().paused = false
 				KEY_1:
 					var ui := get_tree().get_first_node_in_group("ui_controller")
 					if ui:
@@ -681,6 +696,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
+	_level_complete = false
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	camera_controller = Main.camera_controller
 
 	cursor.hide()
@@ -759,6 +776,13 @@ func _ready() -> void:
 	loot_popup = LOOT_POP_UP.instantiate()
 	loot_popup.hide()
 	add_child(loot_popup)
+	
+	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
+	var pause_menu_layer := CanvasLayer.new()
+	pause_menu_layer.layer = 9
+	pause_menu = PAUSE_MENU.instantiate()
+	pause_menu.hide()
+	add_child(pause_menu)
 	
 	var game_over_layer := CanvasLayer.new()
 	game_over_layer.layer = 10
@@ -1034,7 +1058,7 @@ func MoveSingleAI() -> void:
 				currentEnemy.state.is_moved = true
 				#MoveSingleAI()
 				call_deferred("MoveSingleAI")
-			return
+				return
 			## Return triggers above, code below is unreachable atm.
 			# Get next waypoint, wrap around when reaching the end
 			var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
@@ -1168,36 +1192,6 @@ func next_level() -> void:
 		return
 	_level_complete = true
 	cleanup_characters_before_load()
-	#var positions : Array[Vector3i] = occupancy_map.get_used_cells();
-	#for i in positions.size():
-		#var unit : Character = get_unit(positions[i])
-		#var cell_item := occupancy_map.get_cell_item(positions[i])
-		#if cell_item == 3 or cell_item == 0:
-			#if unit == null:
-				#continue
-			#unit.reset();
-			#unit.state.grid_position = Vector3i(0, 0, 0)
-#
-		###Remove all other occupants, since they should not be in the next level
-		#else:
-			#if unit == null:
-				#print("No unit found at enemy position: ", positions[i])
-				#continue
-			#print("Killing unit: ", unit.data.unit_name)			
-			#unit.die(false)
-	
-	## Force Delete Enemy Units from map
-	#cleanup_enemies_before_load()
-	#for c in characters:
-		#if c == null:
-			#continue
-		#if not c.state.is_enemy():
-			#continue
-		#if is_instance_valid(c):
-			##print("Force deleting unit enemy: " + str(c.data.unit_name))
-			#if c.get_parent() != null:
-				#c.get_parent().remove_child(c)
-			#c.free()
 	
 	## TODO: Decide this?
 	# Healing units between levels
@@ -1811,6 +1805,8 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	print("loot_popup: ", loot_popup)
 	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
 	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
+	is_in_menu = true
+	has_window_open = true
 	
 	if Tutorial.in_tutorial and Tutorial.chest_open == false:
 		Tutorial.chest_open = true
