@@ -370,7 +370,8 @@ func reset() -> void:
 	state.is_alive = true;
 	# slowly heal sanity
 	if state.is_playable():
-		state.current_sanity += 1;
+		## TODO: Decide if this is intended - Heal sanity after each round
+		#state.current_sanity += 1;
 		state.is_ability_used = false
 	#hide_ui();
 	show();

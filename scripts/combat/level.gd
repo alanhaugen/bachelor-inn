@@ -108,6 +108,7 @@ var patrol_paths: Dictionary[String, PatrolPath] = {}
 var chests: Dictionary[Vector3i, Chest] = {}
 var pending_chest_weapon: Weapon = null
 var neutral_units: Dictionary[Vector3i, NeutralUnit] = {}
+var neutral_spawn_index: int = 0 ## placeholder var for iterating over netural spawn nodes
 
 enum States {
 	PLAYING,
@@ -823,15 +824,30 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			#new_enemy.data = data
 			#new_enemy.state = c_state
 			#new_enemy.data.unit_name = monster_names.pick_random()
-			new_enemy = LUCY.instantiate()
+			var neutral_scene: PackedScene
+			var neutral_name: String
+	
+			match neutral_spawn_index:
+				0:
+					neutral_scene = LUCY
+					neutral_name = "Lucy"
+				1:
+					neutral_scene = EMIL
+					neutral_name = "Emil"
+				_:
+					neutral_scene = LUCY
+					neutral_name = "Lucy"
+			
+			neutral_spawn_index += 1
+			new_enemy = neutral_scene.instantiate()
 			#print("Lucy faction right after instantiate: ", new_enemy.state.faction)
 			var data := CharacterData.new()
 			var c_state := CharacterState.new()
 			c_state.faction = CharacterState.Faction.NEUTRAL
 			new_enemy.data = data
 			new_enemy.state = c_state
-			print("Lucy faction after state assignment: ", new_enemy.state.faction)
-			new_enemy.data.unit_name = "Lucy"
+			#print("Lucy faction after state assignment: ", new_enemy.state.faction)
+			new_enemy.data.unit_name = neutral_name
 
 		"02_Chest":
 			var chest := CHEST.instantiate()
@@ -1505,9 +1521,9 @@ func _process_old(delta: float) -> void:
 				hide_inactive_characters()
 				
 				## TUTORIAL
-				if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline and Tutorial.timeline_advances_at_player_turn_begins:
+				#if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline and Tutorial.timeline_advances_at_player_turn_begins:
 				#if Tutorial.in_tutorial and not	Tutorial.timeline_advances_at_player_turn_begins:
-					Tutorial.advance_timeline()
+					#Tutorial.advance_timeline()
 				
 				
 				 # Pan camera back to player after enemy turn ends
@@ -1556,7 +1572,8 @@ func _process_old(delta: float) -> void:
 				_clear_selection()
 
 			completed_moves.append(active_move);
-			Tutorial.tutorial_unit_moved();
+			if Tutorial.in_tutorial:
+				Tutorial.tutorial_unit_moved();
 			
 			if is_player_turn == false:
 				#MoveAI(); # called after an enemy is done moving
@@ -1816,16 +1833,14 @@ func _on_chest_opened(pos: Vector3i) -> void:
 
 func _recruit_neutral_units() -> void:
 	print("recruit_neutral_units() triggered")
+	var player_chars: Array[Character] = []
+	
 	for c in characters:
 		if c == null:
 			print("null c in characters found.")
 			continue
-		print(c.data.unit_name, " faction int value: ", c.state.faction, " NEUTRAL value: ", CharacterState.Faction.NEUTRAL)
 		if c.state.faction == CharacterState.Faction.NEUTRAL:
-			print("MATCH FOUND: ", c.data.unit_name)
-			print(str(c.data.unit_name) + "'s faction before recruitment is:" + str(c.state.faction))
 			c.state.faction = CharacterState.Faction.PLAYER
-			print(str(c.data.unit_name) + "'s faction after recruitment is:" + str(c.state.faction))
 			
 			var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
 			if def != null:
@@ -1836,16 +1851,14 @@ func _recruit_neutral_units() -> void:
 			
 			Main.characters.append(c)
 			occupancy_map.set_cell_item(c.state.grid_position, player_code)
-			game_state = GameState.from_level(self)
-		
-			var player_chars: Array[Character] = []
-			for ch in characters:
-				if ch != null and ch.state.faction == CharacterState.Faction.PLAYER:
-					player_chars.append(ch)
+	
+	game_state = GameState.from_level(self)
+	for ch in characters:
+		if ch != null and ch.state.faction == CharacterState.Faction.PLAYER:
+			player_chars.append(ch)
 			print("Emitting party_updated with: ", player_chars.size(), " characters")
 			emit_signal("party_updated", player_chars)
-			print("Recruited: ", c.data.unit_name)
-			return
+			print("Recruited: ", ch.data.unit_name)
 
 	print("No neutral units found to recruit")
 

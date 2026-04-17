@@ -4,4 +4,6 @@ do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_highlight_tile(17, 0, 3)
 do Tutorial.tutorial_highlight_tile(16, 0, 3)
 do Tutorial.tutorial_highlight_tile(15, 0, 3)
+do Tutorial.tutorial_highlight_tile(14, 0, 3)
+do Tutorial.tutorial_highlight_tile(13, 0, 3)
 [end_timeline]

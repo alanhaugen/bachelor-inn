@@ -15,8 +15,11 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Noble Nights"
+config/description="A Lovecraftial Pixel tactical RPG."
+config/version="0.1-demo"
 run/main_scene="uid://cm02uehw506nt"
 config/features=PackedStringArray("4.6", "Forward Plus")
+boot_splash/image="uid://cft6wh327wv2r"
 config/icon="res://icon.svg"
 
 [autoload]

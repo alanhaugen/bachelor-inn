@@ -6,4 +6,5 @@ Road tiles cost 1 movement.
 narrator: Try moving to the RED mark across the small river.
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_highlight_tile(11, 0, 3)
+do Tutorial.tutorial_set_select_unit_advances_timeline()
 [end_timeline]
