@@ -273,9 +273,31 @@ func tutorial_complete() -> void:
 	Main.current_save_slot = 0
 	Main.level.next_level()
 
+
 func _ready() -> void:
 	Dialogic.timeline_ended.connect(on_timeline_ended)
 	#print("PORTRAIT EXSISTS: " + str(portrait_pop_up))
+
+## WIP - Want to try to do simpe position checks to trigger timelines
+func tutorial_check_unit_position_to_trigger() -> void:
+	pass
+	
+	#match Main.level.name:
+		#"tutorialDesignedLevel":
+			#for c in Main.level.characters:
+				#if c.positoin.x >= 7 and c.positoin.y <= 2:
+					#Tutorial.advance_timeline() ## TODO: Add sted advancement, or fix+use on_timeline_ended.
+					#
+		#
+		#"tutorial_2":
+			#for c in Main.level.characters:
+				#if c.positoin.x >= 7 and c.positoin.y <= 2:
+					#Tutorial.advance_timeline()
+		#
+		#"tutorial_3":
+			#for c in Main.level.characters:
+				#if c.positoin.x >= 7 and c.positoin.y <= 2:
+					#Tutorial.advance_timeline()
 
 var tutorial_level_start: Dictionary = {
 	"tutorialDesignedLevel": {"tutorial_level": 1, "timeline": 1},

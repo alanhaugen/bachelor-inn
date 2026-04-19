@@ -7,4 +7,8 @@ script = ExtResource("1_v5vr7")
 skill_id = "melee_sweep"
 skill_name = "melee sweep"
 tooltip = "Attacks in an arc, hitting all enemies in the path."
+effect_mods = {
+&"damage": 3
+}
+max_range = 1
 metadata/_custom_type_script = "uid://c3p07am3ababr"

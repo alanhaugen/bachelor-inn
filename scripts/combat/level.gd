@@ -258,7 +258,8 @@ func _on_turn_transition_finished(_anim_name: StringName) -> void:
 		var first : Character = get_selectable_characters().front()
 		if first != null:
 			camera_controller.set_pivot_target_translate(first.position)
-			#select_unit(first)
+			if not Tutorial.in_tutorial:
+				select_unit(first)
 
 
 func get_grid_cell_from_mouse() -> Vector3i:
@@ -1502,7 +1503,9 @@ func _process_old(delta: float) -> void:
 		if (moves_stack.is_empty()):
 			state = States.PLAYING
 			movement_map.clear()
-			CheckTriggerConditions() ## 
+			CheckTriggerConditions() ##
+			## TODO: Implement function below
+			#Tutorial.tutorial_check_unit_position_to_trigger()
 			
 			if (is_player_turn == false):
 				## END OF ROUND - RESET POINT
