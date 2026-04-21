@@ -283,6 +283,10 @@ transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4
 visible = true
 no_depth_test = false
 
+[node name="BattleLog" parent="." index="9" unique_id=840436049]
+text = "Objective: Find the orb
+"
+
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.670338, 2.7036004, 2.237699)
 visible = true

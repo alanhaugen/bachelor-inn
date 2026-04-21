@@ -49,7 +49,7 @@ data = {
 visible = true
 
 [node name="BattleLog" parent="." index="9" unique_id=840436049]
-text = "Objective: Walk adjacent to the Orb
+text = "Objective: Find out who is talking
 "
 
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]

@@ -87,7 +87,7 @@ const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
 #var in_game_ui: Control
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
-const CHEST = preload("res://scenes/grid_items/chest.tscn")
+const CHEST_SCENE = preload("res://scenes/grid_items/chest.tscn")
 const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const PLAYER: PackedScene = preload("res://scenes/Characters/alfred.tscn"); ## TODO:
 const EMIL: PackedScene = preload("res://scenes/Characters/Emil.tscn")
@@ -105,7 +105,8 @@ const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
 var patrol_paths: Dictionary[String, PatrolPath] = {}
-var chests: Dictionary[Vector3i, Chest] = {}
+#var chests: Dictionary[Vector3i, Chest] = {}
+var chests: Dictionary = {}
 var pending_chest_weapon: Weapon = null
 var neutral_units: Dictionary[Vector3i, NeutralUnit] = {}
 var neutral_spawn_index: int = 0 ## placeholder var for iterating over netural spawn nodes
@@ -851,7 +852,7 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.data.unit_name = neutral_name
 
 		"02_Chest":
-			var chest := CHEST.instantiate()
+			var chest := CHEST_SCENE.instantiate()
 			chest.position = grid_to_world(pos)
 			add_child(chest)
 		
@@ -1148,7 +1149,7 @@ func CheckTriggerConditions() -> void:
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "02_Trigger2":
 				_on_chest_opened(pos)
-				print("Player Unit moved to interact event tile. A window should appear now.");
+				print("Player Unit moved to 02_Trigger tile. A loot window should appear now.");
 			elif get_trigger_name(pos) == "03_Trigger3":
 				if triggered_positions.has(pos):
 					continue
@@ -1168,9 +1169,12 @@ func CheckTriggerConditions() -> void:
 			]
 			for adj : Vector3i in adjacent:
 				if get_trigger_name(adj) == "02_Chest":
-					if triggered_positions.has(adj):
+					var c : Chest = chests.get(adj, null)
+					if c == null or c.is_looted or c.is_opened:
 						continue
-					triggered_positions.append(adj)
+					#if triggered_positions.has(adj):
+						#continue
+					#triggered_positions.append(adj)
 					_on_chest_opened(adj)
 
 func CheckVictoryConditions() -> void:
@@ -1805,18 +1809,18 @@ func _register_chests() -> void:
 
 
 func _on_chest_opened(pos: Vector3i) -> void:
-	print("on_chest_opened() triggered.")
-	var chest: Chest = chests.get(pos, null)
-	if chest == null:
+	#print("on_chest_opened() triggered.")
+	var c: Chest = chests.get(pos, null)
+	if c == null or c.is_looted:
 		push_error("No chest found at: " + str(pos))
 		return
-	if chest.is_opened:
+	if c.is_opened:
 		return
-	chest.is_opened = true
+	c.is_opened = true
 	
-	var new_weapon : Weapon = WeaponRegistry.get_weapon(chest.weapon_id)
+	var new_weapon : Weapon = WeaponRegistry.get_weapon(c.weapon_id)
 	if new_weapon == null:
-		push_error(chest.weapon_id + " Weapon in chest not found.")
+		push_error(c.weapon_id + " Weapon in chest not found.")
 		return
 	else:
 		print("New weapon is: " + new_weapon.weapon_name)
@@ -1824,7 +1828,7 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	is_in_menu = true
 	print("loot_popup: ", loot_popup)
 	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
-	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
+	loot_popup.show_loot(current_weapon, new_weapon, selected_unit, c)
 	is_in_menu = true
 	has_window_open = true
 	
