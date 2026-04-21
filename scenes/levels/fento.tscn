@@ -22,13 +22,14 @@ data = {
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(65535, 65534, 1441792, 65534, 65534, 1441792, 65535, 65535, 1441792, 65534, 0, 1441792, 65535, 0, 1441792, 65531, 65528, 1441797, 65531, 5, 1441796, 8, 2, 851973, 7, 5, 851972, 9, 5, 851973, 7, 65530, 851973, 3, 65528, 851972, 65530, 4, 4)
+"cells": PackedInt32Array(65535, 65534, 1441792, 65534, 65534, 1441792, 65535, 65535, 1441792, 65534, 0, 1441792, 65535, 0, 1441792, 2, 65533, 4, 1, 65533, 5, 2, 65534, 5)
 }
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 data = {
 "cells": PackedInt32Array(131068, 65534, 1, 131068, 65535, 1)
 }
+metadata/_editor_floor_ = Vector3(0, 2, 0)
 
 [node name="MovementOverlay" parent="." index="4" unique_id=1093741866]
 data = {

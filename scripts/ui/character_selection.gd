@@ -56,6 +56,8 @@ func _update_display() -> void:
 		base_data.endurance,
 		base_data.focus,
 	]
+	
+	start_adventure.text = "Start adventure with " + base_data.unit_name + "." 
 
 func _on_left_arrow_button_pressed() -> void:
 	current_index = (current_index - 1 + character_ids.size()) % character_ids.size()

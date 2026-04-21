@@ -80,6 +80,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 text = "DESCRIPTION"
+autowrap_mode = 2
 
 [node name="Stats1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1374693118]
 unique_name_in_owner = true
@@ -109,6 +110,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 text = "DESCRIPTION"
+autowrap_mode = 2
 
 [node name="Stats2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1614006537]
 unique_name_in_owner = true
@@ -138,6 +140,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 text = "DESCRIPTION"
+autowrap_mode = 2
 
 [node name="Stats3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=501378406]
 unique_name_in_owner = true
