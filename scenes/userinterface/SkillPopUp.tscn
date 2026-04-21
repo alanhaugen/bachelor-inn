@@ -4,6 +4,8 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_44yp1"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2knsk"]
+
 [node name="SkillPopUp" type="Control" unique_id=403461182]
 layout_mode = 3
 anchors_preset = 15
@@ -62,6 +64,11 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_44yp1")
 [node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1117110253]
 layout_mode = 2
 
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1548174887]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_2knsk")
+
 [node name="SkillCard1" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=35333382]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -70,6 +77,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "SKILLNAME"
+horizontal_alignment = 1
 
 [node name="TextureRect1" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=2053827073]
 unique_name_in_owner = true
@@ -78,12 +86,14 @@ stretch_mode = 5
 
 [node name="Description1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1869282413]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "DESCRIPTION"
 autowrap_mode = 2
 
 [node name="Stats1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1374693118]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "STATS"
 
@@ -100,6 +110,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "SKILLNAME"
+horizontal_alignment = 1
 
 [node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=380021807]
 unique_name_in_owner = true
@@ -108,12 +119,14 @@ stretch_mode = 5
 
 [node name="Description2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1649138410]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "DESCRIPTION"
 autowrap_mode = 2
 
 [node name="Stats2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1614006537]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "STATS"
 
@@ -130,6 +143,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "SKILLNAME"
+horizontal_alignment = 1
 
 [node name="TextureRect3" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=235189161]
 unique_name_in_owner = true
@@ -138,12 +152,14 @@ stretch_mode = 5
 
 [node name="Description3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=1893630083]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 text = "DESCRIPTION"
 autowrap_mode = 2
 
 [node name="Stats3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=501378406]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 300)
 layout_mode = 2
 text = "STATS"
 
@@ -151,6 +167,11 @@ text = "STATS"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Choose"
+
+[node name="HSeparator3" type="HSeparator" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=610461957]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_2knsk")
 
 [node name="HSeparator2" type="HSeparator" parent="PanelContainer/VBoxContainer" unique_id=1609507919]
 custom_minimum_size = Vector2(0, 10)

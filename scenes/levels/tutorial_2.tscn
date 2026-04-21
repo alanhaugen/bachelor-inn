@@ -42,7 +42,9 @@ metadata/_editor_floor_ = Vector3(0, 0, 0)
 metadata/_editor_floor_ = Vector3(0, 1, 0)
 
 [node name="BattleLog" parent="." index="9" unique_id=840436049]
-text = "Objective: Walk on the chest, then defeat  the enemy
+custom_minimum_size = Vector2(400, 0)
+theme_override_font_sizes/font_size = 24
+text = "Objective: Find the two chests and defeat the enemy.
 "
 
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
