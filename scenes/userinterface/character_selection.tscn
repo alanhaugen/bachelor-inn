@@ -119,6 +119,7 @@ text = "FLAVOR TEXT is flavorful. There are many
 different flavors, but this one is mine. 
 Without my flavor, I am nothing. 
 My flavor is nothing without me. "
+autowrap_mode = 2
 
 [node name="HSeparator4" type="HSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=689658705]
 custom_minimum_size = Vector2(0, 25)
@@ -140,18 +141,6 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_4pm5x")
 [node name="HBoxContainerSTAT1" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1736605543]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-
-[node name="StatNameSTR" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainerSTAT1" unique_id=1831675830]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
-text = "STRENGTH"
-
-[node name="StatValueSTR" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainerSTAT1" unique_id=1578448164]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
-text = "VALUE"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=875288257]
 layout_mode = 2

@@ -33,16 +33,28 @@ func _update_display() -> void:
 		push_error("No definition found for: " + id + ".")
 		return
 	
-	#portrait.texture = char_def.base_data.portrait if char_def.base_data.has("portrait") else null
-	portrait.texture = placeholder_portrait
+	## TODO: Portraits can be swapped out with 3D models in idle animation
+	##       if we use SubViewportContainer
+	var character := char_def.scene.instantiate()
+	portrait.texture = character.portrait if character.portrait != null else null
+	character.queue_free()
+	var base_data := char_def.base_data
+	var base_state := char_def.base_state
+	var resistance : int = 4 + floor(base_data.focus / 2.0) + floor(base_data.endurance / 2.0)
+	var max_hp : int = int(4 + base_data.endurance + floor(base_data.strength / 2.0))
+	var max_sanity : int = int(resistance + base_data.mind)
+	
 	character_name.text = char_def.base_data.unit_name
 	character_flavor_text.text = character_flavor.get(id, "")
-	stats_label.text = "STRENGTH: %d\nMIND: %d\nSPEED: %d\nENDURANCE: %d\nFOCUS: %d" % [
-		char_def.base_data.strength,
-		char_def.base_data.mind,
-		char_def.base_data.speed,
-		char_def.base_data.endurance,
-		char_def.base_data.focus,
+	stats_label.text = "HEATLTH: %d\nSANITY: %d\nRESISTANCE: %d\nSTRENGTH: %d\nMIND: %d\nSPEED: %d\nENDURANCE: %d\nFOCUS: %d" % [
+		max_hp,
+		max_sanity,
+		resistance,
+		base_data.strength,
+		base_data.mind,
+		base_data.speed,
+		base_data.endurance,
+		base_data.focus,
 	]
 
 func _on_left_arrow_button_pressed() -> void:
