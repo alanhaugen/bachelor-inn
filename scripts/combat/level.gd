@@ -37,7 +37,8 @@ var movement_weights_grid : Grid
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
 @onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
-@onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
+@onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png") #
+@onready var cursor_wand : Texture2D = preload("res://art/textures/cursor_wand.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
 @onready var cursor: Sprite3D = $Cursor
@@ -540,6 +541,7 @@ func select_unit(unit: Character) -> void:
 
 func _handle_player_click(pos: Vector3i) -> void:
 	if is_choosing_skill_target:
+		_exit_skill_target_mode()
 		return
 	
 	unit_pos = pos
@@ -589,6 +591,7 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 func _clear_selection() -> void:
 	emit_signal("character_deselected")
 	emit_signal("enemy_deselected")
+	_exit_skill_target_mode()
 	movement_map.clear()
 	path_map.clear()
 	selected_unit = null
@@ -1374,6 +1377,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 
 
 func _exit_skill_target_mode() -> void:
+	Input.set_custom_mouse_cursor(null)
 	var caster := skill_caster
 	is_choosing_skill_target = false
 	active_skill = null
@@ -1695,8 +1699,14 @@ func _update_cursor_on_hover() -> void:
 		return
 	_last_hovered_pos = grid_pos
 	
+	if is_choosing_skill_target:
+		if valid_skill_target_tiles.has(grid_pos):
+			Input.set_custom_mouse_cursor(cursor_wand, Input.CURSOR_ARROW, Vector2(8, 8))
+		else:
+			Input.set_custom_mouse_cursor(null)
+		return
+	
 	var cell := movement_map.get_cell_item(grid_pos)
-	#print("cell value: ", cell, " ATTACK: ", GridTile.Type.ATTACK, " INTERACT: ", GridTile.Type.INTERACT)
 	var cell_name := movement_map.mesh_library.get_item_name(cell) if cell != GridMap.INVALID_CELL_ITEM else ""
 	if cell_name == "Gohere":
 		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
