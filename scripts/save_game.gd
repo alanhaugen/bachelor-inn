@@ -228,24 +228,32 @@ func load_tutorial() -> void:
 	Main.current_save_slot = TUTORIAL_SAVE_SLOT
 	Main.characters.clear()
 	
-	for id: String in registry.characters.keys():
-		var chardef : CharacterDefinition = registry.characters[id]
-		if chardef == null:
-			continue
-		var character := chardef.scene.instantiate()
-		character.data = chardef.base_data.duplicate()
-		character.state = chardef.base_state.duplicate()
-		Main.characters.append(character)
+	var chosen_char_id := Main.selected_starting_character
+	var chardef : CharacterDefinition = registry.characters.get(chosen_char_id, null)
+	if chardef == null:
+		push_error("No definition found for " + chosen_char_id + ".")
+		return
+	
+	#for id: String in registry.characters.keys():
+		#var chardef : CharacterDefinition = registry.characters[id]
+		
+	var character := chardef.scene.instantiate()
+	character.data = chardef.base_data.duplicate()
+	character.state = chardef.base_state.duplicate()
+	Main.characters.append(character)
+	
+	Main.current_level_name = "tutorialDesignedLevel"
+	Main.load_level("tutorialDesignedLevel")
 	
 	#Main.current_level_name = "tutorialDesignedLevel"
-	var level := Main.current_level_name if Main.current_level_name != "" else "tutorialDesignedLevel"
-	
-	var start_info: Dictionary = Tutorial.tutorial_level_start.get(level, {})
-	if not start_info.is_empty():
-		Tutorial.current_tutorial_level = start_info["tutorial_level"]
-		Tutorial.current_timeline = start_info["timeline"]
-		Tutorial.in_tutorial = true
-	Main.load_level(level)
+	#var level := Main.current_level_name if Main.current_level_name != "" else "tutorialDesignedLevel"
+	#
+	#var start_info: Dictionary = Tutorial.tutorial_level_start.get(level, {})
+	#if not start_info.is_empty():
+		#Tutorial.current_tutorial_level = start_info["tutorial_level"]
+		#Tutorial.current_timeline = start_info["timeline"]
+		#Tutorial.in_tutorial = true
+	#Main.load_level(level)
 
 
 func save_progress(save_slot: int, level_index: int) -> void:

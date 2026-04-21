@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="1_x7ja3"]
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_yq722"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_wyhbc"]
-[ext_resource type="Resource" uid="uid://ehboxt8aboe7" path="res://Data/Weapons/sword_elite.tres" id="4_x7ja3"]
+[ext_resource type="Resource" uid="uid://bde3fwobbck4h" path="res://Data/Weapons/unarmed.tres" id="4_x7ja3"]
 [ext_resource type="PackedScene" uid="uid://b10bf6hwaqddg" path="res://scenes/Characters/alfred.tscn" id="5_24i4n"]
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="6_gimyl"]
 

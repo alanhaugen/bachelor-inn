@@ -16,6 +16,7 @@ var current_level_name: String = ""
 var world: Node3D;
 
 ## Character Units held by the gaming session 
+var selected_starting_character: String = "alfred" ## Default as alfred, if something goes wrong. 
 var characters: Array[Character];
 
 ## All levels
