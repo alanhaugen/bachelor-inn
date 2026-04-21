@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://bwui6tij3fb4i" path="res://art/textures/Alphred_portrait_500percentsize.png" id="1_px1q0"]
 [ext_resource type="Script" uid="uid://chmkrem6yccij" path="res://scripts/ui/character_selection.gd" id="1_yjhtr"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fujwu"]
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jvlu7"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yjhtr"]
@@ -75,6 +77,7 @@ size_flags_vertical = 3
 [node name="VSeparator" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainerPortrait" unique_id=801630711]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_fujwu")
 
 [node name="Portrait" type="TextureRect" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainerPortrait" unique_id=1903134975]
 unique_name_in_owner = true

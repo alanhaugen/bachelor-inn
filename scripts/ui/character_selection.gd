@@ -9,6 +9,8 @@ class_name CharacterSelection
 @onready var start_adventure: Button = %StartAdventure
 @onready var stats_label: Label = %StatsLabel
 
+var placeholder_portrait : Texture2D = preload("res://art/textures/Alphred_portrait_500percentsize.png")
+
 var character_ids: Array[String] = ["alfred", "emil", "lucy"]
 var current_index: int = 0
 
@@ -31,7 +33,8 @@ func _update_display() -> void:
 		push_error("No definition found for: " + id + ".")
 		return
 	
-	portrait.texture = char_def.base_data.portrait if char_def.base_data.has("portrait") else null
+	#portrait.texture = char_def.base_data.portrait if char_def.base_data.has("portrait") else null
+	portrait.texture = placeholder_portrait
 	character_name.text = char_def.base_data.unit_name
 	character_flavor_text.text = character_flavor.get(id, "")
 	stats_label.text = "STRENGTH: %d\nMIND: %d\nSPEED: %d\nENDURANCE: %d\nFOCUS: %d" % [

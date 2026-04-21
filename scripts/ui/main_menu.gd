@@ -81,7 +81,10 @@ func _on_back_button_credits_pressed() -> void:
 func _on_start_tutorial_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
-	Main.save.load_tutorial();
+	#Main.save.load_tutorial();
+	var packed := load("res://scenes/userinterface/character_selection.tscn")
+	var select_screen : Control = packed.instantiate()
+	get_tree().root.add_child(select_screen)
 
 
 func _on_start_new_game_pressed() -> void:

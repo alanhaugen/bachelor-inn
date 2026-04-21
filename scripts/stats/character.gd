@@ -14,6 +14,7 @@ class_name Character
 
 @export_category("UI")
 @export var portrait : Texture2D
+@export var portrait_big : Texture2D
 
 @export_category("Model")
 @export var data : CharacterData
