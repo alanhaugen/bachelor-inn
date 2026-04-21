@@ -2,8 +2,4 @@ do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: The monster is still chasing you!  Better find a place to hide! Seek refuge in the ruins up head.
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_highlight_tile(17, 0, 3)
-do Tutorial.tutorial_highlight_tile(16, 0, 3)
-do Tutorial.tutorial_highlight_tile(15, 0, 3)
-do Tutorial.tutorial_highlight_tile(14, 0, 3)
-do Tutorial.tutorial_highlight_tile(13, 0, 3)
 [end_timeline]

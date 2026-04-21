@@ -15,9 +15,9 @@ var character_ids: Array[String] = ["alfred", "emil", "lucy"]
 var current_index: int = 0
 
 var character_flavor: Dictionary = {
-	"alfred": "A seasoned fighter who survived the collapse alone. Stubborn, capable, and tired.",
-	"emil": "A scholar who lost everything to the turning. He carries knowledge no one else remembers.",
-	"lucy": "Swift and quiet. She has been surviving on her own from before it all begun."
+	"alfred": "A scholar who lost everything to the turning. He carries knowledge no one else remembers.",
+	"emil": "Swift and quiet. He has been surviving on his own from before it all begun.",
+	"lucy": "A seasoned fighter who survived the collapse alone. Stubborn and capable."
 }
 
 func _ready() -> void:

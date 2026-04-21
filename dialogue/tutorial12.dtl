@@ -21,7 +21,7 @@ Lucy: " I trust you. What about you, Emil? "
 do Tutorial.tutorial_show_portrait("emil", "left")
 Emil: " Yeah, me too. "\
 \
-"Join us? " Ps. Im a ghost in this current state.
+"Join us? "
 do Tutorial.tutorial_set_select_unit_advances_timeline()
 [signal arg="recruit_neutral"]
 do Tutorial.tutorial_show_portrait("narrator", "left")

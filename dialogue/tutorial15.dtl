@@ -1,7 +1,9 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: * Inside you see some makeshift beds with hey. *
+narrator: The night is upon you and the adenturers show you the inside of the barn.
+narrator: * You see some makeshift beds with hey. *
 do Tutorial.tutorial_show_portrait("alfred", "left")
 Alfred: * The best bedding I have had in a good while *, you think to yourself.
+Alfred: Good night, everyone.
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_complete()
 [end_timeline]

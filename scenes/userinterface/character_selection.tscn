@@ -113,6 +113,7 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_yjhtr")
 
 [node name="CharacterFlavorText" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=303226282]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "FLAVOR TEXT is flavorful. There are many 
