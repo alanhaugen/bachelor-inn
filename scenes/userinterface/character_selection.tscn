@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://d4g4bvcmd7qs4"]
+
+[ext_resource type="Texture2D" uid="uid://bwui6tij3fb4i" path="res://art/textures/Alphred_portrait_500percentsize.png" id="1_px1q0"]
+[ext_resource type="Script" uid="uid://chmkrem6yccij" path="res://scripts/ui/character_selection.gd" id="1_yjhtr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jvlu7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yjhtr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4pm5x"]
+
+[node name="CharacterSelection" type="Control" unique_id=1017749569]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yjhtr")
+
+[node name="Background" type="ColorRect" parent="." unique_id=2113020204]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.10747976, 0.10747973, 0.10747973, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=2125183468]
+custom_minimum_size = Vector2(1200, 800)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=2052604000]
+custom_minimum_size = Vector2(1400, 800)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer" unique_id=339934765]
+layout_mode = 2
+
+[node name="LeftArrowButton" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=237842717]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 48
+text = "<--"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=740102971]
+custom_minimum_size = Vector2(1200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=1877850887]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "CHOOSE YOUR STARTING CHARACTER"
+horizontal_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=429141665]
+clip_contents = true
+custom_minimum_size = Vector2(0, 700)
+layout_mode = 2
+
+[node name="HBoxContainerPortrait" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=322014383]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VSeparator" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainerPortrait" unique_id=801630711]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="Portrait" type="TextureRect" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainerPortrait" unique_id=1903134975]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_px1q0")
+stretch_mode = 5
+
+[node name="VSeparator2" type="VSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/HBoxContainerPortrait" unique_id=1938195779]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jvlu7")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=366253073]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=2009028832]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_yjhtr")
+
+[node name="CharacterName" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1077952491]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "CHARACTER NAME"
+
+[node name="HSeparator3" type="HSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=526320145]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_yjhtr")
+
+[node name="CharacterFlavorText" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=303226282]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "FLAVOR TEXT is flavorful. There are many 
+different flavors, but this one is mine. 
+Without my flavor, I am nothing. 
+My flavor is nothing without me. "
+
+[node name="HSeparator4" type="HSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=689658705]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_yjhtr")
+
+[node name="StatsLabel" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1287931519]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "STATSLABEL
+"
+
+[node name="HSeparator2" type="HSeparator" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=2054971227]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_4pm5x")
+
+[node name="HBoxContainerSTAT1" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer" unique_id=1736605543]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="StatNameSTR" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainerSTAT1" unique_id=1831675830]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "STRENGTH"
+
+[node name="StatValueSTR" type="Label" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/HBoxContainer2/VBoxContainer/HBoxContainerSTAT1" unique_id=1578448164]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "VALUE"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=875288257]
+layout_mode = 2
+
+[node name="StartAdventure" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer" unique_id=1004753921]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "START ADVENTURE"
+
+[node name="RightArrowButton" type="Button" parent="CenterContainer/PanelContainer/HBoxContainer" unique_id=1911808291]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 48
+text = "-->"
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/HBoxContainer/LeftArrowButton" to="." method="_on_left_arrow_button_pressed"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/HBoxContainer/VBoxContainer/StartAdventure" to="." method="_on_start_adventure_pressed"]
+[connection signal="pressed" from="CenterContainer/PanelContainer/HBoxContainer/RightArrowButton" to="." method="_on_right_arrow_button_pressed"]
