@@ -55,9 +55,13 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 #@onready var portrait_pop_up: PortraitPopup = $PortraitPopUp
 #@onready var loot_popup : LootPopup = $LootPopUp
+#@onready var skill_pop_up: SkillPopup = $SkillPopUp
+@onready var skill_popup: SkillPopup = get_tree().get_first_node_in_group("skill_pop_up")
 var portrait_pop_up: PortraitPopup
 var loot_popup : LootPopup
+var skill_loot_popup : SkillPopup
 var pause_menu: PauseMenu
+
 
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
@@ -97,7 +101,8 @@ const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.t
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
 const PORTRAIT_POPUP = preload("res://scenes/userinterface/PortraitPopUp.tscn")
-const LOOT_POP_UP = preload("uid://bge25dwwd4pbs")
+const LOOT_POP_UP = preload("res://scenes/userinterface/LootPopUp.tscn")
+const SKILL_POP_UP = preload("res://scenes/userinterface/SkillPopUp.tscn")
 const GAME_OVER = preload("res://scenes/states/game_over.tscn")
 var game_over_screen: Control
 const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
@@ -779,6 +784,10 @@ func _ready() -> void:
 	loot_popup = LOOT_POP_UP.instantiate()
 	loot_popup.hide()
 	add_child(loot_popup)
+	
+	skill_loot_popup = SKILL_POP_UP.instantiate()
+	skill_loot_popup.hide()
+	add_child(skill_loot_popup)
 	
 	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
 	var pause_menu_layer := CanvasLayer.new()
@@ -1812,26 +1821,44 @@ func _register_chests() -> void:
 func _on_chest_opened(pos: Vector3i) -> void:
 	#print("on_chest_opened() triggered.")
 	var c: Chest = chests.get(pos, null)
-	if c == null or c.is_looted:
+	if c == null:
 		push_error("No chest found at: " + str(pos))
 		return
-	if c.is_opened:
+	if c.is_opened or c.is_looted:
 		return
 	c.is_opened = true
 	
-	var new_weapon : Weapon = WeaponRegistry.get_weapon(c.weapon_id)
-	if new_weapon == null:
-		push_error(c.weapon_id + " Weapon in chest not found.")
-		return
-	else:
-		print("New weapon is: " + new_weapon.weapon_name)
+	match c.loot_type:
+		Chest.LootType.WEAPON:
+			var new_weapon : Weapon = WeaponRegistry.get_weapon(c.weapon_id)
+			if new_weapon == null:
+				push_error(c.weapon_id + " Weapon in chest not found.")
+				return
+			else:
+				#print("New weapon is: " + new_weapon.weapon_name)
+				#print("loot_popup: ", loot_popup)
+				var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
+				is_in_menu = true
+				has_window_open = true
+				loot_popup.show_loot(current_weapon, new_weapon, selected_unit, c)
+		Chest.LootType.SKILL:
+			## TODO: For random skills, we need to add a "get_all_skills()" function to SkillRegistry. 
+			var new_skills : Array[Skill] = [] #SkillRegistry.get_skill(c.skill_id)
+			for id : String in [c.skill_id_1, c.skill_id_2, c.skill_id_3]:
+				if id != "":
+					var skill := SkillRegistry.get_skill(id)
+					if skill != null:
+						new_skills.append(skill)
+			is_in_menu = true
+			has_window_open = true
+			skill_loot_popup.show_skill_loot(new_skills, selected_unit, c)
 	
-	is_in_menu = true
-	print("loot_popup: ", loot_popup)
-	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
-	loot_popup.show_loot(current_weapon, new_weapon, selected_unit, c)
-	is_in_menu = true
-	has_window_open = true
+	#is_in_menu = true
+	#print("loot_popup: ", loot_popup)
+	#var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
+	#loot_popup.show_loot(current_weapon, new_weapon, selected_unit, c)
+	#is_in_menu = true
+	#has_window_open = true
 	
 	if Tutorial.in_tutorial and Tutorial.chest_open == false:
 		Tutorial.chest_open = true

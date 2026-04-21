@@ -1,0 +1,165 @@
+[gd_scene format=3 uid="uid://dfpe4abv63jnd"]
+
+[ext_resource type="Script" uid="uid://cpkt5mpx71knc" path="res://scripts/ui/skill_pop_up.gd" id="1_2knsk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_44yp1"]
+
+[node name="SkillPopUp" type="Control" unique_id=403461182]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+script = ExtResource("1_2knsk")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1712044756]
+custom_minimum_size = Vector2(700, 700)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.8646751, 0.86467516, 0.8646751, 0.8392157)
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=852827206]
+custom_minimum_size = Vector2(650, 650)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1954726097]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="PanelContainer/VBoxContainer" unique_id=238080412]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "CHOOSE A SKILL"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer" unique_id=1712498650]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_44yp1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=1117110253]
+layout_mode = 2
+
+[node name="SkillCard1" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=35333382]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillName1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1085878027]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SKILLNAME"
+
+[node name="TextureRect1" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=2053827073]
+unique_name_in_owner = true
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Description1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1869282413]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DESCRIPTION"
+
+[node name="Stats1" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=1374693118]
+unique_name_in_owner = true
+layout_mode = 2
+text = "STATS"
+
+[node name="SelectButton1" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1" unique_id=982130949]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose"
+
+[node name="SkillCard2" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=370318515]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillName2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1840982571]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SKILLNAME"
+
+[node name="TextureRect2" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=380021807]
+unique_name_in_owner = true
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Description2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1649138410]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DESCRIPTION"
+
+[node name="Stats2" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=1614006537]
+unique_name_in_owner = true
+layout_mode = 2
+text = "STATS"
+
+[node name="SelectButton2" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2" unique_id=485641859]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose"
+
+[node name="SkillCard3" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=117930571]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkillName3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=294559527]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SKILLNAME"
+
+[node name="TextureRect3" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=235189161]
+unique_name_in_owner = true
+layout_mode = 2
+stretch_mode = 5
+
+[node name="Description3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=1893630083]
+unique_name_in_owner = true
+layout_mode = 2
+text = "DESCRIPTION"
+
+[node name="Stats3" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=501378406]
+unique_name_in_owner = true
+layout_mode = 2
+text = "STATS"
+
+[node name="SelectButton3" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3" unique_id=740110548]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Choose"
+
+[node name="HSeparator2" type="HSeparator" parent="PanelContainer/VBoxContainer" unique_id=1609507919]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_44yp1")
+
+[node name="LeaveButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=201841171]
+unique_name_in_owner = true
+layout_mode = 2
+text = "LEAVE WITHOUT TAKING"
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/SkillCard1/SelectButton1" to="." method="_on_select_button_1_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/SkillCard2/SelectButton2" to="." method="_on_select_button_2_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/HBoxContainer/SkillCard3/SelectButton3" to="." method="_on_select_button_3_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/LeaveButton" to="." method="_on_leave_button_pressed"]

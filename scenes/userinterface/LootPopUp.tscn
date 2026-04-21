@@ -2,6 +2,12 @@
 
 [ext_resource type="Script" uid="uid://djombdk6htbts" path="res://scripts/ui/loot_popup.gd" id="1_ytmkd"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_hmsx3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jfb5y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ytmkd"]
+
 [node name="LootPopUp" type="Control" unique_id=294007816]
 layout_mode = 3
 anchors_preset = 15
@@ -12,7 +18,7 @@ grow_vertical = 2
 script = ExtResource("1_ytmkd")
 
 [node name="Background" type="ColorRect" parent="." unique_id=2033102932]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(700, 700)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -28,7 +34,7 @@ grow_vertical = 2
 color = Color(1, 1, 1, 0.45882353)
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=301894864]
-custom_minimum_size = Vector2(500, 500)
+custom_minimum_size = Vector2(650, 650)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -47,12 +53,14 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="Panel/VBoxContainer" unique_id=865477984]
 layout_mode = 2
+size_flags_vertical = 6
 theme_override_font_sizes/font_size = 72
 text = "LOOT"
 horizontal_alignment = 1
 
 [node name="CompareItems" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1989992204]
 layout_mode = 2
+size_flags_vertical = 6
 
 [node name="CurrentWeapon" type="VBoxContainer" parent="Panel/VBoxContainer/CompareItems" unique_id=1839376129]
 custom_minimum_size = Vector2(225, 300)
@@ -72,9 +80,11 @@ stretch_mode = 5
 
 [node name="CurrentWeaponName" type="Label" parent="Panel/VBoxContainer/CompareItems/CurrentWeapon" unique_id=526220253]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 43
 text = "CName"
+autowrap_mode = 2
 
 [node name="CurrentWeaponStats" type="Label" parent="Panel/VBoxContainer/CompareItems/CurrentWeapon" unique_id=1669549377]
 unique_name_in_owner = true
@@ -83,11 +93,21 @@ theme_override_font_sizes/font_size = 46
 text = "CStats
 "
 
+[node name="VSeparator" type="VSeparator" parent="Panel/VBoxContainer/CompareItems" unique_id=918095495]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_hmsx3")
+
 [node name="Arrow" type="Label" parent="Panel/VBoxContainer/CompareItems" unique_id=232573214]
 layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "-->"
 horizontal_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="Panel/VBoxContainer/CompareItems" unique_id=319386386]
+custom_minimum_size = Vector2(25, 0)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_jfb5y")
 
 [node name="NewWeapon" type="VBoxContainer" parent="Panel/VBoxContainer/CompareItems" unique_id=178338566]
 custom_minimum_size = Vector2(225, 300)
@@ -119,6 +139,7 @@ text = "N Stats"
 
 [node name="KeepDrop" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1997891580]
 layout_mode = 2
+size_flags_vertical = 10
 
 [node name="ButtonDiscard" type="Button" parent="Panel/VBoxContainer/KeepDrop" unique_id=1390675697]
 unique_name_in_owner = true
@@ -126,7 +147,7 @@ custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
-text = "Keep current"
+text = "Leave"
 
 [node name="ButtonKeep" type="Button" parent="Panel/VBoxContainer/KeepDrop" unique_id=1532762509]
 unique_name_in_owner = true
@@ -134,7 +155,12 @@ custom_minimum_size = Vector2(200, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 32
-text = "Take new"
+text = "Take"
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer" unique_id=561974524]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_ytmkd")
 
 [connection signal="pressed" from="Panel/VBoxContainer/KeepDrop/ButtonDiscard" to="." method="_on_button_discard_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/KeepDrop/ButtonKeep" to="." method="_on_button_keep_pressed"]

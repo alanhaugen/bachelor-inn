@@ -46,3 +46,6 @@ func get_skill(id: String) -> Skill:
 	
 	push_warning("SkillRegister: unknown skill_id found: '" + id + "'. Known: " + str(_by_id.keys()) + ". Returning NOTHING")
 	return S_NO_SKILL;
+
+func get_all_skills(id: String) -> Skill:
+	return 

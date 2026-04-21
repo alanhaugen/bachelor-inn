@@ -12,6 +12,7 @@ class_name LootPopup
 @onready var button_discard: Button = $Panel/VBoxContainer/KeepDrop/ButtonDiscard
 @onready var button_keep : Button = $Panel/VBoxContainer/KeepDrop/ButtonKeep
 
+const placeholder = preload("res://art/textures/cursor_hand.png")
 
 var _current_weapon: Weapon = null
 var _new_weapon: Weapon = null
@@ -40,7 +41,7 @@ weapon: Weapon) -> void:
 		stats_label.text = ""
 		return
 	
-	icon.texture = weapon.weapon_icon if weapon.weapon_icon != null else null
+	icon.texture = weapon.weapon_icon if weapon.weapon_icon != null else placeholder
 	name_label.text = weapon.weapon_name if weapon.weapon_name != "" else "Unknown"
 	stats_label.text = "DMG: %+d\nRNG: %d-%d\nCRIT: %d" % [
 		weapon.damage_modifier,

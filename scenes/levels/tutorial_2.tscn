@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/LootPopUp.tscn" id="4_131pe"]
 [ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="8_mqfpd"]
 [ext_resource type="PackedScene" uid="uid://d00tnaxafw4ia" path="res://scenes/states/game_over.tscn" id="9_h66jy"]
+[ext_resource type="PackedScene" uid="uid://dfpe4abv63jnd" path="res://scenes/userinterface/SkillPopUp.tscn" id="9_htkxo"]
 
 [node name="Map3d2" unique_id=656823534 instance=ExtResource("1_nhemk")]
 
@@ -33,7 +34,7 @@ metadata/_editor_floor_ = Vector3(0, 1, 0)
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 data = {
-"cells": PackedInt32Array(6, 1, 1376258, 11, 7, 1441795, 65547, 7, 1048576, 10, 7, 3, 9, 7, 3)
+"cells": PackedInt32Array(6, 1, 1376258, 11, 7, 1441795, 65547, 7, 1048576, 10, 7, 3, 9, 7, 3, 3, 8, 2)
 }
 metadata/_editor_floor_ = Vector3(0, 0, 0)
 
@@ -96,7 +97,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 20)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, 4)
 
 [node name="Chest" parent="." index="19" unique_id=903149754 instance=ExtResource("3_mjh77")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.022412, 0.5625, 3.190421)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.022412, 0.585134, 3.190421)
 weapon_id = "sword_advanced"
 
 [node name="PortraitPopUp" parent="." index="20" unique_id=1108238431 instance=ExtResource("8_mqfpd")]
@@ -105,5 +106,16 @@ unique_name_in_owner = true
 [node name="LootPopUp" parent="." index="21" unique_id=294007816 instance=ExtResource("4_131pe")]
 visible = false
 
-[node name="GameOver" parent="." index="22" unique_id=997112840 instance=ExtResource("9_h66jy")]
+[node name="SkillPopUp" parent="." index="22" unique_id=403461182 instance=ExtResource("9_htkxo")]
 visible = false
+
+[node name="GameOver" parent="." index="23" unique_id=997112840 instance=ExtResource("9_h66jy")]
+visible = false
+
+[node name="Chest2" parent="." index="24" unique_id=1216966092 instance=ExtResource("3_mjh77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.976801, 0.48955894, 16.879084)
+loot_type = 1
+skill_id_1 = "defence_basic"
+skill_id_2 = "fireball_basic"
+skill_id_3 = "haste_basic"
+dialogue_timeline = ""
