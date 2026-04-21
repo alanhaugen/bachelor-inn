@@ -1148,6 +1148,8 @@ func CheckTriggerConditions() -> void:
 		var pos :Vector3i = units[i];
 		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
 			if get_trigger_name(pos) == "02_Trigger2":
+				if not selected_unit or not selected_unit.state.is_moved:
+					continue
 				_on_chest_opened(pos)
 				print("Player Unit moved to 02_Trigger tile. A loot window should appear now.");
 			elif get_trigger_name(pos) == "03_Trigger3":
@@ -1172,9 +1174,8 @@ func CheckTriggerConditions() -> void:
 					var c : Chest = chests.get(adj, null)
 					if c == null or c.is_looted or c.is_opened:
 						continue
-					#if triggered_positions.has(adj):
-						#continue
-					#triggered_positions.append(adj)
+					if not selected_unit or not selected_unit.state.is_moved:
+						continue
 					_on_chest_opened(adj)
 
 func CheckVictoryConditions() -> void:
