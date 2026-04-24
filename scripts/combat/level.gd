@@ -872,6 +872,18 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.data = data
 			new_enemy.state = c_state
 			new_enemy.data.unit_name = neutral_name
+			if new_enemy.data.unit_name == "Lucy":
+				var weapon : Weapon = WeaponRegistry.get_weapon("sword_basic")
+				if weapon != null:
+					c_state.weapon = weapon
+				else:
+					push_error("sword_basic not found in WeaponRegistry")
+			elif new_enemy.data.unit_name == "Emil":
+				var weapon : Weapon = WeaponRegistry.get_weapon("bow_basic")
+				if weapon != null:
+					c_state.weapon = weapon
+				else:
+					push_error("sword_basic not found in WeaponRegistry")
 
 		"02_Chest":
 			var chest := CHEST_SCENE.instantiate()
