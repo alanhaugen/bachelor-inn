@@ -29,8 +29,9 @@ data = {
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.4, 0)
 data = {
-"cells": PackedInt32Array(262167, 65535, 0, 196631, 65535, 3, 20, 3, 3, 13, 1, 2)
+"cells": PackedInt32Array(20, 3, 3, 13, 1, 2, 196631, 0, 0, 196631, 65535, 0)
 }
+metadata/_editor_floor_ = Vector3(0, 3, 0)
 
 [node name="BattleLog" parent="." index="9" unique_id=840436049]
 text = "Objective: Find a way forward
