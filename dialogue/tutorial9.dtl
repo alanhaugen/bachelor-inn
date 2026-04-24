@@ -1,7 +1,9 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: A monser has noticed you!\
+narrator: A monser has noticed you!
+narrator: Different enemies have different aggro range.\
 \
-Time to fight!
+The bigger enemy, the bigger range.
+narrator: Time to fight!
 narrator: To preform an attack with your weapon\: \
 1. First click the enemy you want to attack,\
 2. then select the tile you want to attack from.\

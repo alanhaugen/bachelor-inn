@@ -404,7 +404,7 @@ func _update_cursor(pos: Vector3i) -> void:
 func _handle_skill(pos : Vector3i) -> void:
 	var used_skill : Skill = active_skill
 	# Normalize to same plane your maps/skills use
-	##TODO make _handle_skill use height
+	##TODO make _handle_skill use height. Fixed?
 	#var p := Vector3i(pos.x, 0, pos.z)
 	
 	var p : Vector3i = Vector3i(pos)
@@ -414,66 +414,78 @@ func _handle_skill(pos : Vector3i) -> void:
 			" in_valid=", valid_skill_target_tiles.has(p),
 			" target=", target)
 	
-	## check if exit skill
+	## checks to see if skills should be cancelled
 	var exit_skill : bool = false
 	if not valid_skill_target_tiles.has(p):
 		exit_skill = true
-	if target == null:
+	if target == null: ## TODO: Add AoE.none check here
 		exit_skill = true
 	if not _is_valid_target(target, used_skill, skill_caster):
 		exit_skill = true
-	if used_skill.uses_action && skill_caster.state.is_ability_used:
+	if used_skill.uses_action and skill_caster.state.is_ability_used:
 		exit_skill = true
-
 	if exit_skill:
 		_exit_skill_target_mode()
 		return
 	
-	## begin executing skill
+	## begin executing skill, flag caster as 'has used ability'
 	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
-	
-	## Take all the stuff and compile a list of the results as AttackResult! 
-	var result: AttackResult = AttackResult.new()
-	result.aggressor = skill_caster
-	result.victim = target
-	result.vfx_scene =  used_skill.Vfx_Scene
-	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"): 
-		result.damage = used_skill.effect_mods.get("damage", 0)
-	
-	
-	## TODO: fix crash here if used_skill is null
-	var used_action : bool = used_skill.uses_action
-	
 	var caster : Character = skill_caster
-	if used_action:
+	if used_skill.uses_action:
 		caster.state.is_ability_used = true
 		# cast a signal to Ribbon here to gray out ability bar
 		print("emitting ability_used signal")
 		emit_signal("ability_used")
 		emit_signal("character_stats_changed", skill_caster)
 		#print("Flag set, is_ability_used: ", caster.state.is_ability_used)
+		
+	## Take all the stuff and compile a list of the results as AttackResult! 
+	var result: AttackResult = AttackResult.new()
+	result.aggressor = skill_caster
+	result.victim = target if target != null else skill_caster
+	result.vfx_scene =  used_skill.Vfx_Scene
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"): 
+		result.damage = used_skill.effect_mods.get("damage", 0)
 	
-	if Tutorial.in_tutorial and used_skill.skill_id == "heal_basic":
-		Tutorial.heal_cast = true
-		Tutorial.can_advance_timeline = true
-		Tutorial.advance_timeline()
-	
+	## VFX - Show visual
 	print("Skill result - aggressor: ", result.aggressor)
 	print("Skill result - victim: ", result.victim)
 	print("Skill result - vfx_scene: ", result.vfx_scene)
 	print("Skill result - damage: ", result.damage)
 	await combat_vfx.play_skill(result)
 	
-	## Impact damage (Fireball)
-	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
-		target.apply_damage(int(used_skill.effect_mods["damage"]), false, skill_caster, used_skill.skill_name)
+	## TODO: fix crash here if used_skill is null
+	#var used_action : bool = used_skill.uses_action
+	
+	## AoE does not mean every spell cast is AoE, it just checks for AoE effects
+	var aoe_tiles := _get_aoe_tiles(p, used_skill)
+	for aoe_pos in aoe_tiles:
+		var aoe_target: Character = get_unit(aoe_pos)
+		if aoe_target == null: ## TODO: Change this if we want to be able to cast skills on ground.
+			continue
+		if not _is_valid_target(aoe_target, used_skill, skill_caster):
+			continue
+		
+		if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
+			aoe_target.apply_damage(int(used_skill.effect_mods["damage"]), false, skill_caster, used_skill.skill_name)
+		
+		## Apply after effects (DoT)
+		aoe_target.state.apply_skill_effect(used_skill)
+		emit_signal("character_stats_changed", target)
+	
+	## Apply effects like Impact damage from Fireball
+	
 	## DoT's
-	target.state.apply_skill_effect(used_skill)
-	emit_signal("character_stats_changed", target)
+	
+	
+	## To advance tutorial after casting heal
+	if Tutorial.in_tutorial and used_skill.skill_id == "heal_basic":
+		Tutorial.heal_cast = true
+		Tutorial.can_advance_timeline = true
+		Tutorial.advance_timeline()
 	
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
-	#CheckVictoryConditions()
 
 
 func _handle_attack_choice(pos: Vector3i) -> void:
@@ -854,13 +866,11 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			
 			neutral_spawn_index += 1
 			new_enemy = neutral_scene.instantiate()
-			#print("Lucy faction right after instantiate: ", new_enemy.state.faction)
 			var data := CharacterData.new()
 			var c_state := CharacterState.new()
 			c_state.faction = CharacterState.Faction.NEUTRAL
 			new_enemy.data = data
 			new_enemy.state = c_state
-			#print("Lucy faction after state assignment: ", new_enemy.state.faction)
 			new_enemy.data.unit_name = neutral_name
 
 		"02_Chest":
@@ -1014,20 +1024,21 @@ func MoveSingleAI() -> void:
 			continue
 		if not unit.state.is_enemy():
 			continue
+		#print("Enemy: ", unit.data.unit_name, " aggro: ", unit.state.aggro_state, " is_moved: ", unit.state.is_moved)
 		if unit.state.aggro_state != CharacterState.AggroState.FROZEN:
 			any_active_enemies = true
 			break
 	
 	if not any_active_enemies:
+		reset_all_units()
 		is_player_turn = true
 		is_animation_just_finished = true
-		reset_all_units()
-		check_aggro()
-		hide_inactive_characters()
+		#check_aggro() ## Was added for patrolling enemies, but it causes issues. 
+		#hide_inactive_characters()
 		camera_controller.free_camera()
 		#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
 			#camera_controller.set_pivot_target_translate(last_selected_unit.position)
-		#return
+		return
 	
 	var currentEnemy : Character = null
 	for unit in characters:
@@ -1046,85 +1057,84 @@ func MoveSingleAI() -> void:
 	match currentEnemy.state.aggro_state:
 		CharacterState.AggroState.FROZEN:
 			currentEnemy.state.is_moved = true
-			#MoveSingleAI()
 			call_deferred("MoveSingleAI")
 			return
-		CharacterState.AggroState.PATROL_RANDOM:
-			## TODO: Implement random patrol
-			var offsets := [Vector3i(1,0,0), Vector3i(0,1,0), Vector3i(0,0,1)]
-			offsets.shuffle()
-			var moved := false
-			for offset : Vector3i in offsets:
-				var target : Vector3i = currentEnemy.state.grid_position + offset
-				if current_state.is_free(target) and current_state.get_tiles_at_xz(target.x, target.z).size() > 0:
-					moves_stack.append(Move.new(currentEnemy.state.grid_position, target))
-					create_path(currentEnemy.state.grid_position, target)
-					selected_unit = currentEnemy
-					camera_controller.focus_camera(currentEnemy)
-					state = States.ANIMATING
-					#wait_for_camera = true
-					#timer.start(pre_enemy_turn_wait)
-					#await timer.timeout
-					#wait_for_camera = false
-					moved = true
-					break
-			if not moved:
-				currentEnemy.state.is_moved = true
-				#MoveSingleAI()
-				call_deferred("MoveSingleAI")
-			return
-		CharacterState.AggroState.PATROL_PATH:
-			## TODO: Implement waypoint patrol
-			var path: PatrolPath = patrol_paths.get(currentEnemy.data.unit_name, null)
-			if path == null:
-				push_error("No patrol path found for: " + currentEnemy.data.unit_name)
-				currentEnemy.state.aggro_state = CharacterState.AggroState.PATROL_RANDOM
-				#MoveSingleAI()
-				call_deferred("MoveSingleAI")
-				return
-			
-			var waypoints := path.get_waypoints(self)
-			if waypoints.is_empty():
-				currentEnemy.state.is_moved = true
-				#MoveSingleAI()
-				call_deferred("MoveSingleAI")
-				return
-			## Return triggers above, code below is unreachable atm.
-			# Get next waypoint, wrap around when reaching the end
-			var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
-
-			# If already at waypoint, advance to next
-			if target == currentEnemy.state.grid_position:
-				currentEnemy.state.patrol_index += 1
-				target = waypoints[currentEnemy.state.patrol_index % waypoints.size()]
-	
-			# Move one step toward the waypoint using existing pathfinding
-			var move_targets := MoveGenerator.generate_move(currentEnemy, current_state)
-			var best_move: Move = null
-			var best_dist := INF
-			
-			for m in move_targets:
-				var dx : int = abs(m.end_pos.x - target.x)
-				var dz : int = abs(m.end_pos.z - target.z)
-				var dist : int = dx + dz
-				if dist < best_dist:
-					best_dist = dist
-					best_move = m
-			
-			if best_move != null:
-				# Check if we reached the waypoint after this move
-				if best_move.end_pos == target:
-					currentEnemy.state.patrol_index += 1
-				moves_stack.append(best_move)
-				create_path(best_move.start_pos, best_move.end_pos)
-				selected_unit = currentEnemy
-				camera_controller.focus_camera(currentEnemy)
-				state = States.ANIMATING
-			else:
-				currentEnemy.state.is_moved = true
-				#MoveSingleAI()
-				call_deferred("MoveSingleAI")
-			return
+		#CharacterState.AggroState.PATROL_RANDOM:
+			### TODO: Implement random patrol
+			#var offsets := [Vector3i(1,0,0), Vector3i(0,1,0), Vector3i(0,0,1)]
+			#offsets.shuffle()
+			#var moved := false
+			#for offset : Vector3i in offsets:
+				#var target : Vector3i = currentEnemy.state.grid_position + offset
+				#if current_state.is_free(target) and current_state.get_tiles_at_xz(target.x, target.z).size() > 0:
+					#moves_stack.append(Move.new(currentEnemy.state.grid_position, target))
+					#create_path(currentEnemy.state.grid_position, target)
+					#selected_unit = currentEnemy
+					#camera_controller.focus_camera(currentEnemy)
+					#state = States.ANIMATING
+					##wait_for_camera = true
+					##timer.start(pre_enemy_turn_wait)
+					##await timer.timeout
+					##wait_for_camera = false
+					#moved = true
+					#break
+			#if not moved:
+				#currentEnemy.state.is_moved = true
+				##MoveSingleAI()
+				#call_deferred("MoveSingleAI")
+			#return
+		#CharacterState.AggroState.PATROL_PATH:
+			### TODO: Implement waypoint patrol
+			#var path: PatrolPath = patrol_paths.get(currentEnemy.data.unit_name, null)
+			#if path == null:
+				#push_error("No patrol path found for: " + currentEnemy.data.unit_name)
+				#currentEnemy.state.aggro_state = CharacterState.AggroState.PATROL_RANDOM
+				##MoveSingleAI()
+				#call_deferred("MoveSingleAI")
+				#return
+			#
+			#var waypoints := path.get_waypoints(self)
+			#if waypoints.is_empty():
+				#currentEnemy.state.is_moved = true
+				##MoveSingleAI()
+				#call_deferred("MoveSingleAI")
+				#return
+			### Return triggers above, code below is unreachable atm.
+			## Get next waypoint, wrap around when reaching the end
+			#var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
+#
+			## If already at waypoint, advance to next
+			#if target == currentEnemy.state.grid_position:
+				#currentEnemy.state.patrol_index += 1
+				#target = waypoints[currentEnemy.state.patrol_index % waypoints.size()]
+	#
+			## Move one step toward the waypoint using existing pathfinding
+			#var move_targets := MoveGenerator.generate_move(currentEnemy, current_state)
+			#var best_move: Move = null
+			#var best_dist := INF
+			#
+			#for m in move_targets:
+				#var dx : int = abs(m.end_pos.x - target.x)
+				#var dz : int = abs(m.end_pos.z - target.z)
+				#var dist : int = dx + dz
+				#if dist < best_dist:
+					#best_dist = dist
+					#best_move = m
+			#
+			#if best_move != null:
+				## Check if we reached the waypoint after this move
+				#if best_move.end_pos == target:
+					#currentEnemy.state.patrol_index += 1
+				#moves_stack.append(best_move)
+				#create_path(best_move.start_pos, best_move.end_pos)
+				#selected_unit = currentEnemy
+				#camera_controller.focus_camera(currentEnemy)
+				#state = States.ANIMATING
+			#else:
+				#currentEnemy.state.is_moved = true
+				##MoveSingleAI()
+				#call_deferred("MoveSingleAI")
+			#return
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
 	
@@ -1149,6 +1159,8 @@ func MoveSingleAI() -> void:
 			return
 		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
+		if currentEnemy != null:
+			currentEnemy.state.is_moved = true
 
 
 func CheckTriggerConditions() -> void:
@@ -1522,6 +1534,8 @@ func _process_old(delta: float) -> void:
 				turn_transition_animation_player.play();
 				enemy_label.show();
 				player_label.hide();
+				check_aggro()
+				hide_inactive_characters()
 		else:
 			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
 			MoveSingleAI()
