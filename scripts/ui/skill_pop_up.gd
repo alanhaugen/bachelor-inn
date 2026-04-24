@@ -26,7 +26,7 @@ func _ready() -> void:
 	select_button_1.pressed.connect(func() -> void: _on_skill_selected(0))
 	select_button_2.pressed.connect(func() -> void: _on_skill_selected(1))
 	select_button_3.pressed.connect(func() -> void: _on_skill_selected(2))
-	leave_button.pressed.connect(_on_leave_button_pressed)
+	#leave_button.pressed.connect(func() -> void: _on_leave_button_pressed())
 
 func show_skill_loot(skills: Array[Skill], character: Character, chest: Chest) -> void:
 	_skills = skills

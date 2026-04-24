@@ -1152,26 +1152,32 @@ func MoveSingleAI() -> void:
 
 
 func CheckTriggerConditions() -> void:
-	## 02_Trigger2 = interact events like chest, sign post
-	## 03_Trigger3 = Dialogic events automatic trigger
-	#var messages : int = 0 ## Old var from dialogue testing
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
-	for i in units.size():
-		var pos :Vector3i = units[i];
-		if (occupancy_map.get_cell_item(pos) == player_code || occupancy_map.get_cell_item(pos) == player_code_done):
-			if get_trigger_name(pos) == "02_Trigger2":
-				if not selected_unit or not selected_unit.state.is_moved:
-					continue
-				_on_chest_opened(pos)
-				print("Player Unit moved to 02_Trigger tile. A loot window should appear now.");
-			elif get_trigger_name(pos) == "03_Trigger3":
-				if triggered_positions.has(pos):
-					continue
-				print("Trigger fired at: ", pos)
-				triggered_positions.append(pos)
-				Tutorial.advance_timeline()
-			
-			var adjacent := [
+	if selected_unit == null:
+		return
+	
+	var pos := selected_unit.state.grid_position
+	var cell_item := occupancy_map.get_cell_item(pos)
+	
+	if cell_item != player_code and cell_item != player_code_done:
+		return
+	
+	## Trigger check if a player has landed ontop of a trigger
+	if get_trigger_name(pos) == "02_Trigger2": ## This is interact trigger
+		if not selected_unit:
+			return
+		_on_chest_opened(pos)
+		print("Character moved to chest trigger tile.")
+	elif get_trigger_name(pos) == "03_Trigger3": ## This is Dialogic trigger
+		if not selected_unit:
+			return
+		triggered_positions.append(pos)
+		Tutorial.advance_timeline()
+	elif get_trigger_name(pos) == "00_Vicotry":
+		if not selected_unit:
+			return
+		next_level()
+	
+	var adjacent := [
 				pos + Vector3i(1, 0, 0),
 				pos + Vector3i(1, 0, 1),
 				pos + Vector3i(1, 0, -1),
@@ -1181,14 +1187,17 @@ func CheckTriggerConditions() -> void:
 				pos + Vector3i(0, 0, 1),
 				pos + Vector3i(0, 0, -1)
 			]
-			for adj : Vector3i in adjacent:
-				if get_trigger_name(adj) == "02_Chest":
-					var c : Chest = chests.get(adj, null)
-					if c == null or c.is_looted or c.is_opened:
-						continue
-					if not selected_unit or not selected_unit.state.is_moved:
-						continue
-					_on_chest_opened(adj)
+	
+	## Loop to check if a char landed next to a chest - if we want / need.
+	for adj : Vector3i in adjacent:
+		if get_trigger_name(adj) == "02_Chest":
+			var c : Chest = chests.get(adj, null)
+			if c == null or c.is_looted or c.is_opened:
+				continue
+			if not selected_unit or not selected_unit.state.is_moved:
+				continue
+			_on_chest_opened(adj)
+
 
 func CheckVictoryConditions() -> void:
 	## Next_level() should not run here, but in the stat screen after button is pressed
@@ -1702,8 +1711,10 @@ func _update_cursor_on_hover() -> void:
 	if is_choosing_skill_target:
 		if valid_skill_target_tiles.has(grid_pos):
 			Input.set_custom_mouse_cursor(cursor_wand, Input.CURSOR_ARROW, Vector2(8, 8))
+			_show_aoe_preview(grid_pos, active_skill)
 		else:
 			Input.set_custom_mouse_cursor(null)
+			_clear_aoe_preview()
 		return
 	
 	var cell := movement_map.get_cell_item(grid_pos)
@@ -1925,3 +1936,43 @@ func _check_for_victory_trigger() -> void:
 		if get_trigger_name(pos) == "00_Victory":
 			level_has_victory_trigger = true
 			return
+
+func _get_aoe_tiles(center: Vector3i, skill: Skill) -> Array[Vector3i]:
+	var tiles: Array[Vector3i] = []
+	var size := skill.aoe_size
+	
+	match skill.aoe_shape:
+		Skill.AoEShape.NONE:
+			tiles.append(center)
+		Skill.AoEShape.SQUARE:
+			for dx in range(-size, size+1):
+				for dz in range(-size, size+1):
+					tiles.append(Vector3i(center.x + dx, center.y, center.z + dz))
+		Skill.AoEShape.CROSS:
+			tiles.append(center)
+			for i in range(1, size + 1):
+				tiles.append(Vector3i(center.x + i, center.y, center.z))
+				tiles.append(Vector3i(center.x - i, center.y, center.z))
+				tiles.append(Vector3i(center.x, center.y, center.z + i))
+				tiles.append(Vector3i(center.x, center.y, center.z - i))
+		Skill.AoEShape.DIAMOND:
+			pass
+	
+	return tiles
+
+func _show_aoe_preview(center: Vector3i, skill: Skill) -> void:
+	if skill.aoe_shape == Skill.AoEShape.NONE:
+		return
+	var tiles := _get_aoe_tiles(center, skill)
+	for tile in tiles:
+		if movement_weights_map.get_cell_item(tile) != GridMap.INVALID_CELL_ITEM:
+			path_map.set_cell_item(tile, 8) ## Change index 8  if needed
+
+func _clear_aoe_preview() -> void:
+	if active_skill == null or active_skill.aoe_shape == Skill.AoEShape.NONE:
+		return
+	path_map.clear()
+	# Redraw skill target tiles
+	if is_choosing_skill_target:
+		for tile : Vector3i in valid_skill_target_tiles.keys():
+			path_map.set_cell_item(tile, skill_target_code)

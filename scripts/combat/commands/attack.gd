@@ -81,8 +81,9 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 		if aggressor.state.is_playable() and simulate_only == false:
 			aggressor.state.experience += victim.data.strength
 	## TODO: Fix below. self instance is not valid
-	Main.level.emit_signal("character_stats_changed", self)
-	
+	#Main.level.emit_signal("character_stats_changed", self)
+	Main.level.emit_signal("character_stats_changed", aggressor)
+
 
 #old, replaced by Prepare and Apply
 #func execute(state : GameState, simulate_only : bool = false) -> void:
