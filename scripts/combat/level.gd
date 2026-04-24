@@ -1012,10 +1012,7 @@ func MoveAI() -> void:
 		camera_controller.free_camera()
 
 func MoveSingleAI() -> void:
-	#check_aggro()
 	## TODO: Hide "End Turn button" and other UI elements
-	var ai := MinimaxAI.new();
-	var current_state := GameState.from_level(self);
 	var any_active_enemies := false
 	
 	## Check if any enemies are active, if not, return to player turn
@@ -1033,12 +1030,11 @@ func MoveSingleAI() -> void:
 		reset_all_units()
 		is_player_turn = true
 		is_animation_just_finished = true
-		#check_aggro() ## Was added for patrolling enemies, but it causes issues. 
-		#hide_inactive_characters()
 		camera_controller.free_camera()
-		#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-			#camera_controller.set_pivot_target_translate(last_selected_unit.position)
 		return
+	
+	var ai := MinimaxAI.new();
+	var current_state := GameState.from_level(self);
 	
 	var currentEnemy : Character = null
 	for unit in characters:
@@ -1138,13 +1134,24 @@ func MoveSingleAI() -> void:
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
 	
+	## TODO: This only applies the move from move + attack command, barring enemies from moving and attacking.
 	if currentEnemy != null:
 		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
+		#print("Enemy: ", currentEnemy.data.unit_name, " checking moves from: ", currentEnemy.state.grid_position)
 		if current_state.has_enemy_moves(curEnemyPos):
 			var move : Command = ai.choose_best_move(current_state, 3, currentEnemy);
+			#print("First move chosen: ", move.get_class(), " start: ", move.start_pos, " end: ", move.end_pos)
 			moves_stack.append(move);
 			current_state = current_state.apply_move(move, true);
-	
+			
+			## TODO: add attack in combination of move, if possible
+			if move is Move:
+				var new_pos: NullablePosition = NullablePosition.new(move.end_pos)
+				if current_state.has_enemy_moves(new_pos):
+					var attack: Command = ai.choose_best_move(current_state, 3, currentEnemy)
+					if attack is Attack:
+						moves_stack.append(attack)
+					
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
 		state = States.ANIMATING;
