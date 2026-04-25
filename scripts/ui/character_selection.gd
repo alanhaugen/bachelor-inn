@@ -36,7 +36,7 @@ func _update_display() -> void:
 	portrait.texture = character.portrait if character.portrait != null else null
 	character.queue_free()
 	var base_data := char_def.base_data
-	var base_state := char_def.base_state
+	var _base_state := char_def.base_state
 	var resistance : int = 4 + floor(base_data.focus / 2.0) + floor(base_data.endurance / 2.0)
 	var max_hp : int = int(4 + base_data.endurance + floor(base_data.strength / 2.0))
 	var max_sanity : int = int(resistance + base_data.mind)
