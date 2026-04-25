@@ -219,6 +219,8 @@ func read(save_slot: int) -> bool:
 		
 		Main.characters.append(character)
 	var level_name : String = Main.levels[level].get_file().get_basename()
+	print("read() called. slot: ", save_slot)
+	print("Units found in save file: ", units.size())
 	Main.load_level(level_name)
 	return true
 
@@ -257,6 +259,11 @@ func load_tutorial() -> void:
 
 
 func save_progress(save_slot: int, level_index: int) -> void:
+	print("save_progress called. slot: ", save_slot, " level: ", level_index, " units: ", Main.characters.size())
+	for c in Main.characters:
+		if c != null:
+			print("  Saving unit: ", c.data.unit_name)
+	
 	var file := FileAccess.open(SAVE_GAME_PATH, FileAccess.READ)
 	var json_string := file.get_as_text()
 	file.close()
@@ -269,9 +276,12 @@ func save_progress(save_slot: int, level_index: int) -> void:
 	var saves: Dictionary = json.data
 	var slot_key := "Slot " + str(save_slot +1)
 	var units := []
+
 	for character in Main.characters:
 		if character == null:
 			continue
+		if character.scene_id == null or character.scene_id == "":
+			character.scene_id = character.data.unit_name.to_lower()
 		units.append(character.save())
 		
 	saves[slot_key] = {"level": level_index, "units": units}

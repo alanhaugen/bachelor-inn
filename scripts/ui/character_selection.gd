@@ -21,12 +21,6 @@ var character_flavor: Dictionary = {
 }
 
 func _ready() -> void:
-	if not left_arrow_button.pressed.is_connected(_on_left_arrow_button_pressed):
-		left_arrow_button.pressed.connect(_on_left_arrow_button_pressed)
-	if not right_arrow_button.pressed.connect(_on_right_arrow_button_pressed):
-		right_arrow_button.pressed.connect(_on_right_arrow_button_pressed)
-	if not start_adventure.pressed.connect(_on_start_adventure_pressed):
-		start_adventure.pressed.connect(_on_start_adventure_pressed)
 	_update_display()
 
 func _update_display() -> void:

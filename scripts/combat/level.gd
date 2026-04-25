@@ -257,16 +257,21 @@ func select_next_character() -> void:
 func _on_turn_transition_finished(_anim_name: StringName) -> void:
 	if not is_player_turn:
 		return
-	camera_controller.free_camera()
+	var selectables := get_selectable_characters()
+	if selectables.is_empty():
+		return
+	
 	if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(last_selected_unit.position)
 		select_unit(last_selected_unit)
 	else:
-		var first : Character = get_selectable_characters().front()
-		if first != null:
-			camera_controller.set_pivot_target_translate(first.position)
-			if not Tutorial.in_tutorial:
-				select_unit(first)
+		#var first : Character = get_selectable_characters().front()
+		#if first != null:
+		camera_controller.free_camera()
+		camera_controller.set_pivot_target_translate(selectables.front().position)
+		if not Tutorial.in_tutorial:
+			select_unit(selectables.front())
 
 
 func get_grid_cell_from_mouse() -> Vector3i:
@@ -831,8 +836,12 @@ func _ready() -> void:
 	check_aggro()
 	hide_inactive_characters()
 	
+	print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
+	print("Main.characters size: ", Main.characters.size())
 	if Main.get_current_level_index() > 2:
 		Main.save.save_progress(Main.current_save_slot, Main.get_current_level_index())
+	else:
+		print("Skipping save - tutorial level")
 	#SaveGame.new().save_progress(Main.current_save_slot, Main.current_level_index)
 
 
@@ -1942,6 +1951,7 @@ func _recruit_neutral_units() -> void:
 			continue
 		if c.state.faction == CharacterState.Faction.NEUTRAL:
 			c.state.faction = CharacterState.Faction.PLAYER
+			c.scene_id = c.data.unit_name.to_lower()
 			
 			var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
 			if def != null:

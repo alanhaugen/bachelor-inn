@@ -14,7 +14,7 @@ func _ready() -> void:
 	
 func _on_retry_button_pressed() -> void:
 	call_deferred("_load_retry")
-	queue_free()
+	#queue_free()
 	#if Tutorial.in_tutorial:
 		#Tutorial.current_tutorial_level = 1
 		#Tutorial.current_timeline = 1
@@ -26,6 +26,7 @@ func _on_retry_button_pressed() -> void:
 
 func _load_retry() -> void:
 	print("_load_retry called")
+	queue_free()
 	if Main.current_save_slot == SaveGame.TUTORIAL_SAVE_SLOT:
 		Tutorial.current_tutorial_level = 1
 		Tutorial.current_timeline = 1
