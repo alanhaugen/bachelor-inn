@@ -1039,6 +1039,7 @@ func MoveSingleAI() -> void:
 			break
 	
 	if not any_active_enemies:
+		tick_all_units_end_round() ## TODO: Decide if we want to decay buffs when no active enemies
 		reset_all_units()
 		is_player_turn = true
 		is_animation_just_finished = true
@@ -1337,19 +1338,30 @@ func interpolate_to(target_transform:Transform3D, _delta:float) -> void:
 func tick_all_units_end_round() -> void:
 	## Iterate over duplicates, to avoid null values if units die
 	#var dupe := characters.duplicate()
-	
-	var c:Character = null
-	for index : int in range(characters.size()):
-		if(characters.get(index) == null):
-			push_warning("Character with index %d in characters array was null at end of tick" % index)
-			continue
-		c = characters.get(index)
-		if not is_instance_valid(c):
-			continue
+	#characters = characters.filter(func(c: Character) -> bool: return c != null and is_instance_valid(c))
+	var cleaned : Array[Character] = []
+	for c in characters:
+		if c != null and is_instance_valid(c):
+			cleaned.append(c)
+	characters = cleaned
+		
+	for c in characters:
 		if not (c is Character):
 			continue
 		if c.state and c.state.is_alive == false:
-			continue
+			continue 	
+	#var c : Character = null
+	#for index : int in range(characters.size()):
+		#if(characters.get(index) == null):
+			#push_warning("Character with index %d in characters array was null at end of tick" % index)
+			#continue
+		#c = characters.get(index)
+		#if not is_instance_valid(c):
+			#continue
+		#if not (c is Character):
+			#continue
+		#if c.state and c.state.is_alive == false:
+			#continue
 		
 		var health_before := c.state.current_health
 		var sanity_before := c.state.current_sanity
@@ -1621,7 +1633,7 @@ func _process_old(delta: float) -> void:
 					if characters == null: 
 						return
 					## TODO: Fix below - character instance is not valid.
-					emit_signal("character_stats_changed", character)
+					#emit_signal("character_stats_changed", character)
 			
 			var code := enemy_code;
 			if is_player_turn:
