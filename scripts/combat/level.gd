@@ -1923,7 +1923,21 @@ func _get_aoe_tiles(center: Vector3i, skill: Skill) -> Array[Vector3i]:
 				tiles.append(Vector3i(center.x, center.y, center.z + i))
 				tiles.append(Vector3i(center.x, center.y, center.z - i))
 		Skill.AoEShape.DIAMOND:
-			pass
+			for dx in range(-size, size + 1):
+				for dz in range(-size, size + 1):
+					if abs(dx) + abs(dz) <= size:
+						tiles.append(Vector3i(center.x + dx, center.y, center.z + dz))
+		Skill.AoEShape.LINE:
+			var caster_pos := skill_caster.state.grid_position
+			var dx : int = sign(center.x - caster_pos.x)
+			var dz : int = sign(center.z - caster_pos.z)
+
+			var current := caster_pos
+			while current != center:
+				current = Vector3i(current.x + dx, center.y, current.z + dz)
+				tiles.append(current)
+	pass
+		
 	
 	return tiles
 

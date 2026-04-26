@@ -9,7 +9,7 @@ enum TargetFaction
 	SELF
 }
 
-enum AoEShape { NONE, SQUARE, CROSS, DIAMOND }
+enum AoEShape { NONE, SQUARE, CROSS, DIAMOND, LINE, WALL }
 
 ## ID
 @export_subgroup("Visuals")

@@ -68,6 +68,7 @@ func play_skill(result : AttackResult) -> void:
 	var vfx : Node3D = effect.instantiate()
 	get_tree(). current_scene.add_child(vfx)
 	
+	## TODO: Effect plays twice if AoE ability is cast directly on enemy
 	if dmg > 0:
 		vfx.global_position = result.aggressor.global_position + Vector3(0,0.5,0)
 		vfx.look_at(result.victim.global_position + Vector3(0,0.5,0), Vector3.UP)

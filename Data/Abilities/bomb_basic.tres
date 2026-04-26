@@ -20,5 +20,5 @@ effect_mods = {
 min_range = 2
 max_range = 5
 target_faction = 1
-aoe_shape = 1
+aoe_shape = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"
