@@ -21,6 +21,7 @@ effect_mods = {
 &"damage": 3,
 &"dot_tick_damage": 1
 }
+max_range = 4
 target_faction = 1
 duration_turns = 3
 metadata/_custom_type_script = "uid://c3p07am3ababr"

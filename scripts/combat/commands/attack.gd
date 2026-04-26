@@ -16,11 +16,15 @@ func _init(inStartPos : Vector3i, victimPos : Vector3i, attackFromPos : Vector3i
 func prepare(state : GameState, simulate_only: bool = false) -> void:
 	result = AttackResult.new()
 
-	var aggressor : Character = state.get_unit(start_pos);
+	#var aggressor : Character = state.get_unit(start_pos);
+	var aggressor : Character = state.get_unit(end_pos);
+	if aggressor == null:
+		aggressor = state.get_unit(start_pos)
 	var victim : Character = state.get_unit(attack_pos);
 	
 	result.aggressor = aggressor
 	result.victim = victim
+	
 	
 	if aggressor.state.is_playable():
 		aggressor.state.is_ability_used = true

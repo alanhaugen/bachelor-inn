@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Weapon" load_steps=2 format=3 uid="uid://db8m01ts3v802"]
+[gd_resource type="Resource" script_class="Weapon" format=3 uid="uid://db8m01ts3v802"]
 
 [ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="1_ssu25"]
 
@@ -6,7 +6,7 @@
 script = ExtResource("1_ssu25")
 weapon_id = "spear_basic"
 weapon_name = "Iron Spear"
-damage_modifier = 2
+damage_modifier = 5
 max_range = 2
 is_melee = true
 metadata/_custom_type_script = "uid://hhe2ydney01y"

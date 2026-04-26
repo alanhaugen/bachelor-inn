@@ -65,13 +65,13 @@ func apply_move(move : Command, simulate_only : bool = false) -> GameState:
 	var new_state : GameState = clone();
 	
 	var unit : Character = new_state.get_unit(move.start_pos)
+	#if not simulate_only:
+		#unit.state.is_moved = true;
 	unit.state.is_moved = true;
 	
 	move.execute(new_state, simulate_only);
-
 	move.prepare(new_state, simulate_only)
 	move.apply_damage(new_state, simulate_only)
-
 	
 	if new_state.no_units_remaining():
 		new_state.end_turn();
@@ -114,6 +114,9 @@ func get_legal_moves(charaPos : NullablePosition = null) -> Array[Command]:
 		var is_dead : bool = false
 		var isEnemy: bool  = false
 		var chara : Character = get_unit(charaPos.position)
+		if chara == null:
+			return moves
+		#print("get_legal_moves else branch - chara: ", chara.data.unit_name, " is_moved: ", chara.state.is_moved, " is_ability_used: ", chara.state.is_ability_used)
 		if chara.state.is_moved:
 			has_moved = true;
 		if chara.state.is_alive == false:
@@ -121,7 +124,7 @@ func get_legal_moves(charaPos : NullablePosition = null) -> Array[Command]:
 		if chara.state.is_enemy() != is_current_player_enemy:
 			isEnemy = true;
 		
-		if(!(has_moved || is_dead || isEnemy)):
+		if not (has_moved or is_dead or isEnemy):
 			moves += MoveGenerator.generate(chara, self);
 
 	return moves

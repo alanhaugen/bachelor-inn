@@ -49,7 +49,7 @@ signal level_changed(new_level: int)
 ## Default state is FROZEN. All states: FROZEN, PATROL_RANDOM, PATROL_PATH, AGGRESSIVE
 ## Patrol not implemented, and probably will not be - due to game play design
 @export var aggro_state: AggroState = AggroState.FROZEN
-@export var aggro_range : int = 8
+@export var aggro_range : int = 10
 @export var patrol_index: int = 0
 #endregion
 

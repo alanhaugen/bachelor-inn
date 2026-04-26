@@ -1077,102 +1077,26 @@ func MoveSingleAI() -> void:
 			currentEnemy.state.is_moved = true
 			call_deferred("MoveSingleAI")
 			return
-		#CharacterState.AggroState.PATROL_RANDOM:
-			### TODO: Implement random patrol
-			#var offsets := [Vector3i(1,0,0), Vector3i(0,1,0), Vector3i(0,0,1)]
-			#offsets.shuffle()
-			#var moved := false
-			#for offset : Vector3i in offsets:
-				#var target : Vector3i = currentEnemy.state.grid_position + offset
-				#if current_state.is_free(target) and current_state.get_tiles_at_xz(target.x, target.z).size() > 0:
-					#moves_stack.append(Move.new(currentEnemy.state.grid_position, target))
-					#create_path(currentEnemy.state.grid_position, target)
-					#selected_unit = currentEnemy
-					#camera_controller.focus_camera(currentEnemy)
-					#state = States.ANIMATING
-					##wait_for_camera = true
-					##timer.start(pre_enemy_turn_wait)
-					##await timer.timeout
-					##wait_for_camera = false
-					#moved = true
-					#break
-			#if not moved:
-				#currentEnemy.state.is_moved = true
-				##MoveSingleAI()
-				#call_deferred("MoveSingleAI")
-			#return
-		#CharacterState.AggroState.PATROL_PATH:
-			### TODO: Implement waypoint patrol
-			#var path: PatrolPath = patrol_paths.get(currentEnemy.data.unit_name, null)
-			#if path == null:
-				#push_error("No patrol path found for: " + currentEnemy.data.unit_name)
-				#currentEnemy.state.aggro_state = CharacterState.AggroState.PATROL_RANDOM
-				##MoveSingleAI()
-				#call_deferred("MoveSingleAI")
-				#return
-			#
-			#var waypoints := path.get_waypoints(self)
-			#if waypoints.is_empty():
-				#currentEnemy.state.is_moved = true
-				##MoveSingleAI()
-				#call_deferred("MoveSingleAI")
-				#return
-			### Return triggers above, code below is unreachable atm.
-			## Get next waypoint, wrap around when reaching the end
-			#var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
-#
-			## If already at waypoint, advance to next
-			#if target == currentEnemy.state.grid_position:
-				#currentEnemy.state.patrol_index += 1
-				#target = waypoints[currentEnemy.state.patrol_index % waypoints.size()]
-	#
-			## Move one step toward the waypoint using existing pathfinding
-			#var move_targets := MoveGenerator.generate_move(currentEnemy, current_state)
-			#var best_move: Move = null
-			#var best_dist := INF
-			#
-			#for m in move_targets:
-				#var dx : int = abs(m.end_pos.x - target.x)
-				#var dz : int = abs(m.end_pos.z - target.z)
-				#var dist : int = dx + dz
-				#if dist < best_dist:
-					#best_dist = dist
-					#best_move = m
-			#
-			#if best_move != null:
-				## Check if we reached the waypoint after this move
-				#if best_move.end_pos == target:
-					#currentEnemy.state.patrol_index += 1
-				#moves_stack.append(best_move)
-				#create_path(best_move.start_pos, best_move.end_pos)
-				#selected_unit = currentEnemy
-				#camera_controller.focus_camera(currentEnemy)
-				#state = States.ANIMATING
-			#else:
-				#currentEnemy.state.is_moved = true
-				##MoveSingleAI()
-				#call_deferred("MoveSingleAI")
-			#return
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
 	
 	## TODO: This only applies the move from move + attack command, barring enemies from moving and attacking.
 	if currentEnemy != null:
 		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
-		#print("Enemy: ", currentEnemy.data.unit_name, " checking moves from: ", currentEnemy.state.grid_position)
 		if current_state.has_enemy_moves(curEnemyPos):
 			var move : Command = ai.choose_best_move(current_state, 3, currentEnemy);
-			#print("First move chosen: ", move.get_class(), " start: ", move.start_pos, " end: ", move.end_pos)
 			moves_stack.append(move);
 			current_state = current_state.apply_move(move, true);
 			
-			## TODO: add attack in combination of move, if possible
-			if move is Move:
-				var new_pos: NullablePosition = NullablePosition.new(move.end_pos)
-				if current_state.has_enemy_moves(new_pos):
-					var attack: Command = ai.choose_best_move(current_state, 3, currentEnemy)
-					if attack is Attack:
-						moves_stack.append(attack)
+			## Check if attack in combination with move is possible - BEFORE applying move
+			#if move is Move:
+				#var enemy_after := current_state.get_unit(move.end_pos)
+				#if enemy_after != null:
+					#var attack_moves := MoveGenerator.generate(enemy_after, current_state, false, true)
+					#for cmd in attack_moves:
+						#if cmd is Attack:
+							#moves_stack.append(cmd)
+							#break
 					
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
@@ -1603,24 +1527,6 @@ func _process_old(delta: float) -> void:
 				is_player_turn = true;
 				check_aggro()
 				hide_inactive_characters()
-				
-				## TUTORIAL
-				#if Tutorial.in_tutorial and not Tutorial.selection_advances_timeline and Tutorial.timeline_advances_at_player_turn_begins:
-				#if Tutorial.in_tutorial and not	Tutorial.timeline_advances_at_player_turn_begins:
-					#Tutorial.advance_timeline()
-				
-				
-				 # Pan camera back to player after enemy turn ends
-				#camera_controller.free_camera()
-				#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-					#camera_controller.set_pivot_target_translate(last_selected_unit.position)
-					#call_deferred("selected_unit", last_selected_unit)
-				#else:
-					#var first : Character = get_selectable_characters().front()
-					#if first != null:
-						#camera_controller.set_pivot_target_translate(first.position)
-						#call_deferred("selected_unit", first)
-		# Done with one move, execute it and start on next
 		
 		elif (animation_path.is_empty()):
 			active_move = moves_stack.pop_front();
@@ -1681,6 +1587,7 @@ func _process_old(delta: float) -> void:
 			
 			if (moves_stack.is_empty() == false):
 				## called after any enemy except the final enemy is done moving
+				#if not (moves_stack.front() is Attack):
 				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
 			
 			if (animation_path.is_empty() == false):
