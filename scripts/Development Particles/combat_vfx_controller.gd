@@ -82,7 +82,7 @@ func play_skill(result : AttackResult) -> void:
 		_spawn_hit_particles(result.victim)
 		_trigger_hit_flash(result.victim, result.was_critical)
 	else:
-		vfx.global_position = result.victim.global_position
+		vfx.global_position = result.target_position if result.target_position != Vector3.ZERO else result.aggressor.global_position#result.victim.global_position
 		if vfx.has_method("play"):
 			await vfx.play()
 		else:

@@ -425,7 +425,7 @@ func _handle_skill(pos : Vector3i) -> void:
 		exit_skill = true
 	if target == null and used_skill.aoe_shape == Skill.AoEShape.NONE: ## TODO: Add AoE.none check here
 		exit_skill = true
-	if not _is_valid_target(target, used_skill, skill_caster):
+	if not _is_valid_target(target, used_skill, skill_caster)  and used_skill.aoe_shape == Skill.AoEShape.NONE:
 		exit_skill = true
 	if used_skill.uses_action and skill_caster.state.is_ability_used:
 		exit_skill = true
@@ -434,7 +434,7 @@ func _handle_skill(pos : Vector3i) -> void:
 		return
 	
 	## begin executing skill, flag caster as 'has used ability'
-	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name)
+	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name if target != null else "ground")
 	var caster : Character = skill_caster
 	if used_skill.uses_action:
 		caster.state.is_ability_used = true
@@ -448,9 +448,16 @@ func _handle_skill(pos : Vector3i) -> void:
 	var result: AttackResult = AttackResult.new()
 	result.aggressor = skill_caster
 	result.victim = target if target != null else skill_caster
+	result.target_position = grid_to_world(p) + Vector3(0, 1, 0)
 	result.vfx_scene =  used_skill.Vfx_Scene
-	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"): 
+	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage") and target != null: 
 		result.damage = used_skill.effect_mods.get("damage", 0)
+		
+	## Apply damage to primary target
+	if target != null and used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
+		var dmg := int(used_skill.effect_mods["damage"])
+		target.apply_damage(dmg, false, skill_caster, used_skill.skill_name)
+		emit_signal("character_stats_changed", target)
 	
 	## VFX - Show visual
 	print("Skill result - aggressor: ", result.aggressor)
@@ -464,16 +471,24 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	## AoE does not mean every spell cast is AoE, it just checks for AoE effects
 	var aoe_tiles := _get_aoe_tiles(p, used_skill)
+	print("AoE center: ", p, " shape: ", used_skill.aoe_shape, " size: ", used_skill.aoe_size, " tiles: ", aoe_tiles.size())
 	for aoe_pos in aoe_tiles:
+		if aoe_pos == p:
+			continue
 		var aoe_target: Character = get_unit(aoe_pos)
 		## TODO: Change this if we want to be able to cast skills on ground.
+		print("  tile: ", aoe_pos, " target: ", aoe_target)
 		if aoe_target == null: 
 			continue
 		if not _is_valid_target(aoe_target, used_skill, skill_caster):
+			print("  invalid target")
 			continue
-		
 		if used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
-			aoe_target.apply_damage(int(used_skill.effect_mods["damage"]), false, skill_caster, used_skill.skill_name)
+			print("Applying damage to: ", aoe_target.data.unit_name)
+			var dmg := int(used_skill.effect_mods["damage"])
+			aoe_target.apply_damage(dmg, false, skill_caster, used_skill.skill_name)
+			if aoe_pos != p:
+				combat_vfx.spawn_damage_number(dmg, aoe_target.global_position)
 		
 		## Apply after effects (DoT)
 		aoe_target.state.apply_skill_effect(used_skill)
@@ -1331,35 +1346,24 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
 
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
-	#valid_skill_target_tiles.clear()
-	#path_map.clear() 
-#
-	#var tiles_in_range: Array[Vector3i] = _get_tiles_in_manhattan_range(origin, skill.min_range, skill.max_range)
-#
-	#for t in tiles_in_range:
-		#var unit: Character = get_unit(t)
-		#if _is_valid_target(unit, skill, skill_caster):
-			#valid_skill_target_tiles[t] = true
-			#path_map.set_cell_item(t, skill_target_code)
-	#
-	#valid_skill_target_tiles.clear()
-	#path_map.clear()
-
-	#var o := Vector3i(origin.x, 0, origin.z)
 	var o := Vector3i(origin)
 	var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
 
 	for t in tiles_in_range:
 		#var p := Vector3i(t.x, 0, t.z)
 		var p := Vector3i(t)
-		var unit: Character = get_unit(p)
-
-		if unit == null:
-			continue
-
-		if _is_valid_target(unit, skill, skill_caster):
-			valid_skill_target_tiles[p] = true
-			path_map.set_cell_item(p, skill_target_code)
+		
+		if skill.aoe_shape != Skill.AoEShape.NONE:
+			if movement_weights_map.get_cell_item(p) != GridMap.INVALID_CELL_ITEM:
+				valid_skill_target_tiles[p] = true
+				path_map.set_cell_item(p, skill_target_code)
+		else:
+			var unit: Character = get_unit(p)
+			if unit == null:
+				continue
+			if _is_valid_target(unit, skill, skill_caster):
+				valid_skill_target_tiles[p] = true
+				path_map.set_cell_item(p, skill_target_code)
 
 
 func _exit_skill_target_mode() -> void:
@@ -1926,6 +1930,7 @@ func _get_aoe_tiles(center: Vector3i, skill: Skill) -> Array[Vector3i]:
 func _show_aoe_preview(center: Vector3i, skill: Skill) -> void:
 	if skill.aoe_shape == Skill.AoEShape.NONE:
 		return
+	path_map.clear()
 	var tiles := _get_aoe_tiles(center, skill)
 	for tile in tiles:
 		if movement_weights_map.get_cell_item(tile) != GridMap.INVALID_CELL_ITEM:
