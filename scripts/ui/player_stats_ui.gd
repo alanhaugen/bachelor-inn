@@ -44,4 +44,5 @@ func apply_stats(stats: Dictionary) -> void:
 
 func _on_open_close_stats_pressed() -> void:
 	Stats_Container.visible = not Stats_Container.visible
-	oc_icon.flip_h = not Stats_Container.visible
+	#oc_icon.flip_h = not Stats_Container.visible
+	oc_icon.flip_h = Stats_Container.visible

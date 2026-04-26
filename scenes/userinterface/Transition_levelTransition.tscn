@@ -1,6 +1,6 @@
-[gd_scene load_steps=0 format=3 uid="uid://cfv14vbur6xfh"]
+[gd_scene format=3 uid="uid://cfv14vbur6xfh"]
 
-[node name="TransitionLevelTransition" type="Control"]
+[node name="TransitionLevelTransition" type="Control" unique_id=1685139481]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

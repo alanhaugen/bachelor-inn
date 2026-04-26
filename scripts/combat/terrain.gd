@@ -14,7 +14,7 @@ func _init(pos : Vector3i, t : String) -> void:
 	is_passable = is_tile_passable(t);
 
 
-static func is_tile_passable(t : String) -> bool:
+static func is_tile_passable(_t : String) -> bool:
 	return true;
 
 

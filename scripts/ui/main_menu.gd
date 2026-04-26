@@ -30,12 +30,13 @@ func _ready() -> void:
 	print(OS.get_data_dir());
 	
 	var success : bool = Main.save.is_savefile_existing();
-	success = false; # Let's make a new save each time until the save format is stable
+	## TODO: Check if save file-system is ready
+	#success = false; # Let's make a new save each time until the save format is stable
 	
 	if success:
-		print("loaded save");
+		print("Save file exists, loading");
 	else:
-		print("loading save failed. Creating new save");
+		print("No save file found. Creating new save");
 		Main.save.create_new_save_data();
 	
 	# Set focus on the first button
@@ -168,6 +169,10 @@ func _on_select_save_file_2_pressed() -> void:
 	Main.current_save_slot = 2
 	Main.save.create_new_save_in_slot(2)
 	Main.save.read(2)
+
+func _on_delete_save_data_pressed() -> void:
+	Main.save.clear_save_file()
+	_update_save_buttons()
 #endregion
 
 func _update_create_save_buttons() -> void:
@@ -209,3 +214,14 @@ func _update_save_buttons() -> void:
 			save_buttons[i].text = "Slot " + str(i+1) + " - Overwrite?"
 		else:
 			save_buttons[i].text = "Slot " + str(i+1) + " - EMPTY"
+
+
+var credits: Dictionary = {
+	"Project lead" : "Kittel",
+	"Art 1" : "Mari",
+	"Art 2" : "Fen",
+	"Programming 1" : "Alan",
+	"Programming 2" : "Alexander",
+	"Programming 3" : "Andreas",
+	"Music" : "Han fyren"
+}

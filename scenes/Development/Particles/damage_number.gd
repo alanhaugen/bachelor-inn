@@ -14,7 +14,7 @@ func set_value(amount : int, crit : bool) -> void:
 	_play()
 	
 func _play() -> void:
-	var start_pos := position
+	var _start_pos := position
 	var end_pos := position + Vector3(0, float_height, 0)
 
 	var tween := create_tween()

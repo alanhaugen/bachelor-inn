@@ -56,6 +56,7 @@ directories/dtl_directory={
 "tutorial12": "res://dialogue/tutorial12.dtl",
 "tutorial13": "res://dialogue/tutorial13.dtl",
 "tutorial14": "res://dialogue/tutorial14.dtl",
+"tutorial15": "res://dialogue/tutorial15.dtl",
 "tutorial2": "res://dialogue/tutorial2.dtl",
 "tutorial3": "res://dialogue/tutorial3.dtl",
 "tutorial4": "res://dialogue/tutorial4.dtl",
@@ -80,10 +81,11 @@ directories/dtl_directory={
 layout/style_directory={
 "": "res://dialogue/CustomDialogicStyle.tres",
 "CustomDialogicStyle": "res://dialogue/CustomDialogicStyle.tres",
+"VisualNovel_Style_test": "res://dialogue/VisualNovel_Style_test.tres",
 "chatBubbleStyle": "res://dialogue/chatBubbleStyle.tres",
 "style": "res://dialogue/style.tres"
 }
-layout/style_list=["res://dialogue/CustomDialogicStyle.tres", "res://dialogue/style.tres", "res://dialogue/chatBubbleStyle.tres"]
+layout/style_list=["res://dialogue/CustomDialogicStyle.tres", "res://dialogue/style.tres", "res://dialogue/chatBubbleStyle.tres", "res://dialogue/VisualNovel_Style_test.tres"]
 layout/default_style="res://dialogue/CustomDialogicStyle.tres"
 variables={
 "PLATFORM": "MOBILE",

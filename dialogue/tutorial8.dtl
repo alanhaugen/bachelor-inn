@@ -1,8 +1,7 @@
-You got a weapon! WAOW! *Information about weapons*
-You see a monser lurking inside the ruins!\
-\
-The only thing to do is to figh!
-To preform an attack with your weapon\: \
-1. First click the unit you want to attack,\
-2. then select the tile you want to attack from.
-do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: You got your first weapon!
+narrator: Units may only wield one weapon at the time.
+narrator: Some weapons stats vary, like their damage, crit chance and attack range.
+do Tutorial.tutorial_set_select_unit_advances_timeline()
+do Tutorial.tutorial_hide_portrait()
+[end_timeline]

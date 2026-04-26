@@ -83,6 +83,7 @@ func evaluate(state : GameState) -> int:
 					score += max(0, 20 - closest_player.state.current_health)
 			
 			# Slight penalty for moving away from closest player
+			## TODO: float converted to int here
 			score -= closest_dist * 2
 
 		else:

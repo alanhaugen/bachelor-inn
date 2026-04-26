@@ -9,18 +9,19 @@ class_name LootPopup
 @onready var new_weapon_name: Label = %NewWeaponName
 @onready var new_weapon_stats: Label = %NewWeaponStats
 
-@onready var button_discard: Button = $ButtonDiscard
-@onready var button_keep : Button = $ButtonKeep
+@onready var button_discard: Button = $Panel/VBoxContainer/KeepDrop/ButtonDiscard
+@onready var button_keep : Button = $Panel/VBoxContainer/KeepDrop/ButtonKeep
+
 
 var _current_weapon: Weapon = null
 var _new_weapon: Weapon = null
 var _character: Character = null
 
-func show_loot(current_weapon: Weapon, new_weapon: Weapon, char: Character) -> void:
+func show_loot(current_weapon: Weapon, new_weapon: Weapon, character: Character) -> void:
 	print("Loot Window triggered.")
 	_current_weapon = current_weapon
 	_new_weapon = new_weapon
-	_character = char
+	_character = character
 	
 	_set_weapon_in_loot_window(current_weapon_icon, current_weapon_name, current_weapon_stats, 
 	current_weapon)
@@ -49,6 +50,7 @@ weapon: Weapon) -> void:
 
 func _on_button_discard_pressed() -> void:
 	Main.level.is_in_menu = false
+	Main.level.has_window_open = false
 	hide()
 	## add signal for discarded weapon
 
@@ -58,5 +60,6 @@ func _on_button_keep_pressed() -> void:
 		_character.state.weapon = _new_weapon
 	print("New weapon is: " + _character.state.weapon.weapon_name)
 	Main.level.is_in_menu = false
+	Main.level.has_window_open = false
 	hide()
 	## add singlal and function for keeping new weapon

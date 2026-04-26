@@ -36,7 +36,7 @@ var movement_weights_grid : Grid
 #cursor testing
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
-@onready var cursor_feet : Texture2D = preload("res://art/textures/cursor_feet.png")
+@onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
 @onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 #cursor testing end
@@ -53,9 +53,15 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
+#@onready var portrait_pop_up: PortraitPopup = $PortraitPopUp
+#@onready var loot_popup : LootPopup = $LootPopUp
+var portrait_pop_up: PortraitPopup
+var loot_popup : LootPopup
+var pause_menu: PauseMenu
 
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
+var has_window_open : bool = false
 
 
 var selected_unit: Character = null
@@ -78,7 +84,7 @@ var characters: Array[Character];
 var triggered_positions: Array[Vector3i] = []
 
 const GAME_UI = preload("res://scenes/userinterface/InGameUI_WIP.tscn")
-
+#var in_game_ui: Control
 const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
 const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST = preload("res://scenes/grid_items/chest.tscn")
@@ -90,7 +96,11 @@ const BIRD_ENEMY: PackedScene  = preload("res://scenes/Characters/bird.tscn")
 const GHOST_ENEMY: PackedScene  = preload("res://scenes/Characters/Ghost_Enemy.tscn")
 const HORROR_ENEMY: PackedScene = preload("res://scenes/Characters/Horror_Scene.tscn")
 const CORRUPTED_PLAYER_RED: PackedScene = preload("res://scenes/Characters/Char_Corrupted_Player_Orange.tscn")
-@onready var loot_popup : LootPopup = $LootPopUp
+const PORTRAIT_POPUP = preload("res://scenes/userinterface/PortraitPopUp.tscn")
+const LOOT_POP_UP = preload("uid://bge25dwwd4pbs")
+const GAME_OVER = preload("res://scenes/states/game_over.tscn")
+var game_over_screen: Control
+const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -169,17 +179,17 @@ var monster_names := [
 ]
 
 
-func show_move_popup(window_pos :Vector2) -> void:
-	return
-	move_popup.show();
-	is_in_menu = true;
-	move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
-	if active_move is Attack:
-		move_popup.attack_button.show();
-	elif (active_move is Wait):
-		move_popup.wait_button.show();
-	else:
-		move_popup.move_button.show();
+#func show_move_popup(window_pos :Vector2) -> void:
+	#return
+	#move_popup.show();
+	#is_in_menu = true;
+	#move_popup.position = Vector2(window_pos.x + 64, window_pos.y);
+	#if active_move is Attack:
+		#move_popup.attack_button.show();
+	#elif (active_move is Wait):
+		#move_popup.wait_button.show();
+	#else:
+		#move_popup.move_button.show();
 
 
 func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
@@ -236,7 +246,7 @@ func select_next_character() -> void:
 	try_select_unit(list[next_index])
 
 
-func _on_turn_transition_finished(anim_name: StringName) -> void:
+func _on_turn_transition_finished(_anim_name: StringName) -> void:
 	if not is_player_turn:
 		return
 	camera_controller.free_camera()
@@ -598,8 +608,23 @@ func _input(event: InputEvent) -> void:
 						_start_hold(KEY_N, 1.0, 
 							func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
 						)
+				KEY_K:
+					_start_hold(KEY_N, 1.0, 
+					func() -> void: if is_player_turn and state != States.ANIMATING: game_over_screen._load_retry())
 				KEY_TAB:
 					select_next_character()
+				KEY_ESCAPE:
+					if _level_complete or has_window_open:
+						print("Pressed ESC while another window is open.")
+						pass
+					elif not is_in_menu:
+						is_in_menu = true
+						pause_menu.show()
+						get_tree().paused = true
+					else:
+						is_in_menu = false
+						pause_menu.hide()
+						get_tree().paused = false
 				KEY_1:
 					var ui := get_tree().get_first_node_in_group("ui_controller")
 					if ui:
@@ -671,6 +696,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _ready() -> void:
+	_level_complete = false
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	camera_controller = Main.camera_controller
 
 	cursor.hide()
@@ -690,21 +717,6 @@ func _ready() -> void:
 	fog_grid = Grid.new(fog_map)
 	
 	turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
-
-	#if (level_name == "first"):
-		#Dialogic.start(str(level_name) + "Level");
-		#is_in_menu = true;
-	#elif (level_name == "fen"):
-		#Dialogic.start("Showcase_Intro")
-		#is_in_menu = true
-	#elif (level_name == "tutorial_1"):
-		#Tutorial.level = self
-		#Tutorial.start_tutorial()
-		##Dialogic.start("tutorialpc1")
-	#elif (level_name == "fento"):
-		#for c in Main.characters:
-			#if c.state.faction == CharacterState.Faction.ENEMY:
-				#c.state.aggro_range = 20
 	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
@@ -734,7 +746,7 @@ func _ready() -> void:
 					"This character exists: ",
 					new_unit.data.unit_name,
 					" health: ",
-					health if health > 0 else "fresh unit"
+					health if health > 0 else 1000 #"fresh unit"
 				)
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
@@ -751,10 +763,35 @@ func _ready() -> void:
 					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		else:
 			spawn_enemy(pos, unit_type, true)
-
+	
+	## POP UPS INSTANTIATED
 	move_popup = MOVE_POPUP.instantiate()
 	move_popup.hide()
 	add_child(move_popup)
+	
+	portrait_pop_up = PORTRAIT_POPUP.instantiate()
+	portrait_pop_up.hide()
+	add_child(portrait_pop_up)
+	
+	loot_popup = LOOT_POP_UP.instantiate()
+	loot_popup.hide()
+	add_child(loot_popup)
+	
+	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
+	var pause_menu_layer := CanvasLayer.new()
+	pause_menu_layer.layer = 9
+	pause_menu = PAUSE_MENU.instantiate()
+	pause_menu.hide()
+	add_child(pause_menu)
+	
+	var game_over_layer := CanvasLayer.new()
+	game_over_layer.layer = 10
+	add_child(game_over_layer)
+	game_over_screen = GAME_OVER.instantiate()
+	game_over_screen.hide()
+	game_over_layer.add_child(game_over_screen)
+	#add_child(game_over_screen)
+	#in_game_ui = GAME_UI.instantiate()
 	
 	game_state = GameState.from_level(self)
 	
@@ -766,6 +803,11 @@ func _ready() -> void:
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
+	
+	if Main.get_current_level_index() > 2:
+		Main.save.save_progress(Main.current_save_slot, Main.get_current_level_index())
+	#SaveGame.new().save_progress(Main.current_save_slot, Main.current_level_index)
+
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
@@ -931,7 +973,7 @@ func MoveAI() -> void:
 
 func MoveSingleAI() -> void:
 	#check_aggro()
-	#Hide "End Turn button" and other UI elements
+	## TODO: Hide "End Turn button" and other UI elements
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	var any_active_enemies := false
@@ -1016,8 +1058,8 @@ func MoveSingleAI() -> void:
 				currentEnemy.state.is_moved = true
 				#MoveSingleAI()
 				call_deferred("MoveSingleAI")
-			return
-
+				return
+			## Return triggers above, code below is unreachable atm.
 			# Get next waypoint, wrap around when reaching the end
 			var target := waypoints[currentEnemy.state.patrol_index % waypoints.size()]
 
@@ -1082,7 +1124,7 @@ func MoveSingleAI() -> void:
 func CheckTriggerConditions() -> void:
 	## 02_Trigger2 = interact events like chest, sign post
 	## 03_Trigger3 = Dialogic events automatic trigger
-	var messages : int = 0
+	#var messages : int = 0 ## Old var from dialogue testing
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
@@ -1136,7 +1178,7 @@ func CheckVictoryConditions() -> void:
 			numberOfEnemyUnits += 1;
 	
 	if (numberOfPlayerUnits == 0):
-		get_tree().change_scene_to_file("res://scenes/states/gameover.tscn");
+		trigger_game_over()
 	elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
 		is_player_turn = true;
 		next_level();
@@ -1149,40 +1191,12 @@ func next_level() -> void:
 	if _level_complete:
 		return
 	_level_complete = true
+	cleanup_characters_before_load()
 	
-	var positions : Array[Vector3i] = occupancy_map.get_used_cells();
-	for i in positions.size():
-		var unit : Character = get_unit(positions[i])
-		var cell_item := occupancy_map.get_cell_item(positions[i])
-		if cell_item == 3 or cell_item == 0:
-			if unit == null:
-				continue
-			unit.reset();
-			unit.state.grid_position = Vector3i(0, 0, 0)
-
-		##Remove all other occupants, since they should not be in the next level
-		else:
-			if unit == null:
-				print("No unit found at enemy position: ", positions[i])
-				continue
-			print("Killing unit: ", unit.data.unit_name)			
-			unit.die(false)
-	
-	## Force Delete Enemy Units from map
-	for c in characters:
-		if c == null:
-			continue
-		if not c.state.is_enemy():
-			continue
-		if is_instance_valid(c):
-			print("Force deleting unit enemy: " + str(c.data.unit_name))
-			if c.get_parent() != null:
-				c.get_parent().remove_child(c)
-			c.free()
-			
+	## TODO: Decide this?
 	# Healing units between levels
-	for i in Main.characters.size():
-		Main.characters[i].state.current_health = Main.characters[i].state.max_health;
+	#for i in Main.characters.size():
+		#Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
 	## SAVE GAME HAPPENS HERE
 	var surviving_chars : Array[Character] = []
@@ -1193,14 +1207,56 @@ func next_level() -> void:
 	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
 	Main.go_to_transition_screen()
 
+
+func cleanup_characters_before_load() -> void:
+	# Kill enemies through proper death system first
+	var positions: Array[Vector3i] = occupancy_map.get_used_cells()
+	for i in positions.size():
+		var unit: Character = get_unit(positions[i])
+		var cell_item := occupancy_map.get_cell_item(positions[i])
+		if cell_item != 3 and cell_item != 0:
+			if unit == null:
+				print("No unit found at enemy position: ", positions[i])
+				continue
+			print("Killing unit: ", unit.data.unit_name)
+			unit.die(false)
+
+	# Force remove any remaining enemies
+	for c in characters:
+		if c == null:
+			continue
+		if not c.state.is_enemy():
+			continue
+		if is_instance_valid(c):
+			if c.get_parent() != null:
+				c.get_parent().remove_child(c)
+			c.free()
+
+	# Reset player units
+	for c in characters:
+		if c == null:
+			continue
+		if c.state.is_enemy():
+			continue
+		c.reset()
+		c.state.grid_position = Vector3i(0, 0, 0)
+
+
+func trigger_game_over() -> void:
+	is_in_menu = true
+	var ui := get_tree().get_first_node_in_group("ui_controller")
+	if ui:
+		ui.hide()
+	game_over_screen.show()
+
+
 func _on_character_sanity_flipped(character: Character) -> void:
 	print("heyaaa, we just flipped sanity")
 	emit_signal("character_stats_changed", character)
 	#characters.erase(character)
-	
-	
 
-func interpolate_to(target_transform:Transform3D, delta:float) -> void:
+
+func interpolate_to(target_transform:Transform3D, _delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform)
 
 #func tick_all_units_end_round(owner: Character) -> void:
@@ -1293,7 +1349,7 @@ func _exit_skill_target_mode() -> void:
 	skill_caster = null
 	valid_skill_target_tiles.clear()
 	path_map.clear()
-	print("caster is_moved: ", caster.state.is_moved if caster else "null")
+	#print("caster is_moved: ", caster.state.is_moved if caster else "null")
 	if caster != null and caster.state.is_moved == false:
 		select_unit(caster)
 
@@ -1330,24 +1386,24 @@ func _process(delta: float) -> void:
 	return
 	
 	# FUTURE:
-	match state:
-		States.PLAYING:
-			process_playing(delta)
-		States.ANIMATING:
-			process_animating(delta)
-		States.TRANSITION:
-			process_transition(delta)
+	#match state:
+		#States.PLAYING:
+			#process_playing(delta)
+		#States.ANIMATING:
+			#process_animating(delta)
+		#States.TRANSITION:
+			#process_transition(delta)
 
 
-func process_playing(delta: float) -> void:
+func process_playing(_delta: float) -> void:
 	pass
 
 
-func process_animating(delta: float) -> void:
+func process_animating(_delta: float) -> void:
 	pass
 
 
-func process_transition(delta: float) -> void:
+func process_transition(_delta: float) -> void:
 	pass
 
 
@@ -1485,6 +1541,7 @@ func _process_old(delta: float) -> void:
 				for character in characters:
 					if characters == null: 
 						return
+					## TODO: Fix below - character instance is not valid.
 					emit_signal("character_stats_changed", character)
 			
 			var code := enemy_code;
@@ -1555,16 +1612,22 @@ func _process_old(delta: float) -> void:
 
 func end_player_turn() -> bool:
 	if !is_player_turn:
+		print("BLOCKED: not player turn")
 		return false
 	if (turn_transition_animation_player.is_playing()):
+		print("BLOCKED: animation playing")
 		return false
 	if(!combat_vfx.is_finished()):
+		print("BLOCKED: combat vfx not finished")
 		return false
 	if wait_for_camera:
+		print("BLOCKED: waiting for camera")
 		return false
 	if (is_in_menu):
+		print("BLOCKED: is in menu")
 		return false
 	if state != States.PLAYING:
+		print("BLOCKED: state is ", state)
 		return false
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
@@ -1574,6 +1637,7 @@ func end_player_turn() -> bool:
 			active_move.execute(game_state);
 			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
+			_clear_selection()
 	return true
 
 
@@ -1598,10 +1662,19 @@ func _update_cursor_on_hover() -> void:
 	_last_hovered_pos = grid_pos
 	
 	var cell := movement_map.get_cell_item(grid_pos)
+	#print("cell value: ", cell, " ATTACK: ", GridTile.Type.ATTACK, " INTERACT: ", GridTile.Type.INTERACT)
+	var cell_name := movement_map.mesh_library.get_item_name(cell) if cell != GridMap.INVALID_CELL_ITEM else ""
+	if cell_name == "Gohere":
+		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+
 	if cell == GridTile.Type.ATTACK:
 		Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
-	elif cell == GridTile.Type.INTERACT:
+	elif cell in [GridTile.Type.MOVE, GridTile.Type.INTERACT, 3, 4]:
 		Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+	#elif cell == GridTile.Type.MOVE:
+		#Input.set_custom_mouse_cursor(cursor_boot, Input.CURSOR_ARROW, Vector2(8, 8))
+	elif get_trigger_name(grid_pos) == "02_Chest":
+		Input.set_custom_mouse_cursor(cursor_hand, Input.CURSOR_ARROW, Vector2(8, 8))
 	else:
 		Input.set_custom_mouse_cursor(null)
 
@@ -1670,7 +1743,7 @@ func check_aggro() -> void:
 func hide_inactive_characters() -> void:
 	## TODO: Implement hiding player units when out of combat
 	##       Implement spawning player units when re entering combat
-	var any_active_enemy := false
+	var _any_active_enemy := false
 	# This hide inactive enemies
 	for unit in characters:
 		if unit == null:
@@ -1679,7 +1752,7 @@ func hide_inactive_characters() -> void:
 			continue
 		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
 			unit.hide()
-			any_active_enemy = true
+			_any_active_enemy = true
 		else:
 			unit.show()
 	
@@ -1732,6 +1805,13 @@ func _on_chest_opened(pos: Vector3i) -> void:
 	print("loot_popup: ", loot_popup)
 	var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
 	loot_popup.show_loot(current_weapon, new_weapon, selected_unit)
+	is_in_menu = true
+	has_window_open = true
+	
+	if Tutorial.in_tutorial and Tutorial.chest_open == false:
+		Tutorial.chest_open = true
+		Tutorial.can_advance_timeline = true
+		Tutorial.advance_timeline()
 
 
 func _recruit_neutral_units() -> void:
@@ -1768,10 +1848,6 @@ func _recruit_neutral_units() -> void:
 			return
 
 	print("No neutral units found to recruit")
-
-
-func _add_neutral_unit_to_party() -> void:
-	pass
 
 
 func _start_hold(key: Key, duration: float, action: Callable) -> void:

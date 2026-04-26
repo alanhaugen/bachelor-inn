@@ -448,7 +448,7 @@ static func _has_enemy_in_range_from_origin(
 	origin: Vector3i,
 	min_r: int,
 	max_r: int,
-	unit: Character,
+	_unit: Character,
 	state: GameState
 ) -> bool:
 	# Manhattan distance in XZ, height must match (for now)

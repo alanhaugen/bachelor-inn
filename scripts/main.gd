@@ -45,9 +45,18 @@ var transition_screen: Control = null
 #region Methods
 ## Unloads the current level instance
 func unload_level() -> void:
+	#if is_instance_valid(level):
+		#level.cleanup_characters_before_load()
+		#level.queue_free(); # Free the current level instance
+	#level = null;
 	if is_instance_valid(level):
-		level.queue_free(); # Free the current level instance
-	level = null;
+		# Only remove enemies from world, leave player characters alone
+		for child in world.get_children():
+			if child is Character and child.state.is_enemy():
+				world.remove_child(child)
+				child.queue_free()
+		level.queue_free()
+	level = null
 
 func next_level() -> void:
 	print("current_level_name: '", current_level_name, "'")
@@ -86,8 +95,9 @@ func load_level(level_name: String) -> void:
 		Dialogic.VAR.PLATFORM = "MOBILE";
 	else:
 		Dialogic.VAR.PLATFORM = "DESKTOP";
-	unload_level();
+	unload_level(); ## TODO: Called too early?
 	current_level_name = level_name
+	current_level_index = levels.find_custom(func(p: String) -> bool: return p.get_file().get_basename() == level_name)
 	#var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
 	var level_path: String = "res://scenes/levels/%s.tscn" % level_name;
 	print("Attempting to load level path: '", level_path, "'")
@@ -101,6 +111,7 @@ func load_level(level_name: String) -> void:
 	world.add_child(level) # Add the new level to the World node
 	
 	await get_tree().process_frame
+	#SaveGame.new().save_progress(current_save_slot, current_level_index)
 	var ui := get_tree().get_first_node_in_group("ui_controller")
 	if ui:
 		ui._connect_to_level(level)
@@ -134,9 +145,17 @@ func get_next_level_index() -> int:
 	return 0
 
 
+func get_current_level_index() -> int:
+	for i in levels.size():
+		if levels[i].get_file().get_basename() == current_level_name:
+			return i
+	return 0
+
+
 func go_to_transition_screen() -> void:
 	if is_instance_valid(Main.level):
 		Main.level.is_in_menu = true
+		print("Going to Transition Screen. Instance Main.level is valid.")
 	var packed := load("res://scenes/states/level_transition.tscn")
 	transition_screen = packed.instantiate()
 	get_tree().root.add_child(transition_screen)
@@ -181,10 +200,22 @@ var level_story_text : Dictionary = {
 	"tutorial_2":
 	"\nYou find yourself inside a smal, but sturdy set of ruins.\n 
 	The thing that was chasing you has stopped.. For now.\n 
-	The ruins are damp and cold, but a small torch somehow flickers on the far side.\n 
-	Could someone have been here recently?\n\n\n",
+	The ruins are damp, and a faint draft causes a small torch to flicker on the far side.\n 
+	A lit torch? Could someone have been here recently?\n\n
+	.. you hear something\n\n\n",
 	"tutorial_3":
-	"\nThe sound of a whisper draws your attention.\n
-	Outside, on the other side of the ruins you stumble upon a makeshift camp outside a worn stable.\n
-	Two shadows make out a silhuette before a flickering bonfire.\n\n\n"
+	"\nThe faint sound of a voice draws your attention.\n
+	You stumble upon a makeshift camp outside a worn stable.\n
+	Two shadows make out a silhuette before a flickering bonfire.\n\n\n",
+	"fento": 
+	"\nFeral screams pierce the night. Several monsters, no doubt.\n
+	You rush out as fast as you can. Lucy and Emil are already on their feet.\n
+	You draw your weapon.\n\n\n",
+	"fen":
+	"\nPast the river, to the east, your party is embraced by a shining light.\n
+	Behind you - more monsters.\n\n\n",
+	"waterfallLevel":
+	"\nH20\n\n\n",
+	"woodlandsLevel":
+	"\nHowMuchWoodWouldAWoodchuckChuckIfAWoodchuckCouldChuckWood?\n\n\n"
 }

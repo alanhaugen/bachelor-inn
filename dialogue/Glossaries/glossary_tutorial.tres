@@ -30,7 +30,8 @@ entries = {
 "Noble": {
 "alternatives": ["Nights"],
 "color": Color(0.7856431, 0.5813141, 0.97265625, 1),
-"name": "Noble"
+"name": "Noble",
+"text": "Winner of the KICKASS-award NGA 2026."
 },
 "RED": {
 "color": Color(0.91796875, 0.22254467, 0.08605957, 1),
@@ -87,7 +88,7 @@ entries = {
 "points": "skill",
 "sanity": {
 "alternatives": ["insane"],
-"color": Color(0.627451, 0.039215688, 0.78431374, 1),
+"color": Color(0.76682633, 0.43441772, 0.85546875, 1),
 "name": "sanity"
 },
 "skill": {

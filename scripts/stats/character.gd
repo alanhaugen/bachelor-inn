@@ -20,9 +20,6 @@ class_name Character
 @export var state : CharacterState
 @export var scene_id : String = ""
 
-
-
-
 ### SIGNALS
 
 signal sanity_flipped(character: Character)
@@ -184,46 +181,47 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	return new_skill;
 
 
-func _on_experience_changed(in_experience: int) -> void:
-	#data.experience += in_experience;
-	return
-	print(data.unit_name + " gains " + str(in_experience) + " experience points.");
-	if (state.experience > state.next_level_experience):
-		print("Level up!");
-		state.current_level += 1;
-		if (data.speciality == CharacterData.Speciality.Militia):
-			if (state.next_level_experience >= 10):
-				data.health += 1;
-				data.mind += 1;
-			if (state.next_level_experience >= 100):
-				data.health += 1;
-				data.mind += 1;
-			if (state.next_level_experience >= 1000):
-				data.luck += 1;
-				data.skill += 1;
-		
-		calc_derived_stats()
-		
-		state.next_level_experience *= 10;
-		calibrate_level_popup();
-		level_up_popup.show();
-		Main.level.is_in_menu = true;
-		
-		var new_skill_1 : Skill = get_random_unaquired_skill();
-		var new_skill_2 : Skill = get_random_unaquired_skill(new_skill_1);
-		
-		if new_skill_1 != null:
-			skill_choose_popup.unit = self;
-			
-			skill_choose_popup.icon_1.texture = new_skill_1.icon;
-			skill_choose_popup.skill_name_1.text = new_skill_1.skill_name;
-			skill_choose_popup.label_skill_1.text = new_skill_1.tooltip;
-			skill_choose_popup.first_skill = new_skill_1;
-			skill_choose_popup.icon_2.texture = new_skill_2.icon;
-			skill_choose_popup.skill_name_2.text = new_skill_2.skill_name;
-			skill_choose_popup.label_skill_2.text = new_skill_2.tooltip;
-			skill_choose_popup.second_skill = new_skill_2;
-			skill_choose_popup.show();
+#func _on_experience_changed(in_experience: int) -> void:
+	#pass
+	##data.experience += in_experience;
+	#return
+	#print(data.unit_name + " gains " + str(in_experience) + " experience points.");
+	#if (state.experience > state.next_level_experience):
+		#print("Level up!");
+		#state.current_level += 1;
+		#if (data.speciality == CharacterData.Speciality.Militia):
+			#if (state.next_level_experience >= 10):
+				#data.health += 1;
+				#data.mind += 1;
+			#if (state.next_level_experience >= 100):
+				#data.health += 1;
+				#data.mind += 1;
+			#if (state.next_level_experience >= 1000):
+				#data.luck += 1;
+				#data.skill += 1;
+		#
+		#calc_derived_stats()
+		#
+		#state.next_level_experience *= 10;
+		#calibrate_level_popup();
+		#level_up_popup.show();
+		#Main.level.is_in_menu = true;
+		#
+		#var new_skill_1 : Skill = get_random_unaquired_skill();
+		#var new_skill_2 : Skill = get_random_unaquired_skill(new_skill_1);
+		#
+		#if new_skill_1 != null:
+			#skill_choose_popup.unit = self;
+			#
+			#skill_choose_popup.icon_1.texture = new_skill_1.icon;
+			#skill_choose_popup.skill_name_1.text = new_skill_1.skill_name;
+			#skill_choose_popup.label_skill_1.text = new_skill_1.tooltip;
+			#skill_choose_popup.first_skill = new_skill_1;
+			#skill_choose_popup.icon_2.texture = new_skill_2.icon;
+			#skill_choose_popup.skill_name_2.text = new_skill_2.skill_name;
+			#skill_choose_popup.label_skill_2.text = new_skill_2.tooltip;
+			#skill_choose_popup.second_skill = new_skill_2;
+			#skill_choose_popup.show();
 
 
 #func update_health_bar() -> void:
@@ -243,6 +241,10 @@ func calibrate_level_popup() -> void:
 
 
 func calc_derived_stats() -> void:
+	## TODO: Fix calc_derived_stats() being used to build character initially?
+	## 		 the game crashes if we touch current_sanity = max_sanity.
+	## TODO: Simplyfy how stats work?? Right now, adding endurance increases max sanity, 
+	## 	 	 because it increases resistance.
 	if data == null:
 		return
 	state.defense = 4 + data.endurance
@@ -252,14 +254,37 @@ func calc_derived_stats() -> void:
 	#state.movement = 4 + floor(data.speed / 3.0)
 	state.movement = 4 + data.speed
 	state.current_health = state.max_health
+	#state.current_health = state.current_health
 	state.current_sanity = state.max_sanity
+	#state.current_sanity = state.current_sanity
 	state.stability = max(1, data.focus - data.mind)
 
+
+func update_derived_stats_after_level_up() -> void:
+	if data == null:
+		return
+	state.defense = 4 + data.endurance
+	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	state.movement = 4 + data.speed
+	state.stability = max(1, data.focus - data.mind)
+	
+	var new_max_health := int(4 + data.endurance + floor(data.strength / 2.0))
+	var new_max_sanity := int(state.resistance + data.mind)
+	
+	if state.current_health == state.max_health:
+		state.current_health = new_max_health
+	state.max_health = new_max_health
+	
+	if state.current_sanity == state.max_sanity or state.current_sanity == new_max_sanity - 1:
+		state.max_sanity = new_max_sanity
+		state.current_sanity = new_max_sanity
+	else:
+		state.max_sanity = new_max_sanity
 
 func _ready() -> void:
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
-		state.experience_changed.connect(_on_experience_changed)
+		#state.experience_changed.connect(_on_experience_changed)
 	
 	#health_bar_ally = HEALTH_BAR_SCENE.instantiate();
 	#health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
@@ -310,16 +335,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	#var mesh_3d_position: Vector3 = global_transform.origin;
-	
-	#if state.is_alive:
-		#show_ui() # hack, TODO: removeme
-	
-	#if camera:
-		#var screen_position_2d: Vector2 = camera.unproject_position(mesh_3d_position + Vector3(0, 1, 0))
-		#health_bar.position = screen_position_2d - Vector2(3 * 15, 0);
-		#health_bar.position.y += 70; # move down a little 
-	
 	if current_animation == null:
 		return
 	
@@ -331,14 +346,6 @@ func _process(delta: float) -> void:
 		if stop_anim:
 			frame_index = 0
 		sprite.material_override.set_shader_parameter("frame_index", frame_index)
-
-
-#func hide_ui() -> void:
-	#health_bar.hide()
-
-
-#func show_ui() -> void:
-	#health_bar.show()
 
 
 func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
@@ -374,7 +381,7 @@ func reset() -> void:
 
 ## Importing this to attack.gd
 func apply_damage(amount: int, simulate_only: bool = false, 
-					source: Character = null, label: String = "") -> bool:
+	_source: Character = null, _label: String = "") -> bool:
 	amount = int(amount)
 	if amount <= 0:
 		return false
