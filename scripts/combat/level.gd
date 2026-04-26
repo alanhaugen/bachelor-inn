@@ -423,7 +423,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	var exit_skill : bool = false
 	if not valid_skill_target_tiles.has(p):
 		exit_skill = true
-	if target == null: ## TODO: Add AoE.none check here
+	if target == null and used_skill.aoe_shape == Skill.AoEShape.NONE: ## TODO: Add AoE.none check here
 		exit_skill = true
 	if not _is_valid_target(target, used_skill, skill_caster):
 		exit_skill = true
@@ -466,7 +466,8 @@ func _handle_skill(pos : Vector3i) -> void:
 	var aoe_tiles := _get_aoe_tiles(p, used_skill)
 	for aoe_pos in aoe_tiles:
 		var aoe_target: Character = get_unit(aoe_pos)
-		if aoe_target == null: ## TODO: Change this if we want to be able to cast skills on ground.
+		## TODO: Change this if we want to be able to cast skills on ground.
+		if aoe_target == null: 
 			continue
 		if not _is_valid_target(aoe_target, used_skill, skill_caster):
 			continue
@@ -476,7 +477,7 @@ func _handle_skill(pos : Vector3i) -> void:
 		
 		## Apply after effects (DoT)
 		aoe_target.state.apply_skill_effect(used_skill)
-		emit_signal("character_stats_changed", target)
+		emit_signal("character_stats_changed", aoe_target)
 	
 	## Apply effects like Impact damage from Fireball
 	
