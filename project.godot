@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Noble Nights"
-config/description="A Lovecraftial Pixel tactical RPG."
+config/description="A Cosmic Horror Pixel Tactical RPG."
 config/version="0.1-demo"
 run/main_scene="uid://cm02uehw506nt"
 config/features=PackedStringArray("4.6", "Forward Plus")
