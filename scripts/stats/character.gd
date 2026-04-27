@@ -242,8 +242,6 @@ func calibrate_level_popup() -> void:
 
 
 func calc_derived_stats() -> void:
-	## TODO: Fix calc_derived_stats() being used to build character initially?
-	## 		 the game crashes if we touch current_sanity = max_sanity.
 	## TODO: Simplyfy how stats work?? Right now, adding endurance increases max sanity, 
 	## 	 	 because it increases resistance.
 	if data == null:
@@ -253,12 +251,18 @@ func calc_derived_stats() -> void:
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
 	state.max_sanity = state.resistance + data.mind
 	#state.movement = 4 + floor(data.speed / 3.0)
-	state.movement = 4 + data.speed
-	state.current_health = state.max_health
-	#state.current_health = state.current_health
-	state.current_sanity = state.max_sanity
-	#state.current_sanity = state.current_sanity
 	state.stability = max(1, data.focus - data.mind)
+	state.movement = 4 + data.speed
+	
+	if state.current_health <= 0:
+		state.current_health = state.max_health
+	if state.current_sanity <= 0:
+		state.current_sanity = state.max_sanity
+	
+	## TODO: decide if we want to have an auto equip class weapon.
+	#if state.weapon == null or state.weapon.weapon_id == "unarmed":
+		#var weapon_id := get_default_weapon_id()
+		#state.weapon = WeaponRegistry.get_weapon(weapon_id)
 
 
 func update_derived_stats_after_level_up() -> void:
@@ -285,30 +289,10 @@ func update_derived_stats_after_level_up() -> void:
 func _ready() -> void:
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
-		#state.experience_changed.connect(_on_experience_changed)
-	
-	#health_bar_ally = HEALTH_BAR_SCENE.instantiate();
-	#health_bar_enemy = ENEMY_HEALTH_BAR_SCENE.instantiate();
-	#add_child(health_bar_ally);
-	#add_child(health_bar_enemy);
-	#health_bar_ally.hide();
-	#health_bar_enemy.hide();
 	
 	calc_derived_stats()
 	
-	# Skill aquirement commented out for now
-	#if personality == Personality.Zealot:
-	#	skills.append(generic_skills[0]);
-	#state.skills.append(get_random_unaquired_skill()); #No longer gets random skill from skill list, should rather use the new skill system!
-	
-	#if data.speciality == CharacterData.Speciality.Scholar:
-		#state.skills.append(SkillRegistry.get_skill("heal_basic"));
-	#abilities.append(abilites[0]);
-	
 	if not state.is_playable() and state.faction != CharacterState.Faction.NEUTRAL:
-		#health_bar = health_bar_ally;
-	#else:
-		#health_bar = health_bar_enemy;
 		state.faction = CharacterState.Faction.ENEMY;
 	# should remake the entire level up 
 	level_up_popup = LEVEL_UP_POPUP.instantiate();
@@ -322,17 +306,9 @@ func _ready() -> void:
 	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
 	skill_choose_popup.hide()
 	
-	#sprite.translate(Vector3(0.3,1.0,-0.1))
-	#sprite.rotate(Vector3(1,0,0), deg_to_rad(-60))
-	#sprite.scale = Vector3(4,4,4)
-		
-	#outline.translatsprite.translatee(Vector3(0.3,1.0,-0.1))
-	#outline.rotate(Vector3(1,0,0), deg_to_rad(-60))
-	#outline.scale = Vector3(4,4,4)
 	play(idle_animation)
 	
 	camera = get_viewport().get_camera_3d()
-	#update_health_bar()
 
 
 func _process(delta: float) -> void:
@@ -363,8 +339,6 @@ func move_to(pos: Vector3i, simulate_only: bool = false) -> void:
 			grid_code = Main.level.enemy_code;
 		Main.level.occupancy_map.set_cell_item(state.grid_position, grid_code);
 		Main.level.emit_signal("character_stats_changed", self)
-		#if state.is_playable():
-			#my_material.set_shader_parameter("grey_tint", true)
 
 
 func reset() -> void:
@@ -439,6 +413,7 @@ func save() -> Dictionary:
 		"data": data.save(),
 		"state": state.save()
 	}
+
 
 ## This func is used inside the next function - ensure_weapon_equipped()
 ## Gives characters their base weapon based on speciality.

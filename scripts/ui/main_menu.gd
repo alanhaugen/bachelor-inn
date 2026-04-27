@@ -21,6 +21,7 @@ var _slot_pending_overwrite: int = -1
 #region --- Processing ---
 ## Called when the node enters the scene tree for the first time
 func _ready() -> void:
+	print(OS.get_data_dir())
 	Main.world = world;
 	Main.levels = levels_order.levels;
 	Main.camera_controller = camera_controller;

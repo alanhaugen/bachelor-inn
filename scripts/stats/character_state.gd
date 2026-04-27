@@ -65,6 +65,8 @@ signal level_changed(new_level: int)
 @export var resistance : int
 #endregion
 
+#var is_initialized: bool = false
+
 		
 #region methods
 func is_ally(in_faction: Faction = Faction.PLAYER) -> bool:

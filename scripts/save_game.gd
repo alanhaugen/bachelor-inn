@@ -188,19 +188,26 @@ func read(save_slot: int) -> bool:
 		data.focus = data_dict["focus"]
 		data.endurance = data_dict["endurance"]
 
-
 		# --- STATE ---
 		var state := CharacterState.new()
 		var state_dict : Dictionary = unit_dict["state"]
-
 		var gp : Array = state_dict["grid_position"]
 		state.grid_position = Vector3i(gp[0], gp[1], gp[2])
-
 		state.faction = state_dict["faction"]
 		state.experience = state_dict["experience"]
 		state.level = state_dict["level"]
-		state.current_health = state_dict["current_health"]
-		state.current_sanity = state_dict["current_sanity"]
+		## Need to do this atm to avoid UI signal overwriting current_sanity on load/read
+		var endurance := int(data_dict["endurance"])
+		var focus := int(data_dict["focus"])
+		var mind := int(data_dict["mind"])
+		var strength := int(data_dict["strength"])
+		var resistance := int(4 + floor(float(focus) / 2.0) + floor(float(endurance) / 2.0))
+		state.max_health = int(4 + endurance + floor(float(strength) / 2.0))
+		state.max_sanity = resistance + mind
+		
+		state.current_health = int(state_dict["current_health"])
+		state.current_sanity = int(state_dict["current_sanity"])
+		
 		state.weapon = WeaponRegistry.get_weapon(state_dict["weapon_id"])
 		state.skills.clear()
 		var ids: Array = state_dict.get("skill_ids", [])
@@ -283,6 +290,7 @@ func save_progress(save_slot: int, level_index: int) -> void:
 		if character.scene_id == null or character.scene_id == "":
 			character.scene_id = character.data.unit_name.to_lower()
 		units.append(character.save())
+		print("  Saving: ", character.data.unit_name, " hp: ", character.state.current_health, " san: ", character.state.current_sanity)
 		
 	saves[slot_key] = {"level": level_index, "units": units}
 	
