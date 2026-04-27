@@ -563,7 +563,7 @@ horizontal_alignment = 2
 [node name="Name" type="Label" parent="UI/CreditsSelect/LevelSelectVBOX/HBoxContainer7" unique_id=1237151151]
 layout_mode = 2
 size_flags_vertical = 5
-text = "huskerikke"
+text = "Einar"
 
 [node name="BackButtonCredits" type="Button" parent="UI/CreditsSelect/LevelSelectVBOX" unique_id=476628321]
 custom_minimum_size = Vector2(32, 32)
@@ -571,7 +571,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_fonts/font = ExtResource("2_cix78")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxTexture_wxwbn")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_beadd")
 theme_override_styles/hover = SubResource("StyleBoxTexture_huha7")

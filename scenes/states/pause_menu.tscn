@@ -1,6 +1,18 @@
 [gd_scene format=3 uid="uid://btap5oojesi27"]
 
 [ext_resource type="Script" uid="uid://b2rdr6eo40gm2" path="res://scripts/ui/pause_menu.gd" id="1_bxrfh"]
+[ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="2_lgpe2"]
+[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/userinterface/button_theme.tres" id="3_1owm0"]
+[ext_resource type="StyleBox" uid="uid://bh3vpp1vfa4o" path="res://scenes/userinterface/Button_Focus_Style.tres" id="4_tgxt0"]
+[ext_resource type="StyleBox" uid="uid://bxg7htv4vn5rw" path="res://scenes/userinterface/button_hover_style.tres" id="5_0thcs"]
+[ext_resource type="StyleBox" uid="uid://7btdlsimck4p" path="res://scenes/userinterface/button_normal_style.tres" id="6_703ti"]
+[ext_resource type="StyleBox" uid="uid://dcptgtrri5psh" path="res://scenes/userinterface/button_pressed_style.tres" id="7_6u7bi"]
+
+[sub_resource type="Theme" id="Theme_fc1pj"]
+Button/styles/focus = ExtResource("4_tgxt0")
+Button/styles/hover = ExtResource("5_0thcs")
+Button/styles/normal = ExtResource("6_703ti")
+Button/styles/pressed = ExtResource("7_6u7bi")
 
 [node name="PauseMenu" type="Control" unique_id=1247984136]
 layout_mode = 3
@@ -11,35 +23,25 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bxrfh")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=723295461]
-custom_minimum_size = Vector2(400, 400)
+[node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=470662658]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 529.0
+offset_top = 192.0
+offset_right = -1181.75
+offset_bottom = -733.5
+scale = Vector2(4, 4)
+texture = ExtResource("2_lgpe2")
+region_rect = Rect2(68, 100, 24, 24)
+patch_margin_left = 5
+patch_margin_top = 5
+patch_margin_right = 5
+patch_margin_bottom = 5
+metadata/_edit_group_ = true
 
-[node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=1197574619]
-custom_minimum_size = Vector2(350, 350)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.25323564, 5.0477123e-05, 0.25928286, 1)
-
-[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect" unique_id=1060619752]
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect" unique_id=1060619752]
 custom_minimum_size = Vector2(200, 200)
 layout_mode = 1
 anchors_preset = 8
@@ -47,38 +49,46 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -73.5
-offset_top = -60.0
-offset_right = 73.5
-offset_bottom = 60.0
+offset_left = -100.125
+offset_top = -73.0
+offset_right = 99.875
+offset_bottom = 127.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="ColorRect/VBoxContainer" unique_id=518689797]
+[node name="Label" type="Label" parent="NinePatchRect/VBoxContainer" unique_id=518689797]
 layout_mode = 2
 size_flags_vertical = 5
-theme_override_font_sizes/font_size = 48
+theme_override_font_sizes/font_size = 32
 text = "PAUSED"
 horizontal_alignment = 1
+metadata/_edit_lock_ = true
 
-[node name="Options" type="Button" parent="ColorRect/VBoxContainer" unique_id=902936125]
+[node name="Options" type="Button" parent="NinePatchRect/VBoxContainer" unique_id=902936125]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 5
+theme = ExtResource("3_1owm0")
 text = "Options"
+metadata/_edit_lock_ = true
 
-[node name="ResumeButton" type="Button" parent="ColorRect/VBoxContainer" unique_id=1259551808]
+[node name="ResumeButton" type="Button" parent="NinePatchRect/VBoxContainer" unique_id=1259551808]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 5
+theme = SubResource("Theme_fc1pj")
 text = "Resume"
+metadata/_edit_lock_ = true
 
-[node name="BackToMainMenu" type="Button" parent="ColorRect/VBoxContainer" unique_id=1497429984]
+[node name="BackToMainMenu" type="Button" parent="NinePatchRect/VBoxContainer" unique_id=1497429984]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 5
+theme = SubResource("Theme_fc1pj")
 text = "Quit to Main Menu"
+metadata/_edit_lock_ = true
 
-[connection signal="pressed" from="ColorRect/VBoxContainer/Options" to="." method="_on_options_pressed"]
-[connection signal="pressed" from="ColorRect/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
-[connection signal="pressed" from="ColorRect/VBoxContainer/BackToMainMenu" to="." method="_on_back_to_main_menu_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="NinePatchRect/VBoxContainer/BackToMainMenu" to="." method="_on_back_to_main_menu_pressed"]
