@@ -486,7 +486,7 @@ visible = false
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34202012, 33, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34202012, 36.935585, 0, -1)
 
 [node name="Scatterables" type="Node3D" parent="." index="17" unique_id=1148957787]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)
