@@ -48,12 +48,10 @@ omni_range = 27.256
 
 [node name="Lamp2" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="3" unique_id=1926863076]
 transform = Transform3D(0.9998989, 0.010757646, -0.009300203, -0.010857675, 0.99988306, -0.010773, 0.009183224, 0.010872889, 0.99989873, 16.964767, -2.633286, 34.890224)
-visible = true
 light_color = Color(0.8648794, 0.32599044, 0.13145241, 1)
 
 [node name="Lamp3" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="4" unique_id=792911881]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.211191, -1.8353305, 4.231345)
-visible = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.221989, -1.835331, 4.2320724)
 light_color = Color(1, 0.16470589, 0.21568628, 1)
 
 [node name="Lamp4" type="OmniLight3D" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="5" unique_id=1783121924]
@@ -69,10 +67,10 @@ minimum_camera_z = -200.0
 maximum_camera_z = 200.0
 
 [node name="FireParticle" parent="." index="18" unique_id=190313014 instance=ExtResource("2_tomb4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.95834, 2.8676875, 35.080517)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.95834, 2.3843093, 35.080517)
 
 [node name="FireParticle2" parent="." index="19" unique_id=272045790 instance=ExtResource("2_tomb4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.933259, 3.8200083, 4.9577985)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.933259, 3.8253093, 4.9577985)
 
 [node name="Fireflies" parent="." index="20" unique_id=116509753 instance=ExtResource("3_te3c6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.355574, 0.6137824, 24.530235)
