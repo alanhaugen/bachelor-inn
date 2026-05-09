@@ -9,6 +9,9 @@ class_name CharacterSelection
 @onready var start_adventure: Button = %StartAdventure
 @onready var stats_label: Label = %StatsLabel
 
+var info_box_packed := preload("res://scenes/userinterface/info_box_char_select.tscn")
+var info_box: Control = null
+
 var placeholder_portrait : Texture2D = preload("res://art/textures/Alphred_portrait_500percentsize.png")
 
 var character_ids: Array[String] = ["alfred", "emil", "lucy"]
@@ -21,6 +24,9 @@ var character_flavor: Dictionary = {
 }
 
 func _ready() -> void:
+	info_box = info_box_packed.instantiate()
+	add_child(info_box)
+	info_box.hide()
 	_update_display()
 
 func _update_display() -> void:
@@ -67,6 +73,11 @@ func _on_right_arrow_button_pressed() -> void:
 
 
 func _on_start_adventure_pressed() -> void:
-	Main.selected_starting_character = character_ids[current_index]
-	queue_free()
-	Main.save.load_tutorial()
+	if character_name.text != "Alfred":
+		## Show info box
+		info_box.show()
+		return
+	else:
+		Main.selected_starting_character = character_ids[current_index]
+		queue_free()
+		Main.save.load_tutorial()
