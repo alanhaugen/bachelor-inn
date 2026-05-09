@@ -23,6 +23,8 @@ var character_flavor: Dictionary = {
 	"lucy": "A seasoned fighter who survived the collapse alone. Stubborn and capable."
 }
 
+##TODO: Add info_box_char_select.tscn as child node to this scene tree instead of preloading
+
 func _ready() -> void:
 	info_box = info_box_packed.instantiate()
 	add_child(info_box)
