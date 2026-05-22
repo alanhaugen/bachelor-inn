@@ -251,7 +251,7 @@ func calc_derived_stats() -> void:
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
 	state.max_sanity = state.resistance + data.mind
 	#state.movement = 4 + floor(data.speed / 3.0)
-	state.stability = max(1, data.focus - data.mind)
+	state.stability = max(1, data.focus - (data.mind/2))
 	state.movement = 4 + data.speed
 	
 	if state.current_health <= 0:

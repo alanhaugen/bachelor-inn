@@ -78,7 +78,7 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 				#aggressor.state.current_sanity -= victim.data.strength / aggressor.state.stability
 		else:
 			@warning_ignore("integer_division")
-			victim.state.current_sanity -= aggressor.data.strength / victim.state.stability
+			victim.state.current_sanity -= aggressor.data.mind / victim.state.stability
 	
 	#death
 	if result.killed:
