@@ -452,19 +452,21 @@ func _handle_skill(pos : Vector3i) -> void:
 	result.vfx_scene =  used_skill.Vfx_Scene
 	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage") and target != null: 
 		result.damage = used_skill.effect_mods.get("damage", 0)
-		
+	
+		## VFX - Show visual
+	print("Skill result - aggressor: ", result.aggressor)
+	print("Skill result - victim: ", result.victim)
+	print("Skill result - vfx_scene: ", result.vfx_scene)
+	print("Skill result - damage: ", result.damage)
+	await combat_vfx.play_skill(result)
+	
 	## Apply damage to primary target
 	if target != null and used_skill.effect_mods != null and used_skill.effect_mods.has("damage"):
 		var dmg := int(used_skill.effect_mods["damage"])
 		target.apply_damage(dmg, false, skill_caster, used_skill.skill_name)
 		emit_signal("character_stats_changed", target)
 	
-	## VFX - Show visual
-	print("Skill result - aggressor: ", result.aggressor)
-	print("Skill result - victim: ", result.victim)
-	print("Skill result - vfx_scene: ", result.vfx_scene)
-	print("Skill result - damage: ", result.damage)
-	await combat_vfx.play_skill(result)
+
 	
 	## TODO: fix crash here if used_skill is null
 	#var used_action : bool = used_skill.uses_action
