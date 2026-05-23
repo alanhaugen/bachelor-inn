@@ -24,10 +24,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Main="*res://scripts/main.gd"
+Main="*res://scripts/Core/main.gd"
 Dialogic="*res://addons/dialogic/Core/DialogicGameHandler.gd"
 Tutorial="*res://scripts/tutorial.gd"
-Event="*res://scripts/combat/event.gd"
+Event="*res://scripts/Unused/event.gd"
 WeaponRegistry="*res://scripts/stats/weapon_registry.gd"
 SkillRegistry="*res://scripts/stats/skillregistry.gd"
 

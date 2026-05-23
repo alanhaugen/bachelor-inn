@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cm02uehw506nt"]
 
-[ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/ui/main_menu.gd" id="1_vgp3j"]
-[ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://scripts/level_order.tres" id="2_dij2v"]
+[ext_resource type="Script" uid="uid://bt1if6bipdwt1" path="res://scripts/Core/main_menu.gd" id="1_vgp3j"]
+[ext_resource type="Resource" uid="uid://vjdtuo3nhqwn" path="res://Data/level_order.tres" id="2_dij2v"]
 [ext_resource type="Shader" uid="uid://b28ad3myemhko" path="res://shaders/Intro_Background.gdshader" id="3_qqcna"]
 [ext_resource type="Texture2D" uid="uid://cft6wh327wv2r" path="res://art/textures/NobleNightsLogo_normalsize.png" id="4_h2qhj"]
 [ext_resource type="Texture2D" uid="uid://davk3as2tq5ut" path="res://art/textures/GUI_Assets.png" id="5_tps6c"]

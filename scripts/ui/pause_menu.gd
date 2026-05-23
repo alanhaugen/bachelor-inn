@@ -22,7 +22,7 @@ func _on_back_to_main_menu_pressed() -> void:
 	if is_instance_valid(Main.level):
 		Main.level.queue_free()
 		Main.level = null
-	get_tree().change_scene_to_file("res://scenes/userinterface/Level/main_menu.tscn");
+	get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn");
 
 
 func _on_options_pressed() -> void:
