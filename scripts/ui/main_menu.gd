@@ -83,7 +83,7 @@ func _on_start_tutorial_pressed() -> void:
 	$UI/Background.visible = false;
 	$UI/LevelSelect.visible = false;
 	#Main.save.load_tutorial();
-	var packed := load("res://scenes/userinterface/character_selection.tscn")
+	var packed := load("res://scenes/userinterface/Menus/character_selection.tscn")
 	var select_screen : Control = packed.instantiate()
 	get_tree().root.add_child(select_screen)
 

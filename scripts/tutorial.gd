@@ -37,7 +37,7 @@ func advance_timeline() -> void:
 	
 	var next_timeline: String = "tutorial" + str(current_timeline)
 	print("Next timeline: " + str(next_timeline))
-	if FileAccess.file_exists("res://dialogue/" + next_timeline + ".dtl"):
+	if FileAccess.file_exists("res://dialogue/Tutorial/" + next_timeline + ".dtl"):
 		tutorial_lock_menus()
 		Dialogic.start(next_timeline)
 	else:

@@ -166,7 +166,7 @@ func show_flavor_screen() -> void:
 		return  
 	if is_instance_valid(level):
 		level.is_in_menu = true
-	var packed := load("res://scenes/userinterface/flavor_text_screen.tscn")
+	var packed := load("res://scenes/userinterface/Menus/flavor_text_screen.tscn")
 	flavor_screen = packed.instantiate()
 	get_tree().root.add_child(flavor_screen)
 

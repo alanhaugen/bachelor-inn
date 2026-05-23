@@ -3,13 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_nhemk"]
 [ext_resource type="Texture2D" uid="uid://c71u0xag6oy8m" path="res://art/textures/GoboLightShaftPixelated.png" id="2_d47y0"]
 [ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="2_qi357"]
-[ext_resource type="Script" path="res://scripts/combat/patrol_path.gd" id="2_uonig"]
+[ext_resource type="Script" uid="uid://cp16qj5iurkhq" path="res://scripts/combat/patrol_path.gd" id="2_uonig"]
 [ext_resource type="PackedScene" uid="uid://bajx21wdflkf8" path="res://scenes/grid_items/chest.tscn" id="3_mjh77"]
 [ext_resource type="PackedScene" uid="uid://b8j8ahxio3wsf" path="res://scenes/Development/Particles/Mesh_Water.tscn" id="3_xbsfl"]
-[ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/LootPopUp.tscn" id="4_131pe"]
-[ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="8_mqfpd"]
+[ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/Level/LootPopUp.tscn" id="4_131pe"]
+[ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/Level/PortraitPopUp.tscn" id="8_mqfpd"]
 [ext_resource type="PackedScene" uid="uid://d00tnaxafw4ia" path="res://scenes/states/game_over.tscn" id="9_h66jy"]
-[ext_resource type="PackedScene" uid="uid://dfpe4abv63jnd" path="res://scenes/userinterface/SkillPopUp.tscn" id="9_htkxo"]
+[ext_resource type="PackedScene" uid="uid://dfpe4abv63jnd" path="res://scenes/userinterface/Level/SkillPopUp.tscn" id="9_htkxo"]
 
 [node name="Map3d2" unique_id=656823534 instance=ExtResource("1_nhemk")]
 

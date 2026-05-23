@@ -42,15 +42,15 @@ var my_outline_material : ShaderMaterial = null
 #region packed scenes
 #const HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar.tscn")
 #const ENEMY_HEALTH_BAR_SCENE : PackedScene = preload("res://scenes/userinterface/health_bar_enemy.tscn")
-const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
-const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
+#const LEVEL_UP_POPUP : PackedScene = preload("res://scenes/userinterface/level_up.tscn")
+#const SKILL_CHOOSE_POPUP : PackedScene = preload("res://scenes/userinterface/skill_choose.tscn")
 #endregion
 
 #region inferred variables
 var camera : Camera3D
 var health_bar : HealthBar
-var level_up_popup : LevelUpPopUp
-var skill_choose_popup : SkillChoose
+#var level_up_popup : LevelUpPopUp
+#var skill_choose_popup : SkillChoose
 #var health_bar_ally : HealthBar
 #var health_bar_enemy : HealthBar
 #endregion
@@ -231,14 +231,14 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 	#health_bar.name_label = data.unit_name;
 
 
-func calibrate_level_popup() -> void:
-	level_up_popup.focus = data.focus;
-	level_up_popup.level = state.current_level;
-	level_up_popup.mind = data.mind;
-	level_up_popup.movement = state.movement;
-	level_up_popup.speed = data.speed;
-	level_up_popup.strength = data.strength;
-	level_up_popup.endurance = data.endurance;
+#func calibrate_level_popup() -> void:
+#	level_up_popup.focus = data.focus;
+#	level_up_popup.level = state.current_level;
+#	level_up_popup.mind = data.mind;
+#	level_up_popup.movement = state.movement;
+#	level_up_popup.speed = data.speed;
+#	level_up_popup.strength = data.strength;
+#	level_up_popup.endurance = data.endurance;
 
 
 func calc_derived_stats() -> void:
@@ -295,16 +295,16 @@ func _ready() -> void:
 	if not state.is_playable() and state.faction != CharacterState.Faction.NEUTRAL:
 		state.faction = CharacterState.Faction.ENEMY;
 	# should remake the entire level up 
-	level_up_popup = LEVEL_UP_POPUP.instantiate();
-	add_child(level_up_popup);
-	level_up_popup.hide();
-	level_up_popup.name_label = data.unit_name;
-	calibrate_level_popup();
+	#level_up_popup = LEVEL_UP_POPUP.instantiate();
+	#add_child(level_up_popup);
+	#level_up_popup.hide();
+	#level_up_popup.name_label = data.unit_name;
+	#calibrate_level_popup();
 	
-	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate()
-	add_child(skill_choose_popup)
-	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
-	skill_choose_popup.hide()
+#	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate()
+#	add_child(skill_choose_popup)
+#	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
+#	skill_choose_popup.hide()
 	
 	play(idle_animation)
 	

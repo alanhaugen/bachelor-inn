@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://c4b8f02hyixcc"]
+
+[ext_resource type="Script" uid="uid://ml4dennnbf1u" path="res://scripts/ui/in_game_ui.gd" id="1_mm7qg"]
+[ext_resource type="PackedScene" uid="uid://cogf2xkkqlmrb" path="res://scenes/userinterface/Level/player_stats.tscn" id="2_c1gf4"]
+[ext_resource type="PackedScene" uid="uid://3dh3t2j28eq1" path="res://scenes/userinterface/Level/Enemy_Stats.tscn" id="3_mu5nr"]
+[ext_resource type="PackedScene" uid="uid://dokhyh7eo4mwv" path="res://scenes/userinterface/Level/CharacterPreview.tscn" id="4_56sgq"]
+[ext_resource type="PackedScene" uid="uid://bqxnj06jaw6ps" path="res://scenes/userinterface/Level/ribbon.tscn" id="5_c1mo8"]
+[ext_resource type="Theme" uid="uid://l5nt8aeex4yj" path="res://scenes/userinterface/button_theme.tres" id="6_m5ao7"]
+[ext_resource type="FontFile" uid="uid://bltfi0bh6lptu" path="res://art/Fonts/RetroByte.ttf" id="7_nw6ha"]
+[ext_resource type="Texture2D" uid="uid://bxkugojenvo5a" path="res://art/textures/UI_Spritesheet.png" id="8_6f47u"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_b706j"]
+texture = ExtResource("8_6f47u")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(228, 68, 24, 24)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_len0o"]
+texture = ExtResource("8_6f47u")
+texture_margin_left = 5.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(228, 68, 24, 24)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_owq5w"]
+texture = ExtResource("8_6f47u")
+texture_margin_left = 6.0
+texture_margin_top = 5.0
+texture_margin_right = 5.0
+texture_margin_bottom = 5.0
+region_rect = Rect2(227, 67, 26, 26)
+
+[node name="GUI" type="Control" unique_id=1620263469]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_mm7qg")
+
+[node name="Scale" type="Control" parent="." unique_id=110596003]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Player_Stats" parent="Scale" unique_id=1444668078 instance=ExtResource("2_c1gf4")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = 48.0
+offset_top = -87.99994
+offset_right = 48.0
+offset_bottom = -87.99994
+scale = Vector2(3, 3)
+
+[node name="Enemy_Stats" parent="Scale" unique_id=272324159 instance=ExtResource("3_mu5nr")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -367.0
+offset_top = 11.0
+offset_right = -367.0
+offset_bottom = 11.0
+grow_horizontal = 0
+scale = Vector2(3, 3)
+
+[node name="Characters_VBOX" type="VBoxContainer" parent="Scale" unique_id=1558160718]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 108.333336
+offset_bottom = 215.0
+scale = Vector2(3, 3)
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="CharacterPreview" parent="Scale/Characters_VBOX" unique_id=801399757 instance=ExtResource("4_56sgq")]
+visible = false
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Scale" unique_id=1909360445]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Ribbon" parent="Scale" unique_id=2041898346 instance=ExtResource("5_c1mo8")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+offset_left = 9.0
+offset_top = -297.99994
+offset_right = 9.0
+offset_bottom = -297.99994
+
+[node name="End_Turn_Button" type="Button" parent="Scale" unique_id=1064894623]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -259.0
+offset_top = 18.0
+offset_right = -179.66663
+offset_bottom = 42.0
+grow_horizontal = 0
+scale = Vector2(3, 3)
+mouse_behavior_recursive = 2
+mouse_default_cursor_shape = 2
+theme = ExtResource("6_m5ao7")
+theme_override_colors/font_color = Color(0.20459601, 0.19122118, 0.25484505, 1)
+theme_override_colors/font_focus_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
+theme_override_colors/font_pressed_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
+theme_override_colors/font_hover_color = Color(0.30959404, 0.29366162, 0.37918672, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.20392157, 0.19215687, 0.25490198, 1)
+theme_override_fonts/font = ExtResource("7_nw6ha")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxTexture_b706j")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_len0o")
+theme_override_styles/hover = SubResource("StyleBoxTexture_owq5w")
+text = "End Turn"
+icon_alignment = 1
+metadata/_edit_group_ = true
+
+[connection signal="pressed" from="Scale/End_Turn_Button" to="." method="_on_end_turn_button_pressed"]
