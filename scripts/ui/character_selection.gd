@@ -9,7 +9,7 @@ class_name CharacterSelection
 @onready var start_adventure: Button = %StartAdventure
 @onready var stats_label: Label = %StatsLabel
 
-var info_box_packed := preload("res://scenes/userinterface/info_box_char_select.tscn")
+var info_box_packed := preload("res://scenes/userinterface/Menus/info_box_char_select.tscn")
 var info_box: Control = null
 
 var placeholder_portrait : Texture2D = preload("res://art/textures/Alphred_portrait_500percentsize.png")
