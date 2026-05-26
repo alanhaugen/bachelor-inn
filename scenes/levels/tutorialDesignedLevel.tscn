@@ -5,8 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://dq18dlnejxsql" path="res://scenes/Development/Particles/Particle_fireflies.tscn" id="4_digyo"]
 [ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="4_f0odu"]
 [ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="5_smjk0"]
-[ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/Level/PortraitPopUp.tscn" id="6_bg3qq"]
-[ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/Level/LootPopUp.tscn" id="7_ewjo4"]
+[ext_resource type="PackedScene" uid="uid://c5s0t6p0113xu" path="res://scenes/userinterface/PortraitPopUp.tscn" id="6_bg3qq"]
+[ext_resource type="PackedScene" uid="uid://bge25dwwd4pbs" path="res://scenes/userinterface/LootPopUp.tscn" id="7_ewjo4"]
 [ext_resource type="PackedScene" uid="uid://d00tnaxafw4ia" path="res://scenes/states/game_over.tscn" id="7_rtseb"]
 [ext_resource type="PackedScene" uid="uid://btap5oojesi27" path="res://scenes/states/pause_menu.tscn" id="9_gldne"]
 
@@ -60,10 +60,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.17736, -4.515497, -0.01478
 visible = true
 light_color = Color(0.4672712, 0.43958032, 0.737747, 1)
 light_energy = 4.178
-
-[node name="DirectionalLight3D" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="3" unique_id=1646267771]
-light_energy = 0.8
-light_indirect_energy = 0.352
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
 transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0.9801872, 0.685935, 1.5374656)

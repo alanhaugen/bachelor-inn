@@ -1,8 +1,8 @@
 extends Control
 class_name ui_controller
 
-const RIBBON: PackedScene = preload("res://scenes/userinterface/Level/ribbon.tscn");
-@onready var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/Level/CharacterPreview.tscn")
+const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
+@onready var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/CharacterPreview.tscn")
 @onready var preview_container := %Characters_VBOX
 @onready var player_stats: PlayerStatsUI = %Player_Stats
 @onready var enemy_stats: EnemyStatsUI = %Enemy_Stats

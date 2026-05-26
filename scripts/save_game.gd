@@ -8,7 +8,7 @@ const SAVE_GAME_PATH := "user://noblenights_saves.tres";
 @export var version := 1;
 @export var map_name := "first";
 
-var registry: CharacterRegistry = load("res://Data/Characters/CharacterRegistry.tres")
+var registry: CharacterRegistry = load("res://scripts/Characters/CharacterRegistry.tres")
 
 const TUTORIAL_SAVE_SLOT := 3
 

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="EnemyDefinitions" load_steps=8 format=3 uid="uid://getxkg8s4ipo"]
+
+[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="1_bmvvw"]
+[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_c7c5v"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_isthl"]
+[ext_resource type="PackedScene" uid="uid://uwkg1mydmaxl" path="res://scenes/Characters/bird.tscn" id="5_jw8q3"]
+[ext_resource type="Script" uid="uid://de2j0apfdotrf" path="res://scripts/Characters/EnemyDefinition.gd" id="6_pjmwv"]
+
+[sub_resource type="Resource" id="Resource_esgda"]
+script = ExtResource("1_bmvvw")
+unit_name = ""
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_egese"]
+script = ExtResource("2_c7c5v")
+faction = 1
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
+
+[resource]
+script = ExtResource("6_pjmwv")
+UID = null
+scene = ExtResource("5_jw8q3")
+base_data = SubResource("Resource_esgda")
+base_state = SubResource("Resource_egese")
+metadata/_custom_type_script = "uid://de2j0apfdotrf"

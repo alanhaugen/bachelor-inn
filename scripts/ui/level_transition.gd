@@ -16,7 +16,7 @@ func _setup_ui() -> void:
 	## TODO: FIll in the "card slots" for each unit
 	for c in Main.characters:
 		if c != null:
-			c.state.unspent_attribute_points += c.state.attribute_points_per_level
+			c.state.unspent_skill_points += 3
 		if c == null:
 			continue
 		var card := UNIT_CARD.instantiate() as UnitCard
@@ -26,7 +26,7 @@ func _setup_ui() -> void:
 
 func _on_continue_button_pressed() -> void:
 	for c in Main.characters:
-		if c!= null and c.state.unspent_attribute_points > 0:
+		if c!= null and c.state.unspent_skill_points > 0:
 			return
 	if is_instance_valid(Main.level):
 		Main.level.is_in_menu = false
