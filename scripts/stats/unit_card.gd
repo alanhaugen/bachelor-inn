@@ -71,7 +71,7 @@ func setup(character: Character) -> void:
 ## FUNCTIONS
 func _check_can_continue() -> bool:
 	for c in Main.characters:
-		if c != null and c.state.unspent_skill_points > 0:
+		if c != null and c.state.unspent_attribute_points > 0:
 			return false
 	return true
 
@@ -88,14 +88,14 @@ func _refresh_stats() -> void:
 
 	health.text = "HP: %d/%d" % [_character.state.current_health, _character.state.max_health]
 	sanity.text = "SAN: %d/%d" % [_character.state.current_sanity, _character.state.max_sanity]
-	available_points.text = "Available Points: %d" % _character.state.unspent_skill_points
-	#banner_lvl_up.visible = _character.state.unspent_skill_points > 0
+	available_points.text = "Available Points: %d" % _character.state.unspent_attribute_points
+	#banner_lvl_up.visible = _character.state.unspent_attribute_points > 0
 	_update_buttons()
 
 
 func _update_buttons() -> void:
 	#### Buttons enabled disabled
-	var has_points := _character.state.unspent_skill_points > 0
+	var has_points := _character.state.unspent_attribute_points > 0
 	str_button.disabled = not has_points
 	str_button_all.disabled = not has_points
 	mnd_button.disabled = not has_points
@@ -139,9 +139,9 @@ func _update_buttons() -> void:
 
 
 func _spend_skill_point(stat: String) -> void:
-	if _character.state.unspent_skill_points <= 0:
+	if _character.state.unspent_attribute_points <= 0:
 		return
-	_character.state.unspent_skill_points -= 1
+	_character.state.unspent_attribute_points -= 1
 	match stat:
 		"strength": _character.data.strength += 1
 		"mind": _character.data.mind += 1
@@ -156,10 +156,10 @@ func _spend_skill_point(stat: String) -> void:
 
 
 func _spend_all_skill_point(stat: String) -> void:
-	if _character.state.unspent_skill_points <= 0:
+	if _character.state.unspent_attribute_points <= 0:
 		return
-	var p : int = _character.state.unspent_skill_points
-	_character.state.unspent_skill_points -= _character.state.unspent_skill_points
+	var p : int = _character.state.unspent_attribute_points
+	_character.state.unspent_attribute_points -= _character.state.unspent_attribute_points
 	match stat:
 		"strength": _character.data.strength += p
 		"mind": _character.data.mind += p
@@ -203,41 +203,41 @@ func _on_fcs_button_all_pressed() -> void:
 	_spend_all_skill_point("focus")
 
 func _on_remove_str_button_pressed() -> void:
-	if _character.state.unspent_skill_points >= 3:
+	if _character.state.unspent_attribute_points >= 3:
 		return
 	_character.data.strength -= 1
-	_character.state.unspent_skill_points += 1
+	_character.state.unspent_attribute_points += 1
 	_character.update_derived_stats_after_level_up()
 	_refresh_stats()
 
 func _on_remove_mnd_button_pressed() -> void:
-	if _character.state.unspent_skill_points >= 3:
+	if _character.state.unspent_attribute_points >= 3:
 		return
 	_character.data.mind -= 1
-	_character.state.unspent_skill_points += 1
+	_character.state.unspent_attribute_points += 1
 	_character.update_derived_stats_after_level_up()
 	_refresh_stats()
 
 func _on_remove_spd_button_pressed() -> void:
-	if _character.state.unspent_skill_points >= 3:
+	if _character.state.unspent_attribute_points >= 3:
 		return
 	_character.data.speed -= 1
-	_character.state.unspent_skill_points += 1
+	_character.state.unspent_attribute_points += 1
 	_character.update_derived_stats_after_level_up()
 	_refresh_stats()
 
 func _on_remove_end_button_pressed() -> void:
-	if _character.state.unspent_skill_points >= 3:
+	if _character.state.unspent_attribute_points >= 3:
 		return
 	_character.data.endurance -= 1
-	_character.state.unspent_skill_points += 1
+	_character.state.unspent_attribute_points += 1
 	_character.update_derived_stats_after_level_up()
 	_refresh_stats()
 
 func _on_remove_fcs_button_pressed() -> void:
-	if _character.state.unspent_skill_points >= 3:
+	if _character.state.unspent_attribute_points >= 3:
 		return
 	_character.data.focus -= 1
-	_character.state.unspent_skill_points += 1
+	_character.state.unspent_attribute_points += 1
 	_character.update_derived_stats_after_level_up()
 	_refresh_stats()
