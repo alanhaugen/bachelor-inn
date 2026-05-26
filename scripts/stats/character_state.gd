@@ -43,7 +43,9 @@ signal level_changed(new_level: int)
 @export var is_ability_used :bool = false;
 @export var experience := 0 : set = _set_experience
 @export var level := 1
-@export var unspent_skill_points : int = 0
+@export var attribute_points_per_level : = 3
+@export var unspent_attribute_points : int = 0
+
 @export var skills: Array[Skill] = []
 @export var active_effects: Array[Dictionary] = []
 ## Default state is FROZEN. All states: FROZEN, PATROL_RANDOM, PATROL_PATH, AGGRESSIVE

@@ -21,7 +21,7 @@ signal preview_selected(character: Character)
 var has_moved: bool = false : set =_set_has_moved
 var has_used_ability: bool = false : set =_set_has_used_ability
 
-var ActiveEffectUI: PackedScene = preload("res://scenes/userinterface/active_effect_scene.tscn")
+var ActiveEffectUI: PackedScene = preload("res://scenes/userinterface/Level/active_effect_scene.tscn")
 
 var character: Character
 var is_selected: bool = false : set =_set_is_selected;
