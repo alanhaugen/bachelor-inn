@@ -3,6 +3,7 @@ class_name Skill
 
 enum TargetFaction
 {
+	## TODO: ADD 'ALL'?
 	FRIENDLY, ## Will use friendly as both friendly and self first
 	ENEMY,
 	BOTH,

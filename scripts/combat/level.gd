@@ -458,6 +458,11 @@ func _handle_skill(pos : Vector3i) -> void:
 		var dmg := int(used_skill.effect_mods["damage"])
 		target.apply_damage(dmg, false, skill_caster, used_skill.skill_name)
 		emit_signal("character_stats_changed", target)
+	## Apply healing to target
+	if target != null and used_skill.effect_mods != null and used_skill.effect_mods.has("current_health"):
+		var heal := int(used_skill.effect_mods["current_health"])
+		target.state.current_health = min(target.state.current_health + heal, target.state.max_health)#(dmg, false, skill_caster, used_skill.skill_name)
+		emit_signal("character_stats_changed", target)
 	
 	## VFX - Show visual
 	print("Skill result - aggressor: ", result.aggressor)
@@ -476,7 +481,7 @@ func _handle_skill(pos : Vector3i) -> void:
 		if aoe_pos == p:
 			continue
 		var aoe_target: Character = get_unit(aoe_pos)
-		## TODO: Change this if we want to be able to cast skills on ground.
+		## TODO: Change this 'aoe_target == null' if we want to be able to cast skills on ground.
 		print("  tile: ", aoe_pos, " target: ", aoe_target)
 		if aoe_target == null: 
 			continue
@@ -489,6 +494,10 @@ func _handle_skill(pos : Vector3i) -> void:
 			aoe_target.apply_damage(dmg, false, skill_caster, used_skill.skill_name)
 			if aoe_pos != p:
 				combat_vfx.spawn_damage_number(dmg, aoe_target.global_position)
+		if used_skill.effect_mods != null and used_skill.effect_mods.has("current_health"):
+			print("Healing ", aoe_target.data.unit.name)
+			var heal := int(used_skill.effect_mods["current_health"])
+			aoe_target.state.current_health = min(aoe_target.state.current_health + heal, aoe_target.state.max_health)
 		
 		## Apply after effects (DoT)
 		aoe_target.state.apply_skill_effect(used_skill)
