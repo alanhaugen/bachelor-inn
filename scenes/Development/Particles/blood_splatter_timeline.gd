@@ -10,6 +10,8 @@ extends Node3D
 @export var mesh: MeshInstance3D 
 @export var duration: float = 10.0
 
+var bloodCol: Color = Color.DARK_RED 
+
 func _ready() -> void:
 	rand_scale()
 	tween_shader()
@@ -29,6 +31,7 @@ func tween_shader() -> void:
 	var mat: ShaderMaterial = b_mat.duplicate()
 	mesh.set_surface_override_material(0, mat)
 	
+	mat.set_shader_parameter("albedo", bloodCol)
 	var tween: Tween = create_tween()
 	mat.set_shader_parameter("d_value", 0.0)
 	tween.tween_property(mat, "shader_parameter/d_value", 1.0, duration)

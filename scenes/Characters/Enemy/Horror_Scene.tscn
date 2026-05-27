@@ -15,6 +15,7 @@ run_up_animation = ExtResource("5_6v5nd")
 run_down_animation = ExtResource("3_jtemf")
 idle_animation = ExtResource("6_lbjy3")
 portrait = ExtResource("7_y5mi4")
+bloodColor = Color(0.8136501, 0.41342363, 0.5836128, 1)
 
 [node name="Sprite" parent="." index="0" unique_id=1365623275]
 transform = Transform3D(16, 0, 0, 0, 4.939582, 3.1464474, 0, -6.2928944, 2.4697912, 0, 1.5070372, -1.2454202)

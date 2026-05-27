@@ -6,6 +6,8 @@
 [sub_resource type="BoxMesh" id="BoxMesh_ft1en"]
 material = ExtResource("2_h8ni7")
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_h8ni7"]
+
 [node name="Main" type="Node3D" unique_id=1106893528 node_paths=PackedStringArray("mesh")]
 script = ExtResource("1_tav7j")
 mesh = NodePath("Splatter")
@@ -13,3 +15,6 @@ mesh = NodePath("Splatter")
 [node name="Splatter" type="MeshInstance3D" parent="." unique_id=1849520109]
 transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, -0.19693151, 0)
 mesh = SubResource("BoxMesh_ft1en")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Splatter" unique_id=429280599]
+mesh = SubResource("PlaneMesh_h8ni7")

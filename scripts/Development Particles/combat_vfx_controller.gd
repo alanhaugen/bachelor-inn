@@ -161,6 +161,9 @@ func _spawn_blood_splatter(target : Character, attacker : Character) -> void:
 	var result: Dictionary = space_state.intersect_ray(query)
 	if not result.is_empty():
 		var splatter: Node3D = blood_splatter.instantiate()
+		
+		if "bloodColor" in target:
+			splatter.bloodCol = target.bloodColor
 		get_tree().current_scene.add_child(splatter)
 		splatter.global_position = result.position + Vector3(0, 0.01, 0)
 

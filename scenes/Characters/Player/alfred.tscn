@@ -15,6 +15,7 @@ run_up_animation = ExtResource("5_o3dv1")
 run_down_animation = ExtResource("2_mfx1k")
 idle_animation = ExtResource("6_d2cp7")
 portrait = ExtResource("7_d2cp7")
+bloodColor = Color(0.7482082, 0, 0.15524006, 1)
 
 [node name="Sprite" parent="." index="0" unique_id=1365623275]
 no_depth_test = true
