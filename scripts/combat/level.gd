@@ -652,7 +652,7 @@ func _ready() -> void:
 	trigger_map.hide()
 	movement_map.clear()
 	movement_weights_map.hide()
-	##occupancy_map.hide()
+	occupancy_map.hide()
 	path_map.clear()
 	fog_map.clear()
 
