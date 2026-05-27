@@ -1,4 +1,4 @@
-You made it, and look! There's a chest!\
+Alfred: " There's a chest! "\
 \
-Better go see if there's any loot.
+" Better go see if there's anything usefull i can grab. "
 do Tutorial.tutorial_highlight_tile(4, 0, 0)

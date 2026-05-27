@@ -1,27 +1,24 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: Infront of a crackeling bondifre, you find yourself behind two survivors.\
-\
-They have stopped talking, and are just gazing towards the bonfire.
-narrator: *CRACK* - You just stepped on a tiny branch with cartoonish looks.\
-\
-The two turn around in an instant and draws their weapons!
+narrator: Infront of a crackeling bondifre, two people sit in silence, gazing toward the warm and comforting flames.
+Alfred: " ...Hello... "
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_show_portrait("lucy", "left")
 Lucy: " Halt! "
 do Tutorial.tutorial_show_portrait("emil", "left")
 Emil: " Dont come any closer! "
 do Tutorial.tutorial_show_portrait("alfred", "left")
-Alfred: " I'm sorry! " you say, as you raise your arms.\
+Alfred: " I'm sorry! " \
 \
-" I mean no harm! I'm a survivor, just like you! "
-Alfred: " And I love cats and dogs! "
+" I mean no harm! "
+Alfred: " I've been out here for weeks trying to find someplace to shelter, my old town was overrun by the miasma "
 do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: " Hmmm... well, no one that love cats and dogs can be a bad person. "
-Lucy: " I trust you. What about you, Emil? "
+Lucy: " Hmmm... well, one more mouth to feed is a challenge, but that's also one more set of helping hands. "
+Lucy: " I'll trust you for now, since you didn't ambush us straight away, unfortunatly we've had a few run-ins with bad actors only out to save their own hides. "
 do Tutorial.tutorial_show_portrait("emil", "left")
-Emil: " Yeah, me too. "\
+Emil: " If Lucy thinks you're good, then i'll trust her jugement. "\
 \
-"Join us? "
+" Join us? "
+Alfred: " Gladly "
 do Tutorial.tutorial_set_select_unit_advances_timeline()
 [signal arg="recruit_neutral"]
 do Tutorial.tutorial_show_portrait("narrator", "left")

@@ -1,12 +1,13 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: A monser has noticed you!
+Alfred: " Oh not again! Thought I was safe here. "
 narrator: Different enemies have different aggro range.\
 \
 The bigger enemy, the bigger range.
-narrator: Time to fight!
+Alfred: " Alright new weapon, don't let me down. "
 narrator: To preform an attack with your weapon\: \
-1. First click the enemy you want to attack,\
-2. then select the tile you want to attack from.\
+1. First click the unit you want to attack with,\
+2. Then click the enemy you want to attack,\
+3. Lastly, select the tile you want a unit to attack from, out of the highlighted tiles.\
 \
 Choosing the smartest attack origin is a great way to gain some tactical advantage!
 narrator: If all your units are out of actions (Movement and actions), your turn will end automaticly.\

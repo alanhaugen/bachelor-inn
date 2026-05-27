@@ -1,8 +1,8 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: Welcome to Noble Nights!\
 \
-Press MB1  OR  SPACEBAR to advance the tutorial prompts!
-narrator: *Press MouseButton1 (MB1) on any unit to select it. \
+Press LEFT MOUSE BUTTON  OR  SPACEBAR to advance the tutorial prompts!
+narrator: *Press LEFT MOUSE BUTTON on any unit to select it. \
 \
 OR\
 \

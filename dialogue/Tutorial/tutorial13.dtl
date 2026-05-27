@@ -1,7 +1,7 @@
 do Tutorial.tutorial_show_portrait("lucy", "left")
-Lucy: " Looks like you are a bit hurt there. "\
+Lucy: " Hey, you look hurt. "\
 \
-" I can use my ability to heal you health. "
+" I can use my ability to heal you if you wish?. "
 do Tutorial.tutorial_set_select_unit_advances_timeline()
 do Tutorial.tutorial_show_portrait("narrator", "left")
 narrator: Every unit has an action bar with abilities and spells.\

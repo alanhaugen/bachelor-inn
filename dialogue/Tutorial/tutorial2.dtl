@@ -1,8 +1,8 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: Use WASD to move the camera, then\
+narrator: Use WASD or RIGHT MOUSE BUTTON to move the camera, then\
 \
-Click (MB1) on any highlighted tile to move.
-narrator: Looks like you are in trouble there.
+Click LEFT MOUSE BUTTON on any highlighted tile to move.
+narrator: Looks like trouble is brewing.
 narrator: To survive, try moving to the tile with a RED mark.
 do Tutorial.tutorial_hide_portrait()
 do Tutorial.tutorial_highlight_tile(7, 0, 2)

@@ -1,5 +1,5 @@
 do Tutorial.tutorial_show_portrait("narrator", "left")
-narrator: You can only move one time per turn.\
+narrator: A unit can only move one time per turn.\
 \
 Click 'END TURN' in the top right corner ,  OR   \
 hold 'SPACEBAR'.
