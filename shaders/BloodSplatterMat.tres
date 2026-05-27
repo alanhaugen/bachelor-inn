@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bo6nx1cxwsasf"]
+
+[ext_resource type="Shader" uid="uid://bwfkbbvi77bc1" path="res://scenes/Development/BloodSplatterDecal.gdshader" id="1_vw3q1"]
+[ext_resource type="Texture2D" uid="uid://d3gss6wp2pfho" path="res://art/textures/BloodSplatterTex1.png" id="2_lxuqf"]
+[ext_resource type="Texture2D" uid="uid://bnn45uwfynrl5" path="res://art/WIP/Textures/noise_texture.tres" id="2_vargn"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_vw3q1")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/texture_albedo = ExtResource("2_lxuqf")
+shader_parameter/cube_half_size = 0.5
+shader_parameter/pixels_p_unit = 16.38
+shader_parameter/d_noise = ExtResource("2_vargn")
+shader_parameter/d_value = 0.0

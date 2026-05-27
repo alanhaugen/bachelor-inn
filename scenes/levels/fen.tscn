@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="13_grt2m"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="14_6oho0"]
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="15_hwceo"]
+[ext_resource type="PackedScene" uid="uid://2bnjvl7pvigp" path="res://scenes/Development/Particles/BloodSplatterScene.tscn" id="15_oqa5m"]
 [ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="16_vra1y"]
 [ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="17_pu2tq"]
 
@@ -483,6 +484,9 @@ visible = false
 [node name="Smog2" parent="Particles" parent_id_path=PackedInt32Array(194722830) index="5" unique_id=1186449705 instance=ExtResource("14_6oho0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
+
+[node name="CombatVFXController" parent="." index="14" unique_id=1575126150]
+blood_splatter = ExtResource("15_oqa5m")
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
 unique_name_in_owner = true

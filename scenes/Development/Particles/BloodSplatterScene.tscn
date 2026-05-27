@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://2bnjvl7pvigp"]
+
+[ext_resource type="Script" uid="uid://djqe88qjn8lwj" path="res://scenes/Development/Particles/blood_splatter_timeline.gd" id="1_tav7j"]
+[ext_resource type="Material" uid="uid://bo6nx1cxwsasf" path="res://shaders/BloodSplatterMat.tres" id="2_h8ni7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_ft1en"]
+material = ExtResource("2_h8ni7")
+
+[node name="Main" type="Node3D" unique_id=1106893528 node_paths=PackedStringArray("mesh")]
+script = ExtResource("1_tav7j")
+mesh = NodePath("Splatter")
+
+[node name="Splatter" type="MeshInstance3D" parent="." unique_id=1849520109]
+transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1, 0, -0.19693151, 0)
+mesh = SubResource("BoxMesh_ft1en")
