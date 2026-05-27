@@ -50,6 +50,8 @@ void fragment() {
 	if (textureLod(texture_albedo, uv, 0.0).a < 0.5) {
     	discard;
 	}
+	vec4 td = textureLod(texture_albedo, uv, 0.0);
+	float b = td.r;
 	
-	ALBEDO = textureLod(texture_albedo, uv, 0.0).rgb * albedo.rgb;
+	ALBEDO = mix(vec3(0.0), albedo.rgb, b);
 }

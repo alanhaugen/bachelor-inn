@@ -21,6 +21,7 @@ class_name Character
 @export var state : CharacterState
 @export var scene_id : String = ""
 
+@export var bloodColor : Color
 ### SIGNALS
 
 signal sanity_flipped(character: Character)

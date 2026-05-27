@@ -1,14 +1,16 @@
 extends Node3D
 
 @export_group("scalings")
-@export var min_x_scale: float = 0.1
-@export var max_x_scale: float = 2.0
-@export var min_z_scale: float = 0.1
-@export var max_z_scale: float = 2.0
+@export var min_x_scale: float = 0.3
+@export var max_x_scale: float = 1.0
+@export var min_z_scale: float = 0.9
+@export var max_z_scale: float = 3.0
 
 @export_group("Settings")
 @export var mesh: MeshInstance3D 
-@export var duration: float = 5.0
+@export var duration: float = 10.0
+
+var bloodCol: Color = Color.DARK_RED 
 
 func _ready() -> void:
 	rand_scale()
@@ -29,6 +31,7 @@ func tween_shader() -> void:
 	var mat: ShaderMaterial = b_mat.duplicate()
 	mesh.set_surface_override_material(0, mat)
 	
+	mat.set_shader_parameter("albedo", bloodCol)
 	var tween: Tween = create_tween()
 	mat.set_shader_parameter("d_value", 0.0)
 	tween.tween_property(mat, "shader_parameter/d_value", 1.0, duration)
