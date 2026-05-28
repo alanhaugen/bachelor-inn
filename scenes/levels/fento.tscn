@@ -66,8 +66,7 @@ text = "Objective: Kill the monsters
 "
 
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.662776, -2.9688683, 0.08767605)
-visible = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.662776, 0.81837225, 0.08767605)
 light_color = Color(1, 0.8392157, 0.5529412, 1)
 light_energy = 1.924
 

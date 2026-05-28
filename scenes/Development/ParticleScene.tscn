@@ -331,4 +331,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82414484, 1.3292136)
 visible = false
 
 [node name="MeshInstance3D2" parent="." unique_id=1849520109 instance=ExtResource("22_wkorp")]
-transform = Transform3D(-0.11713708, 0, -3.7639809, 0, 0.030359585, 0, 0.23723815, 0, -1.8584774, 1.9198728, -0.0024557114, 0.35749525)
+transform = Transform3D(5.134384, 0, 0, 0, 1, 0, 0, 0, 0.5872996, 1.9198728, 0.012368709, 0.35749525)
