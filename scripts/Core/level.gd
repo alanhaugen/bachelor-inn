@@ -45,9 +45,11 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 @onready var terrain_map: GridMap = %TerrainGrid
 @onready var occupancy_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
+#Movement_map shows visually all of the pathing, but does not do logic
 @onready var movement_weights_map: GridMap = %MovementWeightsGrid
 @onready var trigger_map: GridMap = %TriggerOverlay
 @onready var path_map: GridMap = $PathOverlay
+#path_map is used for logic purposes, checking whether the selected space is a valid target
 @onready var fog_map: GridMap = $FogOverlay
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
 @onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer

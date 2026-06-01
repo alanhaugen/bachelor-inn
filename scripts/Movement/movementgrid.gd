@@ -59,14 +59,15 @@ func set_tile(tile : GridTile) -> void:
 	used_cells[tile.pos] = true
 	grid.set_cell_item(tile.pos, tile.type)
 
+#Unused
+#func set_move_tile(pos : Vector3i) -> void:
+#	#grid.set_cell_item(pos, GridTile.Type.MOVE)
+#	grid.set_cell_item(pos, GridTile.Type.INTERACT)
 
-func set_move_tile(pos : Vector3i) -> void:
-	#grid.set_cell_item(pos, GridTile.Type.MOVE)
-	grid.set_cell_item(pos, GridTile.Type.INTERACT)
 
-
-func set_attack_tile(pos : Vector3i) -> void:
-	grid.set_cell_item(pos, GridTile.Type.ATTACK)
+#Unused
+#func set_attack_tile(pos : Vector3i) -> void:
+#	grid.set_cell_item(pos, GridTile.Type.ATTACK)
 
 
 # Heuristic: Manhattan distance for grid
