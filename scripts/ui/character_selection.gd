@@ -51,7 +51,7 @@ func _update_display() -> void:
 	
 	character_name.text = char_def.base_data.unit_name
 	character_flavor_text.text = character_flavor.get(id, "")
-	stats_label.text = "HEATLTH: %d\nSANITY: %d\nRESISTANCE: %d\nSTRENGTH: %d\nMIND: %d\nSPEED: %d\nENDURANCE: %d\nFOCUS: %d" % [
+	stats_label.text = "HEALTH: %d\nSANITY: %d\nRESISTANCE: %d\nSTRENGTH: %d\nMIND: %d\nSPEED: %d\nENDURANCE: %d\nFOCUS: %d" % [
 		max_hp,
 		max_sanity,
 		resistance,
