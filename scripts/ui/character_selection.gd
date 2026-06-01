@@ -18,9 +18,9 @@ var character_ids: Array[String] = ["alfred", "emil", "lucy"]
 var current_index: int = 0
 
 var character_flavor: Dictionary = {
-	"Alfred": "A scholar who lost everything to the miasma. He carries knowledge remembered by few.",
-	"Emil": "Swift and quiet. He's been surviving on his own from before it all begun.",
-	"Lucy": "A seasoned fighter who survived the collapse alone. Stubborn and capable."
+	"alfred": "A scholar who lost everything to the miasma. He carries knowledge remembered by few.",
+	"emil": "Swift and quiet. He's been surviving on his own from before it all begun.",
+	"lucy": "A seasoned fighter who survived the collapse alone. Stubborn and capable."
 }
 
 ##TODO: Add info_box_char_select.tscn as child node to this scene tree instead of preloading
