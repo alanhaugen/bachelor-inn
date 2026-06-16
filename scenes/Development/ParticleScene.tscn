@@ -21,9 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://bqfgq7vek2sty" path="res://scenes/Development/Particles/heal_fx_particle.tscn" id="19_d1qpj"]
 [ext_resource type="PackedScene" uid="uid://b8jbk4xcnx6wf" path="res://scenes/Development/Particles/waterfall_smoke.tscn" id="21_er3k5"]
 [ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="22_hokb8"]
-[ext_resource type="Shader" uid="uid://bwfkbbvi77bc1" path="res://scenes/Development/BloodSplatterDecal.gdshader" id="22_wkorp"]
-[ext_resource type="Texture2D" uid="uid://bnn45uwfynrl5" path="res://art/WIP/Textures/noise_texture.tres" id="23_8onu1"]
-[ext_resource type="Texture2D" uid="uid://d3gss6wp2pfho" path="res://art/textures/BloodSplatterTex1.png" id="23_wkorp"]
+[ext_resource type="PackedScene" uid="uid://2bnjvl7pvigp" path="res://scenes/Development/Particles/BloodSplatterScene.tscn" id="22_wkorp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q0lo1"]
 render_priority = 0
@@ -221,19 +219,6 @@ shader_parameter/Vignette = 0.35999999195328
 shader_parameter/Film_Grain = 0.0
 shader_parameter/Filter_Strenght = 0.0
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8onu1"]
-render_priority = 0
-shader = ExtResource("22_wkorp")
-shader_parameter/albedo = Color(1, 1, 1, 1)
-shader_parameter/texture_albedo = ExtResource("23_wkorp")
-shader_parameter/cube_half_size = 0.5
-shader_parameter/pixels_p_unit = 16.38
-shader_parameter/d_noise = ExtResource("23_8onu1")
-shader_parameter/d_Value = 0.0
-
-[sub_resource type="BoxMesh" id="BoxMesh_ft1en"]
-material = SubResource("ShaderMaterial_8onu1")
-
 [node name="ParticleScene" type="Node3D" unique_id=1425515566]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=524923286]
@@ -345,6 +330,5 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82414484, 1.3292136)
 visible = false
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=246634194]
-transform = Transform3D(-1.1555091, 0, -2.7438147, 0, 0.030359585, 0, 2.3402572, 0, -1.3547667, 1.8831682, -0.0024557114, 0.36062998)
-mesh = SubResource("BoxMesh_ft1en")
+[node name="MeshInstance3D2" parent="." unique_id=1849520109 instance=ExtResource("22_wkorp")]
+transform = Transform3D(5.134384, 0, 0, 0, 1, 0, 0, 0, 0.5872996, 1.9198728, 0.012368709, 0.35749525)

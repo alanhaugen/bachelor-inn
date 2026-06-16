@@ -1,0 +1,29 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Infront of a crackeling bondifre, two people sit in silence, gazing toward the warm and comforting flames.
+Alfred: " ...Hello... "
+do Tutorial.tutorial_hide_portrait()
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " Halt! "
+do Tutorial.tutorial_show_portrait("emil", "left")
+Emil: " Dont come any closer! "
+do Tutorial.tutorial_show_portrait("alfred", "left")
+Alfred: " I'm sorry! " \
+\
+" I mean no harm! "
+Alfred: " I've been out here for weeks trying to find someplace to shelter, my old town was overrun by the miasma "
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " Hmmm... well, one more mouth to feed is a challenge, but that's also one more set of helping hands. "
+Lucy: " I'll trust you for now, since you didn't ambush us straight away, unfortunatly we've had a few run-ins with bad actors only out to save their own hides. "
+do Tutorial.tutorial_show_portrait("emil", "left")
+Emil: " If Lucy thinks you're good, then i'll trust her jugement. "\
+\
+" Join us? "
+Alfred: " Gladly "
+do Tutorial.tutorial_set_select_unit_advances_timeline()
+[signal arg="recruit_neutral"]
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Your PARTY has increased!\
+\
+Use TAB to quicky circle through party units.
+do Tutorial.tutorial_hide_portrait()
+[end_timeline]

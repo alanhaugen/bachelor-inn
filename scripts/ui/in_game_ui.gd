@@ -1,8 +1,8 @@
 extends Control
 class_name ui_controller
 
-const RIBBON: PackedScene = preload("res://scenes/userinterface/ribbon.tscn");
-@onready var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/CharacterPreview.tscn")
+const RIBBON: PackedScene = preload("res://scenes/userinterface/Level/ribbon.tscn");
+@onready var CharacterPreviewScene: PackedScene = preload("res://scenes/userinterface/Level/CharacterPreview.tscn")
 @onready var preview_container := %Characters_VBOX
 @onready var player_stats: PlayerStatsUI = %Player_Stats
 @onready var enemy_stats: EnemyStatsUI = %Enemy_Stats
@@ -164,7 +164,7 @@ func _on_party_updated(characters: Array[Character]) -> void:
 		##Instead we should be moving the null value out of the array.
 		if (character == null) :
 			continue;
-		if character.state.faction == CharacterState.Faction.NEUTRAL:
+		if character.state.faction != CharacterState.Faction.PLAYER:
 			continue
 		add_character_preview(character)
 	for c: Character in previews.keys():

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_nwjql")
 weapon_id = "unarmed"
-weapon_name = "Punchie and Knuckles"
+weapon_name = "Unarmed"
 weapon_tooltip = "Say hello to Pain and Gain"
 damage_modifier = 0
 weapon_critical = 0

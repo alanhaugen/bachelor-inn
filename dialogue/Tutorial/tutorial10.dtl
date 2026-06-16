@@ -1,0 +1,5 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+Alfred: " I should leave before more creatures corner me. "
+Alfred: " This seems like an exit. "
+do Tutorial.tutorial_hide_portrait()
+do Tutorial.tutorial_trigger_victory()

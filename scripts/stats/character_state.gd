@@ -43,12 +43,15 @@ signal level_changed(new_level: int)
 @export var is_ability_used :bool = false;
 @export var experience := 0 : set = _set_experience
 @export var level := 1
-@export var unspent_skill_points : int = 0
+@export var attribute_points_per_level : = 3
+@export var unspent_attribute_points : int = 0
+
 @export var skills: Array[Skill] = []
 @export var active_effects: Array[Dictionary] = []
 ## Default state is FROZEN. All states: FROZEN, PATROL_RANDOM, PATROL_PATH, AGGRESSIVE
+## Patrol not implemented, and probably will not be - due to game play design
 @export var aggro_state: AggroState = AggroState.FROZEN
-@export var aggro_range : int = 100
+@export var aggro_range : int = 10
 @export var patrol_index: int = 0
 #endregion
 
@@ -63,6 +66,8 @@ signal level_changed(new_level: int)
 @export var defense : int
 @export var resistance : int
 #endregion
+
+#var is_initialized: bool = false
 
 		
 #region methods
@@ -190,7 +195,8 @@ func get_effective_movement() -> int:
 func tick_effects_end_round(owner: Character) -> void:
 	for i in range(active_effects.size() - 1, -1, -1):
 		var effect: Dictionary = active_effects[i]
-		
+		print("Ticking effect: ", effect.get("id", "unknown"), " rounds left: ", effect.get("rounds", 0), " on: ", owner.data.unit_name)
+
 		if effect.has("tick"):
 			var tick: Dictionary = effect["tick"]
 			if tick.has("damage"):
@@ -201,7 +207,7 @@ func tick_effects_end_round(owner: Character) -> void:
 
 		if int(effect["rounds"]) <= 0:
 			active_effects.remove_at(i)
-
+			print("Effect removed: ", effect.get("id", "unknown"))
 
 static func make_active_effect(skill: Skill, caster: Object) -> Dictionary:
 	return {

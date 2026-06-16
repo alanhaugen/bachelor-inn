@@ -1,0 +1,11 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Welcome to Noble Nights!\
+\
+Press LEFT MOUSE BUTTON  OR  SPACEBAR to advance the tutorial prompts!
+narrator: *Press LEFT MOUSE BUTTON on any unit to select it. \
+\
+OR\
+\
+Use TAB KEY to shuffle between available units.*
+do Tutorial.tutorial_hide_portrait()
+[end_timeline]

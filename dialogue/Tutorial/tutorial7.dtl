@@ -1,0 +1,10 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Dangers lurk around every corner. \
+\
+Be on your toes and stay foc-
+Alfred: " Oh! A chest! "
+narrator: Walk ONTOP of the chest to open it.
+do Tutorial.tutorial_hide_portrait()
+[end_timeline]
+do Tutorial.tutorial_set_select_unit_advances_timeline()
+do Tutorial.tutorial_set_timeline_advances_at_player_turn_begins()

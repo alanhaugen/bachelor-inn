@@ -1,0 +1,7 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+Alfred: " Oh thank god a weapon, now I can defend myself. "
+narrator: Units may only wield one weapon at the time.
+narrator: Some weapons stats vary, like their damage, crit chance and attack range.
+do Tutorial.tutorial_set_select_unit_advances_timeline()
+do Tutorial.tutorial_hide_portrait()
+[end_timeline]

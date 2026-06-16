@@ -7,6 +7,8 @@ class_name CombatVFXController
 @export var ranged_attack_magic : PackedScene
 @export var melee_attack_scene  : PackedScene
 @export var melee_attack_magic  : PackedScene
+@export var blood_splatter  : PackedScene
+@export var splash_radius: float = 1.0
 
 var _is_aniamting_attack : bool = false;
 
@@ -68,6 +70,7 @@ func play_skill(result : AttackResult) -> void:
 	var vfx : Node3D = effect.instantiate()
 	get_tree(). current_scene.add_child(vfx)
 	
+	## TODO: Effect plays twice if AoE ability is cast directly on enemy
 	if dmg > 0:
 		vfx.global_position = result.aggressor.global_position + Vector3(0,0.5,0)
 		vfx.look_at(result.victim.global_position + Vector3(0,0.5,0), Vector3.UP)
@@ -82,7 +85,7 @@ func play_skill(result : AttackResult) -> void:
 		_spawn_hit_particles(result.victim)
 		_trigger_hit_flash(result.victim, result.was_critical)
 	else:
-		vfx.global_position = result.victim.global_position
+		vfx.global_position = result.target_position if result.target_position != Vector3.ZERO else result.aggressor.global_position#result.victim.global_position
 		if vfx.has_method("play"):
 			await vfx.play()
 		else:
@@ -130,7 +133,43 @@ func _trigger_hit_flash(target : Character, crit : bool) -> void:
 	if target.has_method("flash_hit"):
 		target.flash_hit(crit)
 
+func _spawn_blood_splatter(target : Character, attacker : Character) -> void:
+	if not blood_splatter:
+		return
+	
+	var space_state: PhysicsDirectSpaceState3D = target.get_world_3d().direct_space_state
+	var attacker_pos: Vector3 = attacker.global_position
+	var target_pos: Vector3 =target.global_position
+	#make flat :3
+	attacker_pos.y = 0
+	target_pos.y = 0
+	
+	var splash_dir: Vector3 = (target_pos - attacker_pos).normalized()
 
+	var splash_center: Vector3 = target.global_position + (splash_dir * splash_radius)
+	
+	var start_pos: Vector3 = splash_center + Vector3(0, 1.0, 0)
+	var end_pos: Vector3 = splash_center + Vector3(0, -4.0, 0)
+	
+	#old places under 
+	#var start_pos: Vector3 = target.global_position + Vector3(0, 1.0, 0)
+	#var end_pos: Vector3 = target.global_position + Vector3(0, -4.0, 0)
+	
+	#checks collission mask 2 :3
+	var query: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(start_pos, end_pos)
+	query.collision_mask = 2
+	var result: Dictionary = space_state.intersect_ray(query)
+	if not result.is_empty():
+		var splatter: Node3D = blood_splatter.instantiate()
+		
+		if "bloodColor" in target:
+			splatter.bloodCol = target.bloodColor
+		get_tree().current_scene.add_child(splatter)
+		splatter.global_position = result.position + Vector3(0, 0.01, 0)
+
+		var look_target: Vector3 = splatter.global_position + splash_dir
+		splatter.look_at(look_target, Vector3.UP)
+		
 func _spawn_melee_attack(attacker : Character, target : Character, result: AttackResult) -> void:
 	if not melee_attack_scene:
 		return
@@ -159,6 +198,7 @@ func _spawn_melee_attack(attacker : Character, target : Character, result: Attac
 	_spawn_hit_particles(target)
 	_spawn_dmg_number_scene(result)
 	_trigger_hit_flash(target, result.was_critical)
+	_spawn_blood_splatter(target, attacker)
 	_is_aniamting_attack = false;
 	
 func _spawn_ranged_attack(attacker : Character, target : Character, result: AttackResult) -> void:
@@ -188,6 +228,7 @@ func _spawn_ranged_attack(attacker : Character, target : Character, result: Atta
 	_spawn_hit_particles(target)
 	_spawn_dmg_number_scene(result)
 	_trigger_hit_flash(target, result.was_critical)
+	_spawn_blood_splatter(target, attacker)
 	_is_aniamting_attack = false;
 
 ## Delete

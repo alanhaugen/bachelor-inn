@@ -9,7 +9,6 @@ void fragment() {
 	ALPHA= d.a;
 	d *= colorTint;
 	ALBEDO = d.rgb;
-	
 }
 
 //void light() {

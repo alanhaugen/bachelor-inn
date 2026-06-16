@@ -1,0 +1,6 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+Alfred: " Aaaah fresh air, love it. "
+do Tutorial.tutorial_highlight_tile(-3, 0, 1)
+Alfred: ...
+Alfred: " Survivors!... I should talk to them "
+do Tutorial.tutorial_hide_portrait()

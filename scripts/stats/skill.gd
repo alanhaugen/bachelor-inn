@@ -3,11 +3,14 @@ class_name Skill
 
 enum TargetFaction
 {
+	## TODO: ADD 'ALL'?
 	FRIENDLY, ## Will use friendly as both friendly and self first
 	ENEMY,
 	BOTH,
 	SELF
 }
+
+enum AoEShape { NONE, SQUARE, CROSS, DIAMOND, LINE, WALL }
 
 ## ID
 @export_subgroup("Visuals")
@@ -37,6 +40,9 @@ var max_level : int = 5
 @export_range(0,100) var max_range: int = 3;
 
 @export var target_faction: TargetFaction = TargetFaction.FRIENDLY
+@export_subgroup("AoE")
+@export var aoe_shape: AoEShape = AoEShape.NONE
+@export var aoe_size: int = 1
 ## Key names:
 ## DoT = &dot_tick_damage
 @export_subgroup("Lingering effects")

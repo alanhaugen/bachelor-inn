@@ -1,0 +1,10 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: The night shadows the land, as calm yet melancoly conversations fill the old farmhouse.
+narrator: As time goes on, lanterns are turned of and conversations slow.
+do Tutorial.tutorial_show_portrait("alfred", "left")
+Alfred: " The best bedding I have had in a good while "
+Emil: " Good night guys. "
+Lucy: " Good night. "
+do Tutorial.tutorial_hide_portrait()
+do Tutorial.tutorial_complete()
+[end_timeline]

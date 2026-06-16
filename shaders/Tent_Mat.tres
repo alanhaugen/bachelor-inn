@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dymm1weytve62"]
+
+[ext_resource type="Shader" uid="uid://bfxvcs84qtnd8" path="res://shaders/BasicShader.gdshader" id="1_bvosc"]
+[ext_resource type="Texture2D" uid="uid://tgh07c2khdwe" path="res://art/textures/Tent_tex.png" id="2_pp4yo"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bvosc")
+shader_parameter/diffuse_tex = ExtResource("2_pp4yo")
+shader_parameter/colorTint = Color(1, 1, 1, 1)

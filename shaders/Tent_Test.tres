@@ -1,0 +1,11 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://b0hqqd481k55x"]
+
+[ext_resource type="Texture2D" uid="uid://tgh07c2khdwe" path="res://art/textures/Tent_tex.png" id="1_gjo66"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_gjo66")
+texture_filter = 0

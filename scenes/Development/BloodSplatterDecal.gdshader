@@ -10,7 +10,7 @@ uniform float pixels_p_unit = 16.0;
 varying mat4 INV_MODEL_MATRIX;
 
 uniform sampler2D d_noise;
-uniform float d_Value : hint_range(0.0, 1.0) = 0.0;
+uniform float d_value : hint_range(0.0, 1.0) = 0.0;
 
 void vertex(){
 	INV_MODEL_MATRIX = inverse(MODEL_MATRIX);
@@ -43,13 +43,15 @@ void fragment() {
 	}
 	vec2 uv = test_pos.xz + 0.5;
 	float d = textureLod(d_noise, uv, 0.0).r;
-	if (d < d_Value) {
+	if (d < d_value) {
 		discard;
 	}
 	
 	if (textureLod(texture_albedo, uv, 0.0).a < 0.5) {
     	discard;
 	}
+	vec4 td = textureLod(texture_albedo, uv, 0.0);
+	float b = td.r;
 	
-	ALBEDO = textureLod(texture_albedo, uv, 0.0).rgb * albedo.rgb;
+	ALBEDO = mix(vec3(0.0), albedo.rgb, b);
 }

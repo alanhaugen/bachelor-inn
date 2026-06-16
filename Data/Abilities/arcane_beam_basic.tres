@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Skill" format=3 uid="uid://cmccd7c550ll4"]
+
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="1_jpqbk"]
+
+[resource]
+script = ExtResource("1_jpqbk")
+skill_id = "arcane_beam_basic"
+skill_name = "Arcane Beam"
+tooltip = "Lazer"
+aoe_shape = 4
+metadata/_custom_type_script = "uid://c3p07am3ababr"

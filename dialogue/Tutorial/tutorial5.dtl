@@ -1,0 +1,6 @@
+do Tutorial.tutorial_show_portrait("narrator", "left")
+Alfred: " This guy keeps chasing me! I've gotta find a place to hide from it... "
+Alfred: " THE RUINS! I should be able to make it through that hole in the wall. "
+do Tutorial.tutorial_hide_portrait()
+do Tutorial.tutorial_highlight_tile(17, 0, 3)
+[end_timeline]

@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://dervxyhn1r3y6" path="res://art/textures/ParticleTex/Firefly_Particle.png" id="13_grt2m"]
 [ext_resource type="PackedScene" uid="uid://dslx07sad7ypt" path="res://scenes/Development/Particles/smog_Particletscn.tscn" id="14_6oho0"]
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="15_hwceo"]
+[ext_resource type="PackedScene" uid="uid://2bnjvl7pvigp" path="res://scenes/Development/Particles/BloodSplatterScene.tscn" id="15_oqa5m"]
 [ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="16_vra1y"]
 [ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="17_pu2tq"]
 
@@ -283,6 +284,10 @@ transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, -4
 visible = true
 no_depth_test = false
 
+[node name="BattleLog" parent="." index="9" unique_id=840436049]
+text = "Objective: Find the orb
+"
+
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.670338, 2.7036004, 2.237699)
 visible = true
@@ -480,9 +485,12 @@ visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.024162, 0.32331276, 5.5933323)
 visible = false
 
+[node name="CombatVFXController" parent="." index="14" unique_id=1575126150]
+blood_splatter = ExtResource("15_oqa5m")
+
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34202012, 33, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 0.34202012, 0.93969256, 0, -0.93969256, 0.34202012, 36.935585, 0, -1)
 
 [node name="Scatterables" type="Node3D" parent="." index="17" unique_id=1148957787]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 5.730424, 0.5625, -2.8077984)

@@ -1,0 +1,18 @@
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " Your sanity, on the other hand, I can't help you with. "\
+\
+" Just please.. make sure you never go insane. I've seen it happen.... I hope to never have to fight another burdened in my lifetime. "
+do Tutorial.tutorial_show_portrait("narrator", "left")
+narrator: Fighting monsters causes units to lose their sanity.
+narrator: Once their sanity meter is depleated, they turn into a monster themselves!\
+\
+So choose your battles carefully.
+do Tutorial.tutorial_show_portrait("lucy", "left")
+Lucy: " We've got space for another camper in the house, you're welcome inside.... "\
+"..."
+Alfred: " Alfred, the names Alfred. "
+Lucy: " Welcome to our group, Alfred. "
+do Tutorial.tutorial_hide_portrait()
+do Tutorial.tutorial_highlight_tile(-4, 0, -3)
+do Tutorial.tutorial_end_turn()
+[end_timeline]
