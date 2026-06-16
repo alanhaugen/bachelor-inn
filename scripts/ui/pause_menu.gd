@@ -11,9 +11,10 @@ func _ready() -> void:
 
 func _on_resume_button_pressed() -> void:
 	print("Resume Button pressed.")
-	Main.level.is_in_menu = false
-	Main.level.get_tree().paused = false
-	self.hide()
+	Main.level.state_machine.pop()
+	#Main.level.is_in_menu = false
+	#Main.level.get_tree().paused = false
+	#self.hide()
 
 
 func _on_back_to_main_menu_pressed() -> void:

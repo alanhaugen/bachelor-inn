@@ -32,6 +32,7 @@ var movement_grid : MovementGrid
 var movement_weights_grid : Grid
 
 @onready var battle_log: Label = $BattleLog
+@onready var state_machine: StateMachine = $StateMachine
 
 #cursor testing
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
@@ -410,6 +411,7 @@ func _update_cursor(pos: Vector3i) -> void:
 
 func _handle_skill(pos : Vector3i) -> void:
 	var used_skill : Skill = active_skill
+	var caster: Character = skill_caster
 	# Normalize to same plane your maps/skills use
 	##TODO make _handle_skill use height. Fixed?
 	#var p := Vector3i(pos.x, 0, pos.z)
@@ -437,7 +439,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	## begin executing skill, flag caster as 'has used ability'
 	print("Casting ", used_skill.skill_id, " from ", skill_caster.data.unit_name, " to ", target.data.unit_name if target != null else "ground")
-	var caster : Character = skill_caster
+	#var caster : Character = skill_caster
 	if used_skill.uses_action:
 		caster.state.is_ability_used = true
 		# cast a signal to Ribbon here to gray out ability bar
@@ -520,7 +522,10 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
-
+	if caster != null and not caster.state.is_moved:
+		state_machine.transition_to(StateSelectingMove.new())
+	else:
+		state_machine.transition_to(StateSelectingUnit.new())
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
@@ -624,12 +629,15 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 		state = States.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
+		#return "move"
 
 	elif found_attack != null:
 		active_move = found_attack
 
 		show_attack_tiles(pos)
 		state = States.CHOOSING_ATTACK
+		#return "attack"
+	#return ""
 
 	movement_map.clear()
 
@@ -671,17 +679,20 @@ func _input(event: InputEvent) -> void:
 				KEY_TAB:
 					select_next_character()
 				KEY_ESCAPE:
+					#level.state_machine.pop()
 					if _level_complete or has_window_open:
 						print("Pressed ESC while another window is open.")
 						pass
-					elif not is_in_menu:
-						is_in_menu = true
-						pause_menu.show()
-						get_tree().paused = true
 					else:
-						is_in_menu = false
-						pause_menu.hide()
-						get_tree().paused = false
+						state_machine.push(StateMenu.new())
+					#elif not is_in_menu:
+						#is_in_menu = true
+						#pause_menu.show()
+						#get_tree().paused = true
+					#else:
+						#is_in_menu = false
+						#pause_menu.hide()
+						#get_tree().paused = false
 				KEY_1:
 					var ui := get_tree().get_first_node_in_group("ui_controller")
 					if ui:
@@ -1080,8 +1091,9 @@ func MoveSingleAI() -> void:
 		tick_all_units_end_round() ## TODO: Decide if we want to decay buffs when no active enemies
 		reset_all_units()
 		is_player_turn = true
-		is_animation_just_finished = true
+		#is_animation_just_finished = true ## TODO: delete -> moved to statemachine
 		camera_controller.free_camera()
+		state_machine.transition_to(StateSelectingUnit.new()) ## Replaces is_anim_just_finished
 		return
 	
 	var ai := MinimaxAI.new();
@@ -1129,7 +1141,8 @@ func MoveSingleAI() -> void:
 					
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		state = States.ANIMATING;
+		#state = States.ANIMATING;
+		state_machine.transition_to(StateAnimating.new())
 		camera_controller.focus_camera(selected_unit)
 		wait_for_camera = true
 		timer.start(pre_enemy_turn_wait)
@@ -1143,6 +1156,7 @@ func MoveSingleAI() -> void:
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
 		if currentEnemy != null:
 			currentEnemy.state.is_moved = true
+		call_deferred("MoveSingleAI") ## "Manually" continue loop of Enemy AI
 
 
 func CheckTriggerConditions() -> void:
@@ -1341,6 +1355,8 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	#print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
 	#if skill == active_skill:
 	#	return
+	if not state_machine.current == StateSelectingMove:
+		return
 	if selected_unit != null and selected_unit.state.is_ability_used:
 		print("Unit has already used their ability this turn.")
 		return
@@ -1353,11 +1369,12 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	
 	active_skill = skill
 	skill_caster = selected_unit
-	is_choosing_skill_target = true
+	is_choosing_skill_target = true ## TODO: Remove after SM is working
 	
 	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
-
+	#state_machine.transition_to(StateChoosingSkill.new())
+	
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	var o := Vector3i(origin)
 	var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
