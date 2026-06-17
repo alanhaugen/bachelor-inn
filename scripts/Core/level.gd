@@ -8,6 +8,7 @@ class_name Level
 # TODO: Make your own units passable
 # TODO: camp?
 # TODO: Make enemies able to occopy several grid-tiles
+# TODO: check if every 'non-engine' function that starts with underscore isn't called from outside the class
 
 #### signals 
 
@@ -1654,24 +1655,28 @@ func _process_old(delta: float) -> void:
 					selected_unit.play(selected_unit.run_left_animation)
 
 func end_player_turn() -> bool:
-	if !is_player_turn:
+	if not is_player_turn:
 		print("BLOCKED: not player turn")
 		return false
-	if (turn_transition_animation_player.is_playing()):
-		print("BLOCKED: animation playing")
-		return false
-	if(!combat_vfx.is_finished()):
+	#if (turn_transition_animation_player.is_playing()):
+		#print("BLOCKED: animation playing")
+		#return false
+	if not combat_vfx.is_finished():
 		print("BLOCKED: combat vfx not finished")
 		return false
-	if wait_for_camera:
-		print("BLOCKED: waiting for camera")
+	if state_machine.current is StateMenu:
 		return false
-	if (is_in_menu):
-		print("BLOCKED: is in menu")
+	if not (state_machine.current is StateSelectingUnit or state_machine.current is StateSelectingMove):
 		return false
-	if state != States.PLAYING:
-		print("BLOCKED: state is ", state)
-		return false
+	#if wait_for_camera:
+		#print("BLOCKED: waiting for camera")
+		#return false
+	#if (is_in_menu):
+		#print("BLOCKED: is in menu")
+		#return false
+	#if state != States.PLAYING:
+		#print("BLOCKED: state is ", state)
+		#return false
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
@@ -1681,6 +1686,8 @@ func end_player_turn() -> bool:
 			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
 			occupancy_map.set_cell_item(active_move.end_pos, player_code_done);
 			_clear_selection()
+	
+	state_machine.transition_to(StateTurnTransition.new(false))
 	return true
 
 
