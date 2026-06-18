@@ -3,9 +3,11 @@ class_name StateChoosingAttack
 
 ## Signals made in enter() must be disconnected in exit()
 func enter(level: Node) -> void:
+	print("ENTER STATE: StateChoosingAttack.")
 	pass
 
 func exit(level: Node) -> void:
+	print("EXIT STATE: StateChoosingAttack.")
 	level.path_map.clear()
 
 func handle_input(level: Node, event: InputEvent) -> void:

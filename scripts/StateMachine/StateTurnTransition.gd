@@ -7,6 +7,7 @@ func _init(to_player: bool) -> void:
 	_to_player = to_player
 
 func enter(level: Node) -> void:
+	print("ENTER STATE: StateTurnTransition.")
 	if _to_player:
 		level.enemy_label.hide()
 		level.player_label.show()
@@ -22,6 +23,7 @@ func enter(level: Node) -> void:
 	level.turn_transition_animation_player.play()
 
 func exit(level: Node) -> void:
+	print("EXIT STATE: StateTurnTransition.")
 	pass
 
 func handle_input(level: Node, event: InputEvent) -> void:

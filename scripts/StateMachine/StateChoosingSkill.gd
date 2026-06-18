@@ -2,9 +2,11 @@ extends LevelState
 class_name StateChoosingSkill
 
 func enter(level: Node) -> void:
+	print("ENTER STATE: StateChoosingSkill.")
 	pass
 
 func exit(level: Node) -> void:
+	print("EXIT STATE: StateChoosingSkill.")
 	pass
 
 func handle_input(level: Node, event: InputEvent) -> void:

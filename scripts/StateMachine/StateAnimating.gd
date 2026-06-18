@@ -4,9 +4,11 @@ class_name StateAnimating
 var _is_processing: bool = false
 
 func enter(level: Node) -> void:
+	print("ENTER STATE: StateAnimating.")
 	_is_processing = false
 
 func exit(level: Node) -> void:
+	print("EXIT STATE: StateAnimating.")
 	level.movement_map.clear()
 	_is_processing = false
 
@@ -113,6 +115,6 @@ func _finish_animation(level: Node) -> void:
 		level.is_player_turn = true
 		level.check_aggro()
 		level.hide_inactive_characters()
-		level.state_machine.transition_to(StatePlayerTurn.new())
+		level.state_machine.transition_to(StateTurnTransition.new(true))
 	else:
 		level.state_machine.transition_to(StateSelectingUnit.new())

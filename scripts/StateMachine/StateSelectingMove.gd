@@ -3,9 +3,11 @@ class_name StateSelectingMove
 
 ## Signals made in enter() must be disconnected in exit()
 func enter(level: Node) -> void:
+	print("ENTER STATE: StateSelectingMove.")
 	pass
 
 func exit(level: Node) -> void:
+	print("EXIT STATE: StateSelectingMove.")
 	level.movement_map.clear()
 	level.path_map.clear()
 

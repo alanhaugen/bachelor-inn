@@ -887,8 +887,6 @@ func _ready() -> void:
 	hide_inactive_characters()
 	state_machine.transition_to(StateTurnTransition.new(true))
 	
-	state_machine.transition_to(StateSelectingUnit.new())
-	
 	print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
 	print("Main.characters size: ", Main.characters.size())
 	if Main.get_current_level_index() > 2:
@@ -1451,6 +1449,18 @@ func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
 
 
 func _process(delta: float) -> void:
+	_update_cursor_on_hover()
+	_draw_path_arrow()
+	
+	## KEYBOARD INPUT CONTROL
+	if _held_key != KEY_NONE:
+		_hold_timer += delta
+		if _hold_timer >= _hold_duration:
+			_key_consumed = true
+			_hold_action.call()
+			_cancel_hold()
+	## KEYBOARD INPUT CONTROL END
+	
 	_process_old(delta)
 	return
 	
@@ -1707,6 +1717,15 @@ func end_player_turn() -> bool:
 func _update_cursor_on_hover() -> void:
 	#Input.set_custom_mouse_cursor(cursor_sword, Input.CURSOR_ARROW, Vector2(8, 8))
 	#print("cursor update called, texture is null: ", cursor_sword == null)
+	var valid_states: Array = [StateSelectingUnit, StateSelectingMove, StateChoosingAttack, StateChoosingSkill]
+	var is_interactive: bool = false
+	for s: Script in valid_states: ## :Script instead of LevelState for broader use
+		if is_instance_of(state_machine.current, s):
+			is_interactive = true
+			break
+	if not is_interactive:
+		Input.set_custom_mouse_cursor(null)
+		return
 	
 	var mouse_pos := get_viewport().get_mouse_position()
 	var origin := camera_controller.project_ray_origin(mouse_pos)
