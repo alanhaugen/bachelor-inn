@@ -100,6 +100,7 @@ func _process_next_move(level: Node) -> void:
 
 func _finish_animation(level: Node) -> void:
 	level.CheckTriggerConditions()
+	level.CheckVictoryConditions()
 	
 	if not level.is_player_turn:
 		# End of enemy turn - trans to player turn
