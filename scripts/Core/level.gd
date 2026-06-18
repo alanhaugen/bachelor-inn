@@ -664,21 +664,29 @@ func _input(event: InputEvent) -> void:
 			match event.keycode:
 				KEY_SPACE:
 					_start_hold(KEY_SPACE, 1.0, 
-						func() -> void: if is_player_turn and state != States.ANIMATING: end_player_turn()
+						func() -> void: 
+							if is_player_turn and not (state_machine.current is StateAnimating): 
+								end_player_turn()
 					)
 				KEY_N:
 					if Tutorial.in_tutorial:
 						_start_hold(KEY_N, 1.0, 
-						func() -> void: if is_player_turn and state != States.ANIMATING: Tutorial.tutorial_trigger_victory())
+						func() -> void: 
+							if is_player_turn and not (state_machine.current is StateAnimating): 
+								Tutorial.tutorial_trigger_victory())
 					else:
 						_start_hold(KEY_N, 1.0, 
-							func() -> void: if is_player_turn and state != States.ANIMATING: next_level()
+							func() -> void: 
+								if is_player_turn and not (state_machine.current is StateAnimating): 
+									next_level()
 						)
 				KEY_K:
-					_start_hold(KEY_N, 1.0, 
-					func() -> void: if is_player_turn and state != States.ANIMATING: game_over_screen._load_retry())
-				KEY_TAB:
-					select_next_character()
+					_start_hold(KEY_K, 1.0, 
+					func() -> void: 
+						if is_player_turn and not (state_machine.current is StateAnimating): 
+							game_over_screen._load_retry())
+				#KEY_TAB:
+					#select_next_character()
 				KEY_ESCAPE:
 					#level.state_machine.pop()
 					if _level_complete or has_window_open:
@@ -694,26 +702,26 @@ func _input(event: InputEvent) -> void:
 						#is_in_menu = false
 						#pause_menu.hide()
 						#get_tree().paused = false
-				KEY_1:
-					var ui := get_tree().get_first_node_in_group("ui_controller")
-					if ui:
-						ui.ribbon.trigger_skill_by_index(0)
-				KEY_2:
-					var ui := get_tree().get_first_node_in_group("ui_controller")
-					if ui:
-						ui.ribbon.trigger_skill_by_index(1)
-				KEY_3:
-					var ui := get_tree().get_first_node_in_group("ui_controller")
-					if ui:
-						ui.ribbon.trigger_skill_by_index(2)
-				KEY_4:
-					var ui := get_tree().get_first_node_in_group("ui_controller")
-					if ui:
-						ui.ribbon.trigger_skill_by_index(3)
-				KEY_5:
-					var ui := get_tree().get_first_node_in_group("ui_controller")
-					if ui:
-						ui.ribbon.trigger_skill_by_index(4)
+				#KEY_1:
+					#var ui := get_tree().get_first_node_in_group("ui_controller")
+					#if ui:
+						#ui.ribbon.trigger_skill_by_index(0)
+				#KEY_2:
+					#var ui := get_tree().get_first_node_in_group("ui_controller")
+					#if ui:
+						#ui.ribbon.trigger_skill_by_index(1)
+				#KEY_3:
+					#var ui := get_tree().get_first_node_in_group("ui_controller")
+					#if ui:
+						#ui.ribbon.trigger_skill_by_index(2)
+				#KEY_4:
+					#var ui := get_tree().get_first_node_in_group("ui_controller")
+					#if ui:
+						#ui.ribbon.trigger_skill_by_index(3)
+				#KEY_5:
+					#var ui := get_tree().get_first_node_in_group("ui_controller")
+					#if ui:
+						#ui.ribbon.trigger_skill_by_index(4)
 		
 		else:
 			if event.keycode == _held_key:
@@ -876,6 +884,8 @@ func _ready() -> void:
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
+	
+	state_machine.transition_to(StateSelectingUnit.new())
 	
 	print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
 	print("Main.characters size: ", Main.characters.size())
@@ -1295,11 +1305,12 @@ func cleanup_characters_before_load() -> void:
 
 
 func trigger_game_over() -> void:
-	is_in_menu = true
-	var ui := get_tree().get_first_node_in_group("ui_controller")
-	if ui:
-		ui.hide()
-	game_over_screen.show()
+	#is_in_menu = true
+	#var ui := get_tree().get_first_node_in_group("ui_controller")
+	#if ui:
+		#ui.hide()
+	#game_over_screen.show()
+	state_machine.transition_to(StateGameOver.new())
 
 
 func _on_character_sanity_flipped(character: Character) -> void:
@@ -1515,7 +1526,7 @@ func _process_old(delta: float) -> void:
 		return;
 		
 	#CheckTriggerConditions();
-	CheckVictoryConditions();
+	#CheckVictoryConditions();
 	
 	if (state == States.PLAYING):
 		if (is_animation_just_finished):
@@ -1544,7 +1555,7 @@ func _process_old(delta: float) -> void:
 		if (moves_stack.is_empty()):
 			state = States.PLAYING
 			movement_map.clear()
-			CheckTriggerConditions() ##
+			#CheckTriggerConditions() ##
 			## TODO: Implement function below
 			#Tutorial.tutorial_check_unit_position_to_trigger()
 			

@@ -23,9 +23,32 @@ func handle_input(level: Node, event: InputEvent) -> void:
 				level.select_next_character()
 				level.state_machine.transition_to(StateSelectingMove.new())
 				return
-			KEY_1: ## TODO: Add all key binds to action bar skills
-				#level.state_machine.transition_to(StateSelectSpellTarget.new())
-				pass
+			KEY_1:
+				var ui := level.get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(0)
+				return
+			KEY_2:
+				var ui := level.get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(1)
+				return
+			KEY_3:
+				var ui := level.get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(2)
+				return
+			KEY_4:
+				var ui := level.get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(3)
+				return
+			KEY_5:
+				var ui := level.get_tree().get_first_node_in_group("ui_controller")
+				if ui:
+					ui.ribbon.trigger_skill_by_index(4)
+				return
+	
 	if not event is InputEventMouseButton:
 		return
 	if not event.pressed:
