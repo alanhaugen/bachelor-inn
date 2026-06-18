@@ -785,7 +785,8 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
-	turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
+	## Move to state machine
+	#turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
 	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
@@ -868,7 +869,7 @@ func _ready() -> void:
 	
 	game_state = GameState.from_level(self)
 	
-	turn_transition_animation_player.play()
+	#turn_transition_animation_player.play()
 	add_to_group("level")
 	
 	_register_chests()
@@ -876,6 +877,7 @@ func _ready() -> void:
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
+	state_machine.transition_to(StateTurnTransition.new(true))
 	
 	print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
 	print("Main.characters size: ", Main.characters.size())

@@ -31,7 +31,25 @@ func handle_input(level: Node, event: InputEvent) -> void:
 func _on_animation_finished(anim_name: StringName, level: Node) -> void:
 	if _to_player:
 		level.is_player_turn = true
-		level.state_machine.transition_to(StateSelectingUnit.new())
+		var selectables: Character = level.get_selectable_characters()
+		
+		if selectables.is_empty():
+			level.state_machine.transition_to(StateSelectingUnit.new())
+			return
+		
+		if level.last_selected_unit != null and selectables.has(level.last_selected_unit):
+			level.camera_controller.free_camera()
+			level.camera_controller.set_pivot_target_translate(level.last_selected_unit)
+			level.select_unit(level.last_selected_unit)
+			level.state_machine.transition_to(StateSelectingMove.new())
+		else:
+			level.camera_controller.free_camera()
+			level.camera_controller.set_pivot_target_translate(selectables.front())
+			if not Tutorial.in_tutorial:
+				level.select_unit(selectables.front())
+				level.state_machine.transition_to(StateSelectingMove.new())
+			else:
+				level.state_machine.transition_to(StateSelectingUnit.new())
 	else:
 		level.is_player_turn = false
 		level.state_machine.transition_to(StateEnemyTurn.new())
