@@ -609,7 +609,7 @@ func _handle_player_click(pos: Vector3i) -> void:
 	select_unit(get_unit(pos))
 
 
-func _handle_action_tile_click(pos: Vector3i) -> void:
+func _handle_action_tile_click(pos: Vector3i) -> String:
 	active_move = null
 
 	var found_move : Move = null
@@ -620,6 +620,8 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 			found_move = cmd
 		elif cmd is Attack and cmd.attack_pos == pos:
 			found_attack = cmd
+	
+	movement_map.clear()
 
 	# MOVE HAS PRIORITY
 	if found_move != null:
@@ -627,20 +629,18 @@ func _handle_action_tile_click(pos: Vector3i) -> void:
 
 		moves_stack.append(active_move)
 		camera_controller.focus_camera(selected_unit)
-		state = States.ANIMATING
+		#state = States.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
-		#return "move"
+		return "move"
 
 	elif found_attack != null:
 		active_move = found_attack
 
 		show_attack_tiles(pos)
-		state = States.CHOOSING_ATTACK
-		#return "attack"
-	#return ""
-
-	movement_map.clear()
+		#state = States.CHOOSING_ATTACK
+		return "attack"
+	return ""
 
 
 func _clear_selection() -> void:
@@ -1497,12 +1497,12 @@ func get_screen_position(sprite: Sprite3D) -> Vector2:
 	return camera.unproject_position(sprite.global_position)
 
 func _draw_path_arrow() -> void:
-	if state == States.PLAYING and selected_unit and is_in_menu == false:
+	#if state == States.PLAYING and selected_unit and is_in_menu == false:
+	if state_machine.current is StateSelectingMove and selected_unit != null:
 		var pos :Vector3i = get_grid_cell_from_mouse();
 		if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 			path_map.clear()
 			var points : Array[Vector3i] = movement_grid.get_path(selected_unit.state.grid_position, pos)
-			
 			for point : Vector3i in points:
 				path_map.set_cell_item(point, 3) #SET PATH MAP TO BE THE TILE IN ARRAY WHEN DRAWING PATH ARROW
 

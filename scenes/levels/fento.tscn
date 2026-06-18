@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://4qhd45gbklo" path="res://art/meshes/HouseTest.fbx" id="3_37ajb"]
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="5_fcqlb"]
 [ext_resource type="PackedScene" uid="uid://k7pqwlthd0ri" path="res://scenes/Development/Particles/smaller_fire.tscn" id="7_baojg"]
+[ext_resource type="Script" uid="uid://bik6shmmal220" path="res://scripts/StateMachine/state_machine.gd" id="8_baojg"]
 
 [sub_resource type="FogMaterial" id="FogMaterial_2lct5"]
 density = 8.0
@@ -131,3 +132,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.171986, -2.1846838, -18.74
 
 [node name="Smaller fire2" parent="Fog WIP" index="1" unique_id=1419798794 instance=ExtResource("7_baojg")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6081, -2.1946487, -8.235571)
+
+[node name="StateMachine" type="Node" parent="." index="22" unique_id=299474275]
+script = ExtResource("8_baojg")
+metadata/_custom_type_script = "uid://bik6shmmal220"

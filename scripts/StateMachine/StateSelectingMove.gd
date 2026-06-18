@@ -76,7 +76,7 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	
 	# Click movement tile or enemy unit
 	if level.movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-		var result: String = level.handle_action_tile_click(pos)
+		var result: String = level._handle_action_tile_click(pos)
 		match result:
 			"move":
 				print("Match found: Transitioning to Animating State.")

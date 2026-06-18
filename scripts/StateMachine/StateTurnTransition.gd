@@ -33,7 +33,7 @@ func handle_input(level: Node, event: InputEvent) -> void:
 func _on_animation_finished(anim_name: StringName, level: Node) -> void:
 	if _to_player:
 		level.is_player_turn = true
-		var selectables: Character = level.get_selectable_characters()
+		var selectables: Array[Character] = level.get_selectable_characters()
 		
 		if selectables.is_empty():
 			level.state_machine.transition_to(StateSelectingUnit.new())
@@ -46,7 +46,7 @@ func _on_animation_finished(anim_name: StringName, level: Node) -> void:
 			level.state_machine.transition_to(StateSelectingMove.new())
 		else:
 			level.camera_controller.free_camera()
-			level.camera_controller.set_pivot_target_translate(selectables.front())
+			level.camera_controller.set_pivot_target_translate(selectables.front().position)
 			if not Tutorial.in_tutorial:
 				level.select_unit(selectables.front())
 				level.state_machine.transition_to(StateSelectingMove.new())
