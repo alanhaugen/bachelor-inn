@@ -38,8 +38,10 @@ func _load_retry() -> void:
 
 func _on_back_button_pressed() -> void:
 	if is_instance_valid(Main.level):
+		Main.level.cleanup_characters_before_load()
 		Main.level.queue_free()
 		Main.level = null
-	get_tree().change_scene_to_file("res://scenes/userinterface/Level/main_menu.tscn");
+	#get_tree().change_scene_to_file("res://scenes/userinterface/Level/main_menu.tscn");
+	get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
 	# unload level
 	# open main menu
