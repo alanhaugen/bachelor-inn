@@ -1338,10 +1338,7 @@ func tick_all_units_end_round() -> void:
 
 
 func _on_ribbon_skill_pressed(skill: Skill) -> void:
-	#print("is_ability_used at ribbon press: ", selected_unit.state.is_ability_used if selected_unit else "no unit")
-	#if skill == active_skill:
-	#	return
-	if not state_machine.current == StateSelectingMove:
+	if not (state_machine.current is StateSelectingMove):
 		return
 	if selected_unit != null and selected_unit.state.is_ability_used:
 		print("Unit has already used their ability this turn.")
@@ -1355,11 +1352,10 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	
 	active_skill = skill
 	skill_caster = selected_unit
-	is_choosing_skill_target = true ## TODO: Remove after SM is working
 	
 	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
 	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
-	#state_machine.transition_to(StateChoosingSkill.new())
+	state_machine.transition_to(StateChoosingSkill.new())
 	
 func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 	var o := Vector3i(origin)
