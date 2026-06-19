@@ -519,10 +519,6 @@ func _handle_skill(pos : Vector3i) -> void:
 		state_machine.transition_to(StateSelectingUnit.new())
 
 func _handle_attack_choice(pos: Vector3i) -> void:
-	if path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
-		_cancel_attack_choice_mode()
-		return
-
 	active_move.end_pos = pos
 	moves_stack.append(active_move)
 
@@ -531,9 +527,8 @@ func _handle_attack_choice(pos: Vector3i) -> void:
 		moves_stack.front().end_pos
 	)
 
-	is_choosing_skill_attack_origin = false
 	camera_controller.focus_camera(selected_unit)
-	state = States.ANIMATING
+	state_machine.transition_to(StateAnimating.new())
 
 
 func _is_invalid_tile(pos: Vector3i) -> bool:

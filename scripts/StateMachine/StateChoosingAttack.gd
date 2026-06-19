@@ -9,6 +9,7 @@ func enter(level: Node) -> void:
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateChoosingAttack.")
 	level.path_map.clear()
+	level.is_choosing_skill_attack_origin = false
 
 func handle_input(level: Node, event: InputEvent) -> void:
 	if not level._can_handle_input(event):
@@ -29,6 +30,8 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	if level.path_map.get_cell_item(pos) == GridMap.INVALID_CELL_ITEM:
 		_cancel(level)
 		return
+		
+	level._handle_attack_choice(pos)
 	
 func _cancel(level: Node) -> void:
 	level._cancel_attack_choice_mode()
