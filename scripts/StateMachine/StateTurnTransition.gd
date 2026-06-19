@@ -17,6 +17,8 @@ func enter(level: Node) -> void:
 		level.check_aggro()
 		level.hide_inactive_characters()
 	
+	## TODO: add signal to remove UI while animating?
+	
 	level.turn_transition_animation_player.animation_finished.connect(
 		_on_animation_finished.bind(level), CONNECT_ONE_SHOT ## Auto disconnect after fire'ing once
 	)
