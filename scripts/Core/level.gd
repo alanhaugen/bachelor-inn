@@ -373,33 +373,23 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 
 func _can_handle_input(event: InputEvent) -> bool:
-	##old
-	#if get_grid_cell_from_mouse() == Vector3i(INF, INF, INF):
-		#return false
 	if not is_player_turn:
+		return false	
+	if state_machine.current is StateAnimating:
 		return false
-	
-	if state == States.ANIMATING:
-		return false
-
 	if is_in_menu:
 		return false
 
-	if not (event is InputEventMouseButton):
-		return false
-
-	if event.button_index != MOUSE_BUTTON_LEFT:
-		return false
-
-	if not event.pressed:
-		return false
-
-	if Input.is_action_pressed("enable_dragging"):
-		return false
-	
-	if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
-		_clear_selection();
-		return false
+	if event is InputEventMouseButton:
+		if event.button_index != MOUSE_BUTTON_LEFT:
+			return false
+		if not event.pressed:
+			return false
+		if Input.is_action_pressed("enable_dragging"):
+			return false
+		if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
+			_clear_selection();
+			return false
 
 	return true
 
@@ -551,11 +541,17 @@ func _is_invalid_tile(pos: Vector3i) -> bool:
 
 
 func can_handle_ui_input() -> bool:
-		return(
-			is_player_turn
-			and state == States.PLAYING
-			and not is_in_menu
-		)
+	var valid_states: Array[Script] = [StateSelectingUnit, StateSelectingMove, StateChoosingAttack, StateChoosingSkill]
+	var is_interactive: = false
+	for s : Script in valid_states:
+		if is_instance_of(state_machine, s):
+			is_interactive = true
+			break
+	return(
+		is_player_turn
+		and state == States.PLAYING
+		and not is_in_menu
+	)
 
 
 func try_select_unit(unit: Character) -> void:
@@ -731,45 +727,45 @@ func _input(event: InputEvent) -> void:
 				_key_consumed = false
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if not _can_handle_input(event):
-		return
-	
-	var pos: Vector3i = get_grid_cell_from_mouse()
-	print(pos)
-
-	_update_cursor(pos)
-	
-	if is_choosing_skill_target == true:
-		_handle_skill(pos)
-		return;
-	
-	# Attack selection phase
-	if state == States.CHOOSING_ATTACK:
-		_handle_attack_choice(pos)
-		return
-
-	if _is_invalid_tile(pos):
-		return
-
-	# Player unit clicked
-	if get_unit_name(pos) == CharacterStates.Player:
-		_handle_player_click(pos)
-		return
-
-	# Clicked on movement/attack tile
-	if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-		_handle_action_tile_click(pos)
-		return
-
-	# Clicked empty tile
-	_clear_selection()
-
-	# Enemy clicked (for info panel)
-	if get_unit(pos) and get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
-		selected_enemy_unit = get_unit(pos)
-		emit_signal("enemy_selected", selected_enemy_unit)
-		print("hey an enemy has been selected ")
+#func _unhandled_input(event: InputEvent) -> void:
+	#if not _can_handle_input(event):
+		#return
+	#
+	#var pos: Vector3i = get_grid_cell_from_mouse()
+	#print(pos)
+#
+	#_update_cursor(pos)
+	#
+	#if is_choosing_skill_target == true:
+		#_handle_skill(pos)
+		#return;
+	#
+	## Attack selection phase
+	#if state == States.CHOOSING_ATTACK:
+		#_handle_attack_choice(pos)
+		#return
+#
+	#if _is_invalid_tile(pos):
+		#return
+#
+	## Player unit clicked
+	#if get_unit_name(pos) == CharacterStates.Player:
+		#_handle_player_click(pos)
+		#return
+#
+	## Clicked on movement/attack tile
+	#if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
+		#_handle_action_tile_click(pos)
+		#return
+#
+	## Clicked empty tile
+	#_clear_selection()
+#
+	## Enemy clicked (for info panel)
+	#if get_unit(pos) and get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
+		#selected_enemy_unit = get_unit(pos)
+		#emit_signal("enemy_selected", selected_enemy_unit)
+		#print("hey an enemy has been selected ")
 
 
 func _ready() -> void:
@@ -1050,6 +1046,12 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 		var anim_pos := grid_to_world(p)
 		animation_path.append(anim_pos)
 
+	print("Looking for unit at: ", start)
+	for c in characters:
+		if is_instance_valid(c):
+			print(" - ", c.data.unit_name, " at ", c.state.grid_position)
+			selected_unit = get_unit(start)
+			
 	selected_unit = get_unit(start)
 
 

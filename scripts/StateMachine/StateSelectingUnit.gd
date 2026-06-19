@@ -10,7 +10,7 @@ class_name StateSelectingUnit
 ## Signals made in enter() must be disconnected in exit()
 func enter(level: Node) -> void:
 	print("ENTER STATE: StateSelectingUnit.")
-	level.clear_selection()
+	level._clear_selection()
 
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateSelectingUnit.")
@@ -33,7 +33,7 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	
 	#Player Unit Clicked
 	if level.get_unit_name(pos) == CharacterStates.Player:
-		level.handle_player_click(pos)
+		level._handle_player_click(pos)
 		level.state_machine.transition_to(StateSelectingMove.new())
 		return
 	

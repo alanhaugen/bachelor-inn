@@ -22,8 +22,9 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	if event is InputEventKey and not event.echo and event.pressed:
 		match event.keycode:
 			KEY_TAB:
+				print("Key Input TAB registered.")
 				level.select_next_character()
-				level.state_machine.transition_to(StateSelectingMove.new())
+				#level.state_machine.transition_to(StateSelectingMove.new())
 				return
 			KEY_1:
 				var ui := level.get_tree().get_first_node_in_group("ui_controller")
@@ -79,12 +80,10 @@ func handle_input(level: Node, event: InputEvent) -> void:
 		var result: String = level._handle_action_tile_click(pos)
 		match result:
 			"move":
-				print("Match found: Transitioning to Animating State.")
-				#level.state_machine.transistion_to(StateAnimating.new())
+				level.state_machine.transition_to(StateAnimating.new())
 				pass
 			"attack":
-				print("Match found: Transitioning to Choosing Attack State")
-				#level.state_machine.transition_to(StateChoosingAttack.new())
+				level.state_machine.transition_to(StateChoosingAttack.new())
 				pass
 		return
 	# Click enemy unit

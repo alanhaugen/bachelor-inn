@@ -30,12 +30,12 @@ func update(level: Node, delta: float) -> void:
 
 func _move_along_path(level: Node, delta: float) -> void:
 	var movement_speed: float = 8.0
-	var target: Vector3i = level.animation_path.front()
+	var target: Vector3 = level.animation_path.front()
 	var dir: Vector3 = target - level.selected_unit.position
 	var step: = movement_speed * delta
 	
 	if dir.length() <= step:
-		level.selected_unit.positoin = target
+		level.selected_unit.position = target
 		level.animation_path.pop_front()
 	else:
 		level.selected_unit.position += dir.normalized() * step
@@ -89,7 +89,7 @@ func _process_next_move(level: Node) -> void:
 				continue
 			level.emit_signal("character_stats_changed", character)
 	
-	if not level.moves_stack.empty():
+	if not level.moves_stack.is_empty():
 		level.create_path(
 			level.moves_stack.front().start_pos,
 			level.moves_stack.front().end_pos
