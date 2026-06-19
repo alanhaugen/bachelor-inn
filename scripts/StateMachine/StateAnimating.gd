@@ -83,20 +83,20 @@ func _process_next_move(level: Node) -> void:
 			level.timer.start(level.post_enemy_attack_wait)
 			await level.timer.timeout
 			level.wait_for_camera = false
-		level.MoveSingleAI() ## Will be moved to own EnemyTurnState
-		for character: Character in level.Main.characters:
+		#level.MoveSingleAI() ## Will be moved to own EnemyTurnState
+		for character: Character in Main.characters:
 			if character == null:
 				continue
 			level.emit_signal("character_stats_changed", character)
 	
-	if not level.moves_stack.is_empty():
-		level.create_path(
-			level.moves_stack.front().start_pos,
-			level.moves_stack.front().end_pos
-			)
-	
-	if not level.animation_path.is_empty():
-		level.selected_unit.position = level.animation_path.pop_front()
+	#if not level.moves_stack.is_empty():
+		#level.create_path(
+			#level.moves_stack.front().start_pos,
+			#level.moves_stack.front().end_pos
+			#)
+	#
+	#if not level.animation_path.is_empty():
+		#level.selected_unit.position = level.animation_path.pop_front()
 	
 	_is_processing = false
 
@@ -106,15 +106,25 @@ func _finish_animation(level: Node) -> void:
 	
 	if not level.is_player_turn:
 		# End of enemy turn - trans to player turn
-		level.tick_all_units_end_round()
-		for c in Main.characters:
-			if c == null:
-				continue
-			level.emit_signal("character_stats_changed", c)
-		level.reset_all_units()
-		level.is_player_turn = true
-		level.check_aggro()
-		level.hide_inactive_characters()
-		level.state_machine.transition_to(StateTurnTransition.new(true))
+		level.MoveSingleAI()
+		#level.tick_all_units_end_round()
+		#for c in Main.characters:
+			#if c == null:
+				#continue
+			#level.emit_signal("character_stats_changed", c)
+		#level.reset_all_units()
+		#level.is_player_turn = true
+		#level.check_aggro()
+		#level.hide_inactive_characters()
+		#level.state_machine.transition_to(StateTurnTransition.new(true))
 	else:
-		level.state_machine.transition_to(StateSelectingMove.new())
+		if is_instance_valid(level.last_selected_unit): # != null:
+			level.select_unit(level.last_selected_unit)
+			level.state_machine.transition_to(StateSelectingMove.new())
+		else:
+			var selectables: Array = level.get_selectable_characters()
+			if not selectables.is_empty():
+				level.select_unit(level.selectables.front())
+				level.state_machine.transition_to(StateSelectingMove.new())
+			else:
+				level.state_machine.transition_to(StateSelectingUnit.new())

@@ -1040,27 +1040,18 @@ func MoveAI() -> void:
 		camera_controller.free_camera()
 
 func MoveSingleAI() -> void:
-	## TODO: Hide "End Turn button" and other UI elements
 	var any_active_enemies := false
-	
-	## Check if any enemies are active, if not, return to player turn
 	for unit in characters:
 		if unit == null:
 			continue
 		if not unit.state.is_enemy():
 			continue
-		#print("Enemy: ", unit.data.unit_name, " aggro: ", unit.state.aggro_state, " is_moved: ", unit.state.is_moved)
 		if unit.state.aggro_state != CharacterState.AggroState.FROZEN:
 			any_active_enemies = true
 			break
 	
 	if not any_active_enemies:
-		tick_all_units_end_round() ## TODO: Decide if we want to decay buffs when no active enemies
-		reset_all_units()
-		is_player_turn = true
-		#is_animation_just_finished = true ## TODO: delete -> moved to statemachine
-		camera_controller.free_camera()
-		state_machine.transition_to(StateSelectingUnit.new()) ## Replaces is_anim_just_finished
+		_end_enemy_turn()
 		return
 	
 	var ai := MinimaxAI.new();
@@ -1078,6 +1069,7 @@ func MoveSingleAI() -> void:
 		break
 		
 	if currentEnemy == null:
+		_end_enemy_turn()
 		return
 		
 	match currentEnemy.state.aggro_state:
@@ -1088,27 +1080,15 @@ func MoveSingleAI() -> void:
 		CharacterState.AggroState.AGGRESSIVE:
 			pass
 	
-	## TODO: This only applies the move from move + attack command, barring enemies from moving and attacking.
 	if currentEnemy != null:
 		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
 		if current_state.has_enemy_moves(curEnemyPos):
 			var move : Command = ai.choose_best_move(current_state, 3, currentEnemy);
 			moves_stack.append(move);
 			current_state = current_state.apply_move(move, true);
-			
-			## Check if attack in combination with move is possible - BEFORE applying move
-			#if move is Move:
-				#var enemy_after := current_state.get_unit(move.end_pos)
-				#if enemy_after != null:
-					#var attack_moves := MoveGenerator.generate(enemy_after, current_state, false, true)
-					#for cmd in attack_moves:
-						#if cmd is Attack:
-							#moves_stack.append(cmd)
-							#break
 					
 	if (moves_stack.is_empty() == false):
 		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		#state = States.ANIMATING;
 		state_machine.transition_to(StateAnimating.new())
 		camera_controller.focus_camera(selected_unit)
 		wait_for_camera = true
@@ -1117,7 +1097,7 @@ func MoveSingleAI() -> void:
 		wait_for_camera = false
 	else:
 		var pivot_chara : Node3D = get_selectable_characters().front()
-		if(pivot_chara == null):
+		if (pivot_chara == null):
 			return
 		camera_controller.free_camera()
 		camera_controller.set_pivot_target_translate(pivot_chara.position)
@@ -1125,6 +1105,19 @@ func MoveSingleAI() -> void:
 			currentEnemy.state.is_moved = true
 		call_deferred("MoveSingleAI") ## "Manually" continue loop of Enemy AI
 
+
+func _end_enemy_turn() -> void:
+	tick_all_units_end_round()
+	for c in Main.characters:
+		if c == null:
+			continue
+		emit_signal("character_stats_changed", c)
+	reset_all_units()
+	is_player_turn = true
+	check_aggro()
+	hide_inactive_characters()
+	camera_controller.free_camera()
+	state_machine.transition_to(StateTurnTransition.new(true))
 
 func CheckTriggerConditions() -> void:
 	if selected_unit == null:

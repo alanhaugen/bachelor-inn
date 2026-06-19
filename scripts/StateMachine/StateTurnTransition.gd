@@ -41,7 +41,7 @@ func _on_animation_finished(anim_name: StringName, level: Node) -> void:
 		
 		if level.last_selected_unit != null and selectables.has(level.last_selected_unit):
 			level.camera_controller.free_camera()
-			level.camera_controller.set_pivot_target_translate(level.last_selected_unit)
+			level.camera_controller.set_pivot_target_translate(level.last_selected_unit.position)
 			level.select_unit(level.last_selected_unit)
 			level.state_machine.transition_to(StateSelectingMove.new())
 		else:

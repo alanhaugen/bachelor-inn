@@ -4,6 +4,7 @@ class_name StateEnemyTurn
 func enter(level: Node) -> void:
 	print("ENTER STATE: StateEnemyTurn.")
 	level.is_player_turn = false
+	## TODO: Hide player card bottom right
 	level.enemy_label.show()
 	level.player_label.hide()
 	level.MoveSingleAI()
