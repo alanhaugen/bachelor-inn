@@ -9,7 +9,7 @@ func enter(level: Node) -> void:
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateSelectingMove.")
 	level.movement_map.clear()
-	level.path_map.clear()
+	#level.path_map.clear()
 
 func handle_input(level: Node, event: InputEvent) -> void:
 	if not level._can_handle_input(event):

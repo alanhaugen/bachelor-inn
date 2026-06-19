@@ -1713,7 +1713,7 @@ func _update_cursor_on_hover() -> void:
 		return
 	_last_hovered_pos = grid_pos
 	
-	if is_choosing_skill_target:
+	if state_machine.current is StateChoosingSkill:
 		if valid_skill_target_tiles.has(grid_pos):
 			Input.set_custom_mouse_cursor(cursor_wand, Input.CURSOR_ARROW, Vector2(8, 8))
 			_show_aoe_preview(grid_pos, active_skill)
