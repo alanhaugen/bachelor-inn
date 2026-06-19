@@ -22,7 +22,7 @@ The project supports standalone script execution for logic verification. Use the
 
 **Example Command:**
 ```bash
-godot --headless --script test_logic.gd
+godot --headless --script tools/test_save_load.gd
 ```
 
 ## Additional Development Information
