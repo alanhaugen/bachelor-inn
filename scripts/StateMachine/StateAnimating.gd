@@ -117,5 +117,4 @@ func _finish_animation(level: Node) -> void:
 		level.hide_inactive_characters()
 		level.state_machine.transition_to(StateTurnTransition.new(true))
 	else:
-		level.select_unit(level.selected_unit)
 		level.state_machine.transition_to(StateSelectingMove.new())

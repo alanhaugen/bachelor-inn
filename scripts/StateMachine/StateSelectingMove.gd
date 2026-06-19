@@ -3,6 +3,8 @@ class_name StateSelectingMove
 
 ## Signals made in enter() must be disconnected in exit()
 func enter(level: Node) -> void:
+	if level.last_selected_unit != null:
+		level.select_unit(level.last_selected_unit)
 	print("ENTER STATE: StateSelectingMove.")
 	pass
 
@@ -56,25 +58,16 @@ func handle_input(level: Node, event: InputEvent) -> void:
 		return
 	if not event.pressed:
 		return
-	
-	# RMB - Cancel / deselect
-	if event.button_index == MOUSE_BUTTON_RIGHT:
-		level._clear_selection()
-		level.state_machine.transition_to(StateSelectingUnit.new())
+		
+	if level._is_invalid_tile(pos): ## TODO: This checks for water tiles. Should be renamed.
 		return
 	
 	# Click another player unit
 	if level.get_unit_name(pos) == CharacterStates.Player:
 		level._handle_player_click(pos)
-		level.state_machine.transition_to(StateSelectingUnit.new())
+		level.state_machine.transition_to(StateSelectingMove.new())
 		return
 		
-	# Click empty tile
-	if level._is_invalid_tile(pos):
-		level._clear_selection()
-		level.state_machine.transition_to(StateSelectingUnit.new())
-		return
-	
 	# Click movement tile or enemy unit
 	if level.movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
 		var result: String = level._handle_action_tile_click(pos)
@@ -86,4 +79,18 @@ func handle_input(level: Node, event: InputEvent) -> void:
 				level.state_machine.transition_to(StateChoosingAttack.new())
 				pass
 		return
+	
 	# Click enemy unit
+	#if level.get_unit_name(pos) == CharacterStates.Enemy:
+		#level.selected_enemy_unit = level.get_unit(pos)
+		#emit_signal("enemy_selected", level.selected_enemy_unit)
+	
+	# Click empty tile /anything else
+	level._clear_selection()
+	level.state_machine.transition_to(StateSelectingUnit.new())
+	
+	
+	#if level.get_unit(pos) and level.get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
+			#level.selected_enemy_unit = level.get_unit(pos)
+			#level.emit_signal("enemy_selected", selected_enemy_unit)
+			#print("hey an enemy has been selected ")

@@ -20,6 +20,19 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	if not level._can_handle_input(event):
 		return
 	
+	# Key inputs
+	if event is InputEventKey and not event.echo and event.pressed:
+		match event.keycode:
+			KEY_TAB:
+				if level.last_selected_unit != null:
+					level.select_unit(level.last_selected_unit)
+					level.state_machine.transition_to(StateSelectingMove.new())
+					return
+				else:
+					level.select_next_character()
+					level.state_machine.transition_to(StateSelectingMove.new())
+					return
+	
 	var pos: Vector3i = level.get_grid_cell_from_mouse()
 	level._update_cursor(pos)
 	

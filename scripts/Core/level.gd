@@ -381,7 +381,7 @@ func _can_handle_input(event: InputEvent) -> bool:
 		return false
 
 	if event is InputEventMouseButton:
-		if event.button_index != MOUSE_BUTTON_LEFT:
+		if event.button_index != MOUSE_BUTTON_LEFT and event.button_index != MOUSE_BUTTON_RIGHT:
 			return false
 		if not event.pressed:
 			return false
@@ -552,7 +552,6 @@ func can_handle_ui_input() -> bool:
 func try_select_unit(unit: Character) -> void:
 	if not can_handle_ui_input():
 		return
-	
 	select_unit(unit)
 
 
@@ -583,20 +582,8 @@ func select_unit(unit: Character) -> void:
 
 
 func _handle_player_click(pos: Vector3i) -> void:
-	if is_choosing_skill_target:
-		_exit_skill_target_mode()
-		return
-	
 	unit_pos = pos
 	movement_map.clear()
-
-	# Same unit clicked again 
-	#Removed as a quickfix
-	#if selected_unit == get_unit(pos):
-		#active_move = Wait.new(pos)
-		#show_move_popup(get_viewport().get_mouse_position())
-		#return
-		
 	select_unit(get_unit(pos))
 
 
@@ -1426,7 +1413,7 @@ func _process(delta: float) -> void:
 			_cancel_hold()
 	## KEYBOARD INPUT CONTROL END
 	
-	_process_old(delta)
+	#_process_old(delta)
 	return
 	
 	# FUTURE:
@@ -1471,181 +1458,181 @@ func _draw_path_arrow() -> void:
 			for point : Vector3i in points:
 				path_map.set_cell_item(point, 3) #SET PATH MAP TO BE THE TILE IN ARRAY WHEN DRAWING PATH ARROW
 
-func _process_old(delta: float) -> void:
-	_update_cursor_on_hover()
-	
-	## KEYBOARD INPUT CONTROL
-	if _held_key != KEY_NONE:
-		_hold_timer += delta
-		if _hold_timer >= _hold_duration:
-			_key_consumed = true
-			_hold_action.call()
-			_cancel_hold()
-	## KEYBOARD INPUT CONTROL END
-	
-	if (turn_transition_animation_player.is_playing()):
-		turn_transition.show()
-		camera_controller.lock_camera()
-		return;
-	if(!combat_vfx.is_finished()):
-		return
-	if wait_for_camera:
-		return
-	#for i in Main.characters.size():
-		#update_side_bar(Main.characters[i], side_bar_array[i]);
-		
-	turn_transition.hide();
-	camera_controller.unlock_camera()
-	
-	_draw_path_arrow()
-	
-	if (is_in_menu):
-		return;
-		
-	#CheckTriggerConditions();
-	#CheckVictoryConditions();
-	
-	if (state == States.PLAYING):
-		if (is_animation_just_finished):
-			is_animation_just_finished = false;
-			turn_transition_animation_player.play();
-			enemy_label.hide();
-			player_label.show();
-		if (is_player_turn):
-			is_player_turn = false;
-			var units :Array[Vector3i] = occupancy_map.get_used_cells();
-			for i in units.size():
-				var pos :Vector3i = units[i];
-				if (occupancy_map.get_cell_item(pos) == player_code):
-					is_player_turn = true;
-			if (is_player_turn == false):
-				turn_transition_animation_player.play();
-				enemy_label.show();
-				player_label.hide();
-				check_aggro()
-				hide_inactive_characters()
-		else:
-			## This is the enemy phase - Probably should not run 'reset_all_units()' here.
-			MoveSingleAI()
-	elif (state == States.ANIMATING):
-		# Animations done: stop animating
-		if (moves_stack.is_empty()):
-			state = States.PLAYING
-			movement_map.clear()
-			#CheckTriggerConditions() ##
-			## TODO: Implement function below
-			#Tutorial.tutorial_check_unit_position_to_trigger()
-			
-			if (is_player_turn == false):
-				## END OF ROUND - RESET POINT
-				## Going from enemy phase to player phase
-				is_animation_just_finished = true;
-				tick_all_units_end_round(); ## Decay effects
-				## TODO: Implement damagenumbers
-				for c in Main.characters:
-					if c == null:
-						continue
-					emit_signal("character_stats_changed", c)
-				
-				reset_all_units();
-				is_player_turn = true;
-				check_aggro()
-				hide_inactive_characters()
-		
-		elif (animation_path.is_empty()):
-			active_move = moves_stack.pop_front();
-			#if get_trigger_name(active_move.end_pos) == "Victory":
-				#next_level();
-				##Dialogic.start(level_name + "LevelVictory")
-			
-			active_move.prepare(game_state)
-			await combat_vfx.play_attack(active_move.result)
-			active_move.apply_damage(game_state)
-			
-			
-			#looks like this is end of player turn! 
-			
-			if is_player_turn:
-				active_move = Wait.new(active_move.end_pos)
-				#show_move_popup(get_screen_position(selected_unit.sprite))
-				for character in characters:
-					if characters == null: 
-						return
-					## TODO: Fix below - character instance is not valid.
+#func _process_old(delta: float) -> void:
+	#_update_cursor_on_hover()
+	#
+	### KEYBOARD INPUT CONTROL
+	#if _held_key != KEY_NONE:
+		#_hold_timer += delta
+		#if _hold_timer >= _hold_duration:
+			#_key_consumed = true
+			#_hold_action.call()
+			#_cancel_hold()
+	### KEYBOARD INPUT CONTROL END
+	#
+	#if (turn_transition_animation_player.is_playing()):
+		#turn_transition.show()
+		#camera_controller.lock_camera()
+		#return;
+	#if(!combat_vfx.is_finished()):
+		#return
+	#if wait_for_camera:
+		#return
+	##for i in Main.characters.size():
+		##update_side_bar(Main.characters[i], side_bar_array[i]);
+		#
+	#turn_transition.hide();
+	#camera_controller.unlock_camera()
+	#
+	#_draw_path_arrow()
+	#
+	#if (is_in_menu):
+		#return;
+		#
+	##CheckTriggerConditions();
+	##CheckVictoryConditions();
+	#
+	#if (state == States.PLAYING):
+		#if (is_animation_just_finished):
+			#is_animation_just_finished = false;
+			#turn_transition_animation_player.play();
+			#enemy_label.hide();
+			#player_label.show();
+		#if (is_player_turn):
+			#is_player_turn = false;
+			#var units :Array[Vector3i] = occupancy_map.get_used_cells();
+			#for i in units.size():
+				#var pos :Vector3i = units[i];
+				#if (occupancy_map.get_cell_item(pos) == player_code):
+					#is_player_turn = true;
+			#if (is_player_turn == false):
+				#turn_transition_animation_player.play();
+				#enemy_label.show();
+				#player_label.hide();
+				#check_aggro()
+				#hide_inactive_characters()
+		#else:
+			### This is the enemy phase - Probably should not run 'reset_all_units()' here.
+			#MoveSingleAI()
+	#elif (state == States.ANIMATING):
+		## Animations done: stop animating
+		#if (moves_stack.is_empty()):
+			#state = States.PLAYING
+			#movement_map.clear()
+			##CheckTriggerConditions() ##
+			### TODO: Implement function below
+			##Tutorial.tutorial_check_unit_position_to_trigger()
+			#
+			#if (is_player_turn == false):
+				### END OF ROUND - RESET POINT
+				### Going from enemy phase to player phase
+				#is_animation_just_finished = true;
+				#tick_all_units_end_round(); ## Decay effects
+				### TODO: Implement damagenumbers
+				#for c in Main.characters:
+					#if c == null:
+						#continue
+					#emit_signal("character_stats_changed", c)
+				#
+				#reset_all_units();
+				#is_player_turn = true;
+				#check_aggro()
+				#hide_inactive_characters()
+		#
+		#elif (animation_path.is_empty()):
+			#active_move = moves_stack.pop_front();
+			##if get_trigger_name(active_move.end_pos) == "Victory":
+				##next_level();
+				###Dialogic.start(level_name + "LevelVictory")
+			#
+			#active_move.prepare(game_state)
+			#await combat_vfx.play_attack(active_move.result)
+			#active_move.apply_damage(game_state)
+			#
+			#
+			##looks like this is end of player turn! 
+			#
+			#if is_player_turn:
+				#active_move = Wait.new(active_move.end_pos)
+				##show_move_popup(get_screen_position(selected_unit.sprite))
+				#for character in characters:
+					#if characters == null: 
+						#return
+					### TODO: Fix below - character instance is not valid.
+					##emit_signal("character_stats_changed", character)
+			#
+			#var code := enemy_code;
+			#if is_player_turn:
+				#code = player_code_done;
+			#occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
+			#occupancy_map.set_cell_item(active_move.end_pos, code);
+			#selected_unit.move_to(active_move.end_pos);
+			#selected_unit.pause_anim()
+			#camera_controller.free_camera()
+			#if not is_player_turn:
+				#_clear_selection()
+#
+			#completed_moves.append(active_move);
+			#if Tutorial.in_tutorial:
+				#Tutorial.tutorial_unit_moved();
+			#
+			#if is_player_turn == false:
+				##MoveAI(); # called after an enemy is done moving
+				#if(active_move is Attack):
+					#wait_for_camera = true
+					#timer.start(post_enemy_attack_wait)
+					#await timer.timeout
+					#wait_for_camera = false
+				#elif active_move is Move:
+					#wait_for_camera = true
+					#timer.start(post_enemy_move_wait)
+					#await timer.timeout
+					#wait_for_camera = false
+				#MoveSingleAI() ## called after an enemy is done moving
+				### Update all character ui at the end of enemy turn, to update tickable ui elements
+				#for character in Main.characters:
+					#if characters == null: 
+						#return
 					#emit_signal("character_stats_changed", character)
-			
-			var code := enemy_code;
-			if is_player_turn:
-				code = player_code_done;
-			occupancy_map.set_cell_item(active_move.start_pos, GridMap.INVALID_CELL_ITEM);
-			occupancy_map.set_cell_item(active_move.end_pos, code);
-			selected_unit.move_to(active_move.end_pos);
-			selected_unit.pause_anim()
-			camera_controller.free_camera()
-			if not is_player_turn:
-				_clear_selection()
-
-			completed_moves.append(active_move);
-			if Tutorial.in_tutorial:
-				Tutorial.tutorial_unit_moved();
-			
-			if is_player_turn == false:
-				#MoveAI(); # called after an enemy is done moving
-				if(active_move is Attack):
-					wait_for_camera = true
-					timer.start(post_enemy_attack_wait)
-					await timer.timeout
-					wait_for_camera = false
-				elif active_move is Move:
-					wait_for_camera = true
-					timer.start(post_enemy_move_wait)
-					await timer.timeout
-					wait_for_camera = false
-				MoveSingleAI() ## called after an enemy is done moving
-				## Update all character ui at the end of enemy turn, to update tickable ui elements
-				for character in Main.characters:
-					if characters == null: 
-						return
-					emit_signal("character_stats_changed", character)
-
-			
-			if (moves_stack.is_empty() == false):
-				## called after any enemy except the final enemy is done moving
-				#if not (moves_stack.front() is Attack):
-				create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
-			
-			if (animation_path.is_empty() == false):
-				## called after any enemy except the final enemy is done moving
-				selected_unit.position = animation_path.pop_front();
-		## Process animation
-		else:
-			var movement_speed := 8.0 # units per second WHAT IS THIS???
-			var target : Vector3 = animation_path.front()
-			var dir : Vector3 = target - selected_unit.position
-			var step := movement_speed * delta
-			
-			#if the unit is very close to their next footstep in animation
-			if dir.length() <= step:
-				selected_unit.position = target
-				animation_path.pop_front()
-			#if the unit is more than a footstep away from the animation target
-			#position: move closer and move back to the if statement above
-			else:
-				selected_unit.position += dir.normalized() * step
-				
-				if (dir.z > 0):
-					selected_unit.play(selected_unit.run_down_animation)
-				elif (dir.z < 0):
-					selected_unit.play(selected_unit.run_up_animation)
-				elif (dir.x > 0):
-					selected_unit.play(selected_unit.run_right_animation)
-				elif (dir.x < 0):
-					selected_unit.play(selected_unit.run_left_animation)
+#
+			#
+			#if (moves_stack.is_empty() == false):
+				### called after any enemy except the final enemy is done moving
+				##if not (moves_stack.front() is Attack):
+				#create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for enemy animation/movement?
+			#
+			#if (animation_path.is_empty() == false):
+				### called after any enemy except the final enemy is done moving
+				#selected_unit.position = animation_path.pop_front();
+		### Process animation
+		#else:
+			#var movement_speed := 8.0 # units per second WHAT IS THIS???
+			#var target : Vector3 = animation_path.front()
+			#var dir : Vector3 = target - selected_unit.position
+			#var step := movement_speed * delta
+			#
+			##if the unit is very close to their next footstep in animation
+			#if dir.length() <= step:
+				#selected_unit.position = target
+				#animation_path.pop_front()
+			##if the unit is more than a footstep away from the animation target
+			##position: move closer and move back to the if statement above
+			#else:
+				#selected_unit.position += dir.normalized() * step
+				#
+				#if (dir.z > 0):
+					#selected_unit.play(selected_unit.run_down_animation)
+				#elif (dir.z < 0):
+					#selected_unit.play(selected_unit.run_up_animation)
+				#elif (dir.x > 0):
+					#selected_unit.play(selected_unit.run_right_animation)
+				#elif (dir.x < 0):
+					#selected_unit.play(selected_unit.run_left_animation)
 
 func end_player_turn() -> bool:
-	if not is_player_turn:
-		print("BLOCKED: not player turn")
-		return false
+	#if not is_player_turn:
+		#print("BLOCKED: not player turn")
+		#return false
 	#if (turn_transition_animation_player.is_playing()):
 		#print("BLOCKED: animation playing")
 		#return false
