@@ -15,5 +15,5 @@ func exit(level: Node) -> void:
 
 func handle_input(level: Node, event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		if event.key_code == KEY_ESCAPE:
+		if event.keycode == KEY_ESCAPE:
 			level.state_machine.pop()
