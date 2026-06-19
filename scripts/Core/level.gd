@@ -681,43 +681,15 @@ func _input(event: InputEvent) -> void:
 					func() -> void: 
 						if is_player_turn and not (state_machine.current is StateAnimating): 
 							game_over_screen._load_retry())
-				#KEY_TAB:
-					#select_next_character()
 				KEY_ESCAPE:
-					#level.state_machine.pop()
 					if _level_complete or has_window_open:
 						print("Pressed ESC while another window is open.")
 						pass
+					elif state_machine.current is StateMenu:
+						pass
 					else:
 						state_machine.push(StateMenu.new())
-					#elif not is_in_menu:
-						#is_in_menu = true
-						#pause_menu.show()
-						#get_tree().paused = true
-					#else:
-						#is_in_menu = false
-						#pause_menu.hide()
-						#get_tree().paused = false
-				#KEY_1:
-					#var ui := get_tree().get_first_node_in_group("ui_controller")
-					#if ui:
-						#ui.ribbon.trigger_skill_by_index(0)
-				#KEY_2:
-					#var ui := get_tree().get_first_node_in_group("ui_controller")
-					#if ui:
-						#ui.ribbon.trigger_skill_by_index(1)
-				#KEY_3:
-					#var ui := get_tree().get_first_node_in_group("ui_controller")
-					#if ui:
-						#ui.ribbon.trigger_skill_by_index(2)
-				#KEY_4:
-					#var ui := get_tree().get_first_node_in_group("ui_controller")
-					#if ui:
-						#ui.ribbon.trigger_skill_by_index(3)
-				#KEY_5:
-					#var ui := get_tree().get_first_node_in_group("ui_controller")
-					#if ui:
-						#ui.ribbon.trigger_skill_by_index(4)
+						get_viewport().set_input_as_handled() ## block multiple instances of input
 		
 		else:
 			if event.keycode == _held_key:
