@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://crtprdkttv88q"]
+
+[ext_resource type="Texture2D" uid="uid://b0dxq6yt434jb" path="res://art/textures/healt_bar_enemy_background.png" id="1_civtb"]
+[ext_resource type="Script" uid="uid://c3latgy6r4acw" path="res://scripts/ui/health_bar_enemy_overhead.gd" id="1_uucoo"]
+
+[node name="HealthBarEnemyOverhead" type="Node3D" unique_id=1617550225]
+script = ExtResource("1_uucoo")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=1782111491]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Background" type="Sprite3D" parent="Node3D" unique_id=1941331979]
+centered = false
+modulate = Color(0.6651851, 0.24780053, 0.24780053, 1)
+texture = ExtResource("1_civtb")
+
+[node name="Trail" type="Sprite3D" parent="Node3D" unique_id=481841755]
+centered = false
+texture = ExtResource("1_civtb")
+
+[node name="Current" type="Sprite3D" parent="Node3D" unique_id=883513777]
+centered = false
+modulate = Color(0.95468724, 0.48452926, 0.48452926, 1)
+texture = ExtResource("1_civtb")
