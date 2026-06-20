@@ -111,6 +111,7 @@ const SKILL_POP_UP = preload("res://scenes/userinterface/Level/SkillPopUp.tscn")
 const GAME_OVER = preload("res://scenes/states/game_over.tscn")
 var game_over_screen: Control
 const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
+const HEALTH_BAR_ENEMY := preload("res://scenes/userinterface/Level/health_bar_enemy_overhead.tscn")
 
 var animation_path :Array[Vector3];
 var is_animation_just_finished :bool = false;
@@ -958,18 +959,18 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 
 	if new_enemy:
 		new_enemy.position = grid_to_world(pos)
-
 		if new_enemy.get_parent() != Main.world:
 			Main.world.add_child(new_enemy)
-
 		characters.append(new_enemy)
 		if(!_on_ready):
 			game_state.units.append(new_enemy)
 			occupancy_map.set_cell_item(pos, 6)
-
 		if new_enemy is Character:
 			new_enemy.state.grid_position = pos
 			new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
+			if new_enemy.state.faction == CharacterState.Faction.ENEMY:
+				var health_bar := HEALTH_BAR_ENEMY.instantiate()
+				new_enemy.add_child(health_bar)
 	return new_enemy
 
 

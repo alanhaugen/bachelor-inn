@@ -35,7 +35,7 @@ func set_health_percent(new_percent: float) -> void:
 	if _trail_tween:
 		_trail_tween.kill()
 	_trail_tween = create_tween()
-	_trail_tween.tween_property(trail, "scale.x", new_percent, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	_trail_tween.tween_property(trail, "scale:x", new_percent, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	
 	visible = new_percent < 1.0
 	
