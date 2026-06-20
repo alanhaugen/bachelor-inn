@@ -7,7 +7,7 @@
 script = ExtResource("1_uucoo")
 
 [node name="Node3D" type="Node3D" parent="." unique_id=1782111491]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+transform = Transform3D(8, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 2, -1)
 
 [node name="Background" type="Sprite3D" parent="Node3D" unique_id=1941331979]
 centered = false
@@ -15,10 +15,12 @@ modulate = Color(0.6651851, 0.24780053, 0.24780053, 1)
 texture = ExtResource("1_civtb")
 
 [node name="Trail" type="Sprite3D" parent="Node3D" unique_id=481841755]
+sorting_offset = 1.0
 centered = false
 texture = ExtResource("1_civtb")
 
 [node name="Current" type="Sprite3D" parent="Node3D" unique_id=883513777]
+sorting_offset = 2.0
 centered = false
 modulate = Color(0.95468724, 0.48452926, 0.48452926, 1)
 texture = ExtResource("1_civtb")
