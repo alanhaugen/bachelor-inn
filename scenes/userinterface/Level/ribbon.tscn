@@ -47,6 +47,7 @@ mouse_filter = 0
 [node name="Ability1" type="TextureButton" parent="NinePatchRect/Skills" unique_id=1321950181]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_f3myg")
 stretch_mode = 3
@@ -54,6 +55,7 @@ stretch_mode = 3
 [node name="Ability2" type="TextureButton" parent="NinePatchRect/Skills" unique_id=1439492357]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_f3myg")
 stretch_mode = 3
@@ -61,6 +63,7 @@ stretch_mode = 3
 [node name="Ability3" type="TextureButton" parent="NinePatchRect/Skills" unique_id=386210818]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_f3myg")
 stretch_mode = 3
@@ -68,6 +71,7 @@ stretch_mode = 3
 [node name="Ability4" type="TextureButton" parent="NinePatchRect/Skills" unique_id=1969507719]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_f3myg")
 stretch_mode = 3
@@ -75,6 +79,7 @@ stretch_mode = 3
 [node name="Ability5" type="TextureButton" parent="NinePatchRect/Skills" unique_id=157040311]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
+focus_mode = 0
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource("3_f3myg")
 stretch_mode = 3

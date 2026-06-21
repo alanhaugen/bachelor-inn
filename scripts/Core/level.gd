@@ -211,7 +211,6 @@ func raycast_to_gridmap(origin: Vector3, direction: Vector3) -> Vector3:
 		origin,
 		origin + direction * 1000.0
 		);
-
 	var result: Dictionary = space_state.intersect_ray(query)
 	if result:
 		return result.position
@@ -246,7 +245,6 @@ func select_next_character() -> void:
 	var list := get_selectable_characters()
 	if list.is_empty():
 		return
-
 	if selected_unit == null:
 		try_select_unit(list[0])
 		return
@@ -254,29 +252,25 @@ func select_next_character() -> void:
 	if index == -1:
 		try_select_unit(list[0])
 		return
-
 	var next_index := (index + 1) % list.size()
 	try_select_unit(list[next_index])
 
 
-func _on_turn_transition_finished(_anim_name: StringName) -> void:
-	if not is_player_turn:
-		return
-	var selectables := get_selectable_characters()
-	if selectables.is_empty():
-		return
-	
-	if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-		camera_controller.free_camera()
-		camera_controller.set_pivot_target_translate(last_selected_unit.position)
-		select_unit(last_selected_unit)
-	else:
-		#var first : Character = get_selectable_characters().front()
-		#if first != null:
-		camera_controller.free_camera()
-		camera_controller.set_pivot_target_translate(selectables.front().position)
-		if not Tutorial.in_tutorial:
-			select_unit(selectables.front())
+#func _on_turn_transition_finished(_anim_name: StringName) -> void:
+	#if not is_player_turn:
+		#return
+	#var selectables := get_selectable_characters()
+	#if selectables.is_empty():
+		#return	
+	#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
+		#camera_controller.free_camera()
+		#camera_controller.set_pivot_target_translate(last_selected_unit.position)
+		#select_unit(last_selected_unit)
+	#else:
+		#camera_controller.free_camera()
+		#camera_controller.set_pivot_target_translate(selectables.front().position)
+		#if not Tutorial.in_tutorial:
+			#select_unit(selectables.front())
 
 
 func get_grid_cell_from_mouse() -> Vector3i:
@@ -374,13 +368,14 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 
 func _can_handle_input(event: InputEvent) -> bool:
+	print("Focus owner: ", get_viewport().gui_get_focus_owner())
+	
 	if not is_player_turn:
 		return false	
 	if state_machine.current is StateAnimating:
 		return false
 	if is_in_menu:
 		return false
-
 	if event is InputEventMouseButton:
 		if event.button_index != MOUSE_BUTTON_LEFT and event.button_index != MOUSE_BUTTON_RIGHT:
 			return false
@@ -389,9 +384,8 @@ func _can_handle_input(event: InputEvent) -> bool:
 		if Input.is_action_pressed("enable_dragging"):
 			return false
 		if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
-			#_clear_selection();
+			print("blocked: -999 grid cell")
 			return false
-
 	return true
 
 
@@ -524,6 +518,8 @@ func _handle_skill(pos : Vector3i) -> void:
 		#state_machine.transition_to(StateSelectingUnit.new())
 
 func _handle_attack_choice(pos: Vector3i) -> void:
+	print("Attack from: ", active_move.start_pos, " to: ", active_move.attack_pos if active_move is Attack else "?", " end: ", active_move.end_pos)
+	
 	active_move.end_pos = pos
 	moves_stack.append(active_move)
 
@@ -584,6 +580,7 @@ func select_unit(unit: Character) -> void:
 	#if (Main.level.name == "tutorial_1"):
 	#	print("DIALOGIC TEST")
 	#	Dialogic.start_timeline("tutorialpc2")
+	#get_viewport().gui_release_focus()
 
 
 func _handle_player_click(pos: Vector3i) -> void:
@@ -612,7 +609,6 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 
 		moves_stack.append(active_move)
 		camera_controller.focus_camera(selected_unit)
-		#state = States.ANIMATING
 		create_path(unit_pos, pos)
 		path_map.clear()
 		return "move"

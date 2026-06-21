@@ -117,6 +117,7 @@ offset_right = -179.66663
 offset_bottom = 42.0
 grow_horizontal = 0
 scale = Vector2(3, 3)
+focus_mode = 0
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("6_m5ao7")

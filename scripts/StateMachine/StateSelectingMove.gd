@@ -14,6 +14,8 @@ func exit(level: Node) -> void:
 	#level.path_map.clear()
 
 func handle_input(level: Node, event: InputEvent) -> void:
+	print("handle_input received: ", event)
+	
 	if not level._can_handle_input(event):
 		return
 	

@@ -465,6 +465,7 @@ offset_left = 131.75
 offset_top = -37.75
 offset_right = 148.75
 offset_bottom = -18.75
+focus_mode = 0
 mouse_behavior_recursive = 2
 mouse_default_cursor_shape = 2
 theme = ExtResource("5_d46rh")
