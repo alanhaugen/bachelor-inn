@@ -315,6 +315,14 @@ func get_tile_name(pos: Vector3) -> String:
 	return terrain_map.mesh_library.get_item_name(terrain_map.get_cell_item(pos));
 
 
+func get_terrain_height(x: int, z: int, near_y: int, search_range: int = 5) -> int:
+	for offset in range(0, search_range + 1):
+		if movement_weights_map.get_cell_item(Vector3i(x, near_y + offset, z)) != GridMap.INVALID_CELL_ITEM:
+			return near_y + offset
+		if offset > 0 and movement_weights_map.get_cell_item(Vector3i(x, near_y - offset, z)) != GridMap.INVALID_CELL_ITEM:
+			return near_y - offset
+	return near_y
+
 # Expanded the function to do some error searching
 func get_unit_name(pos : Vector3) -> String:
 	var item_id: int = occupancy_map.get_cell_item(pos)
@@ -368,8 +376,6 @@ func show_attack_tiles(pos: Vector3i) -> void:
 
 
 func _can_handle_input(event: InputEvent) -> bool:
-	print("Focus owner: ", get_viewport().gui_get_focus_owner())
-	
 	if not is_player_turn:
 		return false	
 	if state_machine.current is StateAnimating:
@@ -384,7 +390,6 @@ func _can_handle_input(event: InputEvent) -> bool:
 		if Input.is_action_pressed("enable_dragging"):
 			return false
 		if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
-			print("blocked: -999 grid cell")
 			return false
 	return true
 
@@ -443,7 +448,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	if used_skill.effect_mods != null and used_skill.effect_mods.has("damage") and target != null: 
 		result.damage = used_skill.effect_mods.get("damage", 0)
 	
-		## VFX - Show visual
+	## VFX - Show visual
 	print("Skill result - aggressor: ", result.aggressor)
 	print("Skill result - victim: ", result.victim)
 	print("Skill result - vfx_scene: ", result.vfx_scene)
@@ -495,10 +500,6 @@ func _handle_skill(pos : Vector3i) -> void:
 		aoe_target.state.apply_skill_effect(used_skill)
 		emit_signal("character_stats_changed", aoe_target)
 	
-	## Apply effects like Impact damage from Fireball
-	
-	## DoT's
-	
 	
 	## To advance tutorial after casting heal
 	if Tutorial.in_tutorial and used_skill.skill_id == "heal_basic":
@@ -512,14 +513,8 @@ func _handle_skill(pos : Vector3i) -> void:
 		state_machine.transition_to(StateSelectingMove.new())
 	else:
 		state_machine.transition_to(StateSelectingUnit.new())
-	#if caster != null and not caster.state.is_moved:
-		#state_machine.transition_to(StateSelectingMove.new())
-	#else:
-		#state_machine.transition_to(StateSelectingUnit.new())
 
 func _handle_attack_choice(pos: Vector3i) -> void:
-	print("Attack from: ", active_move.start_pos, " to: ", active_move.attack_pos if active_move is Attack else "?", " end: ", active_move.end_pos)
-	
 	active_move.end_pos = pos
 	moves_stack.append(active_move)
 
@@ -1932,30 +1927,32 @@ func _get_aoe_tiles(center: Vector3i, skill: Skill) -> Array[Vector3i]:
 		Skill.AoEShape.SQUARE:
 			for dx in range(-size, size+1):
 				for dz in range(-size, size+1):
-					tiles.append(Vector3i(center.x + dx, center.y, center.z + dz))
+					var y := get_terrain_height(center.x + dx, center.z + dz, center.y)
+					tiles.append(Vector3i(center.x + dx, y, center.z + dz))
 		Skill.AoEShape.CROSS:
 			tiles.append(center)
 			for i in range(1, size + 1):
-				tiles.append(Vector3i(center.x + i, center.y, center.z))
-				tiles.append(Vector3i(center.x - i, center.y, center.z))
-				tiles.append(Vector3i(center.x, center.y, center.z + i))
-				tiles.append(Vector3i(center.x, center.y, center.z - i))
+				tiles.append(Vector3i(center.x + i, get_terrain_height(center.x + i, center.z, center.y), center.z))
+				tiles.append(Vector3i(center.x - i, get_terrain_height(center.x - i, center.z, center.y), center.z))
+				tiles.append(Vector3i(center.x, get_terrain_height(center.x, center.z + i, center.y), center.z + i))
+				tiles.append(Vector3i(center.x, get_terrain_height(center.x, center.z - i, center.y), center.z - i))
 		Skill.AoEShape.DIAMOND:
 			for dx in range(-size, size + 1):
 				for dz in range(-size, size + 1):
 					if abs(dx) + abs(dz) <= size:
-						tiles.append(Vector3i(center.x + dx, center.y, center.z + dz))
+						var y := get_terrain_height(center.x + dx, center.z + dz, center.y)
+						tiles.append(Vector3i(center.x + dx, y, center.z + dz))
 		Skill.AoEShape.LINE:
 			var caster_pos := skill_caster.state.grid_position
 			var dx : int = sign(center.x - caster_pos.x)
 			var dz : int = sign(center.z - caster_pos.z)
-
 			var current := caster_pos
 			while current != center:
-				current = Vector3i(current.x + dx, center.y, current.z + dz)
+				var nx := current.x + dx
+				var nz := current.z + dz
+				var ny := get_terrain_height(nx, nz, current.y)
+				current = Vector3i(nx, ny, nz)
 				tiles.append(current)
-	pass
-		
 	
 	return tiles
 
@@ -1965,7 +1962,9 @@ func _show_aoe_preview(center: Vector3i, skill: Skill) -> void:
 	path_map.clear()
 	var tiles := _get_aoe_tiles(center, skill)
 	for tile in tiles:
-		if movement_weights_map.get_cell_item(tile) != GridMap.INVALID_CELL_ITEM:
+		var valid := movement_weights_map.get_cell_item(tile) != GridMap.INVALID_CELL_ITEM
+		print("  tile: ", tile, " valid_in_movement_weights: ", valid)
+		if valid:
 			path_map.set_cell_item(tile, 8) ## Change index 8  if needed
 
 func _clear_aoe_preview() -> void:
