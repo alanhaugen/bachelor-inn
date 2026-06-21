@@ -389,7 +389,7 @@ func _can_handle_input(event: InputEvent) -> bool:
 		if Input.is_action_pressed("enable_dragging"):
 			return false
 		if get_grid_cell_from_mouse() == Vector3i(-999, -999, -999):
-			_clear_selection();
+			#_clear_selection();
 			return false
 
 	return true
@@ -514,10 +514,14 @@ func _handle_skill(pos : Vector3i) -> void:
 	
 	_exit_skill_target_mode()
 	print("is_ability_used after exit: ", caster.state.is_ability_used)
-	if caster != null and not caster.state.is_moved:
+	if is_instance_valid(caster):
 		state_machine.transition_to(StateSelectingMove.new())
 	else:
 		state_machine.transition_to(StateSelectingUnit.new())
+	#if caster != null and not caster.state.is_moved:
+		#state_machine.transition_to(StateSelectingMove.new())
+	#else:
+		#state_machine.transition_to(StateSelectingUnit.new())
 
 func _handle_attack_choice(pos: Vector3i) -> void:
 	active_move.end_pos = pos
@@ -623,6 +627,7 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 
 
 func _clear_selection() -> void:
+	print("Funtion _clear_selection() is called.")
 	emit_signal("character_deselected")
 	emit_signal("enemy_deselected")
 	_exit_skill_target_mode()
@@ -1355,6 +1360,7 @@ func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
 
 
 func _exit_skill_target_mode() -> void:
+	print("Function _exit_skill_target_mode entered.")
 	Input.set_custom_mouse_cursor(null)
 	var caster := skill_caster
 	is_choosing_skill_target = false
@@ -1362,11 +1368,12 @@ func _exit_skill_target_mode() -> void:
 	skill_caster = null
 	valid_skill_target_tiles.clear()
 	path_map.clear()
-	#print("caster is_moved: ", caster.state.is_moved if caster else "null")
-	if caster != null and caster.state.is_moved == false:
+	if is_instance_valid(caster):
+		print("Selecting caster: " + caster.name)
 		select_unit(caster)
+		
 
-
+## TODO: Delete? Redundant due to StateMachine
 func _cancel_attack_choice_mode() -> void:
 	is_choosing_skill_attack_origin = false
 	state = States.PLAYING
