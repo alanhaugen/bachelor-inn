@@ -601,7 +601,6 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 	# MOVE HAS PRIORITY
 	if found_move != null:
 		active_move = found_move
-
 		moves_stack.append(active_move)
 		camera_controller.focus_camera(selected_unit)
 		create_path(unit_pos, pos)
@@ -610,9 +609,7 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 
 	elif found_attack != null:
 		active_move = found_attack
-
 		show_attack_tiles(pos)
-		#state = States.CHOOSING_ATTACK
 		return "attack"
 	return ""
 
@@ -1325,29 +1322,58 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 	active_skill = skill
 	skill_caster = selected_unit
 	
-	_show_skill_target_tiles(skill_caster.state.grid_position, active_skill)
-	print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
+	var reachable: Array[Vector3i] = []
+	for cmd in current_moves:
+		if cmd is Move:
+			reachable.append(cmd.end_pos)
+	reachable.append(selected_unit.state.grid_position)
+	_show_skill_target_tiles(reachable, active_skill)
+	
+	#print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
 	state_machine.transition_to(StateChoosingSkill.new())
 	
-func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
-	var o := Vector3i(origin)
-	var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
 
-	for t in tiles_in_range:
-		#var p := Vector3i(t.x, 0, t.z)
-		var p := Vector3i(t)
-		
-		if skill.aoe_shape != Skill.AoEShape.NONE:
-			if movement_weights_map.get_cell_item(p) != GridMap.INVALID_CELL_ITEM:
-				valid_skill_target_tiles[p] = true
-				path_map.set_cell_item(p, skill_target_code)
-		else:
-			var unit: Character = get_unit(p)
-			if unit == null:
+func _show_skill_target_tiles(reachable: Array[Vector3i], skill: Skill) -> void:
+	valid_skill_target_tiles.clear()
+	path_map.clear()
+	
+	for o in reachable:
+		var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
+		for t in tiles_in_range:
+			var p := Vector3i(t)
+			if valid_skill_target_tiles.has(p):
 				continue
-			if _is_valid_target(unit, skill, skill_caster):
-				valid_skill_target_tiles[p] = true
-				path_map.set_cell_item(p, skill_target_code)
+			if skill.aoe_shape != Skill.AoEShape.NONE:
+				if movement_weights_map.get_cell_item(p) != GridMap.INVALID_CELL_ITEM:
+					valid_skill_target_tiles[p] = true
+					path_map.set_cell_item(p, skill_target_code)
+			else:
+				var unit: Character = get_unit(p)
+				if unit == null:
+					continue
+				if _is_valid_target(unit, skill, skill_caster):
+					valid_skill_target_tiles[p] = true
+					path_map.set_cell_item(p, skill_target_code)
+
+#func _show_skill_target_tiles(origin: Vector3i, skill: Skill) -> void:
+	#var o := Vector3i(origin)
+	#var tiles_in_range: Array[Vector3i] = Math._get_tiles_in_manhattan_range(o, skill.min_range, skill.max_range)
+#
+	#for t in tiles_in_range:
+		##var p := Vector3i(t.x, 0, t.z)
+		#var p := Vector3i(t)
+		#
+		#if skill.aoe_shape != Skill.AoEShape.NONE:
+			#if movement_weights_map.get_cell_item(p) != GridMap.INVALID_CELL_ITEM:
+				#valid_skill_target_tiles[p] = true
+				#path_map.set_cell_item(p, skill_target_code)
+		#else:
+			#var unit: Character = get_unit(p)
+			#if unit == null:
+				#continue
+			#if _is_valid_target(unit, skill, skill_caster):
+				#valid_skill_target_tiles[p] = true
+				#path_map.set_cell_item(p, skill_target_code)
 
 
 func _exit_skill_target_mode() -> void:

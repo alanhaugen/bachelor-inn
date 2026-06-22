@@ -1,5 +1,6 @@
 extends LevelState
 class_name StateChoosingAttack
+## This is where we choose wich tile the unit attacks from
 
 ## Signals made in enter() must be disconnected in exit()
 func enter(level: Node) -> void:
