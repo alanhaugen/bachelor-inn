@@ -78,6 +78,7 @@ var last_selected_unit: Character = null
 var selected_enemy_unit: Character = null
 var active_skill: Skill = null
 var skill_caster: Character = null ## The one using ability
+var skill_target_pos: Vector3i 
 var is_choosing_skill_target: bool = false
 var is_choosing_skill_attack_origin: bool = false
 var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
@@ -368,12 +369,30 @@ func show_attack_tiles(pos: Vector3i) -> void:
 		selected_unit,
 		game_state,
 		pos,
-		reachable
+		reachable,
+		selected_unit.state.weapon.min_range,
+		selected_unit.state.weapon.max_range
 	)
 
 	for tile: Vector3i in tiles:
 		path_map.set_cell_item(tile, 0)
 
+func show_skill_origin_tiles(target_pos: Vector3i, skill: Skill) -> void:
+	path_map.clear()
+	var reachable: Array[Vector3i] = []
+	for cmd in current_moves:
+		if cmd is Move:
+			reachable.append(cmd.end_pos)
+	reachable.append(skill_caster.state.grid_position)
+	
+	var tiles := MoveGenerator.get_attack_origins(
+		skill_caster,
+		game_state,
+		target_pos,
+		reachable,
+		skill.min_range, skill.max_range)
+	for tile: Vector3i in tiles:
+		path_map.set_cell_item(tile, 0)
 
 func _can_handle_input(event: InputEvent) -> bool:
 	if not is_player_turn:
@@ -1314,11 +1333,8 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 		return
 	_exit_skill_target_mode()
 	movement_grid.clear()
-	
 	if selected_unit == null:
-		print("Pressed skill: ", skill.skill_id, " but no unit selected. This should never happen!")
 		return
-	
 	active_skill = skill
 	skill_caster = selected_unit
 	
@@ -1327,10 +1343,10 @@ func _on_ribbon_skill_pressed(skill: Skill) -> void:
 		if cmd is Move:
 			reachable.append(cmd.end_pos)
 	reachable.append(selected_unit.state.grid_position)
-	_show_skill_target_tiles(reachable, active_skill)
 	
+	_show_skill_target_tiles(reachable, active_skill)
 	#print("Entered skill target mode: ", active_skill.skill_id, ". Caster: ", skill_caster.data.unit_name)
-	state_machine.transition_to(StateChoosingSkill.new())
+	state_machine.transition_to(StateChoosingSkillTarget.new())
 	
 
 func _show_skill_target_tiles(reachable: Array[Vector3i], skill: Skill) -> void:

@@ -411,7 +411,7 @@ static func is_neighbour(pos : Vector3i, end_pos : Vector3i) -> bool:
 	return false
 
 
-static func get_attack_origins(unit: Character, state: GameState, target_pos: Vector3i, reachable: Array[Vector3i]) -> Array[Vector3i]:
+static func get_attack_origins(unit: Character, state: GameState, target_pos: Vector3i, reachable: Array[Vector3i], min_range: int, max_range: int) -> Array[Vector3i]:
 	# Include "attack from current position"
 	var origins: Array[Vector3i] = [unit.state.grid_position]
 	for r in reachable:
@@ -419,13 +419,12 @@ static func get_attack_origins(unit: Character, state: GameState, target_pos: Ve
 
 	# Temporary rule: enemy must share same height as origin
 	# Weapon range from registry
-	var w: Weapon = WeaponRegistry.get_weapon(unit.state.weapon.weapon_id)
-	var min_r: int = w.min_range
-	var max_r: int = w.max_range
+	#var w: Weapon = WeaponRegistry.get_weapon(unit.state.weapon.weapon_id)
+	#var min_r: int = w.min_range
+	#var max_r: int = w.max_range
 
 	var valid: Array[Vector3i] = []
 	var seen: Dictionary = {} # de-dupe by position
-
 	for origin in origins:
 		var origin_key := str(origin.x) + "," + str(origin.y) + "," + str(origin.z)
 		if seen.has(origin_key):
@@ -434,13 +433,8 @@ static func get_attack_origins(unit: Character, state: GameState, target_pos: Ve
 		
 		var delta : Vector3i = target_pos - origin
 		var dist: int = abs(delta.x) + abs(delta.z) + max(0, abs(delta.y)-1)
-		if dist >= min_r and dist <= max_r and (delta.y) <= 2:
+		if dist >= min_range and dist <= max_range and (delta.y) <= 2:
 			valid.append(origin)
-			
-		## Thi caused attack origins to be generated from any enemy within range
-		#if _has_enemy_in_range_from_origin(origin, min_r, max_r, unit, state):
-		#	valid.append(origin)
-
 	return valid
 
 
