@@ -54,7 +54,10 @@ func _process_next_move(level: Node) -> void:
 	
 	level.active_move = level.moves_stack.pop_front()
 	level.active_move.prepare(level.game_state)
-	await level.combat_vfx.play_attack(level.active_move.result)
+	if level.active_move is CastSkill:
+		await level.combat_vfx.play_skill(level.active_move.result)
+	else:
+		await level.combat_vfx.play_attack(level.active_move.result)
 	level.active_move.apply_damage(level.game_state)
 	
 	if level.is_player_turn:
@@ -107,16 +110,6 @@ func _finish_animation(level: Node) -> void:
 	if not level.is_player_turn:
 		# End of enemy turn - trans to player turn
 		level.MoveSingleAI()
-		#level.tick_all_units_end_round()
-		#for c in Main.characters:
-			#if c == null:
-				#continue
-			#level.emit_signal("character_stats_changed", c)
-		#level.reset_all_units()
-		#level.is_player_turn = true
-		#level.check_aggro()
-		#level.hide_inactive_characters()
-		#level.state_machine.transition_to(StateTurnTransition.new(true))
 	else:
 		if is_instance_valid(level.last_selected_unit): # != null:
 			level.select_unit(level.last_selected_unit)

@@ -6,6 +6,7 @@
 [ext_resource type="Resource" uid="uid://213btyk7kq4i" path="res://Data/Abilities/defence_basic.tres" id="4_faasa"]
 [ext_resource type="Resource" uid="uid://lvhavkk1vueb" path="res://Data/Abilities/haste_basic.tres" id="5_ruyyk"]
 [ext_resource type="Resource" uid="uid://dn2eahj1aq85s" path="res://Data/Weapons/bow_basic.tres" id="6_4bw0q"]
+[ext_resource type="Resource" uid="uid://x7mbefo655v8" path="res://Data/Abilities/fireball_basic.tres" id="6_mttmo"]
 [ext_resource type="PackedScene" uid="uid://b86o8tlch4nw8" path="res://scenes/Characters/Player/Emil.tscn" id="7_3wqgg"]
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="8_ocdrn"]
 
@@ -21,7 +22,7 @@ metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 [sub_resource type="Resource" id="Resource_ealxf"]
 script = ExtResource("2_mttmo")
 weapon = ExtResource("6_4bw0q")
-skills = Array[ExtResource("3_2xjly")]([ExtResource("4_faasa"), ExtResource("5_ruyyk")])
+skills = Array[ExtResource("3_2xjly")]([ExtResource("4_faasa"), ExtResource("5_ruyyk"), ExtResource("6_mttmo")])
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [resource]

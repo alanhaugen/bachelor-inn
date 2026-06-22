@@ -23,7 +23,7 @@ func handle_input(level: Node, event: InputEvent) -> void:
 		return
 	
 	level.skill_target_pos = pos
-	level.show_skill_target_origin_tiles(pos, level.active_skill)
+	level.show_skill_origin_tiles(pos, level.active_skill)
 	level.state_machine.transition_to(StateChoosingSkillOrigin.new())
 	
 func _cancel(level: Node) -> void:

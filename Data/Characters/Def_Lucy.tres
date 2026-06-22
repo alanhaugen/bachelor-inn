@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_kwl3d"]
 [ext_resource type="Resource" uid="uid://c8qah7yiks0t" path="res://Data/Abilities/heal_basic.tres" id="4_3b8gc"]
 [ext_resource type="Resource" uid="uid://cokhndg82vc8h" path="res://Data/Abilities/bomb_basic.tres" id="5_wpk1a"]
+[ext_resource type="Resource" uid="uid://x7mbefo655v8" path="res://Data/Abilities/fireball_basic.tres" id="6_fxf6a"]
 [ext_resource type="Resource" uid="uid://cegp3wmw3wytm" path="res://Data/Weapons/sword_basic.tres" id="6_mg1lp"]
 [ext_resource type="PackedScene" uid="uid://18v4frr576yx" path="res://scenes/Characters/Player/Char_Lucy.tscn" id="7_20pjk"]
 [ext_resource type="Script" uid="uid://csv21vgg7ba7q" path="res://scripts/Characters/CharacterDefinition.gd" id="8_hwlrv"]
@@ -22,7 +23,7 @@ metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 [sub_resource type="Resource" id="Resource_g0ljv"]
 script = ExtResource("2_fxf6a")
 weapon = ExtResource("6_mg1lp")
-skills = Array[ExtResource("3_kwl3d")]([ExtResource("4_3b8gc"), ExtResource("5_wpk1a")])
+skills = Array[ExtResource("3_kwl3d")]([ExtResource("4_3b8gc"), ExtResource("5_wpk1a"), ExtResource("6_fxf6a")])
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [resource]
