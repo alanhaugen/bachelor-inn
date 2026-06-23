@@ -25,6 +25,7 @@ Vfx_Scene = ExtResource("1_udv1o")
 effect_mods = {
 &"movement": 2
 }
+min_range = 0
 duration_turns = 2
 smallIcon = SubResource("AtlasTexture_udv1o")
 effect_tooltip = "Increases movement range"

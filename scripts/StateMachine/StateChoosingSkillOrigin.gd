@@ -27,7 +27,10 @@ func handle_input(level: Node, event: InputEvent) -> void:
 		return
 	
 	var caster: Character = level.skill_caster
-	var cast := CastSkill.new(caster.state.grid_position, pos, level.skill_target_pos, level.active_skill)
+	var actual_target_pos: Vector3i = level.skill_target_pos
+	if level.skill_target_pos == caster.state.grid_position:
+		actual_target_pos = pos
+	var cast := CastSkill.new(caster.state.grid_position, pos, actual_target_pos, level.active_skill)
 	level.moves_stack.append(cast)
 	level.create_path(caster.state.grid_position, pos)
 	level.camera_controller.focus_camera(caster)

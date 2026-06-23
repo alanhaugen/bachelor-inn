@@ -26,6 +26,7 @@ Vfx_Scene = ExtResource("1_kd7ka")
 effect_mods = {
 &"defence": 5
 }
+min_range = 0
 duration_turns = 2
 smallIcon = SubResource("AtlasTexture_kd7ka")
 effect_tooltip = "Decreases damage taken"

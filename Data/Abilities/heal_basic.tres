@@ -27,5 +27,7 @@ Vfx_Scene = ExtResource("1_bj1s2")
 effect_mods = {
 &"current_health": 3
 }
+min_range = 0
+target_faction = 3
 smallIcon = SubResource("AtlasTexture_07c11")
 metadata/_custom_type_script = "uid://c3p07am3ababr"
