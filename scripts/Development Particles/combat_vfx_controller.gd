@@ -24,45 +24,13 @@ func play_attack(result : AttackResult) -> void:
 			await _spawn_ranged_attack(attacker, result.victim, result)
 
 func play_skill(result : AttackResult) -> void:
-	#if result == null:
-		#return
-	#var dmg : int = result.damage if result.damage != null else 0
-	#print("play_skill dmg: ", dmg)
-	#if dmg > 0:
-		#_spawn_dmg_number_scene(result)
-	#
-	#var effect : PackedScene = result.vfx_scene
-	#print("play_skill effect: ", effect)
-	#if effect == null:
-		#return
-		#
-	#var vfx : Node3D = effect.instantiate()
-	#print("vfx instantiated: ", vfx)
-	#get_tree().current_scene.add_child(vfx)
-	#print("vfx added to scene at: ", result.aggressor.global_position)
-	#vfx.global_position = result.aggressor.global_position + Vector3(0,1,0)
-	#vfx.look_at(result.victim.global_position + Vector3(0,1,0), Vector3.UP)
-		#
-	#print("play_skill called, vfx_scene: ", result.vfx_scene)
-	##var target : Character = result.victim
-	#
-	#var tween := vfx.create_tween()
-	#tween.tween_property(vfx, "global_position", result.victim.global_position + Vector3(0,1,0), 0.25)
-	#await tween.finished
-	#print("tween finished, freeing vfx")
-	#vfx.queue_free()
-	#
-	#if dmg > 0:
-		#_spawn_hit_particles(result.victim)
-		#_trigger_hit_flash(result.victim, result.was_critical)
-		
 	if result == null:
 		return
-	
 	var dmg : int = result.damage if result.damage != null else 0
-	if dmg > 0:
-		_spawn_dmg_number_scene(result)
-		
+	## Moved to cast_skill.gd
+	#if dmg > 0:  #and result.Skill.skill_aoe_shape == Skill.AoEShape.NONE:
+		#_spawn_dmg_number_scene(result)
+		#
 	var effect : PackedScene = result.vfx_scene
 	if effect == null:
 		return
@@ -77,13 +45,17 @@ func play_skill(result : AttackResult) -> void:
 		var tween := vfx.create_tween()
 		tween.tween_property(vfx, "global_position", result.victim.global_position + Vector3(0,0.5,0), 0.25)
 		await tween.finished
-		if vfx.has_method("play"):
-			await vfx.play()
-		else:
-			await get_tree().create_timer(0.5).timeout
-			vfx.queue_free()
+		## Moved to own function
+		#if vfx.has_method("play"):
+			#await vfx.play()
+		#else:
+			#await get_tree().create_timer(0.5).timeout
+			#vfx.queue_free()
+		#_spawn_hit_particles(result.victim)
+		#_trigger_hit_flash(result.victim, result.was_critical)
 		_spawn_hit_particles(result.victim)
 		_trigger_hit_flash(result.victim, result.was_critical)
+		_play_skill_aftereffects(vfx, result)
 	else:
 		vfx.global_position = result.target_position if result.target_position != Vector3.ZERO else result.aggressor.global_position#result.victim.global_position
 		if vfx.has_method("play"):
@@ -93,6 +65,15 @@ func play_skill(result : AttackResult) -> void:
 			vfx.queue_free()
 	return
 
+
+func _play_skill_aftereffects(vfx: Node3D, result: AttackResult) -> void:
+	if vfx.has_method("play"):
+		await vfx.play()
+	else:
+		await get_tree().create_timer(0.5).timeout
+		vfx.queue_free()
+	#_spawn_hit_particles(result.victim)
+	#_trigger_hit_flash(result.victim, result.was_critical)
 
 func _spawn_dmg_number_scene(result : AttackResult) -> void:
 	if not damage_number_scene:

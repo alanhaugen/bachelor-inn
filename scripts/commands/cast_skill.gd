@@ -12,10 +12,14 @@ func _init(inStartPos: Vector3i, inEndPos: Vector3i, inTargetPos: Vector3i, inSk
 	
 func prepare(state: GameState, simulate_only: bool = false) -> void:
 	result = AttackResult.new()
+	#result.skill_aoe_shape = skill.aoe_shape
 	var caster: Character = state.get_unit(end_pos)
 	if caster == null:
 		caster = state.get_unit(start_pos)
 	var target: Character = state.get_unit(target_pos)
+	
+	if target == caster and start_pos == target_pos and end_pos != target_pos:
+		target = null
 	
 	result.aggressor = caster
 	result.victim = target if target != null else caster
@@ -32,11 +36,14 @@ func prepare(state: GameState, simulate_only: bool = false) -> void:
 func apply_damage(state: GameState, simulate_only: bool = false) -> void:
 	var caster: Character = result.aggressor
 	var target: Character = state.get_unit(target_pos)
+	if target == caster and start_pos == target_pos and end_pos != target_pos:
+		target = null
 	
 	if target != null and skill.effect_mods != null and skill.effect_mods.has("damage"):
 		var dmg := int(skill.effect_mods["damage"])
 		target.apply_damage(dmg, simulate_only, caster, skill.skill_name)
 		if not simulate_only:
+			Main.level.combat_vfx.spawn_damage_number(dmg, target.global_position, result.was_critical)
 			Main.level.emit_signal("character_stats_changed", target)
 	
 	if target != null and skill.effect_mods != null and skill.effect_mods.has("current_health"):

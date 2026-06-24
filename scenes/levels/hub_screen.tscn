@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://cc2f7gp6w2q8o"]
+
+[ext_resource type="Texture2D" uid="uid://b0dxq6yt434jb" path="res://art/textures/healt_bar_enemy_background.png" id="1_7pabl"]
+
+[node name="HubScreen" type="Control" unique_id=1070308301]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="TextureRect" parent="." unique_id=262875502]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_7pabl")
+stretch_mode = 6
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1789842128]
+custom_minimum_size = Vector2(1200, 200)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -204.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ColorRect" type="ColorRect" parent="PanelContainer" unique_id=838073606]
+layout_mode = 2
+color = Color(0.2822526, 0, 0.12729862, 1)
+
+[node name="UnitRows" type="VBoxContainer" parent="PanelContainer" unique_id=906557925]
+layout_mode = 2
+
+[node name="GarrisonRow" type="HBoxContainer" parent="PanelContainer/UnitRows" unique_id=1847708169]
+custom_minimum_size = Vector2(0, 90)
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RosterRow" type="HBoxContainer" parent="PanelContainer/UnitRows" unique_id=37820832]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="." unique_id=1275871928]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -250.0
+offset_bottom = 250.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ColorRect2" type="ColorRect" parent="PanelContainer2" unique_id=444837704]
+layout_mode = 2
+color = Color(0.2822526, 0, 0.12729862, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer2" unique_id=1676528600]
+custom_minimum_size = Vector2(200, 500)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer2/VBoxContainer" unique_id=1773248224]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "BUTTONS"
+horizontal_alignment = 1
+
+[node name="ProgressButton" type="Button" parent="PanelContainer2/VBoxContainer" unique_id=1572212170]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "STORY"
+
+[node name="ProgressButton2" type="Button" parent="PanelContainer2/VBoxContainer" unique_id=1629006100]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "SIDE QUEST"
+
+[node name="ProgressButton3" type="Button" parent="PanelContainer2/VBoxContainer" unique_id=78865178]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+text = "SAVE AND QUIT"
