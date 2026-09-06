@@ -2,6 +2,20 @@
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_mq16p"]
 [ext_resource type="PackedScene" uid="uid://bajx21wdflkf8" path="res://scenes/grid_items/chest.tscn" id="2_lw4g3"]
+[ext_resource type="PackedScene" uid="uid://uwkg1mydmaxl" path="res://scenes/Characters/Enemy/bird.tscn" id="3_ov5y5"]
+[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="4_g58ai"]
+[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="5_vbfgb"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="6_lxfn4"]
+
+[sub_resource type="Resource" id="Resource_e2q1c"]
+script = ExtResource("4_g58ai")
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_ruqf1"]
+script = ExtResource("5_vbfgb")
+faction = 1
+bt_profile = 2
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [node name="TestLevel1" unique_id=656823534 instance=ExtResource("1_mq16p")]
 
@@ -18,7 +32,7 @@ data = {
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(1, 2, 0, 1, 3, 0, 2, 3, 0, 2, 2, 0, 15, 65535, 4, 13, 1, 4, 15, 1, 5, 15, 65528, 6, 6, 0, 4)
+"cells": PackedInt32Array(1, 2, 0, 1, 3, 0, 2, 3, 0, 2, 2, 0)
 }
 
 [node name="Lamp" parent="Lights" parent_id_path=PackedInt32Array(38605441) index="0" unique_id=286206317]
@@ -42,3 +56,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0.5, -11)
 
 [node name="Chest4" parent="Chests" index="3" unique_id=990366938 instance=ExtResource("2_lw4g3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21, 0.5, -11)
+
+[node name="Character" parent="." index="19" unique_id=159367408 instance=ExtResource("3_ov5y5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 1)
+data = SubResource("Resource_e2q1c")
+state = SubResource("Resource_ruqf1")

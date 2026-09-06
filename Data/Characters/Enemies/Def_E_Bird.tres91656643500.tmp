@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="2_drv5o"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="3_mf64f"]
 [ext_resource type="PackedScene" uid="uid://uwkg1mydmaxl" path="res://scenes/Characters/Enemy/bird.tscn" id="4_1csds"]
+[ext_resource type="Script" uid="uid://hhe2ydney01y" path="res://scripts/stats/weapon.gd" id="4_yuxri"]
 [ext_resource type="Script" uid="uid://de2j0apfdotrf" path="res://scripts/Characters/EnemyDefinition.gd" id="5_0ykxy"]
 
 [sub_resource type="Resource" id="Resource_esgda"]
@@ -11,8 +12,14 @@ script = ExtResource("1_4ifjk")
 unit_name = ""
 metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 
+[sub_resource type="Resource" id="Resource_f2ojy"]
+script = ExtResource("4_yuxri")
+weapon_id = "unarmed"
+metadata/_custom_type_script = "uid://hhe2ydney01y"
+
 [sub_resource type="Resource" id="Resource_egese"]
 script = ExtResource("2_drv5o")
+weapon = SubResource("Resource_f2ojy")
 faction = 1
 bt_profile = 2
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"

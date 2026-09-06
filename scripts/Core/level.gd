@@ -807,6 +807,22 @@ func _ready() -> void:
 		else:
 			spawn_enemy(pos, unit_type, true)
 	
+	# Spawn directly placed enemy scenes
+	for child in get_children():
+		if child is Character and child.state != null:
+			if child.state.faction == CharacterState.Faction.ENEMY:
+				child.camera = get_viewport().get_camera_3d()
+				child.state.grid_position = world_to_grid(child.position)
+				child.sanity_flipped.connect(_on_character_sanity_flipped)
+				characters.append(child)
+				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
+				game_state.units.append(child)
+
+			# Spawn health bar
+			if HEALTH_BAR_ENEMY != null:
+				var health_bar := HEALTH_BAR_ENEMY.instantiate()
+				child.add_child(health_bar)
+	
 	state_machine = StateMachine.new()
 	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(state_machine)
@@ -935,7 +951,11 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.state = c_state
 
 		"04_EnemyBird":
+			#var def: EnemyDefinitions = preload("res://Data/Characters/Enemies/Def_E_Bird.tres")
 			new_enemy = BIRD_ENEMY.instantiate()
+			#new_enemy = def.scene.instantiate()
+			#new_enemy.data = def.base_data.duplicate()
+			#new_enemy.state = def.base_state.duplicate()
 			var data := CharacterData.new()
 			data.speed += 4;
 			var c_state := CharacterState.new()
@@ -944,7 +964,8 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			new_enemy.data = data
 			new_enemy.state = c_state
 			new_enemy.data.unit_name = monster_names.pick_random()
-
+			print("Spawned: ", new_enemy.data.unit_name, " ai_mode: ", new_enemy.state.ai_mode, " bt_profile: ", new_enemy.state.bt_profile)
+		
 		"05_EnemyGhost":
 			new_enemy = GHOST_ENEMY.instantiate()
 			var data := CharacterData.new()
