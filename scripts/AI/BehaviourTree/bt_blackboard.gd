@@ -9,6 +9,7 @@ var context: MissionContext # For mission objectives
 var chosen_command: Command = null
 var target: Character = null
 var target_pos: Vector3i = Vector3i.ZERO
+var weights_map: GridMap = null
 
 func _init(in_unit: Character, in_state: GameState, in_context: MissionContext) -> void:
 	unit = in_unit

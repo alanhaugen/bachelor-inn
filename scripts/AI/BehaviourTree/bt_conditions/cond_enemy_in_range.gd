@@ -21,6 +21,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 		if not other.state.is_alive:
 			continue
 		var dist : float = abs(other.state.grid_position.x - unit.state.grid_position.x) + abs(other.state.grid_position.z - unit.state.grid_position.z)
+		print("Weapon range: ", min_range, "-", max_range, " dist to ", other.data.unit_name, ": ", dist)
 		if dist >= min_range and dist <= max_range:
 			if dist < closest_dist:
 				closest_dist = dist

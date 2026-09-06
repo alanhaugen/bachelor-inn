@@ -5,6 +5,8 @@ static func run(unit: Character, state: GameState, context: MissionContext) -> C
 	var tree: BTNode = _get_profile(unit.state.bt_profile)
 	print("BTRunner: building tree for profile: ", unit.state.bt_profile)
 	var blackboard := BTBlackboard.new(unit, state, context)
+	#blackboard.movement_grid = Main.level.movement_grid
+	blackboard.weights_map = Main.level.movement_weights_map
 	print("BTRunner: ticking tree")
 	var result := tree.tick(blackboard)
 	print("BTRunner: result: ", result)
