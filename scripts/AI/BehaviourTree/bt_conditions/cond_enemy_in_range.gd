@@ -13,24 +13,26 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 	var closest_target: Character = null
 	var closest_dist := 99999
 	
-	print("BT Condition - unit: ", unit.data.unit_name, " checking ", state.units.size(), " units")
+	var origins: Array[Vector3i] = [unit.state.grid_position]
+	var moves := MoveGenerator.generate(unit, state)
+	for cmd in moves:
+		if cmd is Move:
+			origins.append(cmd.end_pos)
+	
+	# check each player unit against reachable origin
 	for other in state.units:
-		print("  - ", other.data.unit_name, " is_enemy: ", other.state.is_enemy(), " is_alive: ", other.state.is_alive)
 		if other.state.is_enemy():
 			continue
 		if not other.state.is_alive:
 			continue
-		var dist : float = abs(other.state.grid_position.x - unit.state.grid_position.x) + abs(other.state.grid_position.z - unit.state.grid_position.z)
-		print("Weapon range: ", min_range, "-", max_range, " dist to ", other.data.unit_name, ": ", dist)
-		if dist >= min_range and dist <= max_range:
-			if dist < closest_dist:
-				closest_dist = dist
-				closest_target = other
-	
-	if closest_target == null:
-		return BTNode.Status.FAILURE
-	blackboard.target = closest_target
-	return BTNode.Status.SUCCESS
+		for origin in origins:
+			var dist : float = abs(other.state.grid_position.x - origin.x) + abs(other.state.grid_position.z - origin.z)
+			#print("Weapon range: ", min_range, "-", max_range, " dist to ", other.data.unit_name, ": ", dist)
+			if dist >= min_range and dist <= max_range:
+				blackboard.target = other
+				blackboard.attack_origin = origin
+				return BTNode.Status.SUCCESS
+	return BTNode.Status.FAILURE
 
 ## If we want to add spells to enemies
 ## range chack for spells

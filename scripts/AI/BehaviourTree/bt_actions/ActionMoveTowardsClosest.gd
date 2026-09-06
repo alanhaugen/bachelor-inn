@@ -2,7 +2,7 @@ extends BTNode
 class_name ActionMoveTowardClosest
 
 func tick(blackboard: BTBlackboard) -> BTNode.Status:
-	print("ActionMoveTowardClosest ticking")
+	#print("ActionMoveTowardClosest ticking")
 	#print("movement_grid: ", blackboard.movement_grid)
 	var unit := blackboard.unit
 	var state := blackboard.state
@@ -23,7 +23,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 			closest = other
 	
 	if closest == null:
-		print("FAIL: no closest found")
+		#print("FAIL: no closest found")
 		return BTNode.Status.FAILURE
 		
 	print("Closest: ", closest.data.unit_name, " at ", closest.state.grid_position)
@@ -33,9 +33,9 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 		unit.state.grid_position,
 		closest.state.grid_position,
 		blackboard.weights_map)
-	print("Path length: ", path.size(), " path: ", path)
+	#print("Path length: ", path.size(), " path: ", path)
 	if path.is_empty():
-		print("FAIL: no path found")
+		#print("FAIL: no path found")
 		return BTNode.Status.FAILURE
 		
 	# Find reachable move tile closest to the target by following path
@@ -48,7 +48,8 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 			reachable[cmd.end_pos] = cmd
 	#print("Reachable tiles: ", reachable.keys())
 	var best_move: Move = null
-	for i in range(path.size() -1, -1, -1):
+	## NOTE: path.size()-2 here because we exclude the occupied tile of the player unit
+	for i in range(path.size() -2, -1, -1):
 		var tile: Vector3i = path[i]
 		if reachable.has(tile):
 			best_move = reachable[tile]
