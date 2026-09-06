@@ -18,7 +18,7 @@ var _registry: LevelOrder = preload(REGISTRY_PATH)
 var current_level_index: int = -1
 @onready var grid_container: GridContainer = $UI/SelectLevelGrid/VBoxContainer/GridContainer
 
-@onready var camera_controller: CameraController = $World/CameraScene
+#@onready var camera_controller: CameraController = $World/CameraScene
 
 ## Bools
 var _slot_pending_overwrite: int = -1

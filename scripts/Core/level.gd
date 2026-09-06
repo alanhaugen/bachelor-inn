@@ -766,10 +766,9 @@ func _ready() -> void:
 
 	var units: Array[Vector3i] = occupancy_map.get_used_cells()
 	var characters_placed := 0
-
 	print("Loading new level, number of playable characters: ", Main.characters.size())
 	print("Level name: ", Main.level.name)
-	
+
 	_check_for_victory_trigger()
 
 	for i in range(units.size()):
@@ -808,21 +807,27 @@ func _ready() -> void:
 			spawn_enemy(pos, unit_type, true)
 	
 	# Spawn directly placed enemy scenes
-	for child in get_children():
+	print("Scanning children for direct enemies...")
+	for child in find_children("*", "Character", true, false):#get_children():
+		print("  child: ", child.name, " is Character: ", child is Character)
 		if child is Character and child.state != null:
+			print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
 			if child.state.faction == CharacterState.Faction.ENEMY:
 				child.camera = get_viewport().get_camera_3d()
 				child.state.grid_position = world_to_grid(child.position)
 				child.sanity_flipped.connect(_on_character_sanity_flipped)
 				characters.append(child)
+				print("Registering direct enemy: ", child.data.unit_name, 
+						" at world pos: ", child.position,
+						" grid pos: ", child.state.grid_position,
+						" enemy_code: ", enemy_code)
 				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
-				game_state.units.append(child)
-
-			# Spawn health bar
-			if HEALTH_BAR_ENEMY != null:
-				var health_bar := HEALTH_BAR_ENEMY.instantiate()
-				child.add_child(health_bar)
+				#game_state.units.append(child)
+				if HEALTH_BAR_ENEMY != null:
+					var health_bar := HEALTH_BAR_ENEMY.instantiate()
+					child.add_child(health_bar)
 	
+	game_state = GameState.from_level(self)
 	state_machine = StateMachine.new()
 	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(state_machine)
@@ -859,8 +864,6 @@ func _ready() -> void:
 	game_over_layer.add_child(game_over_screen)
 	#add_child(game_over_screen)
 	#in_game_ui = GAME_UI.instantiate()
-	
-	game_state = GameState.from_level(self)
 	
 	#turn_transition_animation_player.play()
 	add_to_group("level")
@@ -1221,10 +1224,11 @@ func CheckVictoryConditions() -> void:
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	var numberOfPlayerUnits :int = 0;
 	var numberOfEnemyUnits  :int = 0;
-	
+	print("Victory check — occupied cells: ", units.size())
 	for i in units.size():
 		var pos :Vector3i = units[i];
 		var cell_item : int = occupancy_map.get_cell_item(pos)
+		print("  pos: ", pos, " code: ", cell_item, " enemy_code: ", enemy_code)
 		if cell_item == player_code or cell_item == player_code_done:
 			if get_trigger_name(pos) == "00_Victory":
 				is_player_turn = true;
