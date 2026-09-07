@@ -9,7 +9,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 	
 	var min_range := unit.state.weapon.min_range 
 	var max_range := unit.state.weapon.max_range 
-	
+	print("ConditionEnemyInRange: unit=", unit.data.unit_name, " weapon range=", min_range, "-", max_range)
 	var closest_target: Character = null
 	var closest_dist := 99999
 	
@@ -18,6 +18,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 	for cmd in moves:
 		if cmd is Move:
 			origins.append(cmd.end_pos)
+	print("  reachable origins count: ", origins.size())
 	
 	# check each player unit against reachable origin
 	for other in state.units:

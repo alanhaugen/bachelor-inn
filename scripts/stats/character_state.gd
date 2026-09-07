@@ -21,20 +21,20 @@ signal level_changed(new_level: int)
 @export var weapon : Weapon = WeaponRegistry.get_weapon("unarmed");
 @export var faction : Faction = Faction.PLAYER;
 @export var connections : Array[int] = [];
-@export var grid_position: Vector3i;					# NOTE: Does not need to be an export
-@export var next_level_experience: int = 1;				# NOTE: Does not need to be an export
-@export var is_alive: bool = true;						# NOTE: Does not need to be an export
-@export var is_moved :bool = false;						# NOTE: Does not need to be an export
-@export var has_preformed_action :bool = false;			# NOTE: Does not need to be an export
-@export var is_ability_used :bool = false;				# NOTE: Does not need to be an export
-@export var experience := 0 : set = _set_experience		# NOTE: Does not need to be an export
-@export var level := 1									# NOTE: Does not need to be an export
-@export var attribute_points_per_level : = 3			# NOTE: Does not need to be an export
-@export var unspent_attribute_points : int = 0			# NOTE: Does not need to be an export
+@export var grid_position: Vector3i;
+@export var next_level_experience: int = 1;
+@export var is_alive: bool = true;
+@export var is_moved :bool = false;
+@export var has_preformed_action :bool = false;
+@export var is_ability_used :bool = false;
+@export var experience := 0 : set = _set_experience	
+@export var level := 1
+@export var attribute_points_per_level : = 3
+@export var unspent_attribute_points : int = 0
 
 # --- SKILLS ---
 @export var skills: Array[Skill] = []
-@export var active_effects: Array[Dictionary] = []		# NOTE: Does not need to be an export
+@export var active_effects: Array[Dictionary] = []
 
 # --- AI / BEHAVIOUR TREE ---
 @export var ai_mode: AIMode = AIMode.BEHAVIOUR_TREE

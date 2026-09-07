@@ -67,7 +67,7 @@ func apply_damage(state: GameState , simulate_only: bool = false) -> void:
 	#result.killed = victim.state.current_health <= 0
 	## Using attack from character.gd so we can use the units abilities
 	result.killed = victim.apply_damage(result.damage, simulate_only, aggressor, "Attack")
-	
+	print("Agressor " + str(aggressor.data.unit_name) + " dealt " + str(result.damage) + " to " + str(victim.data.unit_name) + " with " + str(aggressor.state.weapon.weapon_name))
 	#sanity
 	if(!simulate_only):
 		pass

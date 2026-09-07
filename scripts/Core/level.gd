@@ -194,7 +194,7 @@ var monster_names := [
 ]
 
 func _ready() -> void:
-	print("state_machine node: ", state_machine)
+	#print("state_machine node: ", state_machine)
 	_level_complete = false
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	camera_controller = Main.camera_controller
@@ -239,14 +239,7 @@ func _ready() -> void:
 				new_unit.state.is_moved = false
 				new_unit.camera = get_viewport().get_camera_3d()
 				characters_placed += 1
-
 				var health := new_unit.state.current_health
-				print(
-					"This character exists: ",
-					new_unit.data.unit_name,
-					" health: ",
-					health if health > 0 else 1000 #"fresh unit"
-				)
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 			if new_unit:
@@ -264,20 +257,20 @@ func _ready() -> void:
 			spawn_enemy(pos, unit_type, true)
 	
 	# Spawn directly placed enemy scenes
-	print("Scanning children for direct enemies...")
+	#print("Scanning children for direct enemies...")
 	for child in find_children("*", "Character", true, false):#get_children():
-		print("  child: ", child.name, " is Character: ", child is Character)
+		#print("  child: ", child.name, " is Character: ", child is Character)
 		if child is Character and child.state != null:
-			print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
+			#print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
 			if child.state.faction == CharacterState.Faction.ENEMY:
 				child.camera = get_viewport().get_camera_3d()
 				child.state.grid_position = world_to_grid(child.position)
 				child.sanity_flipped.connect(_on_character_sanity_flipped)
 				characters.append(child)
-				print("Registering direct enemy: ", child.data.unit_name, 
-						" at world pos: ", child.position,
-						" grid pos: ", child.state.grid_position,
-						" enemy_code: ", enemy_code)
+				#print("Registering direct enemy: ", child.data.unit_name, 
+						#" at world pos: ", child.position,
+						#" grid pos: ", child.state.grid_position,
+						#" enemy_code: ", enemy_code)
 				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
 				#game_state.units.append(child)
 				if HEALTH_BAR_ENEMY != null:
@@ -789,7 +782,7 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 
 
 func _clear_selection() -> void:
-	print("Funtion _clear_selection() is called.")
+	#print("Funtion _clear_selection() is called.")
 	emit_signal("character_deselected")
 	emit_signal("enemy_deselected")
 	_exit_skill_target_mode()
@@ -1106,6 +1099,15 @@ func MoveSingleAI() -> void:
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
+	for u in current_state.units:
+		if not u.state.is_enemy():
+			print("  Player in GameState: ", u.data.unit_name, 
+			" grid_pos=", u.state.grid_position,
+			" is_alive=", u.state.is_alive)
+			
+	print("GameState units count: ", current_state.units.size())
+	for u in current_state.units:
+		print("  - ", u.data.unit_name, " at ", u.state.grid_position, " is_enemy: ", u.state.is_enemy())
 	var currentEnemy : Character = null
 	for unit in characters:
 		if unit == null:
@@ -1432,7 +1434,7 @@ func _show_skill_target_tiles(reachable: Array[Vector3i], skill: Skill) -> void:
 
 
 func _exit_skill_target_mode() -> void:
-	print("Function _exit_skill_target_mode entered.")
+	#print("Function _exit_skill_target_mode entered.")
 	Input.set_custom_mouse_cursor(null)
 	var caster := skill_caster
 	is_choosing_skill_target = false

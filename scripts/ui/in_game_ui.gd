@@ -110,12 +110,12 @@ func add_character_preview(character: Character) -> void:
 func _on_character_selected(character: Character) -> void:
 	player_stats.apply_stats(build_character_stats(character))
 	player_stats.show()
-	print("DEBUG SELECT:",character.data.unit_name, "effects", character.state.active_effects)
+	#print("DEBUG SELECT:",character.data.unit_name, "effects", character.state.active_effects)
 	ribbon.show()
 	ribbon.set_skills(character.state.skills)
 
 
-	print("DEBUG SELECT:", character.data.unit_name, "skills:", character.state.skills.size())
+	#print("DEBUG SELECT:", character.data.unit_name, "skills:", character.state.skills.size())
 	for c: Character in previews.keys():
 		##This is a quickfix, instead the character should be removed from the dictionary when its 
 		##corresponding character dies
