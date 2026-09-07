@@ -1075,7 +1075,6 @@ func MoveAI() -> void:
 	var ai := MinimaxAI.new();
 	var current_state := GameState.from_level(self);
 	
-	
 	if current_state.has_enemy_moves():
 		var move : Command = ai.choose_best_move(current_state, 1);
 		moves_stack.append(move);
