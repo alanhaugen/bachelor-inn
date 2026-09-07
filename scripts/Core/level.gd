@@ -193,6 +193,160 @@ var monster_names := [
 	"Cringe Memory",
 ]
 
+func _ready() -> void:
+	print("state_machine node: ", state_machine)
+	_level_complete = false
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	camera_controller = Main.camera_controller
+	
+	cursor.hide()
+	trigger_map.hide()
+	movement_map.clear()
+	movement_weights_map.hide()
+	occupancy_map.hide()
+	path_map.clear()
+	fog_map.clear()
+
+	terrain_grid = Grid.new(terrain_map)
+	occupancy_grid = Grid.new(movement_map)
+	trigger_grid = Grid.new(movement_map)
+	movement_grid = MovementGrid.new(movement_map)
+	movement_weights_grid = Grid.new(movement_weights_map)
+	path_grid = Grid.new(movement_map)
+	fog_grid = Grid.new(fog_map)
+	
+	## Move to state machine
+	#turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
+	
+	Dialogic.signal_event.connect(_on_dialogic_signal)
+	Main.battle_log = battle_log
+
+	var units: Array[Vector3i] = occupancy_map.get_used_cells()
+	var characters_placed := 0
+	print("Loading new level, number of playable characters: ", Main.characters.size())
+	print("Level name: ", Main.level.name)
+
+	_check_for_victory_trigger()
+
+	for i in range(units.size()):
+		var pos: Vector3i = units[i]
+		var new_unit: Character = null
+
+		var unit_type : String = get_unit_name(pos)
+		if(unit_type == "00_Unit"):
+			if characters_placed < Main.characters.size():
+				new_unit = Main.characters[characters_placed]
+				new_unit.state.is_moved = false
+				new_unit.camera = get_viewport().get_camera_3d()
+				characters_placed += 1
+
+				var health := new_unit.state.current_health
+				print(
+					"This character exists: ",
+					new_unit.data.unit_name,
+					" health: ",
+					health if health > 0 else 1000 #"fresh unit"
+				)
+			else:
+				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+			if new_unit:
+				new_unit.position = grid_to_world(pos)
+
+				if new_unit.get_parent() != Main.world:
+					Main.world.add_child(new_unit)
+
+				characters.append(new_unit)
+
+				if new_unit is Character:
+					new_unit.state.grid_position = pos
+					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
+		else:
+			spawn_enemy(pos, unit_type, true)
+	
+	# Spawn directly placed enemy scenes
+	print("Scanning children for direct enemies...")
+	for child in find_children("*", "Character", true, false):#get_children():
+		print("  child: ", child.name, " is Character: ", child is Character)
+		if child is Character and child.state != null:
+			print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
+			if child.state.faction == CharacterState.Faction.ENEMY:
+				child.camera = get_viewport().get_camera_3d()
+				child.state.grid_position = world_to_grid(child.position)
+				child.sanity_flipped.connect(_on_character_sanity_flipped)
+				characters.append(child)
+				print("Registering direct enemy: ", child.data.unit_name, 
+						" at world pos: ", child.position,
+						" grid pos: ", child.state.grid_position,
+						" enemy_code: ", enemy_code)
+				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
+				#game_state.units.append(child)
+				if HEALTH_BAR_ENEMY != null:
+					var health_bar := HEALTH_BAR_ENEMY.instantiate()
+					child.add_child(health_bar)
+	
+	game_state = GameState.from_level(self)
+	state_machine = StateMachine.new()
+	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(state_machine)
+	state_machine.owner = self
+	## POP UPS INSTANTIATED
+	#move_popup = MOVE_POPUP.instantiate()
+	#move_popup.hide()
+	#add_child(move_popup)
+	
+	portrait_pop_up = PORTRAIT_POPUP.instantiate()
+	portrait_pop_up.hide()
+	add_child(portrait_pop_up)
+	
+	loot_popup = LOOT_POP_UP.instantiate()
+	loot_popup.hide()
+	add_child(loot_popup)
+	
+	skill_loot_popup = SKILL_POP_UP.instantiate()
+	skill_loot_popup.hide()
+	add_child(skill_loot_popup)
+	
+	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
+	var pause_menu_layer := CanvasLayer.new()
+	pause_menu_layer.layer = 9
+	pause_menu = PAUSE_MENU.instantiate()
+	pause_menu.hide()
+	add_child(pause_menu)
+	
+	var game_over_layer := CanvasLayer.new()
+	game_over_layer.layer = 10
+	add_child(game_over_layer)
+	game_over_screen = GAME_OVER.instantiate()
+	game_over_screen.hide()
+	game_over_layer.add_child(game_over_screen)
+	#add_child(game_over_screen)
+	#in_game_ui = GAME_UI.instantiate()
+	
+	#turn_transition_animation_player.play()
+	add_to_group("level")
+	
+	_register_chests()
+	#_register_neutral_units()
+	_register_patrol_paths()
+	check_aggro()
+	hide_inactive_characters()
+	
+	await get_tree().process_frame
+	state_machine.transition_to(StateTurnTransition.new(true))
+	
+	#print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
+	#print("Main.characters size: ", Main.characters.size())
+	if not Main.is_standalone_test and Main.current_level_index > 2:
+		for c in Main.characters:
+			if is_instance_valid(c):
+				c.calc_derived_stats()
+		Main.save.save_progress(Main.current_save_slot, Main.current_level_index)	
+	elif Main.is_standalone_test:
+		print("Skipping save - standalone test level")
+	else:
+		print("Skipping save - tutorial level")
+	#SaveGame.new().save_progress(Main.current_save_slot, Main.current_level_index)
+
 
 #func show_move_popup(window_pos :Vector2) -> void:
 	#return
@@ -735,160 +889,6 @@ func _input(event: InputEvent) -> void:
 		#emit_signal("enemy_selected", selected_enemy_unit)
 		#print("hey an enemy has been selected ")
 
-
-func _ready() -> void:
-	print("state_machine node: ", state_machine)
-	_level_complete = false
-	process_mode = Node.PROCESS_MODE_ALWAYS
-	camera_controller = Main.camera_controller
-	
-	cursor.hide()
-	trigger_map.hide()
-	movement_map.clear()
-	movement_weights_map.hide()
-	occupancy_map.hide()
-	path_map.clear()
-	fog_map.clear()
-
-	terrain_grid = Grid.new(terrain_map)
-	occupancy_grid = Grid.new(movement_map)
-	trigger_grid = Grid.new(movement_map)
-	movement_grid = MovementGrid.new(movement_map)
-	movement_weights_grid = Grid.new(movement_weights_map)
-	path_grid = Grid.new(movement_map)
-	fog_grid = Grid.new(fog_map)
-	
-	## Move to state machine
-	#turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
-	
-	Dialogic.signal_event.connect(_on_dialogic_signal)
-	Main.battle_log = battle_log
-
-	var units: Array[Vector3i] = occupancy_map.get_used_cells()
-	var characters_placed := 0
-	print("Loading new level, number of playable characters: ", Main.characters.size())
-	print("Level name: ", Main.level.name)
-
-	_check_for_victory_trigger()
-
-	for i in range(units.size()):
-		var pos: Vector3i = units[i]
-		var new_unit: Character = null
-
-		var unit_type : String = get_unit_name(pos)
-		if(unit_type == "00_Unit"):
-			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed]
-				new_unit.state.is_moved = false
-				new_unit.camera = get_viewport().get_camera_3d()
-				characters_placed += 1
-
-				var health := new_unit.state.current_health
-				print(
-					"This character exists: ",
-					new_unit.data.unit_name,
-					" health: ",
-					health if health > 0 else 1000 #"fresh unit"
-				)
-			else:
-				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-			if new_unit:
-				new_unit.position = grid_to_world(pos)
-
-				if new_unit.get_parent() != Main.world:
-					Main.world.add_child(new_unit)
-
-				characters.append(new_unit)
-
-				if new_unit is Character:
-					new_unit.state.grid_position = pos
-					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
-		else:
-			spawn_enemy(pos, unit_type, true)
-	
-	# Spawn directly placed enemy scenes
-	print("Scanning children for direct enemies...")
-	for child in find_children("*", "Character", true, false):#get_children():
-		print("  child: ", child.name, " is Character: ", child is Character)
-		if child is Character and child.state != null:
-			print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
-			if child.state.faction == CharacterState.Faction.ENEMY:
-				child.camera = get_viewport().get_camera_3d()
-				child.state.grid_position = world_to_grid(child.position)
-				child.sanity_flipped.connect(_on_character_sanity_flipped)
-				characters.append(child)
-				print("Registering direct enemy: ", child.data.unit_name, 
-						" at world pos: ", child.position,
-						" grid pos: ", child.state.grid_position,
-						" enemy_code: ", enemy_code)
-				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
-				#game_state.units.append(child)
-				if HEALTH_BAR_ENEMY != null:
-					var health_bar := HEALTH_BAR_ENEMY.instantiate()
-					child.add_child(health_bar)
-	
-	game_state = GameState.from_level(self)
-	state_machine = StateMachine.new()
-	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
-	add_child(state_machine)
-	state_machine.owner = self
-	## POP UPS INSTANTIATED
-	#move_popup = MOVE_POPUP.instantiate()
-	#move_popup.hide()
-	#add_child(move_popup)
-	
-	portrait_pop_up = PORTRAIT_POPUP.instantiate()
-	portrait_pop_up.hide()
-	add_child(portrait_pop_up)
-	
-	loot_popup = LOOT_POP_UP.instantiate()
-	loot_popup.hide()
-	add_child(loot_popup)
-	
-	skill_loot_popup = SKILL_POP_UP.instantiate()
-	skill_loot_popup.hide()
-	add_child(skill_loot_popup)
-	
-	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
-	var pause_menu_layer := CanvasLayer.new()
-	pause_menu_layer.layer = 9
-	pause_menu = PAUSE_MENU.instantiate()
-	pause_menu.hide()
-	add_child(pause_menu)
-	
-	var game_over_layer := CanvasLayer.new()
-	game_over_layer.layer = 10
-	add_child(game_over_layer)
-	game_over_screen = GAME_OVER.instantiate()
-	game_over_screen.hide()
-	game_over_layer.add_child(game_over_screen)
-	#add_child(game_over_screen)
-	#in_game_ui = GAME_UI.instantiate()
-	
-	#turn_transition_animation_player.play()
-	add_to_group("level")
-	
-	_register_chests()
-	#_register_neutral_units()
-	_register_patrol_paths()
-	check_aggro()
-	hide_inactive_characters()
-	
-	await get_tree().process_frame
-	state_machine.transition_to(StateTurnTransition.new(true))
-	
-	#print("Current level index: ", Main.get_current_level_index(), " level name: ", Main.current_level_name)
-	#print("Main.characters size: ", Main.characters.size())
-	if not Main.is_standalone_test and Main.current_level_index > 2:
-		for c in Main.characters:
-			if is_instance_valid(c):
-				c.calc_derived_stats()
-		Main.save.save_progress(Main.current_save_slot, Main.current_level_index)	
-	elif Main.is_standalone_test:
-		print("Skipping save - standalone test level")
-	else:
-		print("Skipping save - tutorial level")
-	#SaveGame.new().save_progress(Main.current_save_slot, Main.current_level_index)
 
 
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
@@ -1890,6 +1890,7 @@ func hide_inactive_characters() -> void:
 			#else:
 				#c.hide()
 
+#region register functions
 ## REGISTER FUNCTIONS
 func _register_chests() -> void:
 	for child in get_children():
