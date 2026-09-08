@@ -2,7 +2,6 @@ extends ObjectiveBase
 class_name ObjectiveEscortNpc
 
 @export var target_npc_name: String = ""
-@export var escape_trigger: String = "05_escape"
 var npc: Character = null
 
 func _setup() -> void:
@@ -17,16 +16,8 @@ func _on_character_died(character: Character) -> void:
 		return
 	if not is_instance_valid(Main.level):
 		return
-	if not character.state.is_enemy():
-		return
-	for c in Main.level.characters:
-		if c == null:
-			continue
-		if c.state.name == target_npc_name and not c.state.is_alive:
-			Main.level.trigger_game_over()
-		else:
-			return
-	#on_objective_complete()
+	if character.data.unit_name == target_npc_name:
+		Main.level.trigger_game_over()
 
 func _on_stats_changed(character: Character) -> void:
 	if npc != null:

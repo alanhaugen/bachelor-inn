@@ -70,3 +70,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -43)
 
 [node name="Chest5" parent="Chests" index="5" unique_id=34855807 instance=ExtResource("3_xcwdp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -47)
+
+[node name="MissionObjective" type="Node" parent="." index="20" unique_id=591183929]
