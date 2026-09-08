@@ -33,6 +33,9 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	pass 
 
 func _on_animation_finished(anim_name: StringName, level: Node) -> void:
+	if level._level_complete:
+		return
+		
 	if _to_player:
 		level.is_player_turn = true
 		var selectables: Array[Character] = level.get_selectable_characters()

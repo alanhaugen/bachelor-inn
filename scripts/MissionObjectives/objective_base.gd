@@ -13,7 +13,7 @@ func _ready() -> void:
 func on_objective_complete() -> void:
 	is_complete = true
 	print("Objective complete: ", display_text)
-	Main.level.CheckVictoryConditions()
+	#Main.level.CheckVictoryConditions()
 
 func _setup() -> void:
 	pass  # override in each objective type

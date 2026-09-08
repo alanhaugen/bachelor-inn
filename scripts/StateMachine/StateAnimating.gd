@@ -92,9 +92,12 @@ func _process_next_move(level: Node) -> void:
 	_is_processing = false
 
 func _finish_animation(level: Node) -> void:
+	print("_finish_animation called, _level_complete: ", level._level_complete)
+	if level._level_complete:
+		return
+	
 	level.CheckTriggerConditions()
 	level.CheckVictoryConditions()
-	
 	if not level.is_player_turn:
 		level.MoveSingleAI()
 	else:

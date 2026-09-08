@@ -7,48 +7,56 @@
 script = ExtResource("1_doxni")
 display_name = "Tutorial Level 1"
 scene_path = "res://scenes/levels/tutorialDesignedLevel.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_jendm"]
 script = ExtResource("1_doxni")
 display_name = "Tutorial Level 2"
 scene_path = "res://scenes/levels/tutorial_2.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_mh2pn"]
 script = ExtResource("1_doxni")
 display_name = "Tutorial Level 3"
 scene_path = "res://scenes/levels/tutorial_3.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_doxni"]
 script = ExtResource("1_doxni")
 display_name = "Fento"
 scene_path = "res://scenes/levels/fento.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_7i6ev"]
 script = ExtResource("1_doxni")
 display_name = "Fen"
 scene_path = "res://scenes/levels/fen.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_fgg7y"]
 script = ExtResource("1_doxni")
 display_name = "Waterfall"
 scene_path = "res://scenes/levels/waterfallLevel.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_ensw0"]
 script = ExtResource("1_doxni")
 display_name = "Woodlands"
 scene_path = "res://scenes/levels/woodlandsLevel.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_fjq50"]
 script = ExtResource("1_doxni")
 display_name = "TestLevel1"
 scene_path = "res://scenes/levels/test_level_1.tscn"
+flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [resource]

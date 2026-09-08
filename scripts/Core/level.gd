@@ -19,6 +19,7 @@ signal enemy_deselected
 signal ability_used
 signal character_stats_changed(character: Character)
 signal party_updated(characters: Array[Character])
+signal character_died(character: Character)
 
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 

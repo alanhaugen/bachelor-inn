@@ -254,8 +254,10 @@ func get_current_entry() -> LevelEntry:
 	return levels[current_level_index]
 
 func go_to_transition_screen() -> void:
+	print("go_to_transition_screen called")
 	if is_instance_valid(Main.level):
 		Main.level.is_in_menu = true
+		Main.level.state_machine.push(StateMenu.new())
 		print("Going to Transition Screen. Instance Main.level is valid.")
 	var packed := load("res://scenes/states/level_transition.tscn")
 	transition_screen = packed.instantiate()

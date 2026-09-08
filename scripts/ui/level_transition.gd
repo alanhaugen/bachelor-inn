@@ -9,9 +9,9 @@ func _ready() -> void:
 	update_continue_button()
 
 func _setup_ui() -> void:
-	var level_name := Main.current_level_name
-	$VBoxContainer/HBoxContainer/LevelName.text = Main.level_display_names.get(level_name, level_name)
-	$VBoxContainer/HBoxContainer/FlavorText.text = Main.level_flavor_texts.get(level_name, "")
+	var entry := Main.levels[Main.current_level_index]	#var level_name := Main.levels[Main.current_level_index].display_name
+	$VBoxContainer/HBoxContainer/LevelName.text = entry.display_name#Main.level_display_names.get(level_name, level_name)
+	$VBoxContainer/HBoxContainer/FlavorText.text = entry.flavor_text#Main.level_flavor_texts.get(level_name, "")
 	
 	## TODO: FIll in the "card slots" for each unit
 	for c in Main.characters:
@@ -25,8 +25,13 @@ func _setup_ui() -> void:
 
 
 func _on_continue_button_pressed() -> void:
+	print("Continue pressed")
 	for c in Main.characters:
-		if c!= null and c.state.unspent_attribute_points > 0:
+		if c!= null:
+			continue
+		print("  ", c.data.unit_name, " unspent points: ", c.state.unspent_attribute_points)
+		if c.state.unspent_attribute_points > 0:
+			print("  Blocked - unspent points remaining")
 			return
 	if is_instance_valid(Main.level):
 		Main.level.is_in_menu = false
