@@ -1192,19 +1192,16 @@ func CheckTriggerConditions() -> void:
 			return
 		var objectives := get_tree().get_nodes_in_group("objectives")
 		if objectives.is_empty():
-			# NOTE: If no objectives in level, just trigger victory.
-			next_level()
+			next_level()	# NOTE: If no objectives in level, just trigger victory.
 			return
-			
 		for o in objectives:
 			if o is ObjectiveEscortNpc:
-				if selected_unit.data.unit_name != o.npc_unit_name:
+				if selected_unit.data.unit_name != o.target_npc_name:
 					return
-				o.on_objective_complete()
-		for o in objectives:
-			if not o.is_optional and not o.is_complete:
-				return
-		next_level()
+				o.is_complete = true
+			elif o is ObjectiveReachTile:
+				o.is_complete = true
+		CheckVictoryConditions()
 	
 	var adjacent := [
 				pos + Vector3i(1, 0, 0),
