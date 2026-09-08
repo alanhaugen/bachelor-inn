@@ -1220,56 +1220,80 @@ func CheckTriggerConditions() -> void:
 
 
 func CheckVictoryConditions() -> void:
+	# Check for defeat of all player units
+	var player_units_alive := false
+	for c in characters:
+		if c == null:
+			continue
+		if not c.state.is_enemy() and c.state.is_alive:
+			player_units_alive = true
+			break
+	if not player_units_alive:
+		trigger_game_over()
+		return
+	
+	# Check for mission objectives complete
+	var objectives := get_tree().get_nodes_in_group("objectives")
+	if objectives.is_empty():
+		return
+	for o in objectives:
+		if not o.is_optional and not o.is_complete:
+			return
+	next_level()
+
 	## Next_level() should not run here, but in the stat screen after button is pressed
 	## Victory conditions should just freeze the game, unload, and add an intermed screen / load screen
-	var units :Array[Vector3i] = occupancy_map.get_used_cells();
-	var numberOfPlayerUnits :int = 0;
-	var numberOfEnemyUnits  :int = 0;
-	print("Victory check — occupied cells: ", units.size())
-	for i in units.size():
-		var pos :Vector3i = units[i];
-		var cell_item : int = occupancy_map.get_cell_item(pos)
-		print("  pos: ", pos, " code: ", cell_item, " enemy_code: ", enemy_code)
-		if cell_item == player_code or cell_item == player_code_done:
-			if get_trigger_name(pos) == "00_Victory":
-				is_player_turn = true;
-				next_level();
-				return;
-			numberOfPlayerUnits += 1;
-		elif cell_item == 2:
-			continue
-		elif cell_item >= enemy_code:
-			numberOfEnemyUnits += 1;
-	
-	if (numberOfPlayerUnits == 0):
-		trigger_game_over()
-	elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
-		is_player_turn = true;
-		next_level();
-		return;
+	#var units :Array[Vector3i] = occupancy_map.get_used_cells();
+	#var numberOfPlayerUnits :int = 0;
+	#var numberOfEnemyUnits  :int = 0;
+	#print("Victory check — occupied cells: ", units.size())
+	#for i in units.size():
+		#var pos :Vector3i = units[i];
+		#var cell_item : int = occupancy_map.get_cell_item(pos)
+		#print("  pos: ", pos, " code: ", cell_item, " enemy_code: ", enemy_code)
+		#if cell_item == player_code or cell_item == player_code_done:
+			#if get_trigger_name(pos) == "00_Victory":
+				#is_player_turn = true;
+				#next_level();
+				#return;
+			#numberOfPlayerUnits += 1;
+		#elif cell_item == 2:
+			#continue
+		#elif cell_item >= enemy_code:
+			#numberOfEnemyUnits += 1;
+	#
+	#if (numberOfPlayerUnits == 0):
+		#trigger_game_over()
+	#elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
+		#is_player_turn = true;
+		#next_level();
+		#return;
 
 ##Removing unwanted occupants and resetting movement of characters
 func next_level() -> void:
-	## Guard for our not so nice next level system
 	print("next_level() in level.gd triggered!")
 	if _level_complete:
 		return
 	_level_complete = true
+	
+	if Main.is_standalone_test:
+		print("Standalone test complete - returning to menu")
+		get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
+		return
 	cleanup_characters_before_load()
 	
-	## TODO: Decide this?
-	## NOTE: Note
+	## NOTE: Uncomment to add healing between levels.
 	# Healing units between levels
 	#for i in Main.characters.size():
 		#Main.characters[i].state.current_health = Main.characters[i].state.max_health;
 	
-	## SAVE GAME HAPPENS HERE
+	## NOTE: SAVE GAME HAPPENS HERE
 	var surviving_chars : Array[Character] = []
 	for c in characters:
 		if c != null and c.state.is_alive:
 			surviving_chars.append(c)
 	Main.characters = surviving_chars
-	Main.save.save_progress(Main.current_save_slot, Main.get_next_level_index())
+	Main.save.save_progress(Main.current_save_slot, Main.current_level_index + 1)
 	Main.go_to_transition_screen()
 
 
@@ -1295,11 +1319,12 @@ func cleanup_characters_before_load() -> void:
 		if is_instance_valid(c):
 			if c.get_parent() != null:
 				c.get_parent().remove_child(c)
-			c.free()
+			c.queue_free()
+			#c.free()
 
 	# Reset player units
 	for c in characters:
-		if c == null:
+		if not is_instance_valid(c):#if c == null:
 			continue
 		if c.state.is_enemy():
 			continue

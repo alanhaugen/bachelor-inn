@@ -9,6 +9,8 @@ func _setup() -> void:
 func _on_character_stats_changed(character: Character) -> void:
 	if is_complete:
 		return
+	if not is_instance_valid(Main.level):
+		return
 	if not character.state.is_enemy():
 		return
 	for c in Main.level.characters:

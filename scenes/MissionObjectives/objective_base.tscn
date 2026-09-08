@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cfqlc6he77quf"]
+
+[ext_resource type="Script" uid="uid://ceokicoldoxj0" path="res://scripts/MissionObjectives/objective_base.gd" id="1_6yal5"]
+
+[node name="ObjectiveBase" type="Node" unique_id=807782237]
+script = ExtResource("1_6yal5")

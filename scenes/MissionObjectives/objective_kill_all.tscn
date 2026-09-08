@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c5b1wt1vdugfg"]
+
+[ext_resource type="Script" uid="uid://ca34kf1mydcvo" path="res://scripts/MissionObjectives/objective_kill_all.gd" id="1_c7r3n"]
+
+[node name="ObjectiveKillAll" type="Node" unique_id=1411412953]
+script = ExtResource("1_c7r3n")
