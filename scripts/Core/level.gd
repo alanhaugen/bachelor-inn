@@ -1299,40 +1299,15 @@ func next_level() -> void:
 
 
 func cleanup_characters_before_load() -> void:
-	# Kill enemies through proper death system first
-	var positions: Array[Vector3i] = occupancy_map.get_used_cells()
-	for i in positions.size():
-		var unit: Character = get_unit(positions[i])
-		var cell_item := occupancy_map.get_cell_item(positions[i])
-		if cell_item != 3 and cell_item != 0:
-			if unit == null:
-				print("No unit found at enemy position: ", positions[i])
-				continue
-			print("Killing unit: ", unit.data.unit_name)
-			unit.die(false)
-
-	# Force remove any remaining enemies
-	for c in characters:
-		if c == null:
-			continue
-		if not c.state.is_enemy():
-			continue
-		if is_instance_valid(c):
-			if c.get_parent() != null:
-				c.get_parent().remove_child(c)
-			c.queue_free()
-			#c.free()
-
-	# Reset player units
-	for c in characters:
-		if not is_instance_valid(c):#if c == null:
-			continue
-		if c.state.is_enemy():
-			continue
-		c.reset()
-		c.state.grid_position = Vector3i(0, 0, 0)
-
-
+	# Remove enemies spawned via GridMap from the world
+	# This is not needed if we start placing enemy scenes directly into the world
+	for child in Main.world.get_children():
+		if child is Character and child.state.is_enemy():
+			Main.world.remove_child(child)
+			child.queue_free()
+	# This always remains
+	characters.clear()
+	
 func trigger_game_over() -> void:
 	#is_in_menu = true
 	#var ui := get_tree().get_first_node_in_group("ui_controller")
