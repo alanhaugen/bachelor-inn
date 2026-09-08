@@ -393,10 +393,10 @@ func flash_hit(crit : bool) -> void:
 
 func die(simulate_only : bool) -> void:
 	state.is_alive = false
-	Main.level.emit_signal("character_died", self)
 	
 	if simulate_only == false:
 		Main.level.emit_signal("character_stats_changed", self)
+		Main.level.emit_signal("character_died", self)
 		if state.is_playable():
 			Main.characters.erase(self)
 		Main.level.game_state.units.erase(self)

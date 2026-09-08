@@ -4,9 +4,9 @@ class_name ObjectiveKillAll
 func _setup() -> void:
 	if display_text == "":
 		display_text = "Defeat all enemies."# if display_text == "" else display_text
-	Main.level.character_stats_changed.connect(_on_character_stats_changed)
+	Main.level.character_died.connect(_on_character_died)
 
-func _on_character_stats_changed(character: Character) -> void:
+func _on_character_died(character: Character) -> void:
 	if is_complete:
 		return
 	if not is_instance_valid(Main.level):

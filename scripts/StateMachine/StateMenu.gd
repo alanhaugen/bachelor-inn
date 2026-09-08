@@ -9,7 +9,7 @@ func enter(level: Node) -> void:
 
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateMenu.")
-	print(get_stack())
+	#print(get_stack())
 	level.is_in_menu = false
 	level.pause_menu.hide()
 	level.get_tree().paused = false
