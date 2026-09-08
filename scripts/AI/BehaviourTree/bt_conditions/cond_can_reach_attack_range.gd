@@ -6,7 +6,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 	var state := blackboard.state
 	var min_range := unit.state.weapon.min_range
 	var max_range := unit.state.weapon.max_range
-	print("ConditionCanReachAttackRange: ", unit.data.unit_name, " weapon=", min_range, "-", max_range, " pos=", unit.state.grid_position)
+	#print("ConditionCanReachAttackRange: ", unit.data.unit_name, " weapon=", min_range, "-", max_range, " pos=", unit.state.grid_position)
 	var moves := MoveGenerator.generate(unit, state)
 	var reachable: Array[Vector3i] = [unit.state.grid_position]
 	for cmd in moves:

@@ -234,7 +234,7 @@ func _ready() -> void:
 		var new_unit: Character = null
 
 		var unit_type : String = get_unit_name(pos)
-		if(unit_type == "00_Unit"):
+		if (unit_type == "00_Unit"):
 			if characters_placed < Main.characters.size():
 				new_unit = Main.characters[characters_placed]
 				new_unit.state.is_moved = false
@@ -244,6 +244,9 @@ func _ready() -> void:
 			else:
 				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 			if new_unit:
+				print("Placing ", new_unit.data.unit_name, 
+				" old_pos=", new_unit.state.grid_position,
+				" new_pos=", pos)
 				new_unit.position = grid_to_world(pos)
 
 				if new_unit.get_parent() != Main.world:
@@ -1299,6 +1302,12 @@ func next_level() -> void:
 
 
 func cleanup_characters_before_load() -> void:
+	## Reset position state for player units
+	#for child in Main.world.get_children():
+		#if child is Character and not child.state.is_enemy():
+			#child.state.grid_position = Vector3i(0, 0, 0)
+			#child.position = Vector3.ZERO
+			#
 	# Remove enemies spawned via GridMap from the world
 	# This is not needed if we start placing enemy scenes directly into the world
 	for child in Main.world.get_children():
