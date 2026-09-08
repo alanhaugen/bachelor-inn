@@ -7,9 +7,11 @@
 [ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="5_nwrgp"]
 [ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="6_g3mff"]
 [ext_resource type="Resource" uid="uid://c1b3txa4fyxec" path="res://Data/Weapons/axe_basic.tres" id="7_rfcif"]
+[ext_resource type="PackedScene" uid="uid://c4ugjunruadqr" path="res://scenes/MissionObjectives/objective_kill_specific.tscn" id="8_nwrgp"]
 
 [sub_resource type="Resource" id="Resource_cr05x"]
 script = ExtResource("4_qd2ch")
+unit_name = "Boss"
 metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 
 [sub_resource type="Resource" id="Resource_cmsp8"]
@@ -57,3 +59,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.917633, 0.83604145, 2.8136
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 1.5, -25)
 data = SubResource("Resource_cr05x")
 state = SubResource("Resource_cmsp8")
+
+[node name="MissionObjective" type="Node" parent="." index="20" unique_id=1516670593]
+
+[node name="ObjectiveKillSpecific" parent="MissionObjective" index="0" unique_id=89127788 instance=ExtResource("8_nwrgp")]
+target_unit_name = "Boss"
