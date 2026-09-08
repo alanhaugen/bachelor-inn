@@ -27,14 +27,12 @@ func _setup_ui() -> void:
 func _on_continue_button_pressed() -> void:
 	print("Continue pressed")
 	for c in Main.characters:
-		if c!= null:
+		if c == null:
 			continue
-		print("  ", c.data.unit_name, " unspent points: ", c.state.unspent_attribute_points)
 		if c.state.unspent_attribute_points > 0:
-			print("  Blocked - unspent points remaining")
 			return
-	if is_instance_valid(Main.level):
-		Main.level.is_in_menu = false
+	#if is_instance_valid(Main.level):
+		#Main.level.is_in_menu = false
 	Main.transition_screen.queue_free()
 	Main.transition_screen = null
 	Main.next_level()

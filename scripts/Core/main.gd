@@ -51,22 +51,12 @@ func _ready() -> void:
 	var registry: LevelOrder = preload("res://Data/levels_for_grid_select.tres")
 	#var registry: LevelOrder = preload("res://Data/level_order.tres")
 	levels = registry.levels
-	
 	world = World
 	camera_controller = world.get_node("CameraScene")
 	
 ## Unloads the current level instance
 func unload_level() -> void:
-	#if is_instance_valid(level):
-		#level.cleanup_characters_before_load()
-		#level.queue_free(); # Free the current level instance
-	#level = null;
 	if is_instance_valid(level):
-		# Only remove enemies from world, leave player characters alone
-		for child in world.get_children():
-			if child is Character and child.state.is_enemy():
-				world.remove_child(child)
-				child.queue_free()
 		level.queue_free()
 	level = null
 
@@ -103,7 +93,6 @@ func load_level(index: int) -> void:
 	if index < 0 or index >= levels.size():
 		push_error("Level index out or range: %d" % index)
 		return
-	
 	current_level_index = index
 	var entry: LevelEntry = levels[index]
 	
@@ -113,13 +102,11 @@ func load_level(index: int) -> void:
 		Dialogic.VAR.PLATFORM = "DESKTOP";
 	
 	unload_level()
-	print("Loading entry: ", entry.display_name, " path: ", entry.scene_path)
 	
 	var packed := load(entry.scene_path)
 	if packed == null:
 		push_error("Failed to load level at path: " + entry.scene_path)
 		return
-	
 	level = packed.instantiate()
 	level.level_name = entry.display_name
 	world.add_child(level)
@@ -134,57 +121,6 @@ func load_level(index: int) -> void:
 	var menu := get_tree().get_first_node_in_group("main_menu")
 	if is_instance_valid(menu):
 		menu.queue_free()
-	#print("world valid: ", is_instance_valid(world))
-	#print("world: ", world)
-	#if OS.has_feature("mobile"):
-		#Dialogic.VAR.PLATFORM = "MOBILE";
-	#else:
-		#Dialogic.VAR.PLATFORM = "DESKTOP";
-	#unload_level(); ## TODO: Called too early?
-	#
-	#current_level_name = level_name
-	#current_level_index = levels.find_custom(func(e: LevelEntry) -> bool: return e.scene_path.get_file().get_basename() == level_name)	#var level_path: String = "res://scenes/levels/%sLevel.tscn" % level_name;
-	#var level_path: String = "res://scenes/levels/%s.tscn" % level_name;
-	#print("Attempting to load level path: '", level_path, "'")
-	#var packed := load(level_path)
-	#if packed == null:
-		#push_error("Failed to load level at path: " + level_path)
-		#return
-	#level = packed.instantiate()
-	##level = load(level_path).instantiate();
-	#level.level_name = level_name;	
-	#world.add_child(level) # Add the new level to the World node
-	#
-	#await get_tree().process_frame
-	##SaveGame.new().save_progress(current_save_slot, current_level_index)
-	#var ui := get_tree().get_first_node_in_group("ui_controller")
-	#if ui:
-		#ui._connect_to_level(level)
-	#Main.show_flavor_screen()
-
-
-#func load_level_by_name(level_name: String) -> void:
-	#current_level_name = level_name
-	#for entry: LevelEntry in levels:
-		#if entry.scene_path.get_file().get_basename() == level.name:
-			#load_level(level.display_name.name)
-			#return
-	#for path : String in levels:
-		#if path.get_file().get_basename() == level_name:
-			#load_level(level_name)
-			#return
-	#push_error("No level found matching name: " + level_name)
-
-
-## Not in use atm
-#func load_next_level() -> void:
-	## This splits "tutorial_1" into ["tutorial", "1"] from the right
-	#var parts := current_level_name.rsplit("_", true, 1)
-	#if parts.size() < 2 or not parts[1].is_valid_int():
-		#push_error("Cannot increment level name: " + current_level_name)
-		#return
-	#var next_name := parts[0] + "_" + str(parts[1].to_int() + 1)
-	#load_level_by_name(next_name)
 
 func load_single_level(index: int) -> void:
 	if index < 0 or index >= levels.size():

@@ -10,8 +10,7 @@ class_name Level
 # TODO: Make enemies able to occopy several grid-tiles
 # TODO: check if every 'non-engine' function that starts with underscore isn't called from outside the class
 
-#### signals 
-
+#region signal declerations
 signal character_selected(character: Character)
 signal character_deselected
 signal enemy_selected(enemy: Character)
@@ -20,9 +19,9 @@ signal ability_used
 signal character_stats_changed(character: Character)
 signal party_updated(characters: Array[Character])
 signal character_died(character: Character)
+#region end
 
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
-
 @export var level_name :String
 
 var terrain_grid : Grid
@@ -75,6 +74,11 @@ var level_has_victory_trigger: bool = false
 var has_window_open : bool = false
 var mission_context: MissionContext = MissionContext.new()
 
+var player_characters: Array[Character] = []   # refs to Main.characters, placed this level
+var enemy_characters: Array[Character] = []    # enemies, destroyed at level end
+var neutral_characters: Array[Character] = []  # escorts, NPCs etc
+var characters: Array[Character] = []          # all of the above combined, for systems that need everything
+
 var selected_unit: Character = null
 var last_selected_unit: Character = null
 var selected_enemy_unit: Character = null
@@ -90,7 +94,7 @@ var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
 #var stat_popup_enemy: Control;
 var completed_moves :Array[Command];
 
-var characters: Array[Character];
+#var characters: Array[Character];
 
 ## For TriggerOverlay and Dialogic
 var triggered_positions: Array[Vector3i] = []
@@ -195,7 +199,6 @@ var monster_names := [
 ]
 
 func _ready() -> void:
-	#print("state_machine node: ", state_machine)
 	_level_complete = false
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	camera_controller = Main.camera_controller
@@ -216,70 +219,58 @@ func _ready() -> void:
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
 	
-	## Move to state machine
-	#turn_transition_animation_player.animation_finished.connect(_on_turn_transition_finished)
-	
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
 
-	var units: Array[Vector3i] = occupancy_map.get_used_cells()
+	var spawn_points: Array[Vector3i] = occupancy_map.get_used_cells()
 	var characters_placed := 0
 	print("Loading new level, number of playable characters: ", Main.characters.size())
 	print("Level name: ", Main.level.name)
-
-	_check_for_victory_trigger()
-
-	for i in range(units.size()):
-		var pos: Vector3i = units[i]
-		var new_unit: Character = null
-
-		var unit_type : String = get_unit_name(pos)
-		if (unit_type == "00_Unit"):
-			if characters_placed < Main.characters.size():
-				new_unit = Main.characters[characters_placed]
-				new_unit.state.is_moved = false
-				new_unit.camera = get_viewport().get_camera_3d()
-				characters_placed += 1
-				var health := new_unit.state.current_health
-			else:
-				occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-			if new_unit:
-				print("Placing ", new_unit.data.unit_name, 
-				" old_pos=", new_unit.state.grid_position,
-				" new_pos=", pos)
-				new_unit.position = grid_to_world(pos)
-
-				if new_unit.get_parent() != Main.world:
-					Main.world.add_child(new_unit)
-
-				characters.append(new_unit)
-
-				if new_unit is Character:
-					new_unit.state.grid_position = pos
-					new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
-		else:
-			spawn_enemy(pos, unit_type, true)
+	# Place player characters into spawn points
+	for pos in spawn_points:
+		if get_unit_name(pos) != "00_Unit":
+			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+			continue
+		if characters_placed >= Main.characters.size():
+			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+			continue
+		# This gets the first char of the active roster
+		var new_unit: Character = Main.characters[characters_placed]
+		characters_placed += 1
+		new_unit.camera = get_viewport().get_camera_3d()
+		new_unit.position = grid_to_world(pos)
+		new_unit.state.grid_position = pos
+		new_unit.state.is_moved = false
+		new_unit.state.is_ability_used = false
+		if new_unit.get_parent() != Main.world:
+			Main.world.add_child(new_unit)
+		if not new_unit.sanity_flipped.is_connected(_on_character_sanity_flipped):
+			new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
+		player_characters.append(new_unit)
+		characters.append(new_unit)
+	# END Place player characters into spawn points
 	
-	# Spawn directly placed enemy scenes
-	#print("Scanning children for direct enemies...")
-	for child in find_children("*", "Character", true, false):#get_children():
-		#print("  child: ", child.name, " is Character: ", child is Character)
-		if child is Character and child.state != null:
-			#print("    state: ", child.state, " faction: ", child.state.faction if child.state else "null state")
-			if child.state.faction == CharacterState.Faction.ENEMY:
-				child.camera = get_viewport().get_camera_3d()
-				child.state.grid_position = world_to_grid(child.position)
-				child.sanity_flipped.connect(_on_character_sanity_flipped)
-				characters.append(child)
-				#print("Registering direct enemy: ", child.data.unit_name, 
-						#" at world pos: ", child.position,
-						#" grid pos: ", child.state.grid_position,
-						#" enemy_code: ", enemy_code)
-				occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
-				#game_state.units.append(child)
-				if HEALTH_BAR_ENEMY != null:
-					var health_bar := HEALTH_BAR_ENEMY.instantiate()
-					child.add_child(health_bar)
+	# Register directly placed enemy scenes
+	for child in find_children("*", "Character", true, false):
+		if not child is Character or child.state == null:
+			continue
+		child.camera = get_viewport().get_camera_3d()
+		child.state.grid_position = world_to_grid(child.position)
+		if not child.sanity_flipped.is_connected(_on_character_sanity_flipped):
+			child.sanity_flipped.connect(_on_character_sanity_flipped)
+		occupancy_map.set_cell_item(child.state.grid_position, enemy_code)
+		if HEALTH_BAR_ENEMY != null:
+			var health_bar := HEALTH_BAR_ENEMY.instantiate()
+			child.add_child(health_bar)
+		match child.state.faction:
+			CharacterState.Faction.ENEMY:
+				enemy_characters.append(child)
+			CharacterState.Faction.NEUTRAL:
+				neutral_characters.append(child)
+		characters.append(child)
+	# END Register directly placed enemy scenes
+		
+	_check_for_victory_trigger()
 	
 	game_state = GameState.from_level(self)
 	state_machine = StateMachine.new()
@@ -1276,6 +1267,7 @@ func CheckVictoryConditions() -> void:
 ##Removing unwanted occupants and resetting movement of characters
 func next_level() -> void:
 	print("next_level() in level.gd triggered!")
+	# Checking if objectives are done
 	if _level_complete:
 		return
 	_level_complete = true
@@ -1284,53 +1276,55 @@ func next_level() -> void:
 		print("Standalone test complete - returning to menu")
 		get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
 		return
-	cleanup_characters_before_load()
 	
-	## NOTE: Uncomment to add healing between levels.
-	# Healing units between levels
-	#for i in Main.characters.size():
-		#Main.characters[i].state.current_health = Main.characters[i].state.max_health;
-	
-	## NOTE: SAVE GAME HAPPENS HERE
-	var surviving_chars : Array[Character] = []
-	for c in characters:
-		if c != null and c.state.is_alive:
-			surviving_chars.append(c)
-	Main.characters = surviving_chars
-	Main.save.save_progress(Main.current_save_slot, Main.current_level_index + 1)
+	Main.save.save_progress(Main.current_save_slot, Main.current_level_index)
 	Main.go_to_transition_screen()
+	#print("Before cleanup - Main.characters: ", Main.characters.size())
+	#print("Before cleanup - level.characters: ", characters.size())
+	#cleanup_characters_before_load()
+	#
+	### NOTE: Uncomment to add healing between levels.
+	## Healing units between levels
+	##for i in Main.characters.size():
+		##Main.characters[i].state.current_health = Main.characters[i].state.max_health;
+	#
+	### NOTE: SAVE GAME HAPPENS HERE
+	#print("Before surviving_chars - characters size: ", characters.size())
+	#print("Before surviving_chars - Main.characters size: ", Main.characters.size())
+	#var surviving_chars : Array[Character] = []
+	#for c in player_characters:
+		#if c != null and c.state.is_alive:
+			#surviving_chars.append(c)
+			#print("  Surviving: ", c.data.unit_name, " is_enemy: ", c.state.is_enemy())
+	#print("After surviving_chars size: ", surviving_chars.size())
+	#Main.characters = surviving_chars
+	#print("Main.characters after assignment: ", Main.characters.size())
+	#Main.save.save_progress(Main.current_save_slot, Main.current_level_index + 1)
+	#Main.go_to_transition_screen()
 
 
-func cleanup_characters_before_load() -> void:
-	## Reset position state for player units
+#func cleanup_characters_before_load() -> void:
+	### Reset position state for player units
+	##for child in Main.world.get_children():
+		##if child is Character and not child.state.is_enemy():
+			##child.state.grid_position = Vector3i(0, 0, 0)
+			##child.position = Vector3.ZERO
+			##
+	## Remove enemies spawned via GridMap from the world
+	## This is not needed if we start placing enemy scenes directly into the world
 	#for child in Main.world.get_children():
-		#if child is Character and not child.state.is_enemy():
-			#child.state.grid_position = Vector3i(0, 0, 0)
-			#child.position = Vector3.ZERO
-			#
-	# Remove enemies spawned via GridMap from the world
-	# This is not needed if we start placing enemy scenes directly into the world
-	for child in Main.world.get_children():
-		if child is Character and child.state.is_enemy():
-			Main.world.remove_child(child)
-			child.queue_free()
-	# This always remains
-	characters.clear()
+		#if child is Character and child.state.is_enemy():
+			#Main.world.remove_child(child)
+			#child.queue_free()
+	## This always remains
+	#characters.clear()
 	
 func trigger_game_over() -> void:
-	#is_in_menu = true
-	#var ui := get_tree().get_first_node_in_group("ui_controller")
-	#if ui:
-		#ui.hide()
-	#game_over_screen.show()
 	state_machine.transition_to(StateGameOver.new())
-
 
 func _on_character_sanity_flipped(character: Character) -> void:
 	print("heyaaa, we just flipped sanity")
 	emit_signal("character_stats_changed", character)
-	#characters.erase(character)
-
 
 func interpolate_to(target_transform:Transform3D, _delta:float) -> void:
 	camera_controller.set_pivot_target_transform(target_transform)
