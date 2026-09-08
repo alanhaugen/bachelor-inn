@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dr3w65v4wgubf"]
+
+[ext_resource type="Script" uid="uid://b8dwte7l37p5f" path="res://scripts/MissionObjectives/objective_reach_tile.gd" id="1_8gbmw"]
+
+[node name="ObjectiveReachTile" type="Node" unique_id=324799803]
+script = ExtResource("1_8gbmw")
