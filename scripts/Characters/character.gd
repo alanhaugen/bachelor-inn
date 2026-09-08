@@ -260,7 +260,6 @@ func calc_derived_stats() -> void:
 		state.current_health = state.max_health
 	if state.current_sanity <= 0:
 		state.current_sanity = state.max_sanity
-	
 	## TODO: decide if we want to have an auto equip class weapon.
 	#if state.weapon == null or state.weapon.weapon_id == "unarmed":
 		#var weapon_id := get_default_weapon_id()
@@ -268,25 +267,26 @@ func calc_derived_stats() -> void:
 
 
 func update_derived_stats_after_level_up() -> void:
-	if data == null:
-		return
-	state.defense = 4 + data.endurance
-	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
-	state.movement = 4 + data.speed
-	state.stability = max(1, data.focus - data.mind)
-	
-	var new_max_health := int(4 + data.endurance + floor(data.strength / 2.0))
-	var new_max_sanity := int(state.resistance + data.mind)
-	
-	if state.current_health == state.max_health:
-		state.current_health = new_max_health
-	state.max_health = new_max_health
-	
-	if state.current_sanity == state.max_sanity or state.current_sanity == new_max_sanity - 1:
-		state.max_sanity = new_max_sanity
-		state.current_sanity = new_max_sanity
-	else:
-		state.max_sanity = new_max_sanity
+	calc_derived_stats()
+	#if data == null:
+		#return
+	#state.defense = 4 + data.endurance
+	#state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
+	#state.movement = 4 + data.speed
+	#state.stability = max(1, data.focus - data.mind)
+	#
+	#var new_max_health := int(4 + data.endurance + floor(data.strength / 2.0))
+	#var new_max_sanity := int(state.resistance + data.mind)
+	#
+	#if state.current_health == state.max_health:
+		#state.current_health = new_max_health
+	#state.max_health = new_max_health
+	#
+	#if state.current_sanity == state.max_sanity or state.current_sanity == new_max_sanity - 1:
+		#state.max_sanity = new_max_sanity
+		#state.current_sanity = new_max_sanity
+	#else:
+		#state.max_sanity = new_max_sanity
 
 func _ready() -> void:
 	if state:
