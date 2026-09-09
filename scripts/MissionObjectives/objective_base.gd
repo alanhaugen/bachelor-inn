@@ -15,7 +15,10 @@ func on_objective_complete() -> void:
 	is_complete = true
 	print("Objective complete: ", display_text)
 	#Main.level.CheckVictoryConditions()
-
+	
+func disconnect_signals() -> void:
+	pass  # override in each objective to disconnect its specific signals
+	
 func _setup() -> void:
 	pass  # override in each objective type
 

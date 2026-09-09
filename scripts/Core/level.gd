@@ -1256,6 +1256,10 @@ func next_level() -> void:
 		return
 	_level_complete = true
 	
+	var objectives := get_tree().get_nodes_in_group("objectives")
+	for o in objectives:
+		o.disconnect_signals()
+		
 	if Main.is_standalone_test:
 		print("Standalone test complete - returning to menu")
 		get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")

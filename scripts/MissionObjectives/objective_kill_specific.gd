@@ -14,3 +14,7 @@ func _on_character_died(character: Character) -> void:
 	if character.data.unit_name != target_unit_name:
 		return
 	on_objective_complete()
+
+func disconnect_signals() -> void:
+	if Main.level.character_died.is_connected(_on_character_died):
+		Main.level.character_died.disconnect(_on_character_died)

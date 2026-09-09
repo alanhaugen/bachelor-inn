@@ -20,3 +20,7 @@ func _on_character_died(character: Character) -> void:
 			return
 	on_objective_complete()	
 	#is_complete = true
+
+func disconnect_signals() -> void:
+	if Main.level.character_died.is_connected(_on_character_died):
+		Main.level.character_died.disconnect(_on_character_died)

@@ -33,3 +33,9 @@ func _on_stats_changed(character: Character) -> void:
 		print("NPC reference acquired: ", npc.data.unit_name)
 	else:
 		print("Faction not player: ", character.state.faction)
+
+func disconnect_signals() -> void:
+	if Main.level.character_died.is_connected(_on_character_died):
+		Main.level.character_died.disconnect(_on_character_died)
+	if Main.level.character_stats_changed.is_connected(_on_stats_changed):
+		Main.level.character_stats_changed.disconnect(_on_stats_changed)

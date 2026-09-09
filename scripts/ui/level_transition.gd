@@ -17,8 +17,6 @@ func _setup_ui() -> void:
 	for c in Main.characters:
 		if c != null:
 			c.state.unspent_attribute_points += c.state.attribute_points_per_level
-		if c == null:
-			continue
 		var card := UNIT_CARD.instantiate() as UnitCard
 		$VBoxContainer/UnitContainer.add_child(card)
 		card.setup(c)

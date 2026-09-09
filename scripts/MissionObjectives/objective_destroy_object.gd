@@ -17,3 +17,7 @@ func _on_character_died(character: Character) -> void:
 		return
 	print("Objective destroyed - running 'on_objective_complete' from DestroyObject.")
 	on_objective_complete()
+
+func disconnect_signals() -> void:
+	if Main.level.character_died.is_connected(_on_character_died):
+		Main.level.character_died.disconnect(_on_character_died)
