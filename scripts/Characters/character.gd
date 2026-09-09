@@ -118,37 +118,7 @@ func clone() -> Character:
 func _on_sanity_changed(_in_sanity : int) -> void:
 	if !(state.current_sanity <= 0 and state.is_alive):
 		return
-	#state.faction = CharacterState.Faction.ENEMY
-	#data.unit_name = data.unit_name + "'thulhu"
-	#health_bar = health_bar_enemy
-	#health_bar_ally.hide()
-	#health_bar_enemy.show()
-		
-	#TODO:
 	
-	
-	##Create an enemy character instance based of this character
-	#var CorruptedChar : Character = load("res://scenes/Characters/Horror_Scene.tscn").instantiate();
-	#
-	##State
-	#CorruptedChar.state = state;
-	#CorruptedChar.state.current_health = CorruptedChar.state.max_health
-	#CorruptedChar.state.faction = CorruptedChar.state.Faction.ENEMY;
-	#CorruptedChar.state.is_moved = true;
-	#CorruptedChar.state.is_ability_used = false;
-	#CorruptedChar.state.is_alive = true;
-	##Data
-	#CorruptedChar.data = data;
-		#
-	#die(false);
-	#if CorruptedChar.get_parent() != Main.world:
-		#Main.world.add_child(CorruptedChar)
-	#Main.level.characters.append(CorruptedChar)
-	#Main.level.game_state.units.append(CorruptedChar)
-		#
-	#CorruptedChar.position = position
-		#
-	#Main.level.occupancy_map.set_cell_item(state.grid_position, 6)
 	var pos : Vector3i = state.grid_position
 	var pre_corrupted_data : CharacterData = data
 	var pre_corrupted_state : CharacterState = state
@@ -162,7 +132,6 @@ func _on_sanity_changed(_in_sanity : int) -> void:
 	CorruptedChar.state.is_moved = true;
 	CorruptedChar.state.is_ability_used = false;
 	CorruptedChar.data.unit_name += "'thulhu"
-	#CorruptedChar.position = position
 
 
 func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
@@ -268,57 +237,20 @@ func calc_derived_stats() -> void:
 
 func update_derived_stats_after_level_up() -> void:
 	calc_derived_stats()
-	#if data == null:
-		#return
-	#state.defense = 4 + data.endurance
-	#state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
-	#state.movement = 4 + data.speed
-	#state.stability = max(1, data.focus - data.mind)
-	#
-	#var new_max_health := int(4 + data.endurance + floor(data.strength / 2.0))
-	#var new_max_sanity := int(state.resistance + data.mind)
-	#
-	#if state.current_health == state.max_health:
-		#state.current_health = new_max_health
-	#state.max_health = new_max_health
-	#
-	#if state.current_sanity == state.max_sanity or state.current_sanity == new_max_sanity - 1:
-		#state.max_sanity = new_max_sanity
-		#state.current_sanity = new_max_sanity
-	#else:
-		#state.max_sanity = new_max_sanity
 
 func _ready() -> void:
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
-	
 	calc_derived_stats()
-	
 	if not state.is_playable() and state.faction != CharacterState.Faction.NEUTRAL:
 		state.faction = CharacterState.Faction.ENEMY;
-	# should remake the entire level up 
-	#level_up_popup = LEVEL_UP_POPUP.instantiate();
-	#add_child(level_up_popup);
-	#level_up_popup.hide();
-	#level_up_popup.name_label = data.unit_name;
-	#calibrate_level_popup();
-	
-#	skill_choose_popup = SKILL_CHOOSE_POPUP.instantiate()
-#	add_child(skill_choose_popup)
-#	skill_choose_popup.text = data.unit_name + ", " + CharacterData.Speciality.keys()[data.speciality]
-#	skill_choose_popup.hide()
-	
 	play(idle_animation)
-	
 	camera = get_viewport().get_camera_3d()
-
 
 func _process(delta: float) -> void:
 	if current_animation == null:
 		return
-	
 	frame_timer += delta
-	
 	if frame_timer >= 1.0 / current_animation.fps:
 		frame_timer = 0.0
 		frame_index = (frame_index + 1) % (current_animation.frame_columns * current_animation.frame_rows)
@@ -405,10 +337,8 @@ func die(simulate_only : bool) -> void:
 			get_parent().remove_child(self)
 		queue_free.call_deferred()
 
-
 func print_stats() -> void:
 	print(save());
-
 
 func save() -> Dictionary:
 	return {
@@ -416,7 +346,6 @@ func save() -> Dictionary:
 		"data": data.save(),
 		"state": state.save()
 	}
-
 
 ## This func is used inside the next function - ensure_weapon_equipped()
 ## Gives characters their base weapon based on speciality.
