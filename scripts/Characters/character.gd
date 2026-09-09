@@ -289,12 +289,23 @@ func reset() -> void:
 	Main.level.emit_signal("character_stats_changed", self)
 
 
-## Importing this to attack.gd
+## TODO: Import this to attack.gd?
 func apply_damage(amount: int, simulate_only: bool = false, 
 	_source: Character = null, _label: String = "") -> bool:
 	amount = int(amount)
 	if amount <= 0:
 		return false
+	
+	## Turn hostile if attacked
+	if not simulate_only and state.turns_hostile_when_attacked:
+		if state.faction == CharacterState.Faction.NEUTRAL:
+			state.faction = CharacterState.Faction.ENEMY
+			Main.level.check_aggro()
+			Main.level.enemy_characters.append(self)
+			Main.level.neutral_characters.erase(self)
+			#Main.level.game_state = GameState.from_level(Main.level) 	#<-- This is more robust
+			Main.level.game_state.units.append(self) 					#<-- This is cheaper
+			Main.level.occupancy_map.set_cell_item(state.grid_position, Main.level.enemy_code)
 	
 	## Health reduced here 
 	state.current_health = max(0, state.current_health - amount)

@@ -168,6 +168,13 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 				include_hero_tiles_in_output, include_monster_tiles_in_output,
 				go_through_empty_tiles, include_empty_tiles_in_output)
 			
+			# NOTE: Allows attacks of neutral units
+			for u in game_state.units:
+				if u.state.faction == CharacterState.Faction.NEUTRAL:
+					var dist: int = abs(u.state.grid_position.x - start.x) + abs(u.state.grid_position.z - start.z)
+					if dist >= min_depth and dist <= max_depth:
+						targets.append(u.state.grid_position)
+			
 		CharacterState.Faction.ENEMY:
 			
 			var consider_terrain_cost : bool = false
