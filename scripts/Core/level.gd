@@ -1213,14 +1213,7 @@ func CheckTriggerConditions() -> void:
 
 func CheckVictoryConditions() -> void:
 	# Check for defeat of all player units
-	var player_units_alive := false
-	for c in characters:
-		if c == null:
-			continue
-		if not c.state.is_enemy() and c.state.is_alive:
-			player_units_alive = true
-			break
-	if not player_units_alive:
+	if player_characters.is_empty():
 		trigger_game_over()
 		return
 	
@@ -1228,40 +1221,24 @@ func CheckVictoryConditions() -> void:
 	var objectives := get_tree().get_nodes_in_group("objectives")
 	if objectives.is_empty():
 		return
+	
+	var groups: Dictionary = {}
 	for o in objectives:
-		if not o.is_optional and not o.is_complete:
+		if not groups.has(o.objective_group):
+			groups[o.objective_group] = []
+		groups[o.objective_group].append(o)#o.is_optional and not o.is_complete:
+	
+	for group: Array in groups.values():
+		var group_complete := false
+		for o: ObjectiveBase in group:
+			if not o.is_optional and o.is_complete:
+				group_complete = true
+				break
+		if not group_complete:
 			return
+	
 	next_level()
 
-	## Next_level() should not run here, but in the stat screen after button is pressed
-	## Victory conditions should just freeze the game, unload, and add an intermed screen / load screen
-	#var units :Array[Vector3i] = occupancy_map.get_used_cells();
-	#var numberOfPlayerUnits :int = 0;
-	#var numberOfEnemyUnits  :int = 0;
-	#print("Victory check — occupied cells: ", units.size())
-	#for i in units.size():
-		#var pos :Vector3i = units[i];
-		#var cell_item : int = occupancy_map.get_cell_item(pos)
-		#print("  pos: ", pos, " code: ", cell_item, " enemy_code: ", enemy_code)
-		#if cell_item == player_code or cell_item == player_code_done:
-			#if get_trigger_name(pos) == "00_Victory":
-				#is_player_turn = true;
-				#next_level();
-				#return;
-			#numberOfPlayerUnits += 1;
-		#elif cell_item == 2:
-			#continue
-		#elif cell_item >= enemy_code:
-			#numberOfEnemyUnits += 1;
-	#
-	#if (numberOfPlayerUnits == 0):
-		#trigger_game_over()
-	#elif (numberOfEnemyUnits == 0 and not level_has_victory_trigger):
-		#is_player_turn = true;
-		#next_level();
-		#return;
-
-##Removing unwanted occupants and resetting movement of characters
 func next_level() -> void:
 	print("next_level() in level.gd triggered!")
 	if _level_complete:	# Checking if objectives are done
@@ -1278,45 +1255,6 @@ func next_level() -> void:
 			c.calc_derived_stats()
 	Main.save.save_progress(Main.current_save_slot, Main.current_level_index +1)
 	Main.go_to_transition_screen()
-	#print("Before cleanup - Main.characters: ", Main.characters.size())
-	#print("Before cleanup - level.characters: ", characters.size())
-	#cleanup_characters_before_load()
-	#
-	### NOTE: Uncomment to add healing between levels.
-	## Healing units between levels
-	##for i in Main.characters.size():
-		##Main.characters[i].state.current_health = Main.characters[i].state.max_health;
-	#
-	### NOTE: SAVE GAME HAPPENS HERE
-	#print("Before surviving_chars - characters size: ", characters.size())
-	#print("Before surviving_chars - Main.characters size: ", Main.characters.size())
-	#var surviving_chars : Array[Character] = []
-	#for c in player_characters:
-		#if c != null and c.state.is_alive:
-			#surviving_chars.append(c)
-			#print("  Surviving: ", c.data.unit_name, " is_enemy: ", c.state.is_enemy())
-	#print("After surviving_chars size: ", surviving_chars.size())
-	#Main.characters = surviving_chars
-	#print("Main.characters after assignment: ", Main.characters.size())
-	#Main.save.save_progress(Main.current_save_slot, Main.current_level_index + 1)
-	#Main.go_to_transition_screen()
-
-
-#func cleanup_characters_before_load() -> void:
-	### Reset position state for player units
-	##for child in Main.world.get_children():
-		##if child is Character and not child.state.is_enemy():
-			##child.state.grid_position = Vector3i(0, 0, 0)
-			##child.position = Vector3.ZERO
-			##
-	## Remove enemies spawned via GridMap from the world
-	## This is not needed if we start placing enemy scenes directly into the world
-	#for child in Main.world.get_children():
-		#if child is Character and child.state.is_enemy():
-			#Main.world.remove_child(child)
-			#child.queue_free()
-	## This always remains
-	#characters.clear()
 	
 func trigger_game_over() -> void:
 	state_machine.transition_to(StateGameOver.new())

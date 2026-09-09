@@ -3,6 +3,7 @@ class_name ObjectiveBase
 
 @export var display_text: String = ""
 @export var is_optional: bool = false
+@export var objective_group: int = 0
 
 var is_complete: bool = false
 
