@@ -816,6 +816,10 @@ func _input(event: InputEvent) -> void:
 						pass
 					elif state_machine.current is StateMenu:
 						pass
+					elif state_machine.current is StateAnimating:
+						pass
+					elif state_machine.current is StateLevelComplete:
+						pass
 					else:
 						state_machine.push(StateMenu.new())
 						get_viewport().set_input_as_handled() ## block multiple instances of input
@@ -1936,6 +1940,10 @@ func _recruit_neutral_units() -> void:
 		Main.characters.append(c)
 		occupancy_map.set_cell_item(c.state.grid_position, player_code)
 		
+		if c.get_parent() != Main.world:
+			c.get_parent().remove_child(c)
+			Main.world.add_child(c)
+			
 		#var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
 		var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
 		if def != null:

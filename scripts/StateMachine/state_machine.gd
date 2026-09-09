@@ -18,7 +18,7 @@ func transition_to(new_state: LevelState) -> void:
 func push(new_state: LevelState) -> void:
 	if not _stack.is_empty():
 		_stack.back().exit(owner)
-		_stack.clear()
+		#_stack.clear()
 	_stack.append(new_state)
 	new_state.enter(owner)
 

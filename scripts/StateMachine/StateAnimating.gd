@@ -6,6 +6,7 @@ var _cancelled: bool = false
 
 func enter(level: Node) -> void:
 	print("ENTER STATE: StateAnimating.")
+	_cancelled = false
 	_is_processing = false
 
 func exit(level: Node) -> void:
