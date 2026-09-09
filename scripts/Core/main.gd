@@ -61,6 +61,7 @@ func unload_level() -> void:
 	level = null
 
 func next_level() -> void:
+	print("next_level() in main.gd triggered!")
 	var next_index := current_level_index + 1
 	if next_index >= levels.size():
 		get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
@@ -192,8 +193,8 @@ func get_current_entry() -> LevelEntry:
 func go_to_transition_screen() -> void:
 	print("go_to_transition_screen called")
 	if is_instance_valid(Main.level):
-		Main.level.is_in_menu = true
-		Main.level.state_machine.push(StateMenu.new())
+		#Main.level.is_in_menu = true
+		Main.level.state_machine.push(StateLevelComplete.new())
 		print("Going to Transition Screen. Instance Main.level is valid.")
 	var packed := load("res://scenes/states/level_transition.tscn")
 	transition_screen = packed.instantiate()

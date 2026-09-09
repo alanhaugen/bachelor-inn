@@ -2,6 +2,7 @@ extends LevelState
 class_name StateAnimating
 
 var _is_processing: bool = false
+var _cancelled: bool = false
 
 func enter(level: Node) -> void:
 	print("ENTER STATE: StateAnimating.")
@@ -9,14 +10,23 @@ func enter(level: Node) -> void:
 
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateAnimating.")
-	level.movement_map.clear()
+	_cancelled = true
 	_is_processing = false
+	level.moves_stack.clear()
+	level.animation_path.clear()
+	level.active_move = null
+	level.wait_for_camera = false
 
 func handle_input(level: Node, event: InputEvent) -> void:
 	## Ignore all inputs except pause, which runs from level.gd
 	pass 
 
 func update(level: Node, delta: float) -> void:
+	if _cancelled:
+		return
+	if level._level_complete:
+		return
+		
 	if not level.animation_path.is_empty():
 		_move_along_path(level, delta)
 		return
@@ -56,10 +66,16 @@ func _process_next_move(level: Node) -> void:
 	level.active_move.prepare(level.game_state)
 	if level.active_move is CastSkill:
 		await level.combat_vfx.play_skill(level.active_move.result)
+		if _cancelled:
+			return
 	else:
 		await level.combat_vfx.play_attack(level.active_move.result)
+		if _cancelled:
+			return
 	level.active_move.apply_damage(level.game_state)
-	
+	if _cancelled:
+		return
+		
 	if level.is_player_turn:
 		level.active_move = Wait.new(level.active_move.end_pos)
 	
@@ -85,6 +101,8 @@ func _process_next_move(level: Node) -> void:
 			level.timer.start(level.post_enemy_attack_wait)
 			await level.timer.timeout
 			level.wait_for_camera = false
+			if _cancelled:
+				return
 		for character: Character in Main.characters:
 			if character == null:
 				continue
@@ -93,6 +111,8 @@ func _process_next_move(level: Node) -> void:
 
 func _finish_animation(level: Node) -> void:
 	print("_finish_animation called, _level_complete: ", level._level_complete)
+	if _cancelled:
+		return
 	if level._level_complete:
 		return
 	

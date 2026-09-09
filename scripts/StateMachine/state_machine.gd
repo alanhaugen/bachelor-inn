@@ -33,6 +33,7 @@ func pop() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if current != null:
+		#print("_process ticking: ", current.get_script().resource_path)
 		current.update(owner, delta)
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -1198,6 +1198,7 @@ func CheckTriggerConditions() -> void:
 				o.is_complete = true
 			elif o is ObjectiveReachTile:
 				o.is_complete = true
+		print("Checking Victory Conditions.")
 		CheckVictoryConditions()
 	
 	var adjacent := [
@@ -1252,7 +1253,12 @@ func CheckVictoryConditions() -> void:
 
 func next_level() -> void:
 	print("next_level() in level.gd triggered!")
+	var stack := get_stack()
+	#print("next_level() in level.gd triggered from: ")
+	for i in stack.size():
+		print("  ", stack[i])
 	if _level_complete:	# Checking if objectives are done
+		#print("Blocked by _level_complete")
 		return
 	_level_complete = true
 	
@@ -1264,6 +1270,8 @@ func next_level() -> void:
 		print("Standalone test complete - returning to menu")
 		get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
 		return
+	 # Brief delay before transitioning
+	await get_tree().create_timer(1.0).timeout
 	
 	for c in Main.characters:
 		if is_instance_valid(c):
