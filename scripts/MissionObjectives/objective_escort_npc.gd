@@ -20,9 +20,16 @@ func _on_character_died(character: Character) -> void:
 		Main.level.trigger_game_over()
 
 func _on_stats_changed(character: Character) -> void:
+	print("ObjectiveEscortNpc stats changed: ", character.data.unit_name, 
+		  " faction: ", character.state.faction)
 	if npc != null:
+		print("NPC already set: ", npc.data.unit_name)
 		return
 	if character.data.unit_name != target_npc_name:
+		print("Name mismatch: ", character.data.unit_name, " != ", target_npc_name)
 		return
 	if character.state.faction == CharacterState.Faction.PLAYER:
 		npc = character
+		print("NPC reference acquired: ", npc.data.unit_name)
+	else:
+		print("Faction not player: ", character.state.faction)

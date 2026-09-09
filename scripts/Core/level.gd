@@ -1183,7 +1183,8 @@ func CheckTriggerConditions() -> void:
 			return
 		_recruit_neutral_units()
 		print("Recruit trigger activated.")
-	elif get_trigger_name(pos) == "00_Vicotry":
+	elif get_trigger_name(pos) == "00_Victory":
+		print("Victory tile triggered by: ", selected_unit.data.unit_name if selected_unit else "null")
 		if not selected_unit:
 			return
 		var objectives := get_tree().get_nodes_in_group("objectives")
@@ -1917,6 +1918,7 @@ func _recruit_neutral_units() -> void:
 		
 		c.state.is_recruitable = false  # prevent double recruit
 		c.state.faction = CharacterState.Faction.PLAYER
+		Main.level.emit_signal("character_stats_changed", c)
 		c.scene_id = c.data.unit_name.to_lower()
 		player_characters.append(c)  # add to dedicated player array
 		Main.characters.append(c)
