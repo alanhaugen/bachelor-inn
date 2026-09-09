@@ -1178,6 +1178,11 @@ func CheckTriggerConditions() -> void:
 			return
 		triggered_positions.append(pos)
 		Tutorial.advance_timeline()
+	elif get_trigger_name(pos) == "04_Trigger4":
+		if not selected_unit:
+			return
+		_recruit_neutral_units()
+		print("Recruit trigger activated.")
 	elif get_trigger_name(pos) == "00_Vicotry":
 		if not selected_unit:
 			return
@@ -1905,30 +1910,34 @@ func _recruit_neutral_units() -> void:
 		if c == null:
 			print("null c in characters found.")
 			continue
-		if c.state.faction == CharacterState.Faction.NEUTRAL:
-			c.state.faction = CharacterState.Faction.PLAYER
-			c.scene_id = c.data.unit_name.to_lower()
-			
-			var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
-			if def != null:
-				c.state.skills = def.base_state.skills.duplicate()
-				print("Loaded ", c.state.skills.size(), " skills for: ", c.data.unit_name)
-			else:
-				push_error("No definition found for: " + c.data.unit_name)
-			
-			Main.characters.append(c)
-			occupancy_map.set_cell_item(c.state.grid_position, player_code)
-	
+		if c.state.faction != CharacterState.Faction.NEUTRAL:
+			continue
+		if not c.state.is_recruitable:
+			continue
+		
+		c.state.is_recruitable = false  # prevent double recruit
+		c.state.faction = CharacterState.Faction.PLAYER
+		c.scene_id = c.data.unit_name.to_lower()
+		player_characters.append(c)  # add to dedicated player array
+		Main.characters.append(c)
+		occupancy_map.set_cell_item(c.state.grid_position, player_code)
+		
+		#var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
+		var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
+		if def != null:
+			c.state.skills = def.base_state.skills.duplicate()
+			print("Loaded ", c.state.skills.size(), " skills for: ", c.data.unit_name)
+		else:
+			push_error("No definition found for: " + c.data.unit_name)
+		
+		print("Recruited: ", c.data.unit_name)
+		
 	game_state = GameState.from_level(self)
+	
 	for ch in characters:
 		if ch != null and ch.state.faction == CharacterState.Faction.PLAYER:
 			player_chars.append(ch)
-			print("Emitting party_updated with: ", player_chars.size(), " characters")
-			emit_signal("party_updated", player_chars)
-			print("Recruited: ", ch.data.unit_name)
-
-	print("No neutral units found to recruit")
-
+	emit_signal("party_updated", player_chars)
 
 func _start_hold(key: Key, duration: float, action: Callable) -> void:
 	_held_key = key

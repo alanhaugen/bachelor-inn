@@ -32,6 +32,7 @@ signal level_changed(new_level: int)
 @export var attribute_points_per_level : = 3
 @export var unspent_attribute_points : int = 0
 @export var hostile_when_attacked: bool = false
+@export var is_recruitable: bool = false
 
 # --- SKILLS ---
 @export var skills: Array[Skill] = []

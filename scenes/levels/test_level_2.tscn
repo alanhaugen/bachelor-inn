@@ -12,6 +12,7 @@
 [sub_resource type="Resource" id="Resource_cr05x"]
 script = ExtResource("4_qd2ch")
 unit_name = "Boss"
+endurance = 10
 metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 
 [sub_resource type="Resource" id="Resource_cmsp8"]
