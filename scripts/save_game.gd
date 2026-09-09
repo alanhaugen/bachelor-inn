@@ -264,8 +264,8 @@ func load_tutorial() -> void:
 
 
 func save_progress(save_slot: int, level_index: int) -> void:
-	print("save_progress called from: ", get_stack()[1])
-	print("save_progress called. slot: ", save_slot, " level: ", level_index, " units: ", Main.characters.size())
+	#print("save_progress called from: ", get_stack()[1])
+	#print("save_progress called. slot: ", save_slot, " level: ", level_index, " units: ", Main.characters.size())
 	for c in Main.characters:
 		if c != null:
 			print("  Saving unit: ", c.data.unit_name)

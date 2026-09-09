@@ -38,6 +38,7 @@ var my_outline_material : ShaderMaterial = null
 
 @onready var sprite : Sprite3D = $Sprite
 @onready var outline : Sprite3D = $Outline
+@onready var placeholder_sprite: Sprite3D = $PlaceholderSprite
 #endregion
 
 #region packed scenes
@@ -239,12 +240,15 @@ func update_derived_stats_after_level_up() -> void:
 	calc_derived_stats()
 
 func _ready() -> void:
+	if placeholder_sprite:
+		placeholder_sprite.hide() # TODO: Remove this before release
 	if state:
 		state.sanity_changed.connect(_on_sanity_changed)
 	calc_derived_stats()
 	if not state.is_playable() and state.faction != CharacterState.Faction.NEUTRAL:
 		state.faction = CharacterState.Faction.ENEMY;
-	play(idle_animation)
+	if idle_animation != null:
+		play(idle_animation)
 	camera = get_viewport().get_camera_3d()
 
 func _process(delta: float) -> void:
@@ -296,8 +300,8 @@ func apply_damage(amount: int, simulate_only: bool = false,
 	if amount <= 0:
 		return false
 	
-	## Turn hostile if attacked
-	if not simulate_only and state.turns_hostile_when_attacked:
+	# Turn hostile if attacked
+	if not simulate_only and state.hostile_when_attacked:
 		if state.faction == CharacterState.Faction.NEUTRAL:
 			state.faction = CharacterState.Faction.ENEMY
 			Main.level.check_aggro()

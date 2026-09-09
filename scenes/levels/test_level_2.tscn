@@ -56,7 +56,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.917633, 0.83604145, 2.8136
 [node name="Enemies" type="Node" parent="." index="19" unique_id=498756491]
 
 [node name="Bird" parent="Enemies" index="0" unique_id=159367408 instance=ExtResource("3_goahl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 1.5, -25)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 1.5, -25)
 data = SubResource("Resource_cr05x")
 state = SubResource("Resource_cmsp8")
 

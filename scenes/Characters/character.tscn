@@ -76,3 +76,6 @@ transparency = 0.44
 cast_shadow = 0
 pixel_size = 0.001
 texture = ExtResource("5_1qt5x")
+
+[node name="PlaceholderSprite" type="Sprite3D" parent="." unique_id=166425312]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0662484, 0)

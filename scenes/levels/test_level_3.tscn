@@ -37,6 +37,12 @@ visible = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.523437, 1.1100497, -45.864563)
 visible = true
 
+[node name="CameraSettings" parent="." index="16" unique_id=2146881514]
+minimum_camera_x = -500.0
+maximum_camera_x = 500.0
+minimum_camera_z = -500.0
+maximum_camera_z = 500.0
+
 [node name="FireParticles" type="Node" parent="." index="18" unique_id=2082013519]
 
 [node name="FireParticle" parent="FireParticles" index="0" unique_id=189617330 instance=ExtResource("2_ubi2b")]

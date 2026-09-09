@@ -7,6 +7,7 @@
 [ext_resource type="Resource" uid="uid://b711yumqmi5qb" path="res://art/Animations/Enemies/Bird/Bird_Moving_D.tres" id="5_0eoxd"]
 [ext_resource type="Resource" uid="uid://f5ypnq3b1pdl" path="res://art/Animations/Enemies/Bird/Bird_Idle.tres" id="6_1jur1"]
 [ext_resource type="Texture2D" uid="uid://dts8poisflgnq" path="res://art/textures/Bird_portrait.png" id="7_4ogl1"]
+[ext_resource type="Texture2D" uid="uid://bfqraamr3mk7h" path="res://art/Animations/Enemies/Ghost/NewTextures/D_bird_Idle_Base_.png" id="8_0biy3"]
 
 [node name="Character" unique_id=159367408 instance=ExtResource("1_djitj")]
 run_left_animation = ExtResource("2_0biy3")
@@ -22,3 +23,7 @@ transform = Transform3D(10, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711
 
 [node name="Outline" parent="." index="1" unique_id=53410441]
 transform = Transform3D(10, 0, 0, 0, 2.5711505, 3.0641778, 0, -3.0641778, 2.5711505, 0, 0.67509294, -0.53662795)
+
+[node name="PlaceholderSprite" parent="." index="3" unique_id=166425312]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 1.0662484, 0)
+texture = ExtResource("8_0biy3")

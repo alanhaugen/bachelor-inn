@@ -15,4 +15,5 @@ func _on_character_died(character: Character) -> void:
 		return
 	if character.data.unit_name != target_object_name:
 		return
+	print("Objective destroyed - running 'on_objective_complete' from DestroyObject.")
 	on_objective_complete()

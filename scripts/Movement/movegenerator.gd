@@ -116,6 +116,11 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 			var seen_pairs: Dictionary = {}
 
 			var opponents : Array[Character] = state.get_enemies()
+			for u in state.get_neutral_objects():
+				opponents.append(u)
+			print("Total opponents including neutrals: ", opponents.size())
+			for o in opponents:
+				print("  opponent: ", o.data.unit_name, " at: ", o.state.grid_position)
 			for opponent : Character in opponents:
 				if opponent == null:
 					continue
@@ -172,6 +177,9 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 			for u in game_state.units:
 				if u.state.faction == CharacterState.Faction.NEUTRAL:
 					var dist: int = abs(u.state.grid_position.x - start.x) + abs(u.state.grid_position.z - start.z)
+					print("Neutral unit found: ", u.data.unit_name, " dist=", dist, 
+						" min=", min_depth, " max=", max_depth,
+						" in_range=", dist >= min_depth and dist <= max_depth)
 					if dist >= min_depth and dist <= max_depth:
 						targets.append(u.state.grid_position)
 			

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://lyjbjkqx6pmj"]
+
+[ext_resource type="Script" uid="uid://c3xxj5stgpwig" path="res://scripts/Characters/character.gd" id="1_kbki6"]
+[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="2_lqvfa"]
+[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="3_uwtpk"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="4_x8kou"]
+[ext_resource type="Texture2D" uid="uid://dq67utu1106hd" path="res://art/textures/enemy1.png" id="5_uwtpk"]
+
+[sub_resource type="Resource" id="Resource_hhnvj"]
+script = ExtResource("2_lqvfa")
+unit_name = "MissionObject"
+endurance = 15
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_1qs0i"]
+script = ExtResource("3_uwtpk")
+faction = 2
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_kbki6"]
+
+[node name="DestructibleObject" type="Node3D" unique_id=1165998711]
+script = ExtResource("1_kbki6")
+data = SubResource("Resource_hhnvj")
+state = SubResource("Resource_1qs0i")
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=753668024]
+
+[node name="Sprite" type="Sprite3D" parent="." unique_id=1971449054]
+transform = Transform3D(2, 0, 0, 0, 1.4142135, 1.4142135, 0, -1.4142135, 1.4142135, 0, 0.5, 0)
+texture = ExtResource("5_uwtpk")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1521113715]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1368014094]
+shape = SubResource("BoxShape3D_kbki6")

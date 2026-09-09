@@ -222,3 +222,12 @@ func get_enemies() -> Array[Character]:
 		if u.state.is_enemy() == !is_current_player_enemy:
 			output.append(u)
 	return output
+
+func get_neutral_objects() -> Array[Character]:
+	var output: Array[Character] = []
+	for u in units:
+		if u == null:
+			continue
+		if u.state.faction == CharacterState.Faction.NEUTRAL:
+			output.append(u)
+	return output

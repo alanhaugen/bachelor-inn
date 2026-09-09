@@ -24,23 +24,30 @@ scene_path = "res://scenes/levels/tutorial_3.tscn"
 flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
+[sub_resource type="Resource" id="Resource_1ye6v"]
+script = ExtResource("1_doxni")
+display_name = "Destroy The Object"
+scene_path = "res://scenes/levels/test_level_4.tscn"
+flavor_text = "Monstah"
+metadata/_custom_type_script = "uid://clh7qtku5w0x4"
+
 [sub_resource type="Resource" id="Resource_fjq50"]
 script = ExtResource("1_doxni")
-display_name = "Test - Kill All Enemies"
+display_name = "Kill All Enemies"
 scene_path = "res://scenes/levels/test_level_1.tscn"
 flavor_text = "Flavah flavah"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_t2b0q"]
 script = ExtResource("1_doxni")
-display_name = "Test - Kill The Boss"
+display_name = "Kill The Boss"
 scene_path = "res://scenes/levels/test_level_2.tscn"
 flavor_text = "Flavorful text"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [sub_resource type="Resource" id="Resource_o7ag5"]
 script = ExtResource("1_doxni")
-display_name = "Test - Save The Unit"
+display_name = "Save The Unit"
 scene_path = "res://scenes/levels/test_level_3.tscn"
 flavor_text = "Flavorful"
 metadata/_custom_type_script = "uid://clh7qtku5w0x4"
@@ -75,5 +82,5 @@ metadata/_custom_type_script = "uid://clh7qtku5w0x4"
 
 [resource]
 script = ExtResource("2_7i6ev")
-levels = Array[ExtResource("1_doxni")]([SubResource("Resource_5fr2v"), SubResource("Resource_jendm"), SubResource("Resource_mh2pn"), SubResource("Resource_fjq50"), SubResource("Resource_t2b0q"), SubResource("Resource_o7ag5"), SubResource("Resource_doxni"), SubResource("Resource_7i6ev"), SubResource("Resource_fgg7y"), SubResource("Resource_ensw0")])
+levels = Array[ExtResource("1_doxni")]([SubResource("Resource_5fr2v"), SubResource("Resource_jendm"), SubResource("Resource_mh2pn"), SubResource("Resource_1ye6v"), SubResource("Resource_fjq50"), SubResource("Resource_t2b0q"), SubResource("Resource_o7ag5"), SubResource("Resource_doxni"), SubResource("Resource_7i6ev"), SubResource("Resource_fgg7y"), SubResource("Resource_ensw0")])
 metadata/_custom_type_script = "uid://cxpf6awrsq5lp"

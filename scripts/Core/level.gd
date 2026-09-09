@@ -273,6 +273,9 @@ func _ready() -> void:
 	_check_for_victory_trigger()
 	
 	game_state = GameState.from_level(self)
+	print("GameState units: ", game_state.units.size())
+	for u in game_state.units:
+		print("  - ", u.data.unit_name, " faction: ", u.state.faction)
 	state_machine = StateMachine.new()
 	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(state_machine)
@@ -743,11 +746,12 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 			found_move = cmd
 		elif cmd is Attack and cmd.attack_pos == pos:
 			found_attack = cmd
-	
+	print("Clicked: ", pos, " found_move: ", found_move != null, " found_attack: ", found_attack != null)
 	movement_map.clear()
 
 	# MOVE HAS PRIORITY
 	if found_move != null:
+		print("Executing MOVE to: ", pos)
 		active_move = found_move
 		moves_stack.append(active_move)
 		camera_controller.focus_camera(selected_unit)
@@ -756,6 +760,7 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 		return "move"
 
 	elif found_attack != null:
+		print("Executing ATTACK on: ", pos)
 		active_move = found_attack
 		show_attack_tiles(pos)
 		return "attack"
