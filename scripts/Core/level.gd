@@ -21,6 +21,7 @@ signal party_updated(characters: Array[Character])
 signal character_died(character: Character)
 #region end
 
+@onready var battle_log: Label = $BattleLog
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 @export var level_name :String
 var ai_controller: AIController = AIController.new()
@@ -31,49 +32,39 @@ var trigger_grid : Grid
 var fog_grid : Grid
 var movement_grid : MovementGrid
 var movement_weights_grid : Grid
-
-@onready var battle_log: Label = $BattleLog
-#@onready var state_machine: StateMachine = $StateMachine
 var state_machine: StateMachine
 
-#cursor testing
+#region cursors
 #const CURSOR_SWORD = preload("uid://ddogsq0mua2ft")
+@onready var cursor: Sprite3D = $Cursor
 @onready var cursor_sword : Texture2D = preload("res://art/textures/cursor_sword.png")
 @onready var cursor_hand : Texture2D = preload("res://art/textures/cursor_hand.png")
 @onready var cursor_boot : Texture2D = preload("res://art/textures/cursor_boot.png") #
 @onready var cursor_wand : Texture2D = preload("res://art/textures/cursor_wand.png")
 var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
-#cursor testing end
-@onready var cursor: Sprite3D = $Cursor
+#region end
+
 @onready var terrain_map: GridMap = %TerrainGrid
 @onready var occupancy_map: GridMap = %OccupancyOverlay
 @onready var movement_map: GridMap = %MovementOverlay
-#Movement_map shows visually all of the pathing, but does not do logic
 @onready var movement_weights_map: GridMap = %MovementWeightsGrid
 @onready var trigger_map: GridMap = %TriggerOverlay
 @onready var path_map: GridMap = $PathOverlay
-#path_map is used for logic purposes, checking whether the selected space is a valid target
 @onready var fog_map: GridMap = $FogOverlay
+
 @onready var turn_transition: CanvasLayer = $TurnTransition/CanvasLayer
 @onready var turn_transition_animation_player: AnimationPlayer = $TurnTransition/AnimationPlayer
-
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
-#@onready var portrait_pop_up: PortraitPopup = $PortraitPopUp
-#@onready var loot_popup : LootPopup = $LootPopUp
-#@onready var skill_pop_up: SkillPopup = $SkillPopUp
-@onready var skill_popup: SkillPopup = get_tree().get_first_node_in_group("skill_pop_up")
+
 var portrait_pop_up: PortraitPopup
 var loot_popup : LootPopup
 var skill_loot_popup : SkillPopup
 var pause_menu: PauseMenu
-
-
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
 var has_window_open : bool = false
 var mission_context: MissionContext = MissionContext.new()
-
 var player_characters: Array[Character] = []   # refs to Main.characters, placed this level
 var enemy_characters: Array[Character] = []    # enemies, destroyed at level end
 var neutral_characters: Array[Character] = []  # escorts, NPCs etc
@@ -81,30 +72,17 @@ var characters: Array[Character] = []          # all of the above combined, for 
 
 var selected_unit: Character = null
 var last_selected_unit: Character = null
-var selected_enemy_unit: Character = null
 var active_skill: Skill = null
-var skill_caster: Character = null ## The one using ability
+var skill_caster: Character = null 
 var skill_target_pos: Vector3i 
 var is_choosing_skill_target: bool = false
 var is_choosing_skill_attack_origin: bool = false
-var valid_skill_target_tiles: Dictionary = {} ## For abilities/spells
-#var move_popup: Control;
-#var stat_popup_player: Control;
-#var side_bar_array : Array[SideBar];
-#var stat_popup_enemy: Control;
+var valid_skill_target_tiles: Dictionary = {} 
 var completed_moves :Array[Command];
-
-#var characters: Array[Character];
-
-## For TriggerOverlay and Dialogic
-var triggered_positions: Array[Vector3i] = []
+var triggered_positions: Array[Vector3i] = [] ## NOTE: For avoiding double triggers with TriggerOverlay and Dialogic
 
 const GAME_UI = preload("res://scenes/userinterface/Level/InGameUI_WIP.tscn")
-#var in_game_ui: Control
-#const STATS_POPUP = preload("res://scenes/userinterface/pop_up.tscn")
-#const MOVE_POPUP = preload("res://scenes/userinterface/move_popup.tscn")
 const CHEST_SCENE = preload("res://scenes/grid_items/chest.tscn")
-#const SIDE_BAR = preload("res://scenes/userinterface/sidebar.tscn")
 const PLAYER: PackedScene = preload("res://scenes/Characters/Player/alfred.tscn"); ## TODO:
 const EMIL: PackedScene = preload("res://scenes/Characters/Player/Emil.tscn")
 const LUCY: PackedScene = preload("res://scenes/Characters/Player/Char_Lucy.tscn")
@@ -120,23 +98,11 @@ var game_over_screen: Control
 const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 const HEALTH_BAR_ENEMY := preload("res://scenes/userinterface/Level/health_bar_enemy_overhead.tscn")
 
-var animation_path :Array[Vector3];
-var is_animation_just_finished :bool = false;
-var patrol_paths: Dictionary[String, PatrolPath] = {}
-#var chests: Dictionary[Vector3i, Chest] = {}
-var chests: Dictionary = {}
-var pending_chest_weapon: Weapon = null
-var neutral_units: Dictionary[Vector3i, NeutralUnit] = {}
-var neutral_spawn_index: int = 0 ## placeholder var for iterating over netural spawn nodes
-
-enum States {
-	PLAYING,
-	ANIMATING,
-	TRANSITION,
-	CHOOSING_ATTACK };
-var state :int = States.PLAYING;
 var game_state : GameState;
-
+var animation_path :Array[Vector3];
+var patrol_paths: Dictionary[String, PatrolPath] = {}
+var chests: Dictionary = {}
+#var pending_chest_weapon: Weapon = null
 var is_in_menu: bool = false
 var active_move: Command
 var moves_stack: Array[Command]
@@ -149,8 +115,6 @@ var player_code_done: int = 3
 var enemy_code: int = 1
 var attack_code: int = 0
 var move_code: int = 1
-
-var is_enemy_turn: bool = false
 var skill_target_code: int = 0
 
 #region Camera
@@ -158,7 +122,7 @@ var camera_controller : CameraController
 const post_enemy_move_wait : float = 0.1
 const post_enemy_attack_wait : float = 0.4
 const pre_enemy_turn_wait : float = 0.2
-var wait_timer : float = 0.0
+#var wait_timer : float = 0.0
 @onready var timer : Timer = $Timer
 var wait_for_camera : bool = false
 #endregion
@@ -170,33 +134,6 @@ var _hold_duration: float = 1.0
 var _hold_action: Callable = Callable()
 var _key_consumed: bool = false
 #endregion
-
-var monster_names := [
-	"Xathog-Ruun",
-	"Ylthuun",
-	"Thozra’el",
-	"Khar’Neth",
-	"Ulmaggoth",
-	"Sleeper",
-	"The Thing",
-	"He Who Watches",
-	"The Drowned",
-	"Crawling Silence",
-	"Alien",
-	"Zhae’kul-ith",
-	"Qor’thaal",
-	"Nyss-Vek",
-	"Hrr’kath",
-	"Vool-Xir",
-	"Borrowed Faces",
-	"The Unfinished",
-	"Echo",
-	"Sec'Mat",
-	"Unfinished projects",
-	"d'ave",
-	"mar'k",
-	"Cringe Memory",
-]
 
 func _ready() -> void:
 	_level_complete = false
@@ -692,17 +629,13 @@ func _is_invalid_tile(pos: Vector3i) -> bool:
 
 
 func can_handle_ui_input() -> bool:
-	var valid_states: Array[Script] = [StateSelectingUnit, StateSelectingMove, StateChoosingAttack, StateChoosingSkill]
+	var valid_states: Array[Script] = [StateSelectingUnit, StateSelectingMove, StateChoosingAttack, StateChoosingSkill, StateChoosingSkillOrigin]
 	var is_interactive: = false
 	for s : Script in valid_states:
 		if is_instance_of(state_machine, s):
 			is_interactive = true
 			break
-	return(
-		is_player_turn
-		and state == States.PLAYING
-		and not is_in_menu
-	)
+	return is_player_turn and is_interactive and not is_in_menu
 
 
 func try_select_unit(unit: Character) -> void:
@@ -840,13 +773,86 @@ func _input(event: InputEvent) -> void:
 			elif _key_consumed:
 				_key_consumed = false
 
-func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
-	var new_enemy: Character = null
-
-	match unit_id:
-		"01_Enemy":
-			#new_enemy = PLAYER.instantiate()
+#func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
+	#var new_enemy: Character = null
+#
+	#match unit_id:
+		#"01_Enemy":
+			##new_enemy = PLAYER.instantiate()
+			##
+			##var data := CharacterData.new()
+			##var c_state := CharacterState.new()
+			##c_state.faction = CharacterState.Faction.ENEMY
+			##
+			##new_enemy.data = data
+			##new_enemy.state = c_state
+			##new_enemy.data.unit_name = monster_names.pick_random()
+			#var neutral_scene: PackedScene
+			#var neutral_name: String
+	#
+			#match neutral_spawn_index:
+				#0:
+					#neutral_scene = LUCY
+					#neutral_name = "Lucy"
+				#1:
+					#neutral_scene = EMIL
+					#neutral_name = "Emil"
+				#_:
+					#neutral_scene = LUCY
+					#neutral_name = "Lucy"
 			#
+			#neutral_spawn_index += 1
+			#new_enemy = neutral_scene.instantiate()
+			#var data := CharacterData.new()
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.NEUTRAL
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+			#new_enemy.data.unit_name = neutral_name
+			#if new_enemy.data.unit_name == "Lucy":
+				#var weapon : Weapon = WeaponRegistry.get_weapon("sword_basic")
+				#if weapon != null:
+					#c_state.weapon = weapon
+				#else:
+					#push_error("sword_basic not found in WeaponRegistry")
+			#elif new_enemy.data.unit_name == "Emil":
+				#var weapon : Weapon = WeaponRegistry.get_weapon("bow_basic")
+				#if weapon != null:
+					#c_state.weapon = weapon
+				#else:
+					#push_error("sword_basic not found in WeaponRegistry")
+#
+		#"02_Chest":
+			#var chest := CHEST_SCENE.instantiate()
+			#chest.position = grid_to_world(pos)
+			#add_child(chest)
+		#
+		#"03_UnitDone":
+			#new_enemy = EMIL.instantiate()
+			#var data := CharacterData.new()
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.NEUTRAL
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+#
+		#"04_EnemyBird":
+			##var def: EnemyDefinitions = preload("res://Data/Characters/Enemies/Def_E_Bird.tres")
+			#new_enemy = BIRD_ENEMY.instantiate()
+			##new_enemy = def.scene.instantiate()
+			##new_enemy.data = def.base_data.duplicate()
+			##new_enemy.state = def.base_state.duplicate()
+			#var data := CharacterData.new()
+			#data.speed += 4;
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.ENEMY
+			#
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+			#new_enemy.data.unit_name = monster_names.pick_random()
+			#print("Spawned: ", new_enemy.data.unit_name, " ai_mode: ", new_enemy.state.ai_mode, " bt_profile: ", new_enemy.state.bt_profile)
+		#
+		#"05_EnemyGhost":
+			#new_enemy = GHOST_ENEMY.instantiate()
 			#var data := CharacterData.new()
 			#var c_state := CharacterState.new()
 			#c_state.faction = CharacterState.Faction.ENEMY
@@ -854,122 +860,49 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 			#new_enemy.data = data
 			#new_enemy.state = c_state
 			#new_enemy.data.unit_name = monster_names.pick_random()
-			var neutral_scene: PackedScene
-			var neutral_name: String
-	
-			match neutral_spawn_index:
-				0:
-					neutral_scene = LUCY
-					neutral_name = "Lucy"
-				1:
-					neutral_scene = EMIL
-					neutral_name = "Emil"
-				_:
-					neutral_scene = LUCY
-					neutral_name = "Lucy"
-			
-			neutral_spawn_index += 1
-			new_enemy = neutral_scene.instantiate()
-			var data := CharacterData.new()
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.NEUTRAL
-			new_enemy.data = data
-			new_enemy.state = c_state
-			new_enemy.data.unit_name = neutral_name
-			if new_enemy.data.unit_name == "Lucy":
-				var weapon : Weapon = WeaponRegistry.get_weapon("sword_basic")
-				if weapon != null:
-					c_state.weapon = weapon
-				else:
-					push_error("sword_basic not found in WeaponRegistry")
-			elif new_enemy.data.unit_name == "Emil":
-				var weapon : Weapon = WeaponRegistry.get_weapon("bow_basic")
-				if weapon != null:
-					c_state.weapon = weapon
-				else:
-					push_error("sword_basic not found in WeaponRegistry")
-
-		"02_Chest":
-			var chest := CHEST_SCENE.instantiate()
-			chest.position = grid_to_world(pos)
-			add_child(chest)
-		
-		"03_UnitDone":
-			new_enemy = EMIL.instantiate()
-			var data := CharacterData.new()
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.NEUTRAL
-			new_enemy.data = data
-			new_enemy.state = c_state
-
-		"04_EnemyBird":
-			#var def: EnemyDefinitions = preload("res://Data/Characters/Enemies/Def_E_Bird.tres")
-			new_enemy = BIRD_ENEMY.instantiate()
-			#new_enemy = def.scene.instantiate()
-			#new_enemy.data = def.base_data.duplicate()
-			#new_enemy.state = def.base_state.duplicate()
-			var data := CharacterData.new()
-			data.speed += 4;
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY
-			
-			new_enemy.data = data
-			new_enemy.state = c_state
-			new_enemy.data.unit_name = monster_names.pick_random()
-			print("Spawned: ", new_enemy.data.unit_name, " ai_mode: ", new_enemy.state.ai_mode, " bt_profile: ", new_enemy.state.bt_profile)
-		
-		"05_EnemyGhost":
-			new_enemy = GHOST_ENEMY.instantiate()
-			var data := CharacterData.new()
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY
-			
-			new_enemy.data = data
-			new_enemy.state = c_state
-			new_enemy.data.unit_name = monster_names.pick_random()
-
-		"06_EnemyMonster":
-			new_enemy = HORROR_ENEMY.instantiate()
-			var data := CharacterData.new()
-			data.endurance += 6;
-			data.strength += 6;
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY
-			
-			new_enemy.data = data
-			new_enemy.state = c_state
-			new_enemy.data.unit_name = monster_names.pick_random()
-			
-		"07_InsaneCharacter":
-			new_enemy = CORRUPTED_PLAYER_RED.instantiate()
-			var data := CharacterData.new()
-			data.endurance += 6;
-			data.strength += 6;
-			var c_state := CharacterState.new()
-			c_state.faction = CharacterState.Faction.ENEMY
-			
-			new_enemy.data = data
-			new_enemy.state = c_state
-			new_enemy.data.unit_name = monster_names.pick_random()
-			
-		_:
-			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
-
-	if new_enemy:
-		new_enemy.position = grid_to_world(pos)
-		if new_enemy.get_parent() != Main.world:
-			Main.world.add_child(new_enemy)
-		characters.append(new_enemy)
-		if(!_on_ready):
-			game_state.units.append(new_enemy)
-			occupancy_map.set_cell_item(pos, 6)
-		if new_enemy is Character:
-			new_enemy.state.grid_position = pos
-			new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
-			if new_enemy.state.faction == CharacterState.Faction.ENEMY:
-				var health_bar := HEALTH_BAR_ENEMY.instantiate()
-				new_enemy.add_child(health_bar)
-	return new_enemy
+#
+		#"06_EnemyMonster":
+			#new_enemy = HORROR_ENEMY.instantiate()
+			#var data := CharacterData.new()
+			#data.endurance += 6;
+			#data.strength += 6;
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.ENEMY
+			#
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+			#new_enemy.data.unit_name = monster_names.pick_random()
+			#
+		#"07_InsaneCharacter":
+			#new_enemy = CORRUPTED_PLAYER_RED.instantiate()
+			#var data := CharacterData.new()
+			#data.endurance += 6;
+			#data.strength += 6;
+			#var c_state := CharacterState.new()
+			#c_state.faction = CharacterState.Faction.ENEMY
+			#
+			#new_enemy.data = data
+			#new_enemy.state = c_state
+			#new_enemy.data.unit_name = monster_names.pick_random()
+			#
+		#_:
+			#occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
+#
+	#if new_enemy:
+		#new_enemy.position = grid_to_world(pos)
+		#if new_enemy.get_parent() != Main.world:
+			#Main.world.add_child(new_enemy)
+		#characters.append(new_enemy)
+		#if(!_on_ready):
+			#game_state.units.append(new_enemy)
+			#occupancy_map.set_cell_item(pos, 6)
+		#if new_enemy is Character:
+			#new_enemy.state.grid_position = pos
+			#new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
+			#if new_enemy.state.faction == CharacterState.Faction.ENEMY:
+				#var health_bar := HEALTH_BAR_ENEMY.instantiate()
+				#new_enemy.add_child(health_bar)
+	#return new_enemy
 
 func spawn_corrupted_character(pos : Vector3i) -> Character:
 	var new_enemy: Character = CORRUPTED_PLAYER_RED.instantiate()
@@ -980,7 +913,7 @@ func spawn_corrupted_character(pos : Vector3i) -> Character:
 	c_state.faction = CharacterState.Faction.ENEMY
 	new_enemy.data = data
 	new_enemy.state = c_state
-	new_enemy.data.unit_name = monster_names.pick_random()
+	new_enemy.data.unit_name = MonsterNames.pick_random()
 	
 	new_enemy.position = grid_to_world(pos)
 	if new_enemy.get_parent() != Main.world:
@@ -1044,22 +977,22 @@ func reset_all_units() -> void:
 			character_script.reset();
 
 
-func MoveAI() -> void:
-	var ai := MinimaxAI.new();
-	var current_state := GameState.from_level(self);
-	
-	if current_state.has_enemy_moves():
-		var move : Command = ai.choose_best_move(current_state, 1);
-		moves_stack.append(move);
-		current_state = current_state.apply_move(move, true);
-	
-	if (moves_stack.is_empty() == false):
-		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		state = States.ANIMATING;
-		camera_controller.focus_camera(selected_unit)
-	else:
-		camera_controller.set_pivot_target_translate(Main.characters.front().position)
-		camera_controller.free_camera()
+#func MoveAI() -> void:
+	#var ai := MinimaxAI.new();
+	#var current_state := GameState.from_level(self);
+	#
+	#if current_state.has_enemy_moves():
+		#var move : Command = ai.choose_best_move(current_state, 1);
+		#moves_stack.append(move);
+		#current_state = current_state.apply_move(move, true);
+	#
+	#if (moves_stack.is_empty() == false):
+		#create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
+		#state = States.ANIMATING;
+		#camera_controller.focus_camera(selected_unit)
+	#else:
+		#camera_controller.set_pivot_target_translate(Main.characters.front().position)
+		#camera_controller.free_camera()
 
 #func MoveSingleAI() -> void:
 	#var any_active_enemies := false
@@ -1406,18 +1339,6 @@ func _exit_skill_target_mode() -> void:
 	if is_instance_valid(caster):
 		print("Selecting caster: " + caster.name)
 		select_unit(caster)
-		
-
-## TODO: Delete? Redundant due to StateMachine
-func _cancel_attack_choice_mode() -> void:
-	is_choosing_skill_attack_origin = false
-	state = States.PLAYING
-	path_map.clear()
-	active_move = null
-	var attacker := selected_unit
-	if attacker != null and attacker.state.is_moved == false:
-		select_unit(attacker)
-
 
 func _is_valid_target(unit: Character, skill: Skill, caster: Character) -> bool:
 	if unit == null or skill == null or caster == null:
