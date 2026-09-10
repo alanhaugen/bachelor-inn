@@ -831,49 +831,6 @@ func _input(event: InputEvent) -> void:
 			elif _key_consumed:
 				_key_consumed = false
 
-
-#func _unhandled_input(event: InputEvent) -> void:
-	#if not _can_handle_input(event):
-		#return
-	#
-	#var pos: Vector3i = get_grid_cell_from_mouse()
-	#print(pos)
-#
-	#_update_cursor(pos)
-	#
-	#if is_choosing_skill_target == true:
-		#_handle_skill(pos)
-		#return;
-	#
-	## Attack selection phase
-	#if state == States.CHOOSING_ATTACK:
-		#_handle_attack_choice(pos)
-		#return
-#
-	#if _is_invalid_tile(pos):
-		#return
-#
-	## Player unit clicked
-	#if get_unit_name(pos) == CharacterStates.Player:
-		#_handle_player_click(pos)
-		#return
-#
-	## Clicked on movement/attack tile
-	#if movement_map.get_cell_item(pos) != GridMap.INVALID_CELL_ITEM:
-		#_handle_action_tile_click(pos)
-		#return
-#
-	## Clicked empty tile
-	#_clear_selection()
-#
-	## Enemy clicked (for info panel)
-	#if get_unit(pos) and get_unit(pos).state.faction == CharacterState.Faction.ENEMY:
-		#selected_enemy_unit = get_unit(pos)
-		#emit_signal("enemy_selected", selected_enemy_unit)
-		#print("hey an enemy has been selected ")
-
-
-
 func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> Character:
 	var new_enemy: Character = null
 
@@ -1005,6 +962,30 @@ func spawn_enemy(pos : Vector3i, unit_id : String, _on_ready : bool = false) -> 
 				new_enemy.add_child(health_bar)
 	return new_enemy
 
+func spawn_corrupted_character(pos : Vector3i) -> Character:
+	var new_enemy: Character = CORRUPTED_PLAYER_RED.instantiate()
+	var data := CharacterData.new()
+	data.endurance += 6;
+	data.strength += 6;
+	var c_state := CharacterState.new()
+	c_state.faction = CharacterState.Faction.ENEMY
+	new_enemy.data = data
+	new_enemy.state = c_state
+	new_enemy.data.unit_name = monster_names.pick_random()
+	
+	new_enemy.position = grid_to_world(pos)
+	if new_enemy.get_parent() != Main.world:
+		Main.world.add_child(new_enemy)
+	characters.append(new_enemy)
+	enemy_characters.append(new_enemy)
+	game_state.units.append(new_enemy)
+	occupancy_map.set_cell_item(pos, enemy_code)
+	new_enemy.state.grid_position = pos
+	new_enemy.sanity_flipped.connect(_on_character_sanity_flipped)
+	var health_bar := HEALTH_BAR_ENEMY.instantiate()
+	new_enemy.add_child(health_bar)
+	
+	return new_enemy
 
 func get_unit(pos: Vector3i) -> Character:
 	for i in range(characters.size()):
@@ -1167,7 +1148,7 @@ func _end_enemy_turn() -> void:
 	camera_controller.free_camera()
 	state_machine.transition_to(StateTurnTransition.new(true))
 
-func CheckTriggerConditions() -> void:
+func check_trigger_conditions() -> void:
 	if selected_unit == null:
 		return
 	
@@ -1208,8 +1189,6 @@ func CheckTriggerConditions() -> void:
 				o.is_complete = true
 			elif o is ObjectiveReachTile:
 				o.is_complete = true
-		print("Checking Victory Conditions.")
-		CheckVictoryConditions()
 	
 	var adjacent := [
 				pos + Vector3i(1, 0, 0),
@@ -1232,8 +1211,7 @@ func CheckTriggerConditions() -> void:
 				continue
 			_on_chest_opened(adj)
 
-
-func CheckVictoryConditions() -> void:
+func check_victory_conditions() -> void:
 	# Check for defeat of all player units
 	if player_characters.is_empty():
 		trigger_game_over()

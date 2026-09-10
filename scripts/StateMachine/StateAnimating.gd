@@ -117,8 +117,8 @@ func _finish_animation(level: Node) -> void:
 	if level._level_complete:
 		return
 	
-	level.CheckTriggerConditions()
-	level.CheckVictoryConditions()
+	level.check_trigger_conditions()
+	level.check_victory_conditions()
 	if not level.is_player_turn:
 		level.MoveSingleAI()
 	else:

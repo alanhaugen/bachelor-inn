@@ -254,7 +254,6 @@ func tutorial_set_aggro_range() -> void:
 func tutorial_end_turn() -> void:
 	if not Main.level.is_player_turn:
 		return
-	#if Main.level.state == Main.level.States.ANIMATING:
 	if Main.level.state_machine.current is StateAnimating:
 		return
 	Main.level.is_in_menu = false
