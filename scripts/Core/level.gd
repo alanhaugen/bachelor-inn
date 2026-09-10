@@ -1071,82 +1071,88 @@ func MoveAI() -> void:
 		camera_controller.set_pivot_target_translate(Main.characters.front().position)
 		camera_controller.free_camera()
 
-func MoveSingleAI() -> void:
-	var any_active_enemies := false
-	for unit in characters:
-		if unit == null:
-			continue
-		if not unit.state.is_enemy():
-			continue
-		if unit.state.aggro_state != CharacterState.AggroState.FROZEN:
-			any_active_enemies = true
-			break
-	
-	if not any_active_enemies:
-		_end_enemy_turn()
-		return
-	
-	var ai := MinimaxAI.new();
-	var current_state := GameState.from_level(self);
-	
-	for u in current_state.units:
-		if not u.state.is_enemy():
-			print("  Player in GameState: ", u.data.unit_name, 
-			" grid_pos=", u.state.grid_position,
-			" is_alive=", u.state.is_alive)
-			
-	print("GameState units count: ", current_state.units.size())
-	for u in current_state.units:
-		print("  - ", u.data.unit_name, " at ", u.state.grid_position, " is_enemy: ", u.state.is_enemy())
-	var currentEnemy : Character = null
-	for unit in characters:
-		if unit == null:
-			continue
-		if !unit.state.is_enemy():
-			continue
-		if unit.state.is_moved:
-			continue
-		currentEnemy = unit
-		break
-		
-	if currentEnemy == null:
-		_end_enemy_turn()
-		return
-		
-	match currentEnemy.state.aggro_state:
-		CharacterState.AggroState.FROZEN:
-			currentEnemy.state.is_moved = true
-			call_deferred("MoveSingleAI")
-			return
-		CharacterState.AggroState.AGGRESSIVE:
-			pass
-	
-	if currentEnemy != null:
-		var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
-		if current_state.has_enemy_moves(curEnemyPos):
-			#var move : Command = ai.choose_best_move(current_state, 3, currentEnemy); ## Old AI move gen
-			var move: Command = AIController.choose_move(currentEnemy, current_state, mission_context)
-			moves_stack.append(move);
-			current_state = current_state.apply_move(move, true);
-					
-	if (moves_stack.is_empty() == false):
-		create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
-		state_machine.transition_to(StateAnimating.new())
-		camera_controller.focus_camera(selected_unit)
-		wait_for_camera = true
-		timer.start(pre_enemy_turn_wait)
-		await timer.timeout
-		wait_for_camera = false
-	else:
-		var pivot_chara : Node3D = get_selectable_characters().front()
-		if (pivot_chara == null):
-			return
-		camera_controller.free_camera()
-		camera_controller.set_pivot_target_translate(pivot_chara.position)
-		if currentEnemy != null:
-			currentEnemy.state.is_moved = true
-		call_deferred("MoveSingleAI") ## "Manually" continue loop of Enemy AI
+#func MoveSingleAI() -> void:
+	#var any_active_enemies := false
+	#for unit in characters:
+		#if unit == null:
+			#continue
+		#if not unit.state.is_enemy():
+			#continue
+		#if unit.state.aggro_state != CharacterState.AggroState.FROZEN:
+			#any_active_enemies = true
+			#break
+	#
+	#if not any_active_enemies:
+		#_end_enemy_turn()
+		#return
+	#
+	#var ai := MinimaxAI.new();
+	#var current_state := GameState.from_level(self);
+	#
+	#for u in current_state.units:
+		#if not u.state.is_enemy():
+			#print("  Player in GameState: ", u.data.unit_name, 
+			#" grid_pos=", u.state.grid_position,
+			#" is_alive=", u.state.is_alive)
+			#
+	#print("GameState units count: ", current_state.units.size())
+	#for u in current_state.units:
+		#print("  - ", u.data.unit_name, " at ", u.state.grid_position, " is_enemy: ", u.state.is_enemy())
+	#var currentEnemy : Character = null
+	#for unit in characters:
+		#if unit == null:
+			#continue
+		#if !unit.state.is_enemy():
+			#continue
+		#if unit.state.is_moved:
+			#continue
+		#currentEnemy = unit
+		#break
+		#
+	#if currentEnemy == null:
+		#_end_enemy_turn()
+		#return
+		#
+	#match currentEnemy.state.aggro_state:
+		#CharacterState.AggroState.FROZEN:
+			#currentEnemy.state.is_moved = true
+			#call_deferred("MoveSingleAI")
+			#return
+		#CharacterState.AggroState.AGGRESSIVE:
+			#pass
+	#
+	#if currentEnemy != null:
+		#var curEnemyPos : NullablePosition = NullablePosition.new(currentEnemy.state.grid_position)
+		#if current_state.has_enemy_moves(curEnemyPos):
+			##var move : Command = ai.choose_best_move(current_state, 3, currentEnemy); ## Old AI move gen
+			#var move: Command = AIController.choose_move(currentEnemy, current_state, mission_context)
+			#moves_stack.append(move);
+			#current_state = current_state.apply_move(move, true);
+					#
+	#if (moves_stack.is_empty() == false):
+		#create_path(moves_stack.front().start_pos, moves_stack.front().end_pos); # a-star for pathfinding AI
+		#state_machine.transition_to(StateAnimating.new())
+		#camera_controller.focus_camera(selected_unit)
+		#wait_for_camera = true
+		#timer.start(pre_enemy_turn_wait)
+		#await timer.timeout
+		#wait_for_camera = false
+	#else:
+		#var pivot_chara : Node3D = get_selectable_characters().front()
+		#if (pivot_chara == null):
+			#return
+		#camera_controller.free_camera()
+		#camera_controller.set_pivot_target_translate(pivot_chara.position)
+		#if currentEnemy != null:
+			#currentEnemy.state.is_moved = true
+		#call_deferred("MoveSingleAI") ## "Manually" continue loop of Enemy AI
 
+# In level.gd — replaces MoveSingleAI()
+func MoveSingleAI() -> void:
+	AIController.run_enemy_turn(self)
+
+func _continue_enemy_turn() -> void:
+	AIController.run_enemy_turn(self)
 
 func _end_enemy_turn() -> void:
 	tick_all_units_end_round()
@@ -1842,7 +1848,7 @@ func hide_inactive_characters() -> void:
 		else:
 			unit.show()
 	
-	# This hides all but 1 unit when out of combat
+	# This hides all but 1 player unit when out of combat
 	## TODO: Add function to respawn units around unhidden unit when entering
 	##       combat.
 	#var first_shown := false
