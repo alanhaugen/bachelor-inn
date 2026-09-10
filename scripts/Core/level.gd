@@ -301,7 +301,7 @@ func get_selectable_characters() -> Array[Character]:
 	for c in player_characters:
 		if not is_instance_valid(c):
 			continue
-		if c.state.is_alive:
+		if not c.state.is_alive:
 			continue
 		result.append(c)
 	return result

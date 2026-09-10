@@ -107,6 +107,8 @@ func _process_next_move(level: Node) -> void:
 		for character: Character in level.characters:
 			if character == null:
 				continue
+			if not is_instance_valid(character):
+				continue
 			level.emit_signal("character_stats_changed", character)
 	_is_processing = false
 

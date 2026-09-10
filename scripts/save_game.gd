@@ -117,6 +117,7 @@ func create_new_save_in_slot(save_slot: int) -> void:
 		character.data = def.base_data.duplicate()
 		character.state = def.base_state.duplicate()
 		character.scene_id = id
+		character.calc_derived_stats()
 		units.append(character.save())
 
 	# Only overwrite the selected slot

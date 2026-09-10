@@ -33,6 +33,9 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	pass 
 
 func _on_animation_finished(anim_name: StringName, level: Node) -> void:
+	print("TurnTransition finished - to_player: ", _to_player, 
+		  " last_selected: ", level.last_selected_unit,
+		  " selectables: ", level.get_selectable_characters().size())
 	if level._level_complete:
 		return
 		

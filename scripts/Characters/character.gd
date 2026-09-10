@@ -349,6 +349,10 @@ func die(simulate_only : bool) -> void:
 		if state.is_playable():
 			Main.characters.erase(self)
 			Main.active_party.erase(scene_id)
+		Main.level.characters.erase(self)
+		Main.level.enemy_characters.erase(self)
+		Main.level.neutral_characters.erase(self)
+		Main.level.player_characters.erase(self)
 		Main.level.game_state.units.erase(self)
 		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
 		if get_parent() != null:
