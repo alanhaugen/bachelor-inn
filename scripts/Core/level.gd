@@ -23,7 +23,7 @@ signal character_died(character: Character)
 
 @onready var combat_vfx : CombatVFXController = $CombatVFXController
 @export var level_name :String
-
+var ai_controller: AIController = AIController.new()
 var terrain_grid : Grid
 var path_grid : Grid
 var occupancy_grid : Grid
@@ -1149,10 +1149,10 @@ func MoveAI() -> void:
 
 # In level.gd — replaces MoveSingleAI()
 func MoveSingleAI() -> void:
-	AIController.run_enemy_turn(self)
+	await ai_controller.run_enemy_turn(self)
 
 func _continue_enemy_turn() -> void:
-	AIController.run_enemy_turn(self)
+	await ai_controller.run_enemy_turn(self)
 
 func _end_enemy_turn() -> void:
 	tick_all_units_end_round()
