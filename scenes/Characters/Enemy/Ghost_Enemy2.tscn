@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bic1o0who0eyu" path="res://art/textures/Ghost_portrait.png" id="7_d8qiu"]
 [ext_resource type="Shader" uid="uid://b835tr2lyyio2" path="res://art/WIP/EdgeHighlightTest.gdshader" id="8_igut1"]
 [ext_resource type="Script" uid="uid://72a2wb5ktw46" path="res://scripts/Other/TransformSin.gd" id="9_kw7y1"]
+[ext_resource type="Texture2D" uid="uid://b3wwusx532va6" path="res://art/Animations/Enemies/Ghost/Texture/D_Idle_ghostwalkcycleanim_mask4.png" id="10_d5824"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_og36s"]
 render_priority = 0
@@ -47,3 +48,6 @@ script = ExtResource("9_kw7y1")
 [node name="Shadow" parent="." index="2" unique_id=2091232362]
 transform = Transform3D(10.268, 0, 0, 0, -2.3468644e-07, -4, 0, 5.369, -1.7484555e-07, 0, 0.07548618, -0.24753797)
 transparency = 0.45
+
+[node name="PlaceholderSprite" parent="." index="3" unique_id=166425312]
+texture = ExtResource("10_d5824")

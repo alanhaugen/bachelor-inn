@@ -51,17 +51,13 @@ visible = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.40905, 1.0350356, -33.83152)
 visible = true
 
-[node name="FireParticle" parent="." index="18" unique_id=449574270 instance=ExtResource("2_5idrc")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.917633, 0.83604145, 2.8136368)
-
-[node name="Enemies" type="Node" parent="." index="19" unique_id=498756491]
-
-[node name="Bird" parent="Enemies" index="0" unique_id=159367408 instance=ExtResource("3_goahl")]
+[node name="Bird" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="0" unique_id=159367408 instance=ExtResource("3_goahl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23, 1.5, -25)
 data = SubResource("Resource_cr05x")
 state = SubResource("Resource_cmsp8")
 
-[node name="MissionObjective" type="Node" parent="." index="20" unique_id=1516670593]
-
-[node name="ObjectiveKillSpecific" parent="MissionObjective" index="0" unique_id=89127788 instance=ExtResource("8_nwrgp")]
+[node name="ObjectiveKillSpecific" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="0" unique_id=89127788 instance=ExtResource("8_nwrgp")]
 target_unit_name = "Boss"
+
+[node name="FireParticle" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="0" unique_id=449574270 instance=ExtResource("2_5idrc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.917633, 0.83604145, 2.8136368)

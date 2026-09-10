@@ -62,52 +62,46 @@ maximum_camera_x = 500.0
 minimum_camera_z = -500.0
 maximum_camera_z = 500.0
 
-[node name="FireParticles" type="Node" parent="." index="18" unique_id=2082013519]
-
-[node name="FireParticle" parent="FireParticles" index="0" unique_id=189617330 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.923588, 5.2024255, -33.07689)
-
-[node name="FireParticle2" parent="FireParticles" index="1" unique_id=1905020104 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.89035, 5.2024255, -33.07689)
-
-[node name="FireParticle3" parent="FireParticles" index="2" unique_id=1302246021 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 6, -33)
-
-[node name="FireParticle4" parent="FireParticles" index="3" unique_id=2097194516 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(0.9999825, 0, 0.005916632, 0, 1, 0, -0.005916632, 0, 0.9999825, 21, 6, -33)
-
-[node name="FireParticle5" parent="FireParticles" index="4" unique_id=634302366 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.999977, 5.2024255, -41.16048)
-
-[node name="FireParticle6" parent="FireParticles" index="5" unique_id=1915100925 instance=ExtResource("2_ubi2b")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.963722, 5.2024255, -41.16048)
-
-[node name="Chests" type="Node" parent="." index="19" unique_id=1154804122]
-
-[node name="Chest" parent="Chests" index="0" unique_id=903149754 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1.5, -9)
-
-[node name="Chest2" parent="Chests" index="1" unique_id=2141605521 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1.5, -9)
-
-[node name="Chest3" parent="Chests" index="2" unique_id=1507058737 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 1.5, -19)
-
-[node name="Chest6" parent="Chests" index="3" unique_id=714224855 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, -19)
-
-[node name="Chest4" parent="Chests" index="4" unique_id=555708181 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -43)
-
-[node name="Chest5" parent="Chests" index="5" unique_id=34855807 instance=ExtResource("3_xcwdp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -47)
-
-[node name="MissionObjective" type="Node" parent="." index="20" unique_id=591183929]
-
-[node name="NPCRecruitable" parent="MissionObjective" index="0" unique_id=516576733 instance=ExtResource("4_ypoxe")]
+[node name="NPCRecruitable" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="0" unique_id=516576733 instance=ExtResource("4_ypoxe")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 5.5, -40)
 data = SubResource("Resource_10dhc")
 state = SubResource("Resource_7jw5c")
 
-[node name="ObjectiveEscortNpc" parent="MissionObjective" index="1" unique_id=1759247762 instance=ExtResource("8_46sh2")]
+[node name="ObjectiveEscortNpc" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="1" unique_id=1759247762 instance=ExtResource("8_46sh2")]
 target_npc_name = "Alfredo"
+
+[node name="Chest" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="0" unique_id=903149754 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 1.5, -9)
+
+[node name="Chest2" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="1" unique_id=2141605521 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19, 1.5, -9)
+
+[node name="Chest3" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="2" unique_id=1507058737 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 1.5, -19)
+
+[node name="Chest6" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="3" unique_id=714224855 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, -19)
+
+[node name="Chest4" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="4" unique_id=555708181 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -43)
+
+[node name="Chest5" parent="Chests" parent_id_path=PackedInt32Array(2019346901) index="5" unique_id=34855807 instance=ExtResource("3_xcwdp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43, 1.5, -47)
+
+[node name="FireParticle" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="0" unique_id=189617330 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.923588, 5.2024255, -33.07689)
+
+[node name="FireParticle2" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="1" unique_id=1905020104 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.89035, 5.2024255, -33.07689)
+
+[node name="FireParticle3" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="2" unique_id=1302246021 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 6, -33)
+
+[node name="FireParticle4" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="3" unique_id=2097194516 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(0.9999825, 0, 0.005916632, 0, 1, 0, -0.005916632, 0, 0.9999825, 21, 6, -33)
+
+[node name="FireParticle5" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="4" unique_id=634302366 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.999977, 5.2024255, -41.16048)
+
+[node name="FireParticle6" parent="FireParticles" parent_id_path=PackedInt32Array(1307088819) index="5" unique_id=1915100925 instance=ExtResource("2_ubi2b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.963722, 5.2024255, -41.16048)

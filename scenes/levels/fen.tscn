@@ -17,6 +17,11 @@
 [ext_resource type="ArrayMesh" uid="uid://bw8vrn7u0v5x5" path="res://art/meshes/Grass_Mesh.res" id="15_hwceo"]
 [ext_resource type="ArrayMesh" uid="uid://bn4keujttb355" path="res://art/meshes/Vine_2_mesh.res" id="16_vra1y"]
 [ext_resource type="ArrayMesh" uid="uid://27ji5g5op1n3" path="res://art/meshes/Vine_1_Mesh.res" id="17_pu2tq"]
+[ext_resource type="PackedScene" uid="uid://drpd1d805rfy5" path="res://scenes/Characters/Enemy/bird2.tscn" id="18_ms6rl"]
+[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="19_b35ld"]
+[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="20_cpycw"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="21_0o4ye"]
+[ext_resource type="PackedScene" uid="uid://cirnwlc7so3aq" path="res://scenes/Characters/Enemy/Ghost_Enemy2.tscn" id="22_b35ld"]
 
 [sub_resource type="FogMaterial" id="FogMaterial_2ubu0"]
 density = 8.0
@@ -243,6 +248,26 @@ turbulence_noise_strength = 4.95
 turbulence_noise_scale = 3.673
 turbulence_influence_max = 0.18800001
 
+[sub_resource type="Resource" id="Resource_eksy4"]
+script = ExtResource("19_b35ld")
+unit_name = "Bird"
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_rxrsm"]
+script = ExtResource("20_cpycw")
+faction = 1
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
+
+[sub_resource type="Resource" id="Resource_b35ld"]
+script = ExtResource("19_b35ld")
+unit_name = "Ghost"
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_cpycw"]
+script = ExtResource("20_cpycw")
+faction = 1
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
+
 [node name="FenLevel" unique_id=1364062222 instance=ExtResource("1_6w1qc")]
 level_name = "first fen edition"
 
@@ -259,7 +284,7 @@ data = {
 
 [node name="OccupancyOverlay" parent="." index="2" unique_id=1662628409]
 data = {
-"cells": PackedInt32Array(65529, 65534, 4, 65529, 65533, 5, 17, 65535, 0, 16, 65535, 0, 16, 0, 0, 15, 65535, 0, 15, 0, 0, 17, 65534, 0, 8, 65535, 5, 5, 0, 4, 2, 1, 6, 13, 0, 786437)
+"cells": PackedInt32Array(65529, 65534, 4, 65529, 65533, 5, 65532, 65534, 0, 65532, 65535, 0, 65533, 65535, 0, 65533, 65534, 0)
 }
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
@@ -538,3 +563,23 @@ mesh = ExtResource("16_vra1y")
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -16.233303, 0.7964392, 3.263589)
 mesh = ExtResource("17_pu2tq")
 skeleton = NodePath("../..")
+
+[node name="Character" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="0" unique_id=159367408 instance=ExtResource("18_ms6rl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 1)
+data = SubResource("Resource_eksy4")
+state = SubResource("Resource_rxrsm")
+
+[node name="Character2" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="1" unique_id=699185836 instance=ExtResource("18_ms6rl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, 0.5, -1)
+data = SubResource("Resource_eksy4")
+state = SubResource("Resource_rxrsm")
+
+[node name="Ghost_Enemy" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="2" unique_id=1339368304 instance=ExtResource("22_b35ld")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1, 0.5, -5)
+data = SubResource("Resource_b35ld")
+state = SubResource("Resource_cpycw")
+
+[node name="Ghost_Enemy2" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="3" unique_id=874109436 instance=ExtResource("22_b35ld")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.1, 0.5, -1)
+data = SubResource("Resource_b35ld")
+state = SubResource("Resource_cpycw")
