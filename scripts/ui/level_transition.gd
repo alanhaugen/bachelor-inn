@@ -15,12 +15,12 @@ func _setup_ui() -> void:
 	
 	## TODO: FIll in the "card slots" for each unit
 	for c in Main.characters:
-		if c != null:
-			c.state.unspent_attribute_points += c.state.attribute_points_per_level
+		if c == null:
+			continue
+		c.state.unspent_attribute_points += c.state.attribute_points_per_level
 		var card := UNIT_CARD.instantiate() as UnitCard
 		$VBoxContainer/UnitContainer.add_child(card)
 		card.setup(c)
-
 
 func _on_continue_button_pressed() -> void:
 	print("Continue pressed")
@@ -29,15 +29,11 @@ func _on_continue_button_pressed() -> void:
 			continue
 		if c.state.unspent_attribute_points > 0:
 			return
-	#if is_instance_valid(Main.level):
-		#Main.level.is_in_menu = false
 	Main.transition_screen.queue_free()
 	Main.transition_screen = null
 	Main.next_level()
 
-
 func update_continue_button() -> void:
-	## Order in "spend_skill_points()" in unit_card.gd is wrong, so the trigger cant happen atm.
 	for c in Main.characters:
 		c.state.level += 1
 		print("Level up! " + c.data.unit_name + " is now level " + str(c.state.level))

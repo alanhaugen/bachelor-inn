@@ -14,15 +14,6 @@ func _ready() -> void:
 	
 func _on_retry_button_pressed() -> void:
 	call_deferred("_load_retry")
-	#queue_free()
-	#if Tutorial.in_tutorial:
-		#Tutorial.current_tutorial_level = 1
-		#Tutorial.current_timeline = 1
-		##call_deferred("_load_retry")
-		#Main.save.load_tutorial()
-	#else:
-		#Main.save.read(Main.current_save_slot)
-
 
 func _load_retry() -> void:
 	print("_load_retry called")
@@ -35,17 +26,11 @@ func _load_retry() -> void:
 	else:
 		Main.save.read(Main.current_save_slot)
 
-
 func _on_back_button_pressed() -> void:
-	#Main.unload_level()
-	#Main.characters.clear()
-	#get_tree().change_scene_to_file("res://scenes/userinterface/Level/main_menu.tscn");
 	if is_instance_valid(Main.level):
-		Main.level.cleanup_characters_before_load()
 		Main.level.queue_free()
 		Main.level = null
 	Main.characters.clear()
-	#get_tree().change_scene_to_file("res://scenes/userinterface/Level/main_menu.tscn");
+	Main.active_party.clear()
+	Main.full_roster.clear()	
 	get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
-	# unload level
-	# open main menu

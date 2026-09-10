@@ -298,13 +298,11 @@ func world_to_grid(pos: Vector3) -> Vector3i:
 
 func get_selectable_characters() -> Array[Character]:
 	var result: Array[Character] =[]
-	for c in characters:
+	for c in player_characters:
 		if not is_instance_valid(c):
 			continue
-		if c.state.faction != CharacterState.Faction.PLAYER:
+		if c.state.is_alive:
 			continue
-		#if c.state.is_dead:
-			#continue
 		result.append(c)
 	return result
 
@@ -1061,7 +1059,7 @@ func _continue_enemy_turn() -> void:
 
 func _end_enemy_turn() -> void:
 	tick_all_units_end_round()
-	for c in Main.characters:
+	for c in characters:
 		if c == null:
 			continue
 		emit_signal("character_stats_changed", c)
@@ -1164,13 +1162,7 @@ func check_victory_conditions() -> void:
 	next_level()
 
 func next_level() -> void:
-	print("next_level() in level.gd triggered!")
-	var stack := get_stack()
-	#print("next_level() in level.gd triggered from: ")
-	for i in stack.size():
-		print("  ", stack[i])
-	if _level_complete:	# Checking if objectives are done
-		#print("Blocked by _level_complete")
+	if _level_complete:
 		return
 	_level_complete = true
 	
@@ -1182,7 +1174,7 @@ func next_level() -> void:
 		print("Standalone test complete - returning to menu")
 		get_tree().change_scene_to_file("res://scenes/userinterface/Menus/main_menu.tscn")
 		return
-	 # Brief delay before transitioning
+		
 	await get_tree().create_timer(1.0).timeout
 	
 	for c in Main.characters:
@@ -1811,14 +1803,16 @@ func _recruit_neutral_units() -> void:
 		Main.level.emit_signal("character_stats_changed", c)
 		c.scene_id = c.data.unit_name.to_lower()
 		player_characters.append(c)  # add to dedicated player array
+		if not Main.full_roster.has(c.scene_id):
+			Main.full_roster.append(c.scene_id)
+		Main.active_party.append(c.scene_id)
 		Main.characters.append(c)
 		occupancy_map.set_cell_item(c.state.grid_position, player_code)
 		
 		if c.get_parent() != Main.world:
 			c.get_parent().remove_child(c)
 			Main.world.add_child(c)
-			
-		#var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
+		
 		var def: CharacterDefinition = Main.save.registry.characters.get(c.data.unit_name.to_lower(), null)
 		if def != null:
 			c.state.skills = def.base_state.skills.duplicate()

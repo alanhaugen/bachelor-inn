@@ -19,7 +19,9 @@ const WORLD = preload("res://scenes/World/world.tscn")
 
 ## Character Units held by the gaming session 
 var selected_starting_character: String = "alfred" ## Default as alfred, if something goes wrong. 
-var characters: Array[Character];
+var full_roster: Array[String]
+var active_party: Array[String]
+var characters: Array[Character]
 
 ## All levels
 var levels: Array[LevelEntry];
@@ -67,29 +69,7 @@ func next_level() -> void:
 		get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
 	else:
 		load_level(next_index)
-	#print("current_level_name: '", current_level_name, "'")
-	#var current_index := -1
-	#for i in levels.size():
-		#var basename : String = levels[i].scene_path.get_file().get_basename()
-		#print("levels[", i, "] raw: '", levels[i], "' basename: '", basename, "'")
-		#if levels[i].scene_path.get_file().get_basename() == current_level_name:
-			#current_index = i
-			#break
-	#print("current_index: ", current_index)
-#
-	#if current_index == -1:
-		#push_error("Current level not found: ", current_level_name)
-		#return
-	#
-	#var next_index := current_index + 1
-	#if next_index >= levels.size():
-		#get_tree().change_scene_to_file("res://scenes/states/victory.tscn")
-	#else:
-		#load_level_by_name(levels[next_index].get_file().get_basename())
 
-## Loads a new level and cleanup previously loaded level
-##
-## @param level_name: New level name to load
 func load_level(index: int) -> void:
 	if index < 0 or index >= levels.size():
 		push_error("Level index out or range: %d" % index)
@@ -131,6 +111,8 @@ func load_single_level(index: int) -> void:
 	
 	 # Populate with default test party from registry
 	Main.characters.clear()
+	Main.full_roster = ["alfred", "emil", "lucy"]
+	Main.active_party = ["alfred", "emil", "lucy"]
 	var test_ids := ["alfred", "emil", "lucy"]  # or whatever your default party IDs are
 	for id : String in test_ids:
 		var chardef: CharacterDefinition = save.registry.characters.get(id, null)

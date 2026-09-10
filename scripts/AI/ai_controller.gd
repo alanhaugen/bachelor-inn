@@ -98,7 +98,7 @@ static func run_enemy_turn(level: Level) -> void:
 
 static func _end_enemy_turn(level: Level) -> void:
 	level.tick_all_units_end_round()
-	for c in Main.characters:
+	for c in level.characters:
 		if c == null:
 			continue
 		level.emit_signal("character_stats_changed", c)

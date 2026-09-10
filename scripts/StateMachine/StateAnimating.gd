@@ -104,7 +104,7 @@ func _process_next_move(level: Node) -> void:
 			level.wait_for_camera = false
 			if _cancelled:
 				return
-		for character: Character in Main.characters:
+		for character: Character in level.characters:
 			if character == null:
 				continue
 			level.emit_signal("character_stats_changed", character)

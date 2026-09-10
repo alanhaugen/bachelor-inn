@@ -343,12 +343,12 @@ func flash_hit(crit : bool) -> void:
 
 func die(simulate_only : bool) -> void:
 	state.is_alive = false
-	
 	if simulate_only == false:
 		Main.level.emit_signal("character_stats_changed", self)
 		Main.level.emit_signal("character_died", self)
 		if state.is_playable():
 			Main.characters.erase(self)
+			Main.active_party.erase(scene_id)
 		Main.level.game_state.units.erase(self)
 		Main.level.occupancy_map.set_cell_item(state.grid_position, GridMap.INVALID_CELL_ITEM)
 		if get_parent() != null:
