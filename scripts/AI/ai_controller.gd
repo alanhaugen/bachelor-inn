@@ -75,9 +75,11 @@ static func run_enemy_turn(level: Level) -> void:
 		if current_state.has_enemy_moves(curEnemyPos):
 			#var move : Command = ai.choose_best_move(current_state, 3, currentEnemy); ## Old AI move gen
 			var move: Command = AIController.choose_move(currentEnemy, current_state, level.mission_context)
+			print("Ghost move chosen: ", move, " is_moved before: ", currentEnemy.state.is_moved)
 			level.moves_stack.append(move);
 			current_state = current_state.apply_move(move, true);
-					
+			#currentEnemy.state.is_moved = true
+	
 	if not level.moves_stack.is_empty():
 		level.create_path(level.moves_stack.front().start_pos, level.moves_stack.front().end_pos); # a-star for pathfinding AI
 		level.state_machine.transition_to(StateAnimating.new())

@@ -30,6 +30,7 @@ metadata/_custom_type_script = "uid://cfb66ehlpe84n"
 [sub_resource type="Resource" id="Resource_ckkav"]
 script = ExtResource("5_vbfgb")
 faction = 1
+bt_profile = 1
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [node name="TestLevel1" unique_id=656823534 instance=ExtResource("1_mq16p")]
@@ -66,7 +67,7 @@ state = SubResource("Resource_e2q1c")
 [node name="ObjectiveKillAll" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="0" unique_id=1411412953 instance=ExtResource("8_lxfn4")]
 
 [node name="Ghost_Enemy" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="1" unique_id=1339368304 instance=ExtResource("8_e2q1c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 1, -8)
+transform = Transform3D(1, 0, 0, 0, 0.9996193, 0.027590154, 0, -0.027590154, 0.9996193, 13, 0.5, -5)
 data = SubResource("Resource_ruqf1")
 state = SubResource("Resource_ckkav")
 
