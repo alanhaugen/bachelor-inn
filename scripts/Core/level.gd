@@ -203,6 +203,26 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	camera_controller = Main.camera_controller
 	
+	_set_up_grids()
+	_place_player_units()
+	_register_enemies()
+	_set_up_game_state()
+	_set_up_state_machine()
+	_set_up_ui()
+	
+	#turn_transition_animation_player.play()
+	add_to_group("level")
+	
+	_register_chests()
+	#_register_neutral_units()
+	_register_patrol_paths()
+	check_aggro()
+	hide_inactive_characters()
+	
+	await get_tree().process_frame
+	state_machine.transition_to(StateTurnTransition.new(true))
+
+func _set_up_grids() -> void:
 	cursor.hide()
 	trigger_map.hide()
 	movement_map.clear()
@@ -218,15 +238,17 @@ func _ready() -> void:
 	movement_weights_grid = Grid.new(movement_weights_map)
 	path_grid = Grid.new(movement_map)
 	fog_grid = Grid.new(fog_map)
-	
+
 	Dialogic.signal_event.connect(_on_dialogic_signal)
 	Main.battle_log = battle_log
 
+
+func _place_player_units() -> void:
 	var spawn_points: Array[Vector3i] = occupancy_map.get_used_cells()
 	var characters_placed := 0
 	print("Loading new level, number of playable characters: ", Main.characters.size())
 	print("Level name: ", Main.level.name)
-	# Place player characters into spawn points
+	
 	for pos in spawn_points:
 		if get_unit_name(pos) != "00_Unit":
 			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
@@ -234,7 +256,6 @@ func _ready() -> void:
 		if characters_placed >= Main.characters.size():
 			occupancy_map.set_cell_item(pos, GridMap.INVALID_CELL_ITEM)
 			continue
-		# This gets the first char of the active roster
 		var new_unit: Character = Main.characters[characters_placed]
 		characters_placed += 1
 		new_unit.camera = get_viewport().get_camera_3d()
@@ -248,9 +269,8 @@ func _ready() -> void:
 			new_unit.sanity_flipped.connect(_on_character_sanity_flipped)
 		player_characters.append(new_unit)
 		characters.append(new_unit)
-	# END Place player characters into spawn points
-	
-	# Register directly placed enemy scenes
+
+func _register_enemies() -> void:
 	for child in find_children("*", "Character", true, false):
 		if not child is Character or child.state == null:
 			continue
@@ -268,18 +288,22 @@ func _ready() -> void:
 			CharacterState.Faction.NEUTRAL:
 				neutral_characters.append(child)
 		characters.append(child)
-	# END Register directly placed enemy scenes
-		
+
 	_check_for_victory_trigger()
-	
+
+func _set_up_game_state() -> void:
 	game_state = GameState.from_level(self)
 	print("GameState units: ", game_state.units.size())
 	for u in game_state.units:
 		print("  - ", u.data.unit_name, " faction: ", u.state.faction)
+
+func _set_up_state_machine() -> void:
 	state_machine = StateMachine.new()
 	state_machine.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(state_machine)
 	state_machine.owner = self
+
+func _set_up_ui() -> void:
 	## POP UPS INSTANTIATED
 	#move_popup = MOVE_POPUP.instantiate()
 	#move_popup.hide()
@@ -312,18 +336,6 @@ func _ready() -> void:
 	game_over_layer.add_child(game_over_screen)
 	#add_child(game_over_screen)
 	#in_game_ui = GAME_UI.instantiate()
-	
-	#turn_transition_animation_player.play()
-	add_to_group("level")
-	
-	_register_chests()
-	#_register_neutral_units()
-	_register_patrol_paths()
-	check_aggro()
-	hide_inactive_characters()
-	
-	await get_tree().process_frame
-	state_machine.transition_to(StateTurnTransition.new(true))
 
 #func show_move_popup(window_pos :Vector2) -> void:
 	#return
