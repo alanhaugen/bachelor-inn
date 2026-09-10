@@ -185,7 +185,7 @@ func remove_character_preview(character: Character) -> void:
 func _on_end_turn_button_pressed() -> void:
 	if not Main.level.is_player_turn:
 		return
-	if Main.level.state == Main.level.States.ANIMATING:
+	if Main.level.state_machine.current is StateAnimating:
 		return
 	Main.level._clear_selection()
 	Main.level.end_player_turn()

@@ -23,7 +23,7 @@ func HidePopup() -> void:
 
 func _on_move_button_pressed() -> void:
 	map.moves_stack.append(map.active_move);
-	map.state = map.States.ANIMATING;
+	map.state = map.States.ANIMATING; # NOTE: Not compatible with state_machine.
 	HidePopup();
 
 
@@ -32,7 +32,7 @@ func _on_attack_button_pressed() -> void:
 	#	map.moves_stack.append(map.active_move.neighbour_move);
 	map.moves_stack.append(map.active_move);
 	map.a_star(map.moves_stack.front().start_pos, map.moves_stack.front().end_pos, false);
-	map.state = map.States.ANIMATING;
+	map.state = map.States.ANIMATING; # NOTE: Not compatible with state_machine.
 	HidePopup();
 
 

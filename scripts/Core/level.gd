@@ -1679,12 +1679,6 @@ func _draw_path_arrow() -> void:
 					#selected_unit.play(selected_unit.run_left_animation)
 
 func end_player_turn() -> bool:
-	#if not is_player_turn:
-		#print("BLOCKED: not player turn")
-		#return false
-	#if (turn_transition_animation_player.is_playing()):
-		#print("BLOCKED: animation playing")
-		#return false
 	if not combat_vfx.is_finished():
 		print("BLOCKED: combat vfx not finished")
 		return false
@@ -1692,15 +1686,6 @@ func end_player_turn() -> bool:
 		return false
 	if not (state_machine.current is StateSelectingUnit or state_machine.current is StateSelectingMove):
 		return false
-	#if wait_for_camera:
-		#print("BLOCKED: waiting for camera")
-		#return false
-	#if (is_in_menu):
-		#print("BLOCKED: is in menu")
-		#return false
-	#if state != States.PLAYING:
-		#print("BLOCKED: state is ", state)
-		#return false
 	var units :Array[Vector3i] = occupancy_map.get_used_cells();
 	for i in units.size():
 		var pos :Vector3i = units[i];
