@@ -127,7 +127,7 @@ func _on_character_selected(character: Character) -> void:
 func _on_enemy_selected(enemy: Character) -> void:
 	enemy_stats.apply_stats(build_enemy_Stats(enemy), enemy)
 	enemy_stats.show()
-	print("a enemy has been selected")
+	#print("a enemy has been selected")
 
 
 func _on_character_deselected() -> void:
@@ -158,7 +158,7 @@ func _on_character_stats_changed(character: Character) -> void:
 
 
 func _on_party_updated(characters: Array[Character]) -> void:
-	print("UI party_updated count:", characters.size())
+	#print("UI party_updated count:", characters.size())
 	for character in characters:
 		##If statement in case an enemy dies during playtie, which then makes them null.
 		##Instead we should be moving the null value out of the array.

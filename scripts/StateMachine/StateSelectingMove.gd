@@ -24,7 +24,7 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	if event is InputEventKey and not event.echo and event.pressed:
 		match event.keycode:
 			KEY_TAB:
-				print("Key Input TAB registered.")
+				print("Key Input TAB registered in SelectingMove.")
 				level.select_next_character()
 				#level.state_machine.transition_to(StateSelectingMove.new())
 				return

@@ -94,7 +94,7 @@ const PORTRAIT_POPUP = preload("res://scenes/userinterface/Level/PortraitPopUp.t
 const LOOT_POP_UP = preload("res://scenes/userinterface/Level/LootPopUp.tscn")
 const SKILL_POP_UP = preload("res://scenes/userinterface/Level/SkillPopUp.tscn")
 const GAME_OVER = preload("res://scenes/states/game_over.tscn")
-var game_over_screen: Control
+var game_over_screen: CanvasLayer
 const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 const HEALTH_BAR_ENEMY := preload("res://scenes/userinterface/Level/health_bar_enemy_overhead.tscn")
 
@@ -257,6 +257,8 @@ func _set_up_ui() -> void:
 	game_over_screen = GAME_OVER.instantiate()
 	game_over_screen.hide()
 	add_child(game_over_screen)
+	
+	get_viewport().gui_release_focus() 
 
 #func show_move_popup(window_pos :Vector2) -> void:
 	#return
@@ -309,35 +311,21 @@ func get_selectable_characters() -> Array[Character]:
 
 func select_next_character() -> void:
 	var list := get_selectable_characters()
+	print("select_next_character - list size: ", list.size(), " selected: ", selected_unit.data.unit_name if selected_unit else "null")
 	if list.is_empty():
+		print("list is empty, returning")
 		return
 	if selected_unit == null:
 		try_select_unit(list[0])
 		return
 	var index := list.find(selected_unit)
+	print("index of selected: ", index)
 	if index == -1:
 		try_select_unit(list[0])
 		return
 	var next_index := (index + 1) % list.size()
+	print("selecting next index: ", next_index, " unit: ", list[next_index].data.unit_name)
 	try_select_unit(list[next_index])
-
-
-#func _on_turn_transition_finished(_anim_name: StringName) -> void:
-	#if not is_player_turn:
-		#return
-	#var selectables := get_selectable_characters()
-	#if selectables.is_empty():
-		#return	
-	#if last_selected_unit != null and get_selectable_characters().has(last_selected_unit):
-		#camera_controller.free_camera()
-		#camera_controller.set_pivot_target_translate(last_selected_unit.position)
-		#select_unit(last_selected_unit)
-	#else:
-		#camera_controller.free_camera()
-		#camera_controller.set_pivot_target_translate(selectables.front().position)
-		#if not Tutorial.in_tutorial:
-			#select_unit(selectables.front())
-
 
 func get_grid_cell_from_mouse() -> Vector3i:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
@@ -616,16 +604,24 @@ func _is_invalid_tile(pos: Vector3i) -> bool:
 
 
 func can_handle_ui_input() -> bool:
-	var valid_states: Array[Script] = [StateSelectingUnit, StateSelectingMove, StateChoosingAttack, StateChoosingSkill, StateChoosingSkillOrigin]
+	var valid_states: Array[Script] = [
+		StateSelectingUnit, 
+		StateSelectingMove, 
+		StateChoosingAttack, 
+		StateChoosingSkill, 
+		StateChoosingSkillTarget,
+		StateChoosingSkillOrigin
+		]
 	var is_interactive: = false
 	for s : Script in valid_states:
-		if is_instance_of(state_machine, s):
+		if is_instance_of(state_machine.current, s):
 			is_interactive = true
 			break
 	return is_player_turn and is_interactive and not is_in_menu
 
 
 func try_select_unit(unit: Character) -> void:
+	print("try_select_unit: ", unit.data.unit_name, " can_handle: ", can_handle_ui_input())
 	if not can_handle_ui_input():
 		return
 	select_unit(unit)
@@ -644,8 +640,8 @@ func select_unit(unit: Character) -> void:
 	emit_signal("character_selected", selected_unit)
 	## This allows to show attacks
 	current_moves = MoveGenerator.generate(selected_unit, game_state)
-	## Adding 'true' as a 3rd arg in fill_from_commands exludes attacks
-	#current_moves = MoveGenerator.generate(selected_unit, game_state, true)
+	# Adding 'true' as a 3rd arg in fill_from_commands exludes attacks
+	# current_moves = MoveGenerator.generate(selected_unit, game_state, true)
 	movement_grid.fill_from_commands(current_moves, game_state)
 	
 	if Main.level.level_name.begins_with("tutorial") == true:
@@ -697,7 +693,6 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 
 
 func _clear_selection() -> void:
-	#print("Funtion _clear_selection() is called.")
 	emit_signal("character_deselected")
 	emit_signal("enemy_deselected")
 	_exit_skill_target_mode()

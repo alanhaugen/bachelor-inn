@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 class_name GameOver
 
 @onready var retry_button: Button = $ColorRect/VBoxContainer/RetryButton
