@@ -14,17 +14,10 @@ Button/styles/hover = ExtResource("5_0thcs")
 Button/styles/normal = ExtResource("6_703ti")
 Button/styles/pressed = ExtResource("7_6u7bi")
 
-[node name="PauseMenu" type="Control" unique_id=1247984136]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="PauseMenu" type="CanvasLayer" unique_id=133950030]
 script = ExtResource("1_bxrfh")
 
 [node name="NinePatchRect" type="NinePatchRect" parent="." unique_id=470662658]
-layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0

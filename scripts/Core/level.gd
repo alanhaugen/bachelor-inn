@@ -238,11 +238,6 @@ func _set_up_state_machine() -> void:
 	state_machine.owner = self
 
 func _set_up_ui() -> void:
-	## POP UPS INSTANTIATED
-	#move_popup = MOVE_POPUP.instantiate()
-	#move_popup.hide()
-	#add_child(move_popup)
-	
 	portrait_pop_up = PORTRAIT_POPUP.instantiate()
 	portrait_pop_up.hide()
 	add_child(portrait_pop_up)
@@ -255,21 +250,13 @@ func _set_up_ui() -> void:
 	skill_loot_popup.hide()
 	add_child(skill_loot_popup)
 	
-	## TODO: Rebuild pause and game over scene with a CanvasLayer as Root Node
-	var pause_menu_layer := CanvasLayer.new()
-	pause_menu_layer.layer = 9
 	pause_menu = PAUSE_MENU.instantiate()
 	pause_menu.hide()
 	add_child(pause_menu)
 	
-	var game_over_layer := CanvasLayer.new()
-	game_over_layer.layer = 10
-	add_child(game_over_layer)
 	game_over_screen = GAME_OVER.instantiate()
 	game_over_screen.hide()
-	game_over_layer.add_child(game_over_screen)
-	#add_child(game_over_screen)
-	#in_game_ui = GAME_UI.instantiate()
+	add_child(game_over_screen)
 
 #func show_move_popup(window_pos :Vector2) -> void:
 	#return
