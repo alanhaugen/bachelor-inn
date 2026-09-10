@@ -44,8 +44,6 @@ func create_new_save_data() -> void:
 	
 	for id: String in Main.active_party: #registry.characters.keys():
 		var def: CharacterDefinition = registry.characters[id]
-		
-		#var character := Character.new()
 		var character := def.scene.instantiate()
 		character.data = def.base_data.duplicate()
 		character.state = def.base_state.duplicate()
@@ -106,9 +104,16 @@ func create_new_save_in_slot(save_slot: int) -> void:
 
 	# Build fresh units
 	var units := []
-	for id: String in registry.characters.keys():
-		var def: CharacterDefinition = registry.characters[id]
-		var character := Character.new()
+	var starting_party := ["alfred", "emil", "lucy"]
+	Main.full_roster = ["alfred", "emil", "lucy"]
+	Main.active_party = ["alfred", "emil", "lucy"]
+	
+	for id: String in starting_party:
+		var def: CharacterDefinition = registry.characters.get(id, null)
+		if def == null:
+			push_error("No definition found for: " + id)
+			continue
+		var character := def.scene.instantiate() #.new()
 		character.data = def.base_data.duplicate()
 		character.state = def.base_state.duplicate()
 		character.scene_id = id
@@ -116,7 +121,11 @@ func create_new_save_in_slot(save_slot: int) -> void:
 
 	# Only overwrite the selected slot
 	saves["Noble Nights Save format"] = version
-	saves["Slot " + str(save_slot + 1)] = {"level": 3, "units": units}
+	saves["Slot " + str(save_slot + 1)] = {
+											"level": 3, 
+											"full_roster": ["alfred", "emil", "lucy"],
+											"active_party": ["alfred", "emil", "lucy"],
+											"units": units}
 	var save_file := FileAccess.open(SAVE_GAME_PATH, FileAccess.WRITE)
 	save_file.store_string(JSON.stringify(saves))
 	save_file.close()
@@ -145,6 +154,7 @@ func write(_save_slot: int) -> void:
 
 
 func read(save_slot: int) -> bool:
+	print("read() called for slot: ", save_slot)
 	if not FileAccess.file_exists(SAVE_GAME_PATH):
 		return false
 
@@ -172,15 +182,23 @@ func read(save_slot: int) -> bool:
 
 	var level : int = slot["level"]
 	var units : Array = slot["units"]
+	var raw_roster: Array = slot.get("full_roster", [])
+	var raw_party: Array = slot.get("active_party", [])
 	Main.full_roster.clear()
 	Main.active_party.clear()
-	Main.full_roster = slot.get("full_roster", [])
-	Main.active_party = slot.get("active_party", [])
+	for id: String in raw_roster:
+		Main.full_roster.append(str(id))
+	for id: String in raw_party:
+		Main.active_party.append(str(id))
 	Main.characters.clear() # Clear before rebuilding, for safety
+	print("active_party: ", Main.active_party)
+	print("full_roster: ", Main.full_roster)
+	print("units in save: ", units.size())
 
 	for unit_dict : Dictionary in units:
-		
 		var scene_id : String = unit_dict.get("scene")
+		print("Loading unit: ", scene_id, " in active_party: ", Main.active_party.has(scene_id))
+		
 		if not Main.active_party.has(scene_id):
 			continue
 		var def: CharacterDefinition = registry.characters.get(scene_id)
