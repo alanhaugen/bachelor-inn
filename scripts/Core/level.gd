@@ -210,11 +210,8 @@ func _ready() -> void:
 	_set_up_state_machine()
 	_set_up_ui()
 	
-	#turn_transition_animation_player.play()
 	add_to_group("level")
-	
 	_register_chests()
-	#_register_neutral_units()
 	_register_patrol_paths()
 	check_aggro()
 	hide_inactive_characters()
@@ -493,7 +490,7 @@ func get_trigger_name(pos : Vector3) -> String:
 	return trigger_map.mesh_library.get_item_name(trigger_id)
 
 
-func show_attack_tiles(pos: Vector3i) -> void:
+func _show_attack_tiles(pos: Vector3i) -> void:
 	is_choosing_skill_attack_origin = true
 	## TODO: Gray out abilities?
 	path_map.clear()
@@ -521,7 +518,7 @@ func show_attack_tiles(pos: Vector3i) -> void:
 	for tile: Vector3i in tiles:
 		path_map.set_cell_item(tile, 0)
 
-func show_skill_origin_tiles(target_pos: Vector3i, skill: Skill) -> void:
+func _show_skill_origin_tiles(target_pos: Vector3i, skill: Skill) -> void:
 	path_map.clear()
 	var reachable: Array[Vector3i] = []
 	for cmd in current_moves:
@@ -774,7 +771,7 @@ func _handle_action_tile_click(pos: Vector3i) -> String:
 	elif found_attack != null:
 		print("Executing ATTACK on: ", pos)
 		active_move = found_attack
-		show_attack_tiles(pos)
+		_show_attack_tiles(pos)
 		return "attack"
 	return ""
 
@@ -1808,10 +1805,6 @@ func check_aggro() -> void:
 				break
 
 func hide_inactive_characters() -> void:
-	## TODO: Implement hiding player units when out of combat
-	##       Implement spawning player units when re entering combat
-	var _any_active_enemy := false
-	# This hide inactive enemies
 	for unit in characters:
 		if unit == null:
 			continue
@@ -1819,10 +1812,10 @@ func hide_inactive_characters() -> void:
 			continue
 		if unit.state.aggro_state == CharacterState.AggroState.FROZEN:
 			unit.hide()
-			_any_active_enemy = true
 		else:
 			unit.show()
 	
+#func hide_player_units() -> void: 
 	# This hides all but 1 player unit when out of combat
 	## TODO: Add function to respawn units around unhidden unit when entering
 	##       combat.
@@ -1833,7 +1826,7 @@ func hide_inactive_characters() -> void:
 		#if c.state.faction != CharacterState.Faction.PLAYER:
 			#continue
 		#if any_active_enemy:
-			#c.show()
+			#c.show()|
 		#else:
 			#if not first_shown:
 				#c.show()
@@ -1853,7 +1846,6 @@ func _register_chests() -> void:
 
 
 func _on_chest_opened(pos: Vector3i) -> void:
-	#print("on_chest_opened() triggered.")
 	var c: Chest = chests.get(pos, null)
 	if c == null:
 		push_error("No chest found at: " + str(pos))
@@ -1869,8 +1861,6 @@ func _on_chest_opened(pos: Vector3i) -> void:
 				push_error(c.weapon_id + " Weapon in chest not found.")
 				return
 			else:
-				#print("New weapon is: " + new_weapon.weapon_name)
-				#print("loot_popup: ", loot_popup)
 				var current_weapon : Weapon = selected_unit.state.weapon if selected_unit != null else null
 				is_in_menu = true
 				has_window_open = true

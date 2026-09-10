@@ -213,22 +213,25 @@ func get_random_unaquired_skill(ignore_skill : Skill = null) -> Skill:
 
 
 func calc_derived_stats() -> void:
-	## TODO: Simplyfy how stats work?? Right now, adding endurance increases max sanity, 
-	## 	 	 because it increases resistance.
+	## TODO: Simplyfy how stats work?? Right now, adding endurance increases max sanity, because it increases resistance.
 	if data == null:
 		return
+	
+	var was_full_health := state.current_health >= state.max_health
+	var was_full_sanity := state.current_sanity >= state.max_sanity
+	
 	state.defense = 4 + data.endurance
 	state.resistance = 4 + floor(data.focus / 2.0) + floor(data.endurance / 2.0)
 	state.max_health = 4 + data.endurance + floor(data.strength / 2.0);
 	#state.max_sanity = state.resistance + data.mind
 	state.max_sanity = 20 + state.resistance + data.mind
 	#state.movement = 4 + floor(data.speed / 3.0)
-	state.stability = max(1, data.focus - (data.mind/2))
 	state.movement = 4 + data.speed
+	state.stability = max(1, data.focus - (data.mind/2))
 	
-	if state.current_health <= 0:
+	if state.current_health <= 0 or was_full_health:
 		state.current_health = state.max_health
-	if state.current_sanity <= 0:
+	if state.current_sanity <= 0 or was_full_sanity:
 		state.current_sanity = state.max_sanity
 	## TODO: decide if we want to have an auto equip class weapon.
 	#if state.weapon == null or state.weapon.weapon_id == "unarmed":
