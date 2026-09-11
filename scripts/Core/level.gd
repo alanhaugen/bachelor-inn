@@ -920,17 +920,21 @@ func get_unit(pos: Vector3i) -> Character:
 
 
 func create_path(start : Vector3i, end : Vector3i) -> void:
+	print("create_path() called")
 	animation_path.clear()
 	path_map.clear()
 	var foo0 : Command = moves_stack.front()
 	var foo1 : Vector3i = foo0.start_pos
 	var foo2 : Character = game_state.get_unit(foo1)
+	print("create_path - looking for unit at: ", foo1, " found: ", foo2.data.unit_name if foo2 else "NULL")
 	if(foo2.data.unit_name == "Tucy"):
 		pass
 	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
 	movement_grid.fill_from_commands(foo3, game_state)
 	
 	var path := movement_grid.get_path(start, end)
+	print("Path found: ", path.size(), " points from ", start, " to ", end)
+	print("movement_grid used_cells: ", movement_grid.used_cells.size())
 
 	for p in path:
 		var anim_pos := grid_to_world(p)
@@ -1052,9 +1056,11 @@ func reset_all_units() -> void:
 
 # In level.gd — replaces MoveSingleAI()
 func MoveSingleAI() -> void:
+	print("MoveSingleAI() in level.gd called. Routing to ai_controller.run_enemy_turn()")
 	await ai_controller.run_enemy_turn(self)
 
 func _continue_enemy_turn() -> void:
+	print("_continue_enemy_turn() in level.gd called. Routing to ai_controller.run_enemy_turn()")
 	await ai_controller.run_enemy_turn(self)
 
 func _end_enemy_turn() -> void:

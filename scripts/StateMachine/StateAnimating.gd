@@ -6,15 +6,15 @@ var _cancelled: bool = false
 
 func enter(level: Node) -> void:
 	print("ENTER STATE: StateAnimating.")
-	_cancelled = false
+	#_cancelled = false
 	_is_processing = false
 
 func exit(level: Node) -> void:
 	print("EXIT STATE: StateAnimating.")
 	_cancelled = true
 	_is_processing = false
-	level.moves_stack.clear()
-	level.animation_path.clear()
+	#level.moves_stack.clear()
+	#level.animation_path.clear()
 	level.active_move = null
 	level.wait_for_camera = false
 
@@ -29,10 +29,12 @@ func update(level: Node, delta: float) -> void:
 		return
 		
 	if not level.animation_path.is_empty():
+		#print("StateAnimating's update() - _move_along_path initated.")
 		_move_along_path(level, delta)
 		return
 	
 	if not level.moves_stack.is_empty() and not _is_processing:
+		#print("StateAnimating's update() - _process_next_move initated.")
 		_process_next_move(level)
 		return
 	
@@ -61,6 +63,7 @@ func _move_along_path(level: Node, delta: float) -> void:
 
 
 func _process_next_move(level: Node) -> void:
+	print("Process_next_move started.")
 	_is_processing = true
 	
 	level.active_move = level.moves_stack.pop_front()
@@ -85,6 +88,8 @@ func _process_next_move(level: Node) -> void:
 		code = level.player_code_done
 	level.occupancy_map.set_cell_item(level.active_move.start_pos, GridMap.INVALID_CELL_ITEM)
 	level.occupancy_map.set_cell_item(level.active_move.end_pos, code)
+	print("move_to called on: ", level.selected_unit.data.unit_name if level.selected_unit else "null",
+	  " end_pos: ", level.active_move.end_pos)
 	level.selected_unit.move_to(level.active_move.end_pos)
 	level.selected_unit.pause_anim()
 	level.camera_controller.free_camera()
@@ -110,10 +115,13 @@ func _process_next_move(level: Node) -> void:
 			if not is_instance_valid(character):
 				continue
 			level.emit_signal("character_stats_changed", character)
+	
+	if not level.is_player_turn and level.selected_unit != null:
+		level.selected_unit.state.is_moved = true
 	_is_processing = false
 
 func _finish_animation(level: Node) -> void:
-	print("_finish_animation called, _level_complete: ", level._level_complete)
+	#print("_finish_animation called, _level_complete: ", level._level_complete)
 	if _cancelled:
 		return
 	if level._level_complete:
@@ -121,8 +129,10 @@ func _finish_animation(level: Node) -> void:
 	
 	level.check_trigger_conditions()
 	level.check_victory_conditions()
+	
 	if not level.is_player_turn:
-		level.MoveSingleAI()
+		if not _is_processing:
+			level.call_deferred("MoveSingleAI")
 	else:
 		if is_instance_valid(level.last_selected_unit): # != null:
 			level.select_unit(level.last_selected_unit)
