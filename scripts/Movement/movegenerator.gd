@@ -130,6 +130,8 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 					var dist : int = abs(delta.x) + abs(delta.z) + max(0, abs(delta.y)-1)
 					if dist < min_r or dist > max_r:
 						continue
+					if not Main.level.has_line_of_sight(origin, tile):
+						continue
 					var key := str(origin.x)+","+str(origin.y)+","+str(origin.z)+"->"+str(tile.x)+","+str(tile.y)+","+str(tile.z)
 					if seen_pairs.has(key):
 						continue
@@ -204,6 +206,8 @@ static func generate_attack(unit : Character, game_state : GameState) -> Array[A
 			return moves
 	
 	for target : Vector3i in targets:
+		if not Main.level.has_line_of_sight(start, target):
+			continue
 		moves.append(Attack.new(start, target, start))
 	
 	return moves;
@@ -449,7 +453,8 @@ static func get_attack_origins(unit: Character, state: GameState, target_pos: Ve
 		var delta : Vector3i = target_pos - origin
 		var dist: int = abs(delta.x) + abs(delta.z) + max(0, abs(delta.y)-1)
 		if dist >= min_range and dist <= max_range and (delta.y) <= 2:
-			valid.append(origin)
+			if Main.level.has_line_of_sight(origin, target_pos):
+				valid.append(origin)
 	return valid
 
 

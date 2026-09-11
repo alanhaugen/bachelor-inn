@@ -30,9 +30,12 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 			var dist: float = abs(other.state.grid_position.x - origin.x) + abs(other.state.grid_position.z - origin.z)
 			if dist < min_dist_to_any_player:
 				min_dist_to_any_player = dist
-			if dist >= min_range and dist <= max_range and dist < closest_in_range_distance:
-				closest_in_range_distance = dist
-				closest_in_range = other
+			if dist >= min_range and dist <= max_range:
+				if not Main.level.has_line_of_sight(origin, other.state.grid_position):
+					continue
+				if dist < closest_in_range_distance:
+					closest_in_range_distance = dist
+					closest_in_range = other
 		
 		if closest_in_range == null:
 			continue

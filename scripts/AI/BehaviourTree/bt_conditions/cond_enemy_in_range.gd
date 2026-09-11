@@ -3,13 +3,13 @@ class_name ConditionEnemyInRange
 ## Leaf Node
 
 func tick(blackboard: BTBlackboard) -> BTNode.Status:
-	print("Condition checking: ", get_script().resource_path)
+	#print("Condition checking: ", get_script().resource_path)
 	var unit := blackboard.unit
 	var state := blackboard.state
 	
 	var min_range := unit.state.weapon.min_range 
 	var max_range := unit.state.weapon.max_range 
-	print("ConditionEnemyInRange: unit=", unit.data.unit_name, " weapon range=", min_range, "-", max_range)
+	#print("ConditionEnemyInRange: unit=", unit.data.unit_name, " weapon range=", min_range, "-", max_range)
 	var closest_target: Character = null
 	var closest_dist := 99999
 	
@@ -18,7 +18,7 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 	for cmd in moves:
 		if cmd is Move:
 			origins.append(cmd.end_pos)
-	print("  reachable origins count: ", origins.size())
+	#print("  reachable origins count: ", origins.size())
 	
 	# check each player unit against reachable origin
 	for other in state.units:
@@ -30,10 +30,17 @@ func tick(blackboard: BTBlackboard) -> BTNode.Status:
 			var dist : float = abs(other.state.grid_position.x - origin.x) + abs(other.state.grid_position.z - origin.z)
 			#print("Weapon range: ", min_range, "-", max_range, " dist to ", other.data.unit_name, ": ", dist)
 			if dist >= min_range and dist <= max_range:
-				blackboard.target = other
-				blackboard.attack_origin = origin
-				return BTNode.Status.SUCCESS
-	return BTNode.Status.FAILURE
+				if not Main.level.has_line_of_sight(origin, other.state.grid_position):
+					continue
+				if dist < closest_dist:
+					closest_dist = dist
+					closest_target = other
+					blackboard.target = other
+					blackboard.attack_origin = origin
+	if closest_target == null:
+		return BTNode.Status.FAILURE
+	return BTNode.Status.SUCCESS
+	#return BTNode.Status.FAILURE
 
 ## If we want to add spells to enemies
 ## range chack for spells

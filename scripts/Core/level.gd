@@ -1503,6 +1503,7 @@ func _debug_terrain() -> void:
 	
 func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	# Bresenham's line algorithm
+	#print("LoS check from: ", from, " to: ", to)
 	var x0 := from.x
 	var z0 := from.z
 	var x1 := to.x
@@ -1516,8 +1517,11 @@ func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	
 	while x0 != x1 or z0 != z1:
 		if not (x0 == from.x and z0 == from.z) and not (x0 == to.x and z0 == to.z):
-			var wall_pos := Vector3i(x0, 1, z0)
-			if terrain_map.get_cell_item(wall_pos) != GridMap.INVALID_CELL_ITEM:
+			var wall_pos := Vector3i(x0, from.y +1, z0)
+			var cell := terrain_map.get_cell_item(wall_pos)
+			#print("LoS check at: ", wall_pos, " cell: ", cell)
+			if cell != GridMap.INVALID_CELL_ITEM:
+				#print("LoS BLOCKED at: ", wall_pos)
 				return false
 		
 		var e2 := 2* err
