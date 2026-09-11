@@ -34,6 +34,7 @@ bt_profile = 1
 metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [node name="TestLevel1" unique_id=656823534 instance=ExtResource("1_mq16p")]
+level_name = null
 
 [node name="TerrainGrid" parent="." index="0" unique_id=1846160155]
 data = {

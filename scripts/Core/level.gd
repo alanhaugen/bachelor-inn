@@ -298,13 +298,18 @@ func world_to_grid(pos: Vector3) -> Vector3i:
 
 func get_selectable_characters() -> Array[Character]:
 	var result: Array[Character] =[]
+	var unmoved: Array[Character] =[]
+	
 	for c in player_characters:
 		if not is_instance_valid(c):
 			continue
 		if not c.state.is_alive:
 			continue
 		result.append(c)
-	return result
+		if not c.state.is_moved:
+			unmoved.append(c)
+			
+	return unmoved if not unmoved.is_empty()  else result
 
 
 func select_next_character() -> void:
