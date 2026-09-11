@@ -35,7 +35,10 @@ func handle_input(level: Node, event: InputEvent) -> void:
 	level._handle_attack_choice(pos)
 	
 func _cancel(level: Node) -> void:
-	level._cancel_attack_choice_mode()
+	level.is_choosing_skill_attack_origin = false
+	level.path_map.clear()
+	level.active_move = null
+	
 	if level.selected_unit != null and not level.selected_unit.state.is_moved:
 		## Go back to selecting move
 		level.state_machine.transition_to(StateSelectingMove.new())
