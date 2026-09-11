@@ -154,6 +154,7 @@ func _ready() -> void:
 	hide_inactive_characters()
 	
 	await get_tree().process_frame
+	_debug_terrain()
 	state_machine.transition_to(StateTurnTransition.new(true))
 
 func _set_up_grids() -> void:
@@ -308,7 +309,7 @@ func get_selectable_characters() -> Array[Character]:
 		result.append(c)
 		if not c.state.is_moved:
 			unmoved.append(c)
-			
+	#return result
 	return unmoved if not unmoved.is_empty()  else result
 
 
@@ -1480,3 +1481,51 @@ func _clear_aoe_preview() -> void:
 	if is_choosing_skill_target:
 		for tile : Vector3i in valid_skill_target_tiles.keys():
 			path_map.set_cell_item(tile, skill_target_code)
+
+func _debug_terrain() -> void:
+	# Print a few known positions to understand the terrain data
+	var test_positions := [
+		Vector3i(0, 0, 0),
+		Vector3i(0, 1, 0),
+		Vector3i(0, -1, 0),
+		]
+	for pos: Vector3i in test_positions:
+		var cell := terrain_map.get_cell_item(pos)
+		var name := ""
+		if cell != GridMap.INVALID_CELL_ITEM:
+			name = terrain_map.mesh_library.get_item_name(cell)
+			print("Terrain at ", pos, " cell: ", cell, " name: ", name)
+
+	# Also print where your player units actually are
+	for c in player_characters:
+		print("Unit ", c.data.unit_name, " at grid: ", c.state.grid_position, 
+		" world: ", c.position)
+	
+func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
+	# Bresenham's line algorithm
+	var x0 := from.x
+	var z0 := from.z
+	var x1 := to.x
+	var z1 := to.z
+	
+	var dx: float = abs(x1 - x0)
+	var dz: float = abs(z1 - z0)
+	var sx := 1 if x0 < x1 else -1
+	var sz := 1 if z0 < z1 else -1
+	var err := dx - dz
+	
+	while x0 != x1 or z0 != z1:
+		if not (x0 == from.x and z0 == from.z) and not (x0 == to.x and z0 == to.z):
+			var wall_pos := Vector3i(x0, 1, z0)
+			if terrain_map.get_cell_item(wall_pos) != GridMap.INVALID_CELL_ITEM:
+				return false
+		
+		var e2 := 2* err
+		if e2 > -dz:
+			err -= dz
+			x0 += sx
+		if e2 < dx:
+			err += dx
+			z0 += sz
+	
+	return true

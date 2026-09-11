@@ -16,7 +16,7 @@ func is_savefile_existing() -> bool:
 	return FileAccess.file_exists(SAVE_GAME_PATH);
 
 
-func create_new_from_state(slot:int, level: int, state: GameState) -> void:
+func create_new_from_state(slot: int, level: int, state: GameState) -> void:
 	var units: Array[Character]
 	
 	for unit in state.units:

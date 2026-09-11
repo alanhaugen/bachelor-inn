@@ -9,5 +9,5 @@ func exit(level: Node) -> void:
 	print("EXIT STATE: StateMenu.")
 	level.is_in_menu = false
 
-func handle_input(level: Node, event: InputEvent) -> void:
+func handle_input(_level: Node, _event: InputEvent) -> void:
 	pass

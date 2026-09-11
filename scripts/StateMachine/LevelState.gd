@@ -1,14 +1,14 @@
 extends RefCounted
 class_name LevelState
 
-func enter(level: Node) -> void:
+func enter(_level: Node) -> void:
 	pass
 
-func exit(level: Node) -> void:
+func exit(_level: Node) -> void:
 	pass
 
-func update(level: Node, delta: float) -> void:
+func update(_level: Node, _delta: float) -> void:
 	pass
 
-func handle_input(level: Node, event: InputEvent) -> void:
+func handle_input(_level: Node, _event: InputEvent) -> void:
 	pass
