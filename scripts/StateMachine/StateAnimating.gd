@@ -142,11 +142,7 @@ func _finish_animation(level: Node) -> void:
 			print("  checking: ", c.data.unit_name, " at: ", c.state.grid_position)
 			#if c.state.grid_position == portal_grid:
 			if c.state.grid_position == portal_grid and not c.state.just_teleported:
-				#print("  MATCH - teleporting!")
-				#portal.set("on_cooldown", true)  # prevent re-trigger from origin
-				#var linked_path: NodePath = portal.get("linked_teleporter")
-				#var destination: Node = portal.get_node(linked_path)
-				#destination.set("on_cooldown", true)  # prevent immediate back-teleport
+				c.state.just_teleported = true
 				await level._execute_teleport(portal, c)
 				return
 	
