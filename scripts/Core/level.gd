@@ -264,7 +264,7 @@ func _set_up_ui() -> void:
 	add_child(game_over_screen)
 	
 	fade_overlay = FADE_OVERLAY.instantiate()
-	fade_overlay.hide()
+	#fade_overlay.hide()
 	add_child(fade_overlay)
 	
 	get_viewport().gui_release_focus() 
@@ -1571,6 +1571,14 @@ func _execute_teleport(portal: Teleporter, unit: Character) -> void:
 	
 	var dest_grid_pos: Vector3i = destination.get("teleporter_grid_position")
 	print("Teleporting ", unit.data.unit_name, " to grid: ", dest_grid_pos, " world: ", grid_to_world(dest_grid_pos))
+	
+	# Check if destination is occupied
+	if occupancy_map.get_cell_item(dest_grid_pos) != GridMap.INVALID_CELL_ITEM:
+		# Destination occupied — don't teleport
+		unit.state.just_teleported = true  # prevent retry
+		select_unit(unit)
+		state_machine.transition_to(StateSelectingMove.new())
+		return
 	
 	# Fade out
 	await fade_overlay.fade_out()
