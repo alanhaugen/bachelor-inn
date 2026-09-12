@@ -157,3 +157,7 @@ one_shot = true
 [node name="Chests" type="Node" parent="." unique_id=2019346901]
 
 [node name="FireParticles" type="Node" parent="." unique_id=1307088819]
+
+[node name="Teleporters" type="Node" parent="." unique_id=1793230163]
+
+[node name="Pair1" type="Node" parent="Teleporters" unique_id=1313553453]

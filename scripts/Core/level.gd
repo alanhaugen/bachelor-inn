@@ -57,10 +57,6 @@ var _last_hovered_pos: Vector3i = Vector3i(-999, -999, -999)
 @onready var player_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/playerLabel
 @onready var enemy_label: Label = $TurnTransition/CanvasLayer/VBoxContainer/ColorRect3/enemyLabel
 
-var portrait_pop_up: PortraitPopup
-var loot_popup : LootPopup
-var skill_loot_popup : SkillPopup
-var pause_menu: PauseMenu
 var _level_complete : bool = false
 var level_has_victory_trigger: bool = false
 var has_window_open : bool = false
@@ -81,6 +77,7 @@ var valid_skill_target_tiles: Dictionary = {}
 var completed_moves :Array[Command];
 var triggered_positions: Array[Vector3i] = [] ## NOTE: For avoiding double triggers with TriggerOverlay and Dialogic
 
+#region UI elements
 const GAME_UI = preload("res://scenes/userinterface/Level/InGameUI_WIP.tscn")
 const CHEST_SCENE = preload("res://scenes/grid_items/chest.tscn")
 const PLAYER: PackedScene = preload("res://scenes/Characters/Player/alfred.tscn"); ## TODO:
@@ -94,9 +91,16 @@ const PORTRAIT_POPUP = preload("res://scenes/userinterface/Level/PortraitPopUp.t
 const LOOT_POP_UP = preload("res://scenes/userinterface/Level/LootPopUp.tscn")
 const SKILL_POP_UP = preload("res://scenes/userinterface/Level/SkillPopUp.tscn")
 const GAME_OVER = preload("res://scenes/states/game_over.tscn")
-var game_over_screen: CanvasLayer
+const FADE_OVERLAY = preload("res://scenes/userinterface/Level/fade_to_black.tscn")
 const PAUSE_MENU = preload("res://scenes/states/pause_menu.tscn")
 const HEALTH_BAR_ENEMY := preload("res://scenes/userinterface/Level/health_bar_enemy_overhead.tscn")
+var portrait_pop_up: PortraitPopup
+var loot_popup : LootPopup
+var skill_loot_popup : SkillPopup
+var pause_menu: PauseMenu
+var game_over_screen: CanvasLayer
+var fade_overlay: CanvasLayer
+#region end
 
 var game_state : GameState;
 var animation_path :Array[Vector3];
@@ -228,9 +232,9 @@ func _register_enemies() -> void:
 
 func _set_up_game_state() -> void:
 	game_state = GameState.from_level(self)
-	print("GameState units: ", game_state.units.size())
-	for u in game_state.units:
-		print("  - ", u.data.unit_name, " faction: ", u.state.faction)
+	#print("GameState units: ", game_state.units.size())
+	#for u in game_state.units:
+		#print("  - ", u.data.unit_name, " faction: ", u.state.faction)
 
 func _set_up_state_machine() -> void:
 	state_machine = StateMachine.new()
@@ -258,6 +262,10 @@ func _set_up_ui() -> void:
 	game_over_screen = GAME_OVER.instantiate()
 	game_over_screen.hide()
 	add_child(game_over_screen)
+	
+	fade_overlay = FADE_OVERLAY.instantiate()
+	fade_overlay.hide()
+	add_child(fade_overlay)
 	
 	get_viewport().gui_release_focus() 
 
@@ -802,21 +810,21 @@ func create_path(start : Vector3i, end : Vector3i) -> void:
 	var foo0 : Command = moves_stack.front()
 	var foo1 : Vector3i = foo0.start_pos
 	var foo2 : Character = game_state.get_unit(foo1)
-	print("create_path - looking for unit at: ", foo1, " found: ", foo2.data.unit_name if foo2 else "NULL")
+	#print("create_path - looking for unit at: ", foo1, " found: ", foo2.data.unit_name if foo2 else "NULL")
 	if(foo2.data.unit_name == "Tucy"):
 		pass
 	var foo3 : Array[Command] = MoveGenerator.generate(foo2, game_state)
 	movement_grid.fill_from_commands(foo3, game_state)
 	
 	var path := movement_grid.get_path(start, end)
-	print("Path found: ", path.size(), " points from ", start, " to ", end)
-	print("movement_grid used_cells: ", movement_grid.used_cells.size())
+	#print("Path found: ", path.size(), " points from ", start, " to ", end)
+	#print("movement_grid used_cells: ", movement_grid.used_cells.size())
 
 	for p in path:
 		var anim_pos := grid_to_world(p)
 		animation_path.append(anim_pos)
 
-	print("Looking for unit at: ", start)
+	#print("Looking for unit at: ", start)
 	for c in characters:
 		if is_instance_valid(c):
 			print(" - ", c.data.unit_name, " at ", c.state.grid_position)
@@ -883,11 +891,6 @@ func check_trigger_conditions() -> void:
 			return
 		_recruit_neutral_units()
 		print("Recruit trigger activated.")
-	elif get_trigger_name(pos) == "05_Trigger5":
-		if not selected_unit:
-			return
-		_stairs_teleport_unit(selected_unit)
-		print(selected_unit.state.unit_name + " used the stairs.")
 	elif get_trigger_name(pos) == "00_Victory":
 		print("Victory tile triggered by: ", selected_unit.data.unit_name if selected_unit else "null")
 		if not selected_unit:
@@ -1557,3 +1560,35 @@ func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 			z0 += sz
 	
 	return true
+
+func _execute_teleport(portal: Teleporter, unit: Character) -> void:
+	var destination: Node = portal.get_linked_portal()
+	print("Teleporter: ", name, " grid pos: ", Main.level.world_to_grid(global_position))
+
+	if destination == null:
+		push_error("TeleportPortal: no linked portal found for " + portal.name)
+		return
+	
+	var dest_grid_pos: Vector3i = destination.get("teleporter_grid_position")
+	print("Teleporting ", unit.data.unit_name, " to grid: ", dest_grid_pos, " world: ", grid_to_world(dest_grid_pos))
+	
+	# Fade out
+	await fade_overlay.fade_out()
+
+	# Update occupancy map — clear old position
+	occupancy_map.set_cell_item(unit.state.grid_position, GridMap.INVALID_CELL_ITEM)
+
+	# Move unit to destination
+	unit.position = grid_to_world(dest_grid_pos)
+	unit.state.grid_position = dest_grid_pos
+	unit.state.just_teleported = true
+
+	occupancy_map.set_cell_item(dest_grid_pos, player_code)
+
+	camera_controller.free_camera()
+	camera_controller.set_pivot_target_translate(unit.position)
+
+	await fade_overlay.fade_in()
+
+	select_unit(unit)
+	state_machine.transition_to(StateSelectingMove.new())

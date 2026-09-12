@@ -2,19 +2,25 @@ extends Area3D
 class_name Teleporter
 
 @export var linked_teleporter: NodePath #String = ""
+@export var teleporter_grid_position: Vector3i = Vector3i.ZERO
+var is_active: bool = false
+var pending_teleport_char: Character = null
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	body_entered.connect(_on_body_entered)
+	add_to_group("teleporters")
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body: Node3D) -> void:
+	print("Teleporter body_entered: ", body.name, " type: ", body.get_class())
 	if body is not Character:
 		return
 	if body.state.faction != CharacterState.Faction.PLAYER:
 		return
-	var destination: Teleporter = get_node(linked_teleporter)
-	if destination == null:
-		return
-	body.position = destination.global_position
-	body.state.grid_position = Main.level.world_to_grid(destination.global_position)
-	Main.level.occupancy_map.set_cell_item(body.state.grid_position, Main.level.player_code)
+	pending_teleport_char = body
+	print("Teleporter: ", name, " triggered by: ", body.data.unit_name)
+
+func get_linked_portal() -> Teleporter:
+	if linked_teleporter.is_empty():
+		return null
+	return get_node(linked_teleporter) as Teleporter

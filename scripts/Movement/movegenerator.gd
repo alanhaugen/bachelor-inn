@@ -10,9 +10,9 @@ static func generate(unit : Character, state : GameState, exclude_attacks : bool
 
 
 static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool = false, exclude_move : bool = false) -> Array[Command]:
-	print("Unit: ", unit.data.unit_name, 
-		  " | movement: ", unit.state.movement,
-		  " | effective: ", unit.state.get_effective_movement())
+	#print("Unit: ", unit.data.unit_name, 
+		  #" | movement: ", unit.state.movement,
+		  #" | effective: ", unit.state.get_effective_movement())
 	
 	var start_pos: Vector3i = unit.state.grid_position
 
@@ -118,7 +118,7 @@ static func dijkstra(unit : Character, state : GameState, exclude_attacks : bool
 			var opponents : Array[Character] = state.get_enemies()
 			for u in state.get_neutral_objects():
 				opponents.append(u)
-			print("Total opponents including neutrals: ", opponents.size())
+			#print("Total opponents including neutrals: ", opponents.size())
 			for o in opponents:
 				print("  opponent: ", o.data.unit_name, " at: ", o.state.grid_position)
 			for opponent : Character in opponents:

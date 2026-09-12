@@ -155,7 +155,7 @@ func write(_save_slot: int) -> void:
 
 
 func read(save_slot: int) -> bool:
-	print("read() called for slot: ", save_slot)
+	#print("read() called for slot: ", save_slot)
 	if not FileAccess.file_exists(SAVE_GAME_PATH):
 		return false
 
@@ -192,9 +192,9 @@ func read(save_slot: int) -> bool:
 	for id: String in raw_party:
 		Main.active_party.append(str(id))
 	Main.characters.clear() # Clear before rebuilding, for safety
-	print("active_party: ", Main.active_party)
-	print("full_roster: ", Main.full_roster)
-	print("units in save: ", units.size())
+	#print("active_party: ", Main.active_party)
+	#print("full_roster: ", Main.full_roster)
+	#print("units in save: ", units.size())
 
 	for unit_dict : Dictionary in units:
 		var scene_id : String = unit_dict.get("scene")
@@ -238,7 +238,7 @@ func read(save_slot: int) -> bool:
 		
 		state.current_health = int(state_dict["current_health"])
 		state.current_sanity = int(state_dict["current_sanity"])
-		print("READ: ", data.unit_name, " current_sanity: ", state.current_sanity, " max_sanity: ", state.max_sanity)
+		#print("READ: ", data.unit_name, " current_sanity: ", state.current_sanity, " max_sanity: ", state.max_sanity)
 		
 		state.weapon = WeaponRegistry.get_weapon(state_dict["weapon_id"])
 		state.skills.clear()

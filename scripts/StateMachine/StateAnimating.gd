@@ -65,8 +65,9 @@ func _move_along_path(level: Node, delta: float) -> void:
 func _process_next_move(level: Node) -> void:
 	print("Process_next_move started.")
 	_is_processing = true
-	
 	level.active_move = level.moves_stack.pop_front()
+	if level.selected_unit != null:
+		level.selected_unit.state.just_teleported = false
 	level.active_move.prepare(level.game_state)
 	if level.active_move is CastSkill:
 		await level.combat_vfx.play_skill(level.active_move.result)
@@ -129,6 +130,25 @@ func _finish_animation(level: Node) -> void:
 	
 	level.check_trigger_conditions()
 	level.check_victory_conditions()
+	
+	var teleporters := level.get_tree().get_nodes_in_group("teleporters")
+	print("Teleporters in group: ", teleporters.size())
+	for portal in teleporters:
+		var portal_grid: Vector3i = portal.get("teleporter_grid_position")
+		print("Portal: ", portal.name, " grid: ", portal_grid)
+		for c: Character in level.player_characters:
+			if not is_instance_valid(c):
+				continue
+			print("  checking: ", c.data.unit_name, " at: ", c.state.grid_position)
+			#if c.state.grid_position == portal_grid:
+			if c.state.grid_position == portal_grid and not c.state.just_teleported:
+				#print("  MATCH - teleporting!")
+				#portal.set("on_cooldown", true)  # prevent re-trigger from origin
+				#var linked_path: NodePath = portal.get("linked_teleporter")
+				#var destination: Node = portal.get_node(linked_path)
+				#destination.set("on_cooldown", true)  # prevent immediate back-teleport
+				await level._execute_teleport(portal, c)
+				return
 	
 	if not level.is_player_turn:
 		if not _is_processing:
