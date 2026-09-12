@@ -1503,11 +1503,13 @@ func _debug_terrain() -> void:
 	
 func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	# Bresenham's line algorithm
-	print("LoS check from: ", from, " to: ", to)
-	var x0 := from.x
-	var z0 := from.z
-	var x1 := to.x
-	var z1 := to.z
+	#print("LoS check from: ", from, " to: ", to)
+	var _from: Vector3i = Vector3i(from.x, from.y+1, from.z)
+	var _to: Vector3i = Vector3i(to.x, to.y+1, to.z)
+	var x0 := _from.x
+	var z0 := _from.z
+	var x1 := _to.x
+	var z1 := _to.z
 	
 	var dx: float = abs(x1 - x0)
 	var dz: float = abs(z1 - z0)
@@ -1515,19 +1517,25 @@ func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	var sz := 1 if z0 < z1 else -1
 	var err := dx - dz
 	
-	var y_min: float = min(from.y, to.y)
-	var y_max: float = max(from.y, to.y)
+	var total_steps: float = max(dx, dz)
+	var steps_taken := 0
+	#var y_min: float = min(from.y, to.y)
+	#var y_max: float = max(from.y, to.y)
 	
 	while x0 != x1 or z0 != z1:
-		if not (x0 == from.x and z0 == from.z) and not (x0 == to.x and z0 == to.z):
-			for y in range(y_min+1, y_max+2):
-				var wall_pos := Vector3i(x0, y, z0)
-				var cell := terrain_map.get_cell_item(wall_pos)
-				#print("LoS check at: ", wall_pos, " cell: ", cell)
-				if cell != GridMap.INVALID_CELL_ITEM:
-					#print("LoS BLOCKED at: ", wall_pos)
-					return false
-		
+		if not (x0 == _from.x and z0 == _from.z) and not (x0 == _to.x and z0 == _to.z):
+			var t := float(steps_taken) / float(total_steps) if total_steps > 0 else 0.0
+			#var t := float(steps_taken + 1) / float(total_steps) if total_steps > 0 else 0.0
+			var interpolated_y := int(round(lerp(float(_from.y), float(_to.y), t)))
+
+			var check_pos := Vector3i(x0, interpolated_y, z0)
+			var cell := terrain_map.get_cell_item(check_pos)
+			print("LoS check at: ", check_pos, " cell: ", cell, " t: ", t)
+			if cell != GridMap.INVALID_CELL_ITEM:
+				print("LoS BLOCKED")
+				return false
+					
+		steps_taken += 1
 		var e2 := 2* err
 		if e2 > -dz:
 			err -= dz
