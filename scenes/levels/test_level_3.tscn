@@ -59,6 +59,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.523437, 1.1100497, -45.864
 visible = true
 
 [node name="CameraSettings" parent="." index="16" unique_id=2146881514]
+transform = Transform3D(1, 0, 0, 0, 0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 19.384134, 5.3061914, -29.628544)
 minimum_camera_x = -500.0
 maximum_camera_x = 500.0
 minimum_camera_z = -500.0

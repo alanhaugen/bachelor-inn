@@ -540,6 +540,7 @@ func _handle_skill(pos : Vector3i) -> void:
 	if target != null and used_skill.effect_mods != null and used_skill.effect_mods.has("current_health"):
 		var heal := int(used_skill.effect_mods["current_health"])
 		target.state.current_health = min(target.state.current_health + heal, target.state.max_health)#(dmg, false, skill_caster, used_skill.skill_name)
+		print("Healed ", target.data.unit_name, " to ", target.state.current_health, "/", target.state.max_health)
 		emit_signal("character_stats_changed", target)
 	
 
@@ -882,6 +883,11 @@ func check_trigger_conditions() -> void:
 			return
 		_recruit_neutral_units()
 		print("Recruit trigger activated.")
+	elif get_trigger_name(pos) == "05_Trigger5":
+		if not selected_unit:
+			return
+		_stairs_teleport_unit(selected_unit)
+		print(selected_unit.state.unit_name + " used the stairs.")
 	elif get_trigger_name(pos) == "00_Victory":
 		print("Victory tile triggered by: ", selected_unit.data.unit_name if selected_unit else "null")
 		if not selected_unit:
@@ -1504,6 +1510,14 @@ func _debug_terrain() -> void:
 func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	# Bresenham's line algorithm
 	#print("LoS check from: ", from, " to: ", to)
+	#var _from := Vector3i.ZERO
+	#var _to := Vector3i.ZERO
+	#if from.y == to.y:
+		#_from = Vector3i(from.x, from.y, from.z)
+		#_to = Vector3i(to.x, to.y, to.z)
+	#else:
+		#_from = Vector3i(from.x, from.y+1, from.z)
+		#_to = Vector3i(to.x, to.y+1, to.z)
 	var _from: Vector3i = Vector3i(from.x, from.y+1, from.z)
 	var _to: Vector3i = Vector3i(to.x, to.y+1, to.z)
 	var x0 := _from.x
@@ -1519,8 +1533,6 @@ func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 	
 	var total_steps: float = max(dx, dz)
 	var steps_taken := 0
-	#var y_min: float = min(from.y, to.y)
-	#var y_max: float = max(from.y, to.y)
 	
 	while x0 != x1 or z0 != z1:
 		if not (x0 == _from.x and z0 == _from.z) and not (x0 == _to.x and z0 == _to.z):
@@ -1530,9 +1542,9 @@ func has_line_of_sight(from: Vector3i, to: Vector3i) -> bool:
 
 			var check_pos := Vector3i(x0, interpolated_y, z0)
 			var cell := terrain_map.get_cell_item(check_pos)
-			print("LoS check at: ", check_pos, " cell: ", cell, " t: ", t)
+			#print("LoS check at: ", check_pos, " cell: ", cell, " t: ", t)
 			if cell != GridMap.INVALID_CELL_ITEM:
-				print("LoS BLOCKED")
+				#print("LoS BLOCKED")
 				return false
 					
 		steps_taken += 1

@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://k7guoanmxcmr"]
+
+[ext_resource type="Script" uid="uid://ce21e0v7ahlje" path="res://scripts/Movement/teleporter.gd" id="1_6pfgv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_coubn"]
+
+[node name="Teleporter" type="Area3D" unique_id=845671447]
+script = ExtResource("1_6pfgv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1183770977]
+shape = SubResource("SphereShape3D_coubn")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
