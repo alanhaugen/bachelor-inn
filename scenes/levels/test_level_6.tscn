@@ -1,7 +1,25 @@
 [gd_scene format=3 uid="uid://bml4ia3p5ok1o"]
 
 [ext_resource type="PackedScene" uid="uid://bu3kvc2qxcq2w" path="res://scenes/levels/LevelTemplate.tscn" id="1_6kedp"]
+[ext_resource type="PackedScene" uid="uid://drpd1d805rfy5" path="res://scenes/Characters/Enemy/bird2.tscn" id="2_662ky"]
 [ext_resource type="PackedScene" uid="uid://k7guoanmxcmr" path="res://scenes/grid_items/teleporter.tscn" id="2_v4rl3"]
+[ext_resource type="Script" uid="uid://cfb66ehlpe84n" path="res://scripts/stats/character_data.gd" id="3_efqj6"]
+[ext_resource type="Script" uid="uid://dnpndvvrnj26q" path="res://scripts/stats/character_state.gd" id="4_uuxcr"]
+[ext_resource type="Script" uid="uid://c3p07am3ababr" path="res://scripts/stats/skill.gd" id="5_72yen"]
+[ext_resource type="Resource" uid="uid://bde3fwobbck4h" path="res://Data/Weapons/unarmed.tres" id="6_abm2o"]
+[ext_resource type="PackedScene" uid="uid://c4ugjunruadqr" path="res://scenes/MissionObjectives/objective_kill_specific.tscn" id="7_efqj6"]
+
+[sub_resource type="Resource" id="Resource_3k3va"]
+script = ExtResource("3_efqj6")
+unit_name = "Bird1"
+metadata/_custom_type_script = "uid://cfb66ehlpe84n"
+
+[sub_resource type="Resource" id="Resource_8cl6u"]
+script = ExtResource("4_uuxcr")
+weapon = ExtResource("6_abm2o")
+faction = 1
+bt_profile = 1
+metadata/_custom_type_script = "uid://dnpndvvrnj26q"
 
 [node name="test_level_6" unique_id=656823534 instance=ExtResource("1_6kedp")]
 
@@ -24,6 +42,14 @@ data = {
 
 [node name="TriggerOverlay" parent="." index="3" unique_id=1471713088]
 metadata/_editor_floor_ = Vector3(0, 0, 0)
+
+[node name="Character" parent="Enemies" parent_id_path=PackedInt32Array(1320572048) index="0" unique_id=159367408 instance=ExtResource("2_662ky")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.5, -11)
+data = SubResource("Resource_3k3va")
+state = SubResource("Resource_8cl6u")
+
+[node name="ObjectiveKillSpecific" parent="MissionObjective" parent_id_path=PackedInt32Array(327276810) index="0" unique_id=89127788 instance=ExtResource("7_efqj6")]
+target_unit_name = "Bird1"
 
 [node name="Stairs1" type="Node" parent="." index="22" unique_id=284426496]
 
